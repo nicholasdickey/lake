@@ -11,7 +11,7 @@ interface StaticProps {
 }
 export default function Home(props:StaticProps) {
     console.log("RENDER",props)
-    return <Common/>
+    return <Common  width={3500} custom={true}/>
 }
 interface StaticParams{
     params:{static:string[]}

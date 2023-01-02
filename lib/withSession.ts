@@ -7,11 +7,9 @@ import {
 
 declare module "iron-session" {
     interface IronSessionData {
-        options?: {
-            width: number
-        }
+        options?:Options,
         user?: {
-            id: number;
+            identity: string;
             admin?: boolean;
         };
     }
@@ -41,5 +39,14 @@ export function withSessionSsr<
     return withIronSessionSsr(handler, sessionOptions);
 }
 export interface Options{
-    width:number
+    width:number,
+    sessionid:string,
+    hasLayout:boolean,
+    hasNewslines:boolean,
+    userslug:string,
+    dense:number,
+    thick:number,
+    dark?:number,
+    loud:number,
+    band:number
 }

@@ -89,7 +89,7 @@ export const getServerSideProps = withSessionSsr(
        // console.log("CALLING fetchChannelLayout:",[newsline, options.hasLayout, options.sessionid, options.userslug, type, options.dense, options.thick, layoutNumber])
         const channelLayout = await fetchChannelLayout(['channelLayout',newsline, options.hasLayout, options.sessionid, options.userslug, type, options.dense, options.thick, layoutNumber]);
         //console.log("GOT CHANNEL LAYOUT",JSON.stringify(channelLayout))
-        const user = fetchUser(['user',options.userslug])
+        const user = await fetchUser(['user',options.userslug])
         const qparams= {
             custom: true,
             forum,

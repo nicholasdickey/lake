@@ -5,6 +5,7 @@ import {Column} from './column'
 let View = styled.div`
 width:100%;
 display:flex;
+justify-content:space-between;
 
 `
 export const LayoutRes = ({ layout, res, qparams,session }) => {
@@ -19,7 +20,7 @@ export const LayoutRes = ({ layout, res, qparams,session }) => {
     })
   
     // <div>{JSON.stringify(layres, null, 4)}</div>
-    return <View>{cols}</View>
+    return <View data-id="LayoutVIew">{cols}</View>
 
 
 }

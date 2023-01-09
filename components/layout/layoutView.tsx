@@ -40,14 +40,14 @@ const W2100 = styled.div`
         }
     `
 export const LayoutView = ({ session, pageType, layout,  qparams }) => {
-    console.log("LAYOUT_VIEW:", layout);
+   // console.log("LAYOUT_VIEW:", layout);
     let layoutView = layout.layoutView;
     let columns = layout.columns;
    // let defaultWidth = session.get("defaultWidth");
    // console.log("defaultWidth:", +defaultWidth, +session.get("width"))
-   console.log("layoutView:",layoutView)
+   //console.log("layoutView:",layoutView)
     let width = getLayoutWidth(session.width);
-    console.log("LAYOUTVIEW ", { width})
+    //console.log("LAYOUTVIEW ", { width})
     return <OuterWrapper>
         {width == 750 ? <W000><LayoutRes layout={layoutView} res="w900" qparams={qparams} session={session} /></W000> : null}
         {width == 900 ? <W900><LayoutRes layout={layoutView} res="w900" qparams={qparams} session={session} /></W900> : null}

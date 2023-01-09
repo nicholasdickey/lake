@@ -20,7 +20,7 @@ async function handler(
         res.status(405).send({ message: 'Only POST requests allowed' });
         return;
     }
-    let options: Options = req.session.options ? req.session.options : ({ width: 0, sessionid: randomstring() } as Options);
+    let options: Options = req.session.options ? req.session.options : ({ width: 0} as Options);
    // console.log("inside save session handler",req.body)
     const body = req.body;
     

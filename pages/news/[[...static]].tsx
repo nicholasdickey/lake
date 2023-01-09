@@ -20,7 +20,7 @@ export async function getStaticProps(props: StaticParams) {
     console.log("getStaticProps", params)
     let ssr = props.params?.static as string[];
     if (!ssr)
-        ssr = ["qwiket", "usconservative", "newsline"];
+        ssr = [];
     let [newsline, forum, type] = ssr;
     if (!type)
         type = "newsline";
@@ -44,10 +44,10 @@ export async function getStaticProps(props: StaticParams) {
 
     }
     const channelConfig = await fetchChannelConfig(newsline)
-    console.log("GOT channelConfig", channelConfig)
-    console.log("CALLING fetchChannelLayout:", [newsline, options.hasLayout, options.sessionid, options.userslug, type, options.dense, options.thick, layoutNumber])
+  //  console.log("GOT channelConfig", channelConfig)
+  //  console.log("CALLING fetchChannelLayout:", [newsline, options.hasLayout, options.sessionid, options.userslug, type, options.dense, options.thick, layoutNumber])
     const channelLayout = await fetchChannelLayout(['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, type, options.dense, options.thick, layoutNumber]);
-    console.log("GOT CHANNEL LAYOUT", JSON.stringify(channelLayout))
+  //  console.log("GOT CHANNEL LAYOUT", JSON.stringify(channelLayout))
     const user = await fetchUser(['user', options.userslug])
     const qparams = {
         custom: false,
@@ -66,10 +66,10 @@ export async function getStaticProps(props: StaticParams) {
         [unstable_serialize(['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, type, options.dense, options.thick, layoutNumber])]: channelLayout,
         [unstable_serialize(['user', options.userslug])]: user
     }
-    console.log("queues", queues)
-    console.log("fallback", fallback)
+   // console.log("queues", queues)
+  //  console.log("fallback", fallback)
     fallback = Object.assign(fallback, queues);
-    console.log("fallback after assign", fallback)
+  //  console.log("fallback after assign", fallback)
 
     const propsWrap = {
         props: {

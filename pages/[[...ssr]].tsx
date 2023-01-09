@@ -1,10 +1,10 @@
 import React from "react"
-import Common, { CommonProps } from "../../components/common"
+import Common, { CommonProps } from "../components/common"
 import Bowser from "bowser";
 import { SWRConfig, unstable_serialize } from 'swr'
-import { fetchChannelConfig, fetchChannelLayout,fetchUser } from '../../lib/lakeApi';
-import { withSessionSsr } from '../../lib/withSession';
-import {fetchQueues} from '../../lib/ssrQueueFetches';
+import { fetchChannelConfig, fetchChannelLayout,fetchUser,fetchMyNewsline,fetchPublications,fetchPublicationCategories } from '../lib/lakeApi';
+import { withSessionSsr } from '../lib/withSession';
+import {fetchQueues} from '../lib/ssrQueueFetches';
 
 import {
     GetServerSidePropsContext,
@@ -21,8 +21,9 @@ export default function Home({ session, qparams, fallback }: CommonProps) {
 /**
  * 
  * URL Schema:
- * /[newsline]/[forum]/[type=topic|home]/[tag]/[silo]/[threadid]/[layout\
- * /[newsline]/[forum]/[type=newsline|solo]/[layout]
+ * /[forum]/[type=topic|home]/[tag]/[threadid]/[layoutNumber]
+ * /[forum]/[type=newsline]/[layoutNumber]/[navTab]
+ * /[forum]/[type=solo]/[tag]/[layoutNumber]/[navTab]
  * 
  * 
  */
@@ -33,17 +34,18 @@ export const getServerSideProps = withSessionSsr(
         // parse dynamic params:
         let ssr = context.params?.ssr as string[];
         if (!ssr)
-            ssr = ["qwiket", "usconservative", "newsline", "main"];
-        let [newsline, forum] = ssr;
-        let type=ssr[2];
+            ssr = ["usconservative"];
+        let [forum] = ssr;
+        let type=ssr[1];
         if(!type)
-        type='newsline';
-        const tag = (type == 'topic' || type == 'home') ? ssr[3] : "";
-        const silo = (type == 'topic' || type == 'home') ? ssr[4] : "";
-        const threadid = (type == 'topic' || type == 'home') ? ssr[5] : "";
-        let layoutNumber = ((type == 'topic' || type == 'home') ? ssr[6] : ssr[3]);
+            type='newsline';
+        
+        const tag = (type == 'topic' || type == 'home'||type=='solo') ? ssr[2] :"";
+        const threadid = (type == 'topic' || type == 'home') ? ssr[3] : "";
+        let layoutNumber = ((type == 'topic' || type == 'home') ? ssr[4] :type=='solo'?ssr[3]: ssr[2])||"l1";
+        let navTab=((type=='newsline')?ssr[3]:type=="solo"?ssr[4]:0)||1;
 
-        console.log("NEWSLINE:",newsline,forum)
+        console.log("NEWSLINE:",forum)
 
         let ua = context.req.headers['user-agent'];
         const bowser = Bowser.getParser(ua ? ua : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36');
@@ -79,11 +81,10 @@ export const getServerSideProps = withSessionSsr(
             options.width = defaultWidth;
         if(typeof options.userslug==='undefined')
             options.userslug='';
-        if (!layoutNumber)
-            layoutNumber = 'l1';
-         console.log("Options:",options) 
+       
+        console.log("Options:",options) 
         // TBA pre-fetching data for SSR, for now all data fetched client-side   
-
+        const newsline ='qwiket';
         const channelConfig = await fetchChannelConfig(newsline)
         //console.log("GOT channelConfig",channelConfig)
        // console.log("CALLING fetchChannelLayout:",[newsline, options.hasLayout, options.sessionid, options.userslug, type, options.dense, options.thick, layoutNumber])
@@ -95,7 +96,7 @@ export const getServerSideProps = withSessionSsr(
             forum,
             type,
             tag,
-            silo,
+            navTab, 
             newsline,
             threadid,
             layoutNumber,
@@ -106,6 +107,27 @@ export const getServerSideProps = withSessionSsr(
             [newsline]: channelConfig,
             [unstable_serialize(['channelLayout',newsline, options.hasLayout, options.sessionid, options.userslug, type, options.dense, options.thick, layoutNumber])]: channelLayout,
             [unstable_serialize(['user',options.userslug])]:user
+        }
+        if(type=='newsline'){
+            if(navTab==1){
+                const myNewsline =await  fetchMyNewsline(['navigator', newsline, options.sessionid, options.userslug]);
+                console.log("myNewsline:",myNewsline)
+                fallback[unstable_serialize(['navigator', newsline, options.sessionid, options.userslug])]=myNewsline;
+            }
+            else {
+                 const publicationCategories=await fetchPublicationCategories(['publicationCategories', newsline])
+               
+                 fallback[unstable_serialize(['publicationCategories', newsline])]=publicationCategories;
+                 interface FiltersArray {
+                    [key: string]: boolean;
+                }
+                 const filter:boolean[]=[];
+                 publicationCategories.forEach(f=>filter[f.tag]=true)
+                 console.log("filter:",filter)
+                 const publications =await  fetchPublications(['publications', newsline, options.sessionid, options.userslug,filter ]);
+                 console.log("Publications key=:",['publications', newsline, options.sessionid, options.userslug, filter],publications)
+                 fallback[unstable_serialize(['publications', newsline, options.sessionid, options.userslug,filter ])]=publications;
+                }
         }
       //  console.log("queues",queues)
       //  console.log("fallback",fallback)
@@ -122,5 +144,5 @@ export const getServerSideProps = withSessionSsr(
         };
 
      //   console.log("propsWrap",JSON.stringify({ propsWrap }))
-        return propsWrap
+        return propsWrap;
     })

@@ -19,8 +19,8 @@ export enum QueueType {
  * @param param0 
  * @returns 
  */
-const Segment = ({ session, qparams, qType, lastid, tail, pageIndex, setLastid, hasData, setData }: {
-    session: Options, qparams: Qparams,
+const Segment = ({ extraWide, session, qparams, qType, lastid, tail, pageIndex, setLastid, hasData, setData }: {
+    extraWide:boolean,session: Options, qparams: Qparams,
     qType: QueueType, lastid: number, tail: string, pageIndex: number, setLastid: any, hasData: boolean, setData: any
 }) => {
     const key = ['queue', qType, qparams.newsline, qparams.forum, qparams.tag, pageIndex, lastid, session.sessionid, session.userslug, tail];
@@ -37,7 +37,7 @@ const Segment = ({ session, qparams, qType, lastid, tail, pageIndex, setLastid, 
         if (!hasData)
             setTimeout(() => setData(data, pageIndex, true, data.tail ? data.tail : ''), 1);
     }
-    console.log("RENDER SEGMENT page=", pageIndex,"isVisible:",isVisible);
+   // console.log("RENDER SEGMENT page=", pageIndex,"isVisible:",isVisible);
     const rows = [];
     if (data) {
 
@@ -45,26 +45,26 @@ const Segment = ({ session, qparams, qType, lastid, tail, pageIndex, setLastid, 
         for (let j = 0; j < datum.items.length; j++) {
             const item = datum.items[j].item;
             // console.log("render Qwiket item:",item)
-            rows.push(<Qwiket key={`sss[[sf[f]]]${j}`} session={session} qparams={qparams} item={item} isTopic={false}></Qwiket>)
+            rows.push(<Qwiket key={`sss[[sf[f]]]${j}`} extraWide={extraWide} session={session} qparams={qparams} item={item} isTopic={false}></Qwiket>)
         }
     }
     return (<div ref={ref}>{rows}</div>)
 }
-const Queue = ({ session, qparams, qType }: { session: Options, qparams: Qparams, qType: QueueType }) => {
+const Queue = ({ extraWide,session, qparams, qType }: { extraWide:boolean,session: Options, qparams: Qparams, qType: QueueType }) => {
 
     const [lastid, setLastid] = useState(0);
 
     const setData = (data: any, pageIndex: number, hasData: boolean, tail: string) => {
-        console.log("---> setData", data, pageIndex, hasData, tail)
+       // console.log("---> setData", data, pageIndex, hasData, tail)
         let segment = segments[pageIndex];
         segment.tail = tail;
         segment.hasData = hasData;
         segments[pageIndex] = segment;  //to be removed after conmfirmation that it works.
-        console.log("--->segments.length:", segments.length, "pageIndex:", pageIndex)
+      //  console.log("--->segments.length:", segments.length, "pageIndex:", pageIndex)
         if (pageIndex == segments.length - 1) {
             console.log("---> adding segment")
             segments.push({
-                segment: <Segment key={`wefho${pageIndex + 1}`} session={session} qparams={qparams} qType={qType} lastid={lastid} tail={tail} pageIndex={pageIndex + 1} setLastid={setLastid} hasData={false} setData={setData} />,
+                segment: <Segment key={`wefho${pageIndex + 1}`} extraWide={extraWide} session={session} qparams={qparams} qType={qType} lastid={lastid} tail={tail} pageIndex={pageIndex + 1} setLastid={setLastid} hasData={false} setData={setData} />,
                 tail: '',
                 hasData: false
             })
@@ -73,7 +73,7 @@ const Queue = ({ session, qparams, qType }: { session: Options, qparams: Qparams
     }
 
     const [segments, setSegments] = useState([{
-        segment: <Segment key={`wefho${0}`} session={session} qparams={qparams} qType={qType} lastid={0} tail={''} pageIndex={0} setLastid={setLastid} hasData={false} setData={setData} />,
+        segment: <Segment key={`wefho${0}`} extraWide={extraWide}  session={session} qparams={qparams} qType={qType} lastid={0} tail={''} pageIndex={0} setLastid={setLastid} hasData={false} setData={setData} />,
         tail: '',
         hasData: false
 
@@ -93,7 +93,7 @@ const Queue = ({ session, qparams, qType }: { session: Options, qparams: Qparams
     //const key=['queue', qType, qparams.newsline, qparams.forum, qparams.tag, 0, 0, session.sessionid, session.userslug, ''] ; 
     //const { data, error: queueError } = useSWR(key, fetchQueue);
     const { data: notif, error: notifError } = useSWR(['notif', qType, qparams.newsline, qparams.forum, qparams.tag, 0, 0, session.sessionid, session.userslug, ''], fetchQueue);
-    console.log("RENDER QUEUE",segments.length);
+  //  console.log("RENDER QUEUE",segments.length);
     // return <div>Items: <br/>{JSON.stringify(data)}</div>
     // return <div>Notifications: <br/>{JSON.stringify(notif)}</div>
     /*const rows = [];
@@ -123,21 +123,5 @@ const Queue = ({ session, qparams, qType }: { session: Options, qparams: Qparams
     */
     return <div>{segments.map(s => s.segment)}</div>
 }
-function useIsInViewport(ref: any) {
-    const [isIntersecting, setIsIntersecting] = useState(false);
-    console.log("useIsInViewport",ref)
-    useEffect(() => {
-        const observer =
-            new IntersectionObserver(([entry]) =>
-                setIsIntersecting(entry.isIntersecting),
-            );
-        observer.observe(ref.current);
 
-        return () => {
-            observer.disconnect();
-        };
-    }, [ref]);
-
-    return isIntersecting;
-}
 export default Queue;

@@ -416,16 +416,16 @@ const Lowline = ({ session ,lowline}) => {
     </LowlineWrapper>
 
 }
-
+const StyledHeader = styled.div`
+width:100%;
+`
 export const Header = ({ session, layout, channelSlug, channelDetails, newsline, qparams, updateSession }) => {
 
     const { data: user, error: userError } = useSWR(['user',session.userslug], fetchUser)
-    console.log("dark header render",session)
-    console.log("channelDetails",channelDetails)
+   // console.log("dark header render",session)
+   // console.log("channelDetails",channelDetails)
     //  console.log({ newsline: newsline.toJS(), session: session.toJS() })
-    const StyledHeader = styled.div`
-        width:100%;
-    `
+ 
     return <StyledHeader>
         <TitleBand title={`${newsline.slug != channelSlug ? `${channelDetails.shortname}:` : ''}${newsline.displayName}`} leftLogo={channelDetails.logo} rightLogo={newsline.logo} />
         <DatelineBand channelSlug={channelSlug} session={session} user={user} channelDetails={channelDetails} updateSession={updateSession} />

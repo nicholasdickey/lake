@@ -23,7 +23,8 @@ const Segment = ({ extraWide, session, qparams, qType, lastid, tail, pageIndex, 
     extraWide:boolean,session: Options, qparams: Qparams,
     qType: QueueType, lastid: number, tail: string, pageIndex: number, setLastid: any, hasData: boolean, setData: any
 }) => {
-    const key = ['queue', qType, qparams.newsline, qparams.forum, qparams.tag, pageIndex, lastid, session.sessionid, session.userslug, tail];
+    const sessionid=session.hasLayout?session.sessionid:'';
+    const key = ['queue', qType, qparams.newsline, qparams.forum, qparams.tag, pageIndex, lastid, sessionid, session.userslug, tail];
     const { data, error: queueError } = useSWR(key, fetchQueue);
     const ref = useRef<HTMLDivElement | null>(null)
     const entry = useIntersectionObserver(ref, {})
@@ -53,7 +54,7 @@ const Segment = ({ extraWide, session, qparams, qType, lastid, tail, pageIndex, 
 const Queue = ({ extraWide,session, qparams, qType }: { extraWide:boolean,session: Options, qparams: Qparams, qType: QueueType }) => {
 
     const [lastid, setLastid] = useState(0);
-
+    const sessionid=session.hasNewslines?session.sessionid:'';
     const setData = (data: any, pageIndex: number, hasData: boolean, tail: string) => {
        // console.log("---> setData", data, pageIndex, hasData, tail)
         let segment = segments[pageIndex];
@@ -92,7 +93,7 @@ const Queue = ({ extraWide,session, qparams, qType }: { extraWide:boolean,sessio
     //const [page,setPage]=useState(0);
     //const key=['queue', qType, qparams.newsline, qparams.forum, qparams.tag, 0, 0, session.sessionid, session.userslug, ''] ; 
     //const { data, error: queueError } = useSWR(key, fetchQueue);
-    const { data: notif, error: notifError } = useSWR(['notif', qType, qparams.newsline, qparams.forum, qparams.tag, 0, 0, session.sessionid, session.userslug, ''], fetchQueue);
+    const { data: notif, error: notifError } = useSWR(['notif', qType, qparams.newsline, qparams.forum, qparams.tag, 0, 0, sessionid, session.userslug, ''], fetchQueue);
   //  console.log("RENDER QUEUE",segments.length);
     // return <div>Items: <br/>{JSON.stringify(data)}</div>
     // return <div>Notifications: <br/>{JSON.stringify(notif)}</div>

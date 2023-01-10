@@ -5,22 +5,49 @@ import { Options } from '../lib/withSession';
 import { Qparams } from '../lib/qparams';
 import useSWR, { useSWRConfig } from 'swr';
 import useSWRImmutable from 'swr/immutable'
-import { fetchMyNewsline, fetchPublications, fetchPublicationCategories } from '../lib/lakeApi';
+import { fetchMyNewsline, fetchPublications, fetchPublicationCategories, updateMyNewsline, updatePublications, fetchPublicationsKey, fetchMyNewslineKey,Filters } from '../lib/lakeApi';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import NextImage from 'next/image';
 import StyledCheckbox from './checkbox';
+import SearchField from './searchField';
+import axios from 'axios';
 
 const Row = styled.div`
     display:flex;
     padding-left:6px;
-    padding-right:16px;
+    padding-right:6px;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
     width: 100%;
-    padding: 0px;
+   // padding: 0px;
     position:relative;
+    
+`
+const FilterRow = styled.div`
+    display:flex;
+    padding-left:16px;
+    //padding-right:4px;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+    //padding: 0px;
+    height:26px;
+   // position:relative;
+`
+const PublicationRow = styled.div`
+    display:flex;
+    //padding-left:16px;
+    padding-right:6px;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+    //padding: 0px;
+    height:36px;
+   // position:relative;
 `
 const Left = styled.div`
     display:flex;
@@ -48,14 +75,36 @@ const Name = styled.div`
 `
 const TabsWrap = styled.div`
     font-size:14px;
+   
+    
 `
 const Hr = styled.hr`
-   
+    
     margin:16px;
     font-size:14px;
 `
 const FilterWrap = styled.div`
-    margin-left:16px;
+    //margin-left:16px;
+`
+const SearchBox = styled.div`
+    display:flex;
+    //padding-left:6px;
+    //padding-right:16px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    //width: 100%;
+    margin-top: 16px;
+    position:relative;
+    .react-search-field-input{
+        color:var(--text);
+        background-color:var(--background);
+    }
+    .react-search-field-button-ignore{
+        color:var(--text);
+        //border-color:${props => props.color};
+        background-color:var(--background);
+    }
 `
 
 const Check = ({ label, checked, onChange, disabled }: { label?: string, checked: boolean, onChange: any, disabled: boolean }) => {
@@ -74,7 +123,7 @@ const Check = ({ label, checked, onChange, disabled }: { label?: string, checked
 }
 
 
-const Navigator = ({ session, qparams }: { session: Options, qparams: Qparams }) => {
+const Navigator = ({ session, qparams, updateSession }: { session: Options, qparams: Qparams, updateSession: any }) => {
     const router = useRouter();
     let { newsline, navTab } = qparams;
     const { sessionid, userslug } = session;
@@ -91,7 +140,7 @@ const Navigator = ({ session, qparams }: { session: Options, qparams: Qparams })
 
     console.log("Navigator2, navTab=", navTab)
 
-    return <TabsWrap><Tabs selectedIndex={navTab} onSelect={(i) => {
+    return <TabsWrap><Tabs defaultFocus={true} selectedTabClassName="selected-tab" defaultIndex={+(navTab || 1)} onSelect={(i) => {
         console.log("select ", i)
         router.push(`/${qparams.forum}/${qparams.type}/${qparams.layoutNumber}/${i}`, `/${qparams.forum}/${qparams.type}/${qparams.layoutNumber}/${i}`, { shallow: true })
     }}>
@@ -99,65 +148,89 @@ const Navigator = ({ session, qparams }: { session: Options, qparams: Qparams })
             <Tab>Explore Publications</Tab>
             <Tab>My Newsline</Tab>
         </TabList>
-        <TabPanel>
-            <Publications session={session} qparams={qparams} />
+        <TabPanel key="sdsdlkj1">
+            <Publications session={session} qparams={qparams} updateSession={updateSession} />
         </TabPanel>
 
-        <TabPanel>
-            <MyNewsline session={session} qparams={qparams} />
+        <TabPanel key="sdsdlkj2">
+            <MyNewsline session={session} qparams={qparams} updateSession={updateSession} />
         </TabPanel>
     </Tabs></TabsWrap>
 };
+
+
 interface Publication {
     name: string;
     switch: string;
-    icon: string
+    icon: string,
+    tag: string
 }
-const MyNewsline = ({ session, qparams }: { session: Options, qparams: Qparams }) => {
+const MyNewsline = ({ session, qparams, updateSession }: { session: Options, qparams: Qparams, updateSession: any }) => {
     const { newsline } = qparams;
-    const { sessionid, userslug } = session;
+    let { sessionid, userslug, hasNewslines } = session;
+    //sessionid=hasNewslines?sessionid:'';
+    const key: fetchMyNewslineKey = ['navigator', newsline, sessionid, userslug, hasNewslines];
+    const { data: myNewsline, error: myNewslineError, mutate } = useSWR(key, fetchMyNewsline);
+    console.log("MyNewsline", myNewsline);
 
-    const { data: myNewsline, error: myNewslineError } = useSWR(['navigator', newsline, sessionid, userslug], fetchMyNewsline);
     return <>{myNewsline ? myNewsline.map((n: Publication) => <>
-        <Row><Left><PubImageBox><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={n.icon} alt={n.name} fill={true} /></PubImageBox>
+        <PublicationRow><Left><PubImageBox><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={n.icon} alt={n.name} fill={true} /></PubImageBox>
             <Name>{n.name}</Name></Left>
-            <Check checked={n.switch == 'on'} onChange={() => { }} disabled={false} />
-        </Row>
+            <Check checked={n.switch == 'on'} onChange={async (s:boolean) => {
+                updateSession({ hasNewslines: true });
+                mutate(updateMyNewsline({ tag: n.tag, switch: s ? 'on' : 'off', newsline, sessionid, userslug: session.userslug }),
+                    {
+                        optimisticData: myNewsline.map((p: Publication) => {
+                            if (p.tag = n.tag) {
+                                console.log("Optimistic update ", p.tag, s ? 'on' : 'off')
+                                return {
+                                    ...p,
+                                    switch: s ? 'on' : 'off'
+                                }
+                            }
+                            else {
+                                return p;
+                            }
+                        })
+
+                    })
+            }} disabled={false} />
+        </PublicationRow>
     </>) : "Loading..."}</>
 }
-interface FiltersArray {
-    [key: string]: string;
-}
 
-const Publications = ({ session, qparams }: { session: Options, qparams: Qparams }) => {
+const Publications = ({ session, qparams, updateSession }: { session: Options, qparams: Qparams, updateSession: any }) => {
 
-     const { mutate } = useSWRConfig()
+    const { mutate } = useSWRConfig()
     const { newsline } = qparams;
-    const { sessionid, userslug } = session;
+    let { sessionid, userslug, hasNewslines } = session;
+    //sessionid//=hasNewslines?sessionid:'';
+    const [q, setQ] = useState("");
+  
     const { data: publicationCategories, error: publicationCategoriesError }: { data: FilterDatum[], error: string | undefined } = useSWRImmutable(['publicationCategories', newsline], fetchPublicationCategories);
 
-  
-    const [filters, setFilters]: [filters: FiltersArray, setFilters: any] = useState(()=>publicationCategories?.reduce((accum, currentVal) => {
-       
-        accum[currentVal.tag] = 'on';
-        console.log("reduce:",currentVal,accum)
+
+    const [filters, setFilters]: [filters: Filters, setFilters: any] = useState(() => publicationCategories?publicationCategories.reduce((accum:Filters, currentVal) => {
+
+        accum[currentVal.tag] = true;
+        console.log("reduce:", currentVal, accum)
         return accum;
-    },[]
-    )||[]);
+    },{}):{});
 
     // const out = filterValues(filters);
     //console.log("out", out)
-    console.log("filters",filters)
-    const { data: publications, error: publicationsError } = useSWR(['publications', newsline, sessionid, userslug, filters], fetchPublications, {
+    console.log("filters", filters)
+    const key:fetchPublicationsKey=['publications', newsline, session.hasNewslines ? sessionid : '', userslug, filters, q,hasNewslines];
+    const { data: publications, error: publicationsError } = useSWR(key, fetchPublications, {
 
         revalidateOnFocus: false,
         revalidateOnReconnect: false
     });
-    console.log("Publications render, key=",['publications', newsline, sessionid, userslug, filters], publications)
-    const setF = useCallback((tag: string, action: string, doFetch: boolean) => {
+    console.log("Publications render, key=", ['publications', newsline, sessionid, userslug, filters], publications)
+    const setF = useCallback((tag: string, action: boolean, doFetch: boolean) => {
         console.log("Publications callback", tag, action)
         //if (action) {
-            let newFilters={...filters}
+        let newFilters = { ...filters }
         if (filters[tag] != action) {
 
             newFilters[tag] = action;
@@ -165,27 +238,51 @@ const Publications = ({ session, qparams }: { session: Options, qparams: Qparams
             if (doFetch) {
                 //  setTimeout(() => {
                 //const out = filterValues(filters);
-                console.log("call mutate=>", filters)
-                mutate(['publications', newsline, sessionid, userslug, filters], undefined,
-                    { revalidate: true });
-                console.log("after mutate") 
+               // console.log("call mutate=>", filters);
+                const key:fetchPublicationsKey=['publications', newsline,sessionid, userslug, filters, q,hasNewslines];
+                mutate(key, undefined, { revalidate: true });
+               // console.log("after mutate")
                 // }, 1);
             }
             setFilters(newFilters);
         }
         //}
-    }, [filters, mutate, sessionid, userslug, newsline])
+    }, [filters, mutate, sessionid, userslug, newsline, q,hasNewslines])
     //  const { data:publicationCategories, error: publicationCategoriesError } = useSWR(['publicationCategories', newsline], fetchPublicationCategories);
     //  console.log("publicationCategories",publicationCategories)
 
     console.log("render publications", publications)
-    return <><Hr /><Row>
-        <FilterWrap> <Filters newsline={newsline} callback={setF} publicationCategories={publicationCategories} /></FilterWrap>
-    </Row><Hr />
-        {publications ? publications.map((n: Publication) => <Row key={`afpqhqpd-${n.name}`}><Left><PubImageBox><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={n.icon} alt={n.name} fill={true} /></PubImageBox>
+    return <><SearchBox ><SearchField
+        placeholder="Search..."
+        onSearchClick={(t:string) => { setQ(t); } }
+        searchText="" classNames={undefined} disabled={undefined} onChange={undefined} onEnter={undefined} onBlur={undefined} //artifact of using a legacy jsx component
+    /></SearchBox><Hr /><Row>
+            <FilterWrap> <FiltersContainer newsline={newsline} callback={setF} publicationCategories={publicationCategories} /></FilterWrap>
+        </Row><Hr />
+        {publications ? publications.map((n: Publication) => <PublicationRow key={`afpqhqpd-${n.name}`}><Left><PubImageBox><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={n.icon} alt={n.name} fill={true} /></PubImageBox>
             <Name>{n.name}</Name></Left>
-            <Check checked={n.switch == 'on'} onChange={() => { }} disabled={false} />
-        </Row>
+            <Check checked={n.switch == 'on'} onChange={async (s:boolean) => {
+                console.log("PUBLICATION ON CLICK callling mutate")
+                //need to mutate session.hasNewslines
+                updateSession({ hasNewslines: true });
+
+                mutate(updatePublications({ tag: n.tag, switch: s ? 'on' : 'off', newsline, filters, q, sessionid, userslug: session.userslug }),
+                    {
+                        optimisticData: publications.map((p: Publication) => {
+                            if (p.tag = n.tag) {
+                                return {
+                                    ...p,
+                                    switch: s ? 'on' : 'off'
+                                }
+                            }
+                            else {
+                                return p;
+                            }
+                        })
+
+                    })
+            }} disabled={false} />
+        </PublicationRow>
         ) : "Loading..."}{publicationsError}</>
 }
 interface FilterDatum {
@@ -193,17 +290,16 @@ interface FilterDatum {
     tag: string;
 
 }
-const Filters = ({ newsline, callback, publicationCategories }: { newsline: string, callback: any, publicationCategories: any }) => {
-
-
-
+const FiltersContainer = ({ newsline, callback, publicationCategories }: { newsline: string, callback: any, publicationCategories: any }) => {
     console.log("publicationCategories-->", publicationCategories)
-    return <><Row>{publicationCategories ? publicationCategories.map(f => <Filter key={`wwfvpvh-${f.name}`} name={f.name} tag={f.tag} callback={callback}></Filter>) : 'Loading...'}</Row></>
+    return <Left>{publicationCategories ? publicationCategories.map((f:FilterDatum) => <Filter key={`wwfvpvh-${f.name}`} name={f.name} tag={f.tag} callback={callback}></Filter>) : 'Loading...'}</Left>
 }
 const Filter = ({ name, tag, callback }: { name: string, tag: string, callback: any }) => {
     const [checked, setChecked] = useState(true);
-    callback(tag, checked?'on':'off', false);
-    return <Row>{name}  <Check checked={checked} onChange={(c: boolean) => { setChecked(c); callback(tag, c?'on':'off', true) }} disabled={false} /></Row>
+    callback(tag, checked ? true :false, false);
+    return <FilterRow>{name}  
+    <Check checked={checked} onChange={(c: boolean) => { setChecked(c); callback(tag, c ? 'on' : 'off', true) }} disabled={false} />
+    </FilterRow>
 }
 
 export default Navigator;

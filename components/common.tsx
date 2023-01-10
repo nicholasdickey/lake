@@ -89,6 +89,7 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
   const [theme,setTheme]=useState(session.dark!=-1?session.dark==1?'dark':'light':"unknown")
   //console.log("R!:", session)
   const router = useRouter()
+  const sessionid=session.hasLayout?session.sessionid:'';
   //console.log("pathname:",router.asPath);
   useEffect(() => {
     if(theme!='unknown'){
@@ -153,14 +154,14 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
     
 
   }
-  const { data: layout, error: layoutError } = useSWR(['channelLayout', qparams.newsline, session.hasLayout, session.sessionid, session.userslug, type, session.dense, session.thick, layoutNumber], fetchChannelLayout)
+  const { data: layout, error: layoutError } = useSWR(['channelLayout', qparams.newsline, session.hasLayout, sessionid, session.userslug, type, session.dense, session.thick, layoutNumber], fetchChannelLayout)
 
 
   //console.log("RENDER: width=", session.width)
   //console.log("LAYOUT:", layout)
   //console.log("QPARAMS",qparams);
   //console.log("CHANNEL_CONFIG:", channelConfig)
-  const hpads = layout.hpads;
+  const hpads = layout?.hpads;
   //console.log ("render dark:",session)
 
   //opacity:${user.get("mask") ? 0.5 : 1.0};
@@ -183,7 +184,7 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
               <PageWrap>
                 <Header session={session} channelSlug={channelConfig.channelSlug} channelDetails={channelConfig.channelDetails} newsline={channelConfig.newsline} layout={layout} qparams={qparams} updateSession={updateSession} />
                 
-                <LayoutView  session={session}  pageType={type} layout={layout} qparams={qparams} />
+                <LayoutView  session={session}  pageType={type} layout={layout} qparams={qparams} updateSession={updateSession}/>
               
               </PageWrap>
             </Grid>

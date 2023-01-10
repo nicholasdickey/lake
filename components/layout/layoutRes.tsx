@@ -8,7 +8,7 @@ display:flex;
 justify-content:space-between;
 
 `
-export const LayoutRes = ({ layout, res, qparams,session }) => {
+export const LayoutRes = ({ layout, res, qparams,session,updateSession }) => {
     let layres = layout[res];
     //console.log("LAYRES", layres);
     let columns = layres.columns;
@@ -16,7 +16,7 @@ export const LayoutRes = ({ layout, res, qparams,session }) => {
     let key=0;
     let cols = columns.map(c => {
         // console.log("column", res, c)
-        return  <Column key={`sdfpihww${key++}`} column={c} qparams={qparams}  session={session}/>
+        return  <Column key={`sdfpihww${key++}`} column={c} qparams={qparams}  session={session} updateSession={updateSession} />
     })
   
     // <div>{JSON.stringify(layres, null, 4)}</div>

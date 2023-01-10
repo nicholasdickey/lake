@@ -38,7 +38,7 @@ const listRenderer = ({ qparams, rows, tag, ...rest }) => {
     return <InnerStyledColumn data-id="inner-styled-column" className="q-column">{rows}</InnerStyledColumn>
 }
 */
-export const Column = ({ column, qparams, session }: { column: any, qparams: Qparams, session: Options }) => {
+export const Column = ({ column, qparams, session,updateSession }: { column: any, qparams: Qparams, session: Options,updateSession:any }) => {
     let width = column.percentWidth;
 
     let type = column.type;
@@ -113,7 +113,7 @@ export const Column = ({ column, qparams, session }: { column: any, qparams: Qpa
                     <Queue extraWide={true} qType={selector} qparams={qparams} session={session} />
                 </StyledColumn>
                 <StyledColumn width={rightWidth}>
-                    <Navigator session={session} qparams={qparams} />
+                    <Navigator session={session} qparams={qparams} updateSession={updateSession} />
                 </StyledColumn>
             </MpColumn>
         }

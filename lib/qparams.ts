@@ -5,7 +5,7 @@ export interface Qparams {
     type: string,
     newsline: string,
     tag?: string,
-    navTab?:string,
+    navTab?:number,
     threadid?: string,
     layoutNumber?: string,
     timestamp:number   

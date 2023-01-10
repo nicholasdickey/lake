@@ -39,7 +39,7 @@ const W2100 = styled.div`
             display:flex;
         }
     `
-export const LayoutView = ({ session, pageType, layout,  qparams }) => {
+export const LayoutView = ({ session, pageType, layout,  qparams,updateSession }) => {
    // console.log("LAYOUT_VIEW:", layout);
     let layoutView = layout.layoutView;
     let columns = layout.columns;
@@ -49,11 +49,11 @@ export const LayoutView = ({ session, pageType, layout,  qparams }) => {
     let width = getLayoutWidth(session.width);
     //console.log("LAYOUTVIEW ", { width})
     return <OuterWrapper>
-        {width == 750 ? <W000><LayoutRes layout={layoutView} res="w900" qparams={qparams} session={session} /></W000> : null}
-        {width == 900 ? <W900><LayoutRes layout={layoutView} res="w900" qparams={qparams} session={session} /></W900> : null}
-        {width == 1200 ? <W1200><LayoutRes layout={layoutView} res="w1200" qparams={qparams} session={session} /></W1200> : null}
-        {width == 1800 ? <W1800><LayoutRes layout={layoutView} res="w1800" qparams={qparams} session={session} /></W1800> : null}
-        {width == 2100 ? <W2100><LayoutRes layout={layoutView} res="w2100" qparams={qparams} session={session} /></W2100> : null}
+        {width == 750 ? <W000><LayoutRes layout={layoutView} res="w900" qparams={qparams} session={session} updateSession={updateSession} /></W000> : null}
+        {width == 900 ? <W900><LayoutRes layout={layoutView} res="w900" qparams={qparams} session={session} updateSession={updateSession} /></W900> : null}
+        {width == 1200 ? <W1200><LayoutRes layout={layoutView} res="w1200" qparams={qparams} session={session} updateSession={updateSession} /></W1200> : null}
+        {width == 1800 ? <W1800><LayoutRes layout={layoutView} res="w1800" qparams={qparams} session={session} updateSession={updateSession} /></W1800> : null}
+        {width == 2100 ? <W2100><LayoutRes layout={layoutView} res="w2100" qparams={qparams} session={session} updateSession={updateSession} /></W2100> : null}
 
     </OuterWrapper>
     // return <div>{JSON.stringify(layout, null, 4)}</div>

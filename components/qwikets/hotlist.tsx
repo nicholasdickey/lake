@@ -7,13 +7,13 @@ import { fetchQueue } from '../../lib/lakeApi';
 import NextImage from 'next/image';
 
 
-const HotlistBox=styled.div`
+const HotlistBox=styled.div<Loud>`
    display:flex; 
    width:100%;
    position:relative;;
    margin-bottom:24px;
    margin-top:0px;
-   background:#000;
+   background:${({loud})=>loud?'#000':'#222'};
 `
 interface ImageBoxParams{
     spaces:number,
@@ -21,14 +21,14 @@ interface ImageBoxParams{
 }
 const ImageBox=styled.div<ImageBoxParams>`
     position: relative;
-    object-fit: cover;
+   
     //margin-top: 10px;
     //padding-top: 0px;
    
     //margin-right: 16px; 
     //margin-bottom: 10px;
-    min-height:${({spaces,loud})=>(loud==1?640:420)/spaces}px;
-    //min-width:${({spaces})=>1564/spaces}px;
+    min-height:${({spaces,loud})=>(loud==1?640:420)/spaces}px;  
+    //min-width:${({spaces})=>164/spaces}px;
     //height:${({spaces}) => 100/spaces}%;   
     //width:${({spaces}) => 100/spaces}%;   
    // height:100%;
@@ -36,13 +36,13 @@ const ImageBox=styled.div<ImageBoxParams>`
     width:100%;
     overflow: hidden;
 `
-interface OpacityBoxParams{
+interface Loud{
     loud:number
 }
-const OpacityBox=styled.div<OpacityBoxParams>`
+const OpacityBox=styled.div<Loud>`
      opacity:${({loud})=>loud==1?0.8:.4};
 `
-const OverlayBox=styled.div<OpacityBoxParams>`
+const OverlayBox=styled.div<Loud>`
     position:absolute;
     height:${({loud})=>loud==1?84:78}px;
     right:0px;
@@ -80,7 +80,8 @@ const SitenameBox=styled.div`
 
 const HotlistItem=({ session, qparams,item,spaces }: { session: Options, qparams: Qparams,item:any,spaces:number}) => {
     return <ImageBox spaces={spaces} loud={session.loud} >
-        <OpacityBox loud={session.loud}><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={item.image} alt={item.title} fill={true} /></OpacityBox>
+        <OpacityBox loud={session.loud}>
+            <NextImage style={{objectFit:'cover'}} placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={item.image} alt={item.title} fill={true} /></OpacityBox>
         <OverlayBox loud={session.loud}>
             <TitleBox>{item.title.slice(0,64)}</TitleBox>
             <Hr/>

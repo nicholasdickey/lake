@@ -3,6 +3,8 @@ export const palette = {
         colors: {
             text: "#222222",//color:"#607D8B",
             link: "#607D8B",
+            highlight:"#388e3c",
+            lowlight: "#f8f8f8",     
             background: "#F5F5F5",// g[100]
             button: "#F5F5F5",
             stars: [
@@ -20,6 +22,8 @@ export const palette = {
         colors: {
             text: "#F5F5F5",
             link: "#F5F5F5",
+            highlight:"#B0BEC5",
+            lowlight:"#444",
             background: "#303030",//"#607D8B", //bg[500]
             button:"#607D8B",
             stars: [

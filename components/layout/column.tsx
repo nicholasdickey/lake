@@ -4,6 +4,7 @@ import { Qparams } from '../../lib/qparams';
 import { Options } from '../../lib/withSession'
 import Queue from '../qwikets/queue';
 import Navigator from '../navigator';
+import Hotlist from '../qwikets/hotlist';
 
 const QwiketItem = () => <div>QwiketItem</div>
 const Tag = () => <div>Tag</div>

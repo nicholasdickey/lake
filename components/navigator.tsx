@@ -49,6 +49,16 @@ const PublicationRow = styled.div`
     height:36px;
    // position:relative;
 `
+const Description = styled.div`
+    display:flex;
+    padding-left:16px;
+    font-size: 11px;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    color:var(--highlight);
+    height:34px;
+`
 const Left = styled.div`
     display:flex;
     align-items: center;
@@ -72,16 +82,30 @@ const PubImageBox = styled.div`
 
 const Name = styled.div`
     margin-right:16px;
+    color:var(--highlight);
+`
+const Highlight=styled.div`
+    color:var(--text);
 `
 const TabsWrap = styled.div`
     font-size:14px;
-   
-    
+    .selected-tab{
+        border-width:1px;
+        border-color:var(--text);
+    }
+      
 `
 const Hr = styled.hr`
     
-    margin:16px;
+    margin:16px ;
     font-size:14px;
+  
+`
+const VerticalSpacer = styled.div`
+    
+    margin:16px ;
+    font-size:14px;
+  
 `
 const FilterWrap = styled.div`
     //margin-left:16px;
@@ -96,9 +120,10 @@ const SearchBox = styled.div`
     //width: 100%;
     margin-top: 16px;
     position:relative;
+    background:var(--background);
     .react-search-field-input{
         color:var(--text);
-        background-color:var(--background);
+        background:var(--background);
     }
     .react-search-field-button-ignore{
         color:var(--text);
@@ -126,8 +151,7 @@ const Check = ({ label, checked, onChange, disabled }: { label?: string, checked
 const Navigator = ({ session, qparams, updateSession }: { session: Options, qparams: Qparams, updateSession: any }) => {
     const router = useRouter();
     let { newsline, navTab } = qparams;
-    const { sessionid, userslug } = session;
-
+    
 
     console.log("Navigator, navTab=", navTab, router.query)
     if (router.query) {
@@ -140,7 +164,7 @@ const Navigator = ({ session, qparams, updateSession }: { session: Options, qpar
 
     console.log("Navigator2, navTab=", navTab)
 
-    return <TabsWrap><Tabs defaultFocus={true} selectedTabClassName="selected-tab" defaultIndex={+(navTab || 1)} onSelect={(i) => {
+    return <TabsWrap><Tabs focusTabOnClick={false} defaultFocus={false} selectedTabClassName="selected-tab" defaultIndex={+(navTab || 1)} onSelect={(i) => {
         console.log("select ", i)
         router.push(`/${qparams.forum}/${qparams.type}/${qparams.layoutNumber}/${i}`, `/${qparams.forum}/${qparams.type}/${qparams.layoutNumber}/${i}`, { shallow: true })
     }}>
@@ -163,7 +187,9 @@ interface Publication {
     name: string;
     switch: string;
     icon: string,
-    tag: string
+    tag: string;
+    default:boolean;
+    description:string
 }
 const MyNewsline = ({ session, qparams, updateSession }: { session: Options, qparams: Qparams, updateSession: any }) => {
     const { newsline } = qparams;
@@ -173,9 +199,9 @@ const MyNewsline = ({ session, qparams, updateSession }: { session: Options, qpa
     const { data: myNewsline, error: myNewslineError, mutate } = useSWR(key, fetchMyNewsline);
     console.log("MyNewsline", myNewsline);
 
-    return <>{myNewsline ? myNewsline.map((n: Publication) => <>
-        <PublicationRow><Left><PubImageBox><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={n.icon} alt={n.name} fill={true} /></PubImageBox>
-            <Name>{n.name}</Name></Left>
+    return <><VerticalSpacer/>{myNewsline ? myNewsline.map((n: Publication) => <>
+        <PublicationRow key={`afkkqkqqqq-${n.tag}`}><Left><PubImageBox><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={n.icon} alt={n.name} fill={true} /></PubImageBox>
+            <Name>{!n.default?<Highlight>{n.name}</Highlight>:<>{n.name}</>}</Name></Left>
             <Check checked={n.switch == 'on'} onChange={async (s:boolean) => {
                 updateSession({ hasNewslines: true });
                 mutate(updateMyNewsline({ tag: n.tag, switch: s ? 'on' : 'off', newsline, sessionid, userslug: session.userslug }),
@@ -196,6 +222,7 @@ const MyNewsline = ({ session, qparams, updateSession }: { session: Options, qpa
                     })
             }} disabled={false} />
         </PublicationRow>
+        
     </>) : "Loading..."}</>
 }
 
@@ -216,17 +243,16 @@ const Publications = ({ session, qparams, updateSession }: { session: Options, q
         console.log("reduce:", currentVal, accum)
         return accum;
     },{}):{});
-
+    console.log("RENDER PUBLICATIONS",session)
     // const out = filterValues(filters);
     //console.log("out", out)
     console.log("filters", filters)
-    const key:fetchPublicationsKey=['publications', newsline, session.hasNewslines ? sessionid : '', userslug, filters, q,hasNewslines];
-    const { data: publications, error: publicationsError } = useSWR(key, fetchPublications, {
-
+    const key:fetchPublicationsKey=['publications', newsline,  sessionid , userslug, filters, q,hasNewslines];
+    const { data: publications, error: publicationsError,mutate:mutatePublications } = useSWR(key, fetchPublications, {
         revalidateOnFocus: false,
         revalidateOnReconnect: false
     });
-    console.log("Publications render, key=", ['publications', newsline, sessionid, userslug, filters], publications)
+    console.log("Publications render, key=", key, publications)
     const setF = useCallback((tag: string, action: boolean, doFetch: boolean) => {
         console.log("Publications callback", tag, action)
         //if (action) {
@@ -254,22 +280,22 @@ const Publications = ({ session, qparams, updateSession }: { session: Options, q
     console.log("render publications", publications)
     return <><SearchBox ><SearchField
         placeholder="Search..."
-        onSearchClick={(t:string) => { setQ(t); } }
+        onSearchClick={(t: string) => { setQ(t); } }
         searchText="" classNames={undefined} disabled={undefined} onChange={undefined} onEnter={undefined} onBlur={undefined} //artifact of using a legacy jsx component
-    /></SearchBox><Hr /><Row>
+        theme={undefined}    /></SearchBox><Hr /><Row>
             <FilterWrap> <FiltersContainer newsline={newsline} callback={setF} publicationCategories={publicationCategories} /></FilterWrap>
         </Row><Hr />
-        {publications ? publications.map((n: Publication) => <PublicationRow key={`afpqhqpd-${n.name}`}><Left><PubImageBox><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={n.icon} alt={n.name} fill={true} /></PubImageBox>
-            <Name>{n.name}</Name></Left>
+        {publications ? publications.map((n: Publication) => <><PublicationRow key={`afpqhqpd-${n.name}`}><Left><PubImageBox><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={n.icon} alt={n.name} fill={true} /></PubImageBox>
+            <Name><Highlight>{n.name}</Highlight></Name></Left>
             <Check checked={n.switch == 'on'} onChange={async (s:boolean) => {
                 console.log("PUBLICATION ON CLICK callling mutate")
                 //need to mutate session.hasNewslines
                 updateSession({ hasNewslines: true });
 
-                mutate(updatePublications({ tag: n.tag, switch: s ? 'on' : 'off', newsline, filters, q, sessionid, userslug: session.userslug }),
+                mutatePublications(updatePublications({ tag: n.tag, switch: s ? 'on' : 'off', newsline, filters, q, sessionid, userslug }),
                     {
                         optimisticData: publications.map((p: Publication) => {
-                            if (p.tag = n.tag) {
+                            if (p.tag == n.tag) {
                                 return {
                                     ...p,
                                     switch: s ? 'on' : 'off'
@@ -283,6 +309,7 @@ const Publications = ({ session, qparams, updateSession }: { session: Options, q
                     })
             }} disabled={false} />
         </PublicationRow>
+        <Description>{n.description}</Description></>
         ) : "Loading..."}{publicationsError}</>
 }
 interface FilterDatum {

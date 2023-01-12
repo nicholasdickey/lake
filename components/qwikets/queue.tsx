@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import { Qparams } from '../../lib/qparams'
 import { Options } from '../../lib/withSession';
 import useSWR from 'swr';
-import useSWRInfinite from 'swr/infinite';
+
 import { fetchQueue } from '../../lib/lakeApi';
 import Qwiket from './qwiket'
 import  useIntersectionObserver  from '../../lib/useIntersectionObserver'

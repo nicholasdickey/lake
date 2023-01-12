@@ -5,7 +5,7 @@ import useSWR from 'swr'
 import styled from 'styled-components';
 import { ThemeProvider, DefaultTheme } from 'styled-components'
 import axios from 'axios';
-import { fetchChannelConfig, fetchChannelLayout } from '../lib/lakeApi';
+import { fetchChannelConfig, fetchChannelLayout,fetchChannelLayoutKey } from '../lib/lakeApi';
 import { Options } from '../lib/withSession';
 import { Qparams } from '../lib/qparams';
 import { Topline } from './topline';
@@ -13,7 +13,8 @@ import { Header } from './header';
 import GlobalStyle from '../components/globalstyles'
 import { palette } from '../lib/palette';
 import {LayoutView} from './layout/layoutView';
-import { Inter} from '@next/font/google'
+import { Roboto} from '@next/font/google';
+
 
 
 /**
@@ -25,7 +26,7 @@ export interface CommonProps {
   qparams: Qparams,
   fallback?: any
 }
-const roboto = Inter({ subsets: ['latin'] })
+const roboto = Roboto({ subsets: ['latin'],weight:['300','400','700'], style: ['normal', 'italic'] })
 const isBrowser = () => typeof window !== `undefined`
 interface GridProps {
   hpads: any;
@@ -89,7 +90,7 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
   const [theme,setTheme]=useState(session.dark!=-1?session.dark==1?'dark':'light':"unknown")
   //console.log("R!:", session)
   const router = useRouter()
-  const sessionid=session.hasLayout?session.sessionid:'';
+  //const sessionid=session.hasLayout?session.sessionid:'';
   //console.log("pathname:",router.asPath);
   useEffect(() => {
     if(theme!='unknown'){
@@ -154,11 +155,13 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
     
 
   }
-  const { data: layout, error: layoutError } = useSWR(['channelLayout', qparams.newsline, session.hasLayout, sessionid, session.userslug, type, session.dense, session.thick, layoutNumber], fetchChannelLayout)
+  const key:fetchChannelLayoutKey=['channelLayout', qparams.newsline, session.hasLayout, session.sessionid, session.userslug, type, session.dense, session.thick, layoutNumber||'l1'];
+  console.log("RENDER LAYOUT, key=",key)
+  const { data: layout, error: layoutError } = useSWR(key, fetchChannelLayout)
 
 
   //console.log("RENDER: width=", session.width)
-  //console.log("LAYOUT:", layout)
+  console.log("LAYOUT:", layout)
   //console.log("QPARAMS",qparams);
   //console.log("CHANNEL_CONFIG:", channelConfig)
   const hpads = layout?.hpads;
@@ -183,7 +186,7 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
             <Grid hpads={hpads}>
               <PageWrap>
                 <Header session={session} channelSlug={channelConfig.channelSlug} channelDetails={channelConfig.channelDetails} newsline={channelConfig.newsline} layout={layout} qparams={qparams} updateSession={updateSession} />
-                
+               
                 <LayoutView  session={session}  pageType={type} layout={layout} qparams={qparams} updateSession={updateSession}/>
               
               </PageWrap>

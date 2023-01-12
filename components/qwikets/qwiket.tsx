@@ -5,6 +5,7 @@ import NextImage from 'next/image';
 import TimeDifference from '../../lib/timeDifference'
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
+import {Options} from '../../lib/withSession';
 const VerticalWrap = styled.div`
     border-color: grey;
     border-style: solid;
@@ -71,7 +72,10 @@ const Image = styled.img`
    
                 
 `
-const ImageBox = styled.div`
+interface ImageBoxProps {
+   extraWide:boolean
+  }
+const ImageBox = styled.div<ImageBoxProps>`
    
     object-fit: cover;
     padding-top: 20px;

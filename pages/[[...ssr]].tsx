@@ -2,7 +2,8 @@ import React from "react"
 import Common, { CommonProps } from "../components/common"
 import Bowser from "bowser";
 import { SWRConfig, unstable_serialize } from 'swr'
-import { fetchChannelConfig, fetchChannelLayout, fetchUser, fetchMyNewsline, fetchPublications, fetchPublicationCategories, fetchPublicationsKey, fetchMyNewslineKey, Filters } from '../lib/lakeApi';
+import { fetchChannelConfig, fetchChannelLayout, fetchUser, fetchMyNewsline, fetchPublications, 
+    fetchPublicationCategories, fetchPublicationsKey, fetchMyNewslineKey, Filters,fetchChannelLayoutKey } from '../lib/lakeApi';
 import { withSessionSsr } from '../lib/withSession';
 import { fetchQueues } from '../lib/ssrQueueFetches';
 
@@ -93,9 +94,10 @@ export const getServerSideProps = withSessionSsr(
         const channelConfig = await fetchChannelConfig(newsline);
         //const sessionid=options.hasNewslines?options.sessionid:'';
         //console.log("GOT channelConfig",channelConfig)
-        // console.log("CALLING fetchChannelLayout:",[newsline, options.hasLayout, options.sessionid, options.userslug, type, options.dense, options.thick, layoutNumber])
-        const channelLayout = await fetchChannelLayout(['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, type, options.dense, options.thick, layoutNumber]);
-        //console.log("GOT CHANNEL LAYOUT",JSON.stringify(channelLayout))
+        const key:fetchChannelLayoutKey=['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, type, options.dense, options.thick, layoutNumber];
+        console.log("CALLING fetchChannelLayout:",key);
+        const channelLayout = await fetchChannelLayout(key);
+        console.log("GOT CHANNEL LAYOUT",JSON.stringify(channelLayout))
         const user = await fetchUser(['user', options.userslug])
 
         const qparams = {
@@ -112,7 +114,7 @@ export const getServerSideProps = withSessionSsr(
         const queues = await fetchQueues({ width: options.width, layout: channelLayout, qparams, session: options });
         let fallback = {
             [newsline]: channelConfig,
-            [unstable_serialize(['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, type, options.dense, options.thick, layoutNumber])]: channelLayout,
+            [unstable_serialize(key)]: channelLayout,
             [unstable_serialize(['user', options.userslug])]: user
         }
         if (type == 'newsline') {
@@ -132,7 +134,7 @@ export const getServerSideProps = withSessionSsr(
                 //console.log("filter:",filters);
                 const key: fetchPublicationsKey = ['publications', newsline, options.sessionid, options.userslug, filters, '', options.hasNewslines];
                 const publications = await fetchPublications(key);
-                console.log("Publications key=:", key, publications);
+               // console.log("Publications key=:", key, publications);
                 fallback[unstable_serialize(key)] = publications;
             }
         }

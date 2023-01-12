@@ -35,6 +35,7 @@ const searchFieldButtonStyle = (disabled) => ({
   appearance: 'none',
   border: 'none',
   borderLeft: '1px #ddd solid',
+ 
 });
 
 const searchFieldInputStyle = {
@@ -52,7 +53,7 @@ const SearchFieldInput=styled.input`
   border: none;
   font-size: 14px;
   padding: 0 8px;
-
+  color:var(--text);
   flex: 1;
   //color:${props=>props.theme.dark.colors.text} !important;
   //color:red;
@@ -60,20 +61,24 @@ const SearchFieldInput=styled.input`
   height:${SEARCH_BUTTON_EDGE - 2}px;
 `
 
+const Svg=styled.svg`
+  fill:var(--highlight);
+`
 const SearchIcon = () => {
   const iconEdge = Math.ceil(SEARCH_BUTTON_EDGE * 0.60);
   const searchIconStyle = {
-     fill: '#727272',
+    // fill: '#727272',
+    fill: '#aaa'
   };
   return (
-    <svg
+    <Svg
       version="1.1"
       x="0px"
       y="0px"
       width={iconEdge}
       height={iconEdge}
       viewBox="0 0 635 635"
-      style={searchIconStyle}
+      //style={searchIconStyle}
     >
       <g>
         <path d="M255.108,0C119.863,0,10.204,109.66,10.204,244.904c0,135.245,109.659,244.905,244.904,244.905
@@ -83,10 +88,14 @@ const SearchIcon = () => {
           c0-119.34,96.751-216.091,216.092-216.091s216.091,96.751,216.091,216.091C471.199,364.244,374.448,460.996,255.108,460.996z"
         />
       </g>
-    </svg>
+    </Svg>
   );
 };
-
+const Button=styled.button`
+  background:var(--background);
+  border-color:var(--lowlight);
+  color:var(--text);
+`
 const SearchField = ({
   classNames,
   searchText,
@@ -96,6 +105,7 @@ const SearchField = ({
   onEnter,
   onSearchClick,
   onBlur,
+  theme
 }) => {
   const [value, setValue] = useState(searchText);
 
@@ -143,17 +153,19 @@ const SearchField = ({
         type="text"
         value={value}
         disabled={disabled}
+       
       />
-      <button
+      <Button
         className="react-search-field-button"
         type="button"
         aria-label="search button"
         //style={searchFieldButtonStyle(disabled)}
         onClick={onSearchClickHandler}
         disabled={disabled}
+       
       >
         <SearchIcon />
-      </button>
+      </Button>
     </SearchFieldBox>
   );
 };

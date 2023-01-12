@@ -111,7 +111,7 @@ color:${props=>props.theme.color};
 }
 & a:hover{
     font-weight:500;
-    color${props=>props.theme.linkColor};
+    color:var(--link);
 }
 
 `
@@ -336,12 +336,14 @@ const DesktopNavigation = ({ session, channelDetails, url }) => {
         {items}
     </NavigationWrapper>
 }
+//const LowlineWrapperParams
 const LowlineWrapper = styled.div`
             display: flex;
             margin-top: 10px;
+            margin-bottom:16px;
             border-top: thin solid var(--text);
             height: 30px;
-            border-bottom: ${props=>props.hasBand == 1 ? null : 'thin solid var(--text)'};
+            border-bottom: ${props=>(props.loud == 0&&props.band) ? null : 'thin solid var(--text)'};
             width: 100%;
             align-items: center;
             font-family: Roboto;
@@ -398,7 +400,7 @@ const Lowline = ({ session ,lowline}) => {
 
     let hasBand = +session.band;
     
-    return <LowlineWrapper hasBand={hasBand}>
+    return <LowlineWrapper loud={session.loud} band={session.band}>
         <Stars>
             <Star />
             <Star />

@@ -20,7 +20,8 @@ export const fetchChannelConfig = async (slug: string) => {
    }
    return null
 }
-export const fetchChannelLayout = async ([u, slug, hasLayout, sessionid, userslug, type, dense, thick, layoutNumber]: [u: string, slug: string, hasLayout: boolean, sessionid: string, userslug: string, type: string, dense: number, thick: number, layoutNumber: string]) => {
+export type fetchChannelLayoutKey= [u: string, slug: string, hasLayout: boolean, sessionid: string, userslug: string, type: string, dense: number, thick: number, layoutNumber: string];
+export const fetchChannelLayout = async ([u, slug, hasLayout, sessionid, userslug, type, dense, thick, layoutNumber]:fetchChannelLayoutKey) => {
    try {
       const sessionParam = hasLayout ? userslug ? `&userslug=${userslug}` : `&sessionid=${sessionid}` : ``
       const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/layout/fetch?channel=${slug}${sessionParam}&pageType=${type}&dense=${dense}&thick=${thick}&layoutNumber=${layoutNumber}&API_KEY=${API_KEY}`
@@ -52,7 +53,7 @@ export const fetchUser = async ([u, userslug]: [u: string, userslug: string]) =>
 }
 export const fetchQueue = async ([u, qType, newsline, forum, tag, page, lastid, sessionid, userslug, tail, test]: [u: string, qType: string, newsline: string, forum: string, tag: string, page: number, lastid: string, sessionid: string, userslug: string, tail: string, test: string]) => {
    let params;
-   //   console.log("fetchQueue:", `['queue',qType:${qType},newsline:${newsline},forum:${forum},tag:${tag},page:${page},lastid:${lastid},sessionid:${sessionid},userslug:${userslug},tail:${tail}]`)
+   console.log("fetchQueue:", `['queue',qType:${qType},newsline:${newsline},forum:${forum},tag:${tag},page:${page},lastid:${lastid},sessionid:${sessionid},userslug:${userslug},tail:${tail}]`)
 
    const addParams = (params: string) => {
       //  console.log("addParams1",params)
@@ -280,15 +281,18 @@ export const updatePublications = async ({ newsline, tag, switch: switchParam, f
       outFilters = filterValues(filters);
 
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/newsline/updateAll`
-   console.log(" calling lakeApi updateAll, ", url)
+   console.log(" calling lakeApi updateAll, ", url,sessionid,)
    let res;
    try {
       res = await axios.post(url, {
          newsline,
          tag,
+         sessionid,
+         userslug,
+         q,
          switch: switchParam,
          filters:outFilters,
-         q
+
       })
    }
    catch (x) {

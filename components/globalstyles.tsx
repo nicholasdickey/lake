@@ -4,6 +4,8 @@ const lightValues = css`
   --text: ${({ theme }) => theme.light.colors.text};
   --background: ${({ theme }) => theme.light.colors.background};
   --link: ${({ theme }) => theme.light.colors.link};
+  --highlight: ${({ theme }) => theme.light.colors.highlight};
+  --lowlight: ${({ theme }) => theme.light.colors.lowlight};
   --button: ${({ theme }) => theme.light.colors.button};
   --star1:${({ theme }) => theme.light.colors.stars[1]};
   --star2:${({ theme }) => theme.light.colors.stars[2]};
@@ -15,6 +17,8 @@ const darkValues = css`
   --text: ${({ theme }) => theme.dark.colors.text};
   --background: ${({ theme }) => theme.dark.colors.background};
   --link: ${({ theme }) => theme.dark.colors.link};
+  --highlight: ${({ theme }) => theme.dark.colors.highlight};
+  --lowlight: ${({ theme }) => theme.dark.colors.lowlight};
   --button: ${({ theme }) => theme.dark.colors.button};
   --star1:${({ theme }) => theme.dark.colors.stars[1]};
   --star2:${({ theme }) => theme.dark.colors.stars[2]};
@@ -45,6 +49,7 @@ const GlobalStyle = createGlobalStyle`
     color:var(--text);
     padding: 0;
     margin: 0;
+ 
   }
   a {
     color: inherit;

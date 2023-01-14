@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import Image from 'next/image'
-import {fetchUser} from '../lib/lakeApi';
+import { fetchUser } from '../lib/lakeApi';
 import { palette } from '../lib/palette'
 
 //import Menu from '@material-ui/core/Menu';
@@ -16,7 +16,8 @@ import { palette } from '../lib/palette'
 
 
 import { UilStar } from '@iconscout/react-unicons'
-import { UisStar } from '@iconscout/react-unicons'
+//import { UisStar } from '@iconscout/react-unicons'
+const UisStar = UilStar;
 const TitleStyledWrapper = styled.div`
 display:flex;
 width:100%;
@@ -30,7 +31,7 @@ font-size:2rem;
 
 `
 const Logo = styled((props) => {
-    return <img  {...props}  />
+    return <img  {...props} />
 })`
     width:60px;
     height:60px;
@@ -87,14 +88,14 @@ const Title = styled.div`
     }
 `
 const TitleBand = ({ title, leftLogo, rightLogo }) => {
-  
+
 
     return <TitleStyledWrapper>
         <Logo src={leftLogo} /><Title>{title.toUpperCase()}</Title>{rightLogo ? <Logo src={rightLogo} /> : null}
     </TitleStyledWrapper>
 }
 
-const StyledWrapper = styled((color,linkColor,...props)=><div {...props}/>)`
+const StyledWrapper = styled((color, linkColor, ...props) => <div {...props} />)`
 display:flex;
 width:100%;
 align-items:center;
@@ -107,7 +108,7 @@ font-size:1.8rem;
 & a{
 cursor:pointer;
 text-decoration:none;
-color:${props=>props.theme.color};
+color:${props => props.theme.color};
 }
 & a:hover{
     font-weight:500;
@@ -116,7 +117,7 @@ color:${props=>props.theme.color};
 
 `
 
-const HorizWrap =  styled.div`
+const HorizWrap = styled.div`
     display:flex;
     justify-content:flex-begin;
     margin-left:40px;
@@ -140,24 +141,24 @@ const SubTitle = styled.div`
         font-size:1.6rem;
     }
 `
-const SubscriberStar = styled((startColor,...props) => <UisStar style={{ color: starColor, marginTop: -4, marginLeft: 4 }} {...props} />)
+const SubscriberStar = styled((startColor, ...props) => <UisStar style={{ color: starColor, marginTop: -4, marginLeft: 4 }} {...props} />)
 
 const AvatarGroup = styled.div`
         display:flex;
         align-items:flex-begin;
      `
-const DatelineBand = ({ channelSlug,session, channelDetails, user }) => {
-   
+const DatelineBand = ({ channelSlug, session, channelDetails, user }) => {
+
     let subscr_status = +user?.subscr_status;
     if (!subscr_status)
         subscr_status = 0;
     //console.log({ subscr_status })
 
 
-    
-      
-     
-    
+
+
+
+
     let hometown = channelDetails.hometown;
     let channel = channelSlug;
     // console.log("CHANNEL:", channel)
@@ -167,7 +168,7 @@ const DatelineBand = ({ channelSlug,session, channelDetails, user }) => {
     let approver = user?.approver;
     let avatar = user?.avatar;
 
-    let isLoggedIn = user?1:0;
+    let isLoggedIn = user ? 1 : 0;
     console.log({ isLoggedIn })
     return <StyledWrapper>
         <HorizWrap><SubTitle>{`${dateStrging}  ${hometown}`}</SubTitle></HorizWrap>
@@ -191,6 +192,7 @@ const DatelineBand = ({ channelSlug,session, channelDetails, user }) => {
         }
     </StyledWrapper >
 }
+/*
 const NavigationWrapper = styled.div`
 display: flex;
 margin:10px;
@@ -204,47 +206,48 @@ font-size: 1.8rem;
 }
 & a{
 text-decoration:none;
-color:${props=>props.theme.color};
+color:${props => props.theme.color};
 }
 & a:hover{
     font-weight:500;
-    color:${props=>props.theme.linkColor};
+    color:${props => props.theme.linkColor};
 }
 `
 
 
 const MenuEntry = ({ link, name, as, gap, subMenu }) => {
-let [anchorEl, setAnchorEl] = useState(0);
+    let [anchorEl, setAnchorEl] = useState(0);
 
-const StyledItem = styled.div`
-font-family:Asap Condensed;
-font-weight:500;
-font-size: 1.4rem;
-text-align: center;
-margin-left: ${gap ? `60px` : `20px`};
-margin-right: 20px;
-@media(min-width: 1200px) {
-font-size: 1.6rem;
-}
-@media(min-width: 1400px) {
-font-size: 1.7rem;
-}
-@media(min-width: 1800px) {
-font-size: 1.8rem;
-}
-@media(min-width: 2100px) {
-font-size: 1.9rem;
-}
-cursor:pointer;   
+    const StyledItem = styled.div`
+        font-family:Asap Condensed;
+        font-weight:500;
+        font-size: 1.4rem;
+        text-align: center;
+        margin-left: ${gap ? `60px` : `20px`};
+        margin-right: 20px;
+        @media(min-width: 1200px) {
+        font-size: 1.6rem;
+        }
+        @media(min-width: 1400px) {
+        font-size: 1.7rem;
+        }
+        @media(min-width: 1800px) {
+        font-size: 1.8rem;
+        }
+        @media(min-width: 2100px) {
+        font-size: 1.9rem;
+        }
+        cursor:pointer;   
 
-`
-const DesktopNavigation = ({ session, channelDetails, url }) => {
-    let dark = +session.dark;
-   // const muiTheme = useTheme();
-   // const backgroundColor = muiTheme.palette.background.default;
-    const color = muiTheme.palette.text.primary;
-    const linkColor = dark ? muiTheme.palette.linkColor.dark : muiTheme.palette.linkColor.light;
-  
+        `
+
+    const DesktopNavigation = ({ session, channelDetails, url }) => {
+        let dark = +session.dark;
+        // const muiTheme = useTheme();
+        // const backgroundColor = muiTheme.palette.background.default;
+        const color = muiTheme.palette.text.primary;
+        const linkColor = dark ? muiTheme.palette.linkColor.dark : muiTheme.palette.linkColor.light;
+
         if (!subMenu)
             return <StyledItem><Link href={link} as={as}><a data-id="menu-anchor">{name}</a></Link></StyledItem>
         //  console.log({ subMenu, anchorEl })
@@ -336,6 +339,7 @@ const DesktopNavigation = ({ session, channelDetails, url }) => {
         {items}
     </NavigationWrapper>
 }
+*/
 //const LowlineWrapperParams
 const LowlineWrapper = styled.div`
             display: flex;
@@ -343,7 +347,7 @@ const LowlineWrapper = styled.div`
             margin-bottom:16px;
             border-top: thin solid var(--text);
             height: 30px;
-            border-bottom: ${props=>(props.loud == 0&&props.band) ? null : 'thin solid var(--text)'};
+            border-bottom: ${props => (props.loud == 0 && props.band) ? null : 'thin solid var(--text)'};
             width: 100%;
             align-items: center;
             font-family: Roboto;
@@ -352,7 +356,7 @@ const LowlineWrapper = styled.div`
             @media(max-width: 749px) {
                 display: none;
             } `
-    const VerticalTablet = styled.div`
+const VerticalTablet = styled.div`
             display: none;
             @media(min-width: 750px) {
                 display: flex;
@@ -361,7 +365,7 @@ const LowlineWrapper = styled.div`
                 display: none;
             }
             `
-    const HorizontalTablet = styled.div`
+const HorizontalTablet = styled.div`
             display: none;
             @media(min-width: 900px) {
                 display: flex;
@@ -370,7 +374,7 @@ const LowlineWrapper = styled.div`
                 display: none;
             }
             `
-    const SmallDesktop = styled.div`
+const SmallDesktop = styled.div`
             display: none;
             @media(min-width: 1200px) {
                 display: flex;
@@ -379,27 +383,27 @@ const LowlineWrapper = styled.div`
                 display: none;
             }
             `
-    const LargeDesktop = styled.div`
+const LargeDesktop = styled.div`
             display: none;
             @media(min-width: 1800px) {
                 display: flex;
             }
             `
-    const Stars = styled.div`
+const Stars = styled.div`
             flex-shrink: 0;
             width: 60px;
             margin-right: 30px;
             margin-left: 30px;
             `
-    const Star = styled((...props) => <UilStar style={{ marginLeft: 10, fontSize: 10,width:10,hegith:10 }}  />)`
+const Star = styled((...props) => <UilStar style={{ marginLeft: 10, fontSize: 10, width: 10, hegith: 10 }} />)`
             font-size: 10px;
             margin-left: 10px;
             color: red;
             `
-const Lowline = ({ session ,lowline}) => {
+const Lowline = ({ session, lowline }) => {
 
     let hasBand = +session.band;
-    
+
     return <LowlineWrapper loud={session.loud} band={session.band}>
         <Stars>
             <Star />
@@ -421,13 +425,15 @@ const Lowline = ({ session ,lowline}) => {
 const StyledHeader = styled.div`
 width:100%;
 `
+
+
 export const Header = ({ session, layout, channelSlug, channelDetails, newsline, qparams, updateSession }) => {
 
-    const { data: user, error: userError } = useSWR(['user',session.userslug], fetchUser)
-   // console.log("dark header render",session)
-   // console.log("channelDetails",channelDetails)
+    const { data: user, error: userError } = useSWR(['user', session.userslug], fetchUser)
+    // console.log("dark header render",session)
+    // console.log("channelDetails",channelDetails)
     //  console.log({ newsline: newsline.toJS(), session: session.toJS() })
- 
+
     return <StyledHeader>
         <TitleBand title={`${newsline.slug != channelSlug ? `${channelDetails.shortname}:` : ''}${newsline.displayName}`} leftLogo={channelDetails.logo} rightLogo={newsline.logo} />
         <DatelineBand channelSlug={channelSlug} session={session} user={user} channelDetails={channelDetails} updateSession={updateSession} />
@@ -436,4 +442,3 @@ export const Header = ({ session, layout, channelSlug, channelDetails, newsline,
 };
 
 // <DesktopNavigation session={session} channelDetails={channelDetails} />
-       

@@ -109,14 +109,14 @@ const Check = ({ label, checked, onChange, disabled }: { label: string, checked:
 
 
 const Loud = ({ session, upd }: { session: Options, upd: any }) => {
-  return <Check label='Loud' checked={session.loud == 1 ? true : false} disabled={false} onChange={(checked) => {
+  return <Check label='Loud' checked={session.loud == 1 ? true : false} disabled={false} onChange={(checked:boolean) => {
     console.log("Changed Loud")
     upd({ loud: checked ? 1 : 0 });
   }} />
 }
 const Thick = ({ session, upd }:{session:Options,upd:any}) => {
 
-  return <StyledCheck><Check label='Thick' checked={session.thick == 1 ? true : false} onChange={(checked:boolean) => {
+  return <StyledCheck><Check disabled={false} label='Thick' checked={session.thick == 1 ? true : false} onChange={(checked:boolean) => {
     console.log("Changed And The Band")
     upd({ thick: checked ? 1 : 0 });
   }} /></StyledCheck>
@@ -145,7 +145,7 @@ const Dark = ({ session, updateTheme }:{ session:Options, updateTheme:any }) => 
 
 const Band = ({ session, upd }:{session:Options,upd:any}) => {
 
-  return <StyledMobileCheck><Check label='And The Band' checked={session.band == 1 ? true : false} onChange={(checked:boolean) => {
+  return <StyledMobileCheck><Check  disabled={false} label='And The Band' checked={session.band == 1 ? true : false} onChange={(checked:boolean) => {
     console.log("Changed And The Band", checked)
     upd({ band: checked ? 1 : 0 });
   }} /></StyledMobileCheck>

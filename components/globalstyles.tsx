@@ -49,6 +49,7 @@ const GlobalStyle = createGlobalStyle`
     color:var(--text);
     padding: 0;
     margin: 0;
+  
  
   }
   a {

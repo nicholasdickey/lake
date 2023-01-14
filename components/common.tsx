@@ -14,7 +14,7 @@ import GlobalStyle from '../components/globalstyles'
 import { palette } from '../lib/palette';
 import {LayoutView} from './layout/layoutView';
 import { Roboto} from '@next/font/google';
-
+import {AppWrapper} from '../lib/context'
 
 
 /**
@@ -84,14 +84,25 @@ const PageWrap = styled.div`
 
 
 export default function Home({ session: startSession, qparams }: CommonProps) {
-  const { forum, custom, type, newsline, tag, threadid, layoutNumber } = qparams;
-  const { data: channelConfig, error: channelError } = useSWR(qparams.newsline, fetchChannelConfig)
+  console.log("HOME:",qparams,startSession);
+  const isFallback=qparams&&qparams.newsline!='fallback'?false:true;
+  //if(isFallback)
+  //return <div>Fallback</div>
+ 
+
+  console.log('home2',qparams)
+  const { forum, custom, type, newsline, tag, threadid, layoutNumber } = qparams?qparams:{forum:'',custom:false,type:'unknown',newsline:'qwiket',tag:'',threadid:'',layoutNumber:'l1'};
+  console.log('home3')
+  const { data: channelConfig, error: channelError } = useSWR(newsline, fetchChannelConfig)
+  console.log('home31')
   const [session, setSession] = useState(startSession);
+  console.log('home32')
   const [theme,setTheme]=useState(session.dark!=-1?session.dark==1?'dark':'light':"unknown")
-  //console.log("R!:", session)
+  console.log("R!:", session)
   const router = useRouter()
   //const sessionid=session.hasLayout?session.sessionid:'';
   //console.log("pathname:",router.asPath);
+  
   useEffect(() => {
     if(theme!='unknown'){
       document.body.setAttribute("data-theme", theme);
@@ -108,14 +119,15 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
   if(router.asPath.indexOf('/news/')>=0){
    
     const newpath=router.asPath.replace('/news/','/user/');
-   // console.log(">>>>>>>>>>>>>>>>>>>>>>>>>updateSession, replace path to",router.asPath,newpath)
+    //console.log(">>>>>>>>>>>>>>>>>>>>>>>>>updateSession, replace path to",router.asPath,newpath)
     router.replace(newpath,undefined,{shallow:true});
   }
-   // console.log("updateSession dark", theme, updSession)
+    console.log("updateSession ", theme, updSession)
     const assigned={...Object.assign(session, updSession)}
+    console.log("new session: ",assigned, "old session:",session)
     setSession(assigned);
     axios.post(`/api/session/save`, { session: updSession });
-  },[session,router]);
+  },[session,router,theme]);
 
   const updateSessionStealth = useCallback((updSession: object) => {
      //console.log("updateSession dark", theme, updSession)
@@ -155,11 +167,13 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
     
 
   }
-  const key:fetchChannelLayoutKey=['channelLayout', qparams.newsline, session.hasLayout, session.sessionid, session.userslug, type, session.dense, session.thick, layoutNumber||'l1'];
+  console.log('home4')
+  const layoutType=type=='topic'?'context':type;
+  const key:fetchChannelLayoutKey=['channelLayout', qparams.newsline, session.hasLayout, session.sessionid, session.userslug, layoutType, session.dense, session.thick, layoutNumber||'l1'];
   console.log("RENDER LAYOUT, key=",key)
   const { data: layout, error: layoutError } = useSWR(key, fetchChannelLayout)
 
-
+  console.log('home5')
   //console.log("RENDER: width=", session.width)
   console.log("LAYOUT:", layout)
   //console.log("QPARAMS",qparams);
@@ -168,6 +182,9 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
   //console.log ("render dark:",session)
 
   //opacity:${user.get("mask") ? 0.5 : 1.0};
+  if(isFallback)
+  return <div>Loading...</div>
+
   return (
     <>
       <Head>
@@ -181,6 +198,7 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
       <main  className={roboto.className}>
         <ThemeProvider theme={palette}>
         <GlobalStyle />
+        <AppWrapper session={session} qparams={qparams}>
           <div>
             <Topline updateTheme={updateTheme} session={session} layout={layout} updateSession={updateSession} />
             <Grid hpads={hpads}>
@@ -192,6 +210,7 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
               </PageWrap>
             </Grid>
           </div>
+          </AppWrapper>
         </ThemeProvider>
       </main>
 

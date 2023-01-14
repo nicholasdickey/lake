@@ -121,46 +121,51 @@ export const getServerSideProps = withSessionSsr(
         const channelLayout = await fetchChannelLayout(key);
         console.log("GOT CHANNEL LAYOUT",JSON.stringify(channelLayout))
         const user = await fetchUser(['user', options.userslug])
-      
+        
+        const queues = await fetchQueues({ width: options.width, layout: channelLayout, qparams, session: options });
+        //console.log("retirned fetchQueues",JSON.stringify(queues,null,4))
         let fallback = {
             [newsline]: channelConfig,
             [unstable_serialize(key)]: channelLayout,
             [unstable_serialize(['user', options.userslug])]: user
         }
-        
-      /*
-        const queues = await fetchQueues({ width: options.width, layout: channelLayout, qparams, session: options});
-        //console.log("retirned fetchQueues",JSON.stringify(queues,null,4))
-        
-       
+        if(!isFirstServerCall){
+            const propsWrap = {
+                props: {
+                    session: options,
+                    qparams,
+                    fallback
+                    
+                }
+            };
+            console.log("SHORT SSR RETURN",propsWrap)
+            return propsWrap;
+        }
         if (type == 'newsline') {
             if (navTab == 1) {
                 const key: fetchMyNewslineKey = ['navigator', newsline, options.sessionid, options.userslug, options.hasNewslines];
-              //  const myNewsline = await fetchMyNewsline(key);
-               // console.log("myNewsline:", myNewsline)
-                fallback[unstable_serialize(key)] =[]// myNewsline;
+                const myNewsline = await fetchMyNewsline(key);
+                console.log("myNewsline:", myNewsline)
+                fallback[unstable_serialize(key)] = myNewsline;
             }
             else {
-              //  const publicationCategories = await fetchPublicationCategories(['publicationCategories', newsline])
+                const publicationCategories = await fetchPublicationCategories(['publicationCategories', newsline])
 
-                fallback[unstable_serialize(['publicationCategories', newsline])] = []//publicationCategories;
+                fallback[unstable_serialize(['publicationCategories', newsline])] = publicationCategories;
 
                 const filters: Filters = {};
-               // publicationCategories.forEach((f: { tag: string }) => filters[f.tag] = true);
+                publicationCategories.forEach((f: { tag: string }) => filters[f.tag] = true);
                 //console.log("filter:",filters);
                 const key: fetchPublicationsKey = ['publications', newsline, options.sessionid, options.userslug, filters, '', options.hasNewslines];
-              //  const publications = await fetchPublications(key);
+                const publications = await fetchPublications(key);
                // console.log("Publications key=:", key, publications);
-                fallback[unstable_serialize(key)] =[]// publications;
+                fallback[unstable_serialize(key)] = publications;
             }
         }
         else if (type=='topic'){
             const key:[u:string,threadid:string,withBody:number]=['topic',threadid, 1];
-           // const topic=await fetchTopic(key);
-           // console.log("GOT TOPIC:",JSON.stringify(topic))
-           const topic={
-            fallback:true
-           }
+            const topic=await fetchTopic(key);
+            console.log("GOT TOPIC:",JSON.stringify(topic))
             fallback[unstable_serialize(key)] = topic;
         }
         //  console.log("queues",queues)
@@ -168,14 +173,7 @@ export const getServerSideProps = withSessionSsr(
      
         fallback = Object.assign(fallback, queues);
         //  console.log("fallback after assign", fallback)
-        */
-        if (type=='topic'){
-            const key:[u:string,threadid:string,withBody:number]=['topic',threadid, 1];
-            const topic=await fetchTopic(key);
-            console.log("GOT TOPIC:",JSON.stringify(topic))
-           
-            fallback[unstable_serialize(key)] = topic;
-        }
+
         const propsWrap = {
             props: {
                 session: options,

@@ -118,7 +118,7 @@ const SearchField = ({
    // if (TypeChecker.isFunction(onChange)) {
       //onChange(event.target.value, event);
    // }
-  }, [onChange, setValue]);
+  }, [ setValue]);
 
   const onEnterHandler = useCallback((event) => {
     const isEnterPressed = event.which === ENTER_KEY

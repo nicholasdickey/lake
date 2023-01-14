@@ -40,11 +40,11 @@ interface Loud{
     loud:number
 }
 const OpacityBox=styled.div<Loud>`
-     opacity:${({loud})=>loud==1?0.8:.4};
+     opacity:${({loud})=>loud?0.8:.4};
 `
 const OverlayBox=styled.div<Loud>`
     position:absolute;
-    height:${({loud})=>loud==1?84:78}px;
+    height:${({loud})=>loud?84:78}px;
     right:0px;
     bottom:0px;
     font-size:14px;
@@ -92,14 +92,28 @@ const Hotlist = ({ session, qparams,spaces }: { session: Options, qparams: Qpara
 
     //const [lastid, setLastid] = useState(0);
 
-    const key = ['queue', 'hot', qparams.newsline, qparams.forum, qparams.tag, 0, 0, session.sessionid, session.userslug];
+    const key = ['queue', 'hot', qparams.newsline,/* qparams.forum, qparams.tag, 0, 0, session.sessionid, session.userslug,''*/];
+    console.log('useSwr HOTLIST',key)
     const { data, error: queueError } = useSWR(key, fetchQueue);
-    console.log("RENDER HOTLIST",session);
+    console.log("RENDER HOTLIST",spaces,session,key,data);
+    if(!data||data.fallback){
+        console.log("NO DATA or fallback")
+        let fallbackData=[];
+        for(let i=0;i<spaces;i++){
+            fallbackData.push(<HotlistItem key={`hotlistitem-${i}`} session={session} qparams={qparams} item={{
+                image:'https://media.istockphoto.com/id/1280015859/photo/blue-lake-with-treeline-in-autumn-color-on-a-sunny-afternoon-in-northern-minnesota.jpg?s=612x612&w=0&k=20&c=smtj8bw1BW3gUI9rrxRnAzQKGWmTyMQYcODgbuWNMbc=',
+                title:'Loading...',
+                site_name:'America First News'
+
+            }} spaces={spaces}></HotlistItem> )
+        }
+        return <HotlistBox loud={session.loud}>{fallbackData}</HotlistBox>
+    }
      /* if (data && (data.lastid != lastid)) {
         setTimeout(() => setLastid(data.lastid), 1);
     }*/
     
-    return<HotlistBox>{data?data.items.slice(0,spaces).map((datum:any)=><HotlistItem key={`hotlistitem-${datum.item.threadid}`} session={session} qparams={qparams} item={datum.item} spaces={spaces}/>):[]}</HotlistBox>
+    return<HotlistBox loud={session.loud}>{data?data.items.slice(0,spaces).map((item:any)=><HotlistItem key={`hotlistitem-${item.slug}`} session={session} qparams={qparams} item={item} spaces={spaces}/>):[]}</HotlistBox>
 
    }
 

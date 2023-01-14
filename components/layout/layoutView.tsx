@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { LayoutRes } from './layoutRes'
 import getLayoutWidth from '../../lib/layoutWidth'
+import { Options } from '../../lib/withSession';
+import { Qparams } from '../../lib/qparams';
 
 const OuterWrapper = styled.div`width:100%;`;
 const W000 = styled.div`
@@ -39,7 +41,7 @@ const W2100 = styled.div`
             display:flex;
         }
     `
-export const LayoutView = ({ session, pageType, layout,  qparams,updateSession }) => {
+export const LayoutView = ({ session, pageType, layout,  qparams,updateSession }:{session:Options,pageType:string,layout:any,qparams:Qparams,updateSession:any}) => {
    // console.log("LAYOUT_VIEW:", layout);
     let layoutView = layout.layoutView;
     let columns = layout.columns;

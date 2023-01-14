@@ -5,6 +5,8 @@ declare module 'styled-components' {
     export interface DefaultTheme {
         light: {
             colors: {
+                highlight:string
+                lowlight: string
                 text: string
                 background: string
                 link: string
@@ -14,6 +16,8 @@ declare module 'styled-components' {
         },
         dark: {
             colors: {
+                lowlight: string
+                highlight: string
                 text: string
                 background: string
                 link: string

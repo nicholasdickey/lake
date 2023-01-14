@@ -11,8 +11,9 @@ const lakeApi = (url: string) => {
 export const fetchChannelConfig = async (slug: string) => {
    try {
       const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/channel/fetch?slug=${slug}`
-      // console.log("calling lakeApi fetchChannelConfig ", url)
+      console.log("calling lakeApi fetchChannelConfig ", url)
       const res = await axios.get(url);
+      console.log("returned from axios get ",url,res.data)
       return res.data
    }
    catch (x) {
@@ -51,9 +52,37 @@ export const fetchUser = async ([u, userslug]: [u: string, userslug: string]) =>
    }
    return null;
 }
-export const fetchQueue = async ([u, qType, newsline, forum, tag, page, lastid, sessionid, userslug, tail, test]: [u: string, qType: string, newsline: string, forum: string, tag: string, page: number, lastid: string, sessionid: string, userslug: string, tail: string, test: string]) => {
+export const fetchTopic=async ([u,threadid, withBody]:[u:string,threadid:string,withBody:number])=>{
+   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/topic/fetch?slug=${encodeURIComponent(threadid)}&withBody=${withBody}`;
+   let res;
+   try {
+      res = await axios.get(url)
+   }
+   catch (x) {
+      console.log("fetchQueue HANDLED EXCEPTION:", x)
+      res = await axios.get(url)
+      console.log("retried successfully")
+   }
+   return res ? res.data : null;
+}
+export const fetchQueue = async ([u, qType, newsline, forum, tag, page, lastid, sessionid, userslug, tail, test]: [u: string, qType: string, newsline: string, forum?: string, tag?: string, page?: number, lastid?: string, sessionid?: string, userslug?: string, tail?: string, test?: string]) => {
    let params;
    console.log("fetchQueue:", `['queue',qType:${qType},newsline:${newsline},forum:${forum},tag:${tag},page:${page},lastid:${lastid},sessionid:${sessionid},userslug:${userslug},tail:${tail}]`)
+   if(!page)
+   page=0;
+   if(!lastid)
+   lastid='0';
+   if(!forum)forum='';
+   if(!tag)
+   tag=''
+   if(!sessionid)
+   sessionid='';
+   if(!userslug)
+   userslug='';
+   if(!tail)
+   tail='';
+   if(!test)
+   test='';
 
    const addParams = (params: string) => {
       //  console.log("addParams1",params)
@@ -87,6 +116,7 @@ export const fetchQueue = async ([u, qType, newsline, forum, tag, page, lastid, 
       case 'hot':
          params = `newsline=${newsline}&type=hot&page=${page}&lastid=${lastid}`;
          params = addParams(params);
+         console.log("fetchQueue params",params)
          break;
       case 'tag':
          params = `tag=${tag}&type=tag&page=${page}&lastid=${lastid}`;
@@ -98,7 +128,8 @@ export const fetchQueue = async ([u, qType, newsline, forum, tag, page, lastid, 
          break;
    }
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/queue/fetch?${params}`
-   //  console.log("calling lakeApi fetchQueue, ", url)
+   if(qType=='hot')
+   console.log("hotlist calling lakeApi fetchQueue, ", url)
    let res;
    try {
       res = await axios.get(url)
@@ -137,8 +168,8 @@ export const fetchMyNewsline = async ([u, newsline, sessionid, userslug, hasNews
       console.log("retried successfully")
    }
    const data = res ? res.data : null;
-   console.log("inside fetchNavigator", data);
-   console.log("newsline:", data.newsline)
+  // console.log("inside fetchNavigator", data);
+  // console.log("newsline:", data.newsline)
    if (data?.success) {
       return data.newsline;
    }
@@ -149,7 +180,7 @@ export const fetchMyNewsline = async ([u, newsline, sessionid, userslug, hasNews
 }
 export type Filters= { [key: string]: boolean };
 export type fetchPublicationsKey = [u: string, newsline: string, sessionid: string, userslug: string, filters:Filters, q: string, hasNewsline: boolean];
-const filterValues = (filters: { [key: string]: boolean }) => {
+const filterValues = (filters: Filters) => {
    const filterKeys:string[] = Object.keys(filters);
    let out: string[] = [];
    for (let i = 0; i < filterKeys.length; i++) {

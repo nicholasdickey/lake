@@ -60,6 +60,13 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
 
   }
+  figure {
+    display: block;
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
   
   
 `

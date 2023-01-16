@@ -7,6 +7,7 @@ import { fetchQueue } from '../../lib/lakeApi';
 import Qwiket from './qwiket'
 import useIntersectionObserver  from '../../lib/useIntersectionObserver'
 import { useAppContext } from "../../lib/context";
+
 /*export enum QueueType {
     'mix',
     'newsline',
@@ -51,7 +52,7 @@ const Segment = ({ extraWide,  qType, lastid, tail, pageIndex, setLastid, hasDat
             slug:'loading'
 
         }
-       
+      // return <Skeleton count={5} />
         return <div ref={ref}><Qwiket key={`sss[[sf[f]]]${item.slug}`} extraWide={extraWide} item={item} isTopic={false}></Qwiket></div>
     }
 

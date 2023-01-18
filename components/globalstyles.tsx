@@ -7,6 +7,7 @@ const lightValues = css`
   --highlight: ${({ theme }) => theme.light.colors.highlight};
   --lowlight: ${({ theme }) => theme.light.colors.lowlight};
   --button: ${({ theme }) => theme.light.colors.button};
+  --notificationButton: ${({ theme }) => theme.light.colors.notificationButton};
   --star1:${({ theme }) => theme.light.colors.stars[1]};
   --star2:${({ theme }) => theme.light.colors.stars[2]};
   --star3:${({ theme }) => theme.light.colors.stars[3]};
@@ -20,6 +21,8 @@ const darkValues = css`
   --highlight: ${({ theme }) => theme.dark.colors.highlight};
   --lowlight: ${({ theme }) => theme.dark.colors.lowlight};
   --button: ${({ theme }) => theme.dark.colors.button};
+  --notificationButton: ${({ theme }) => theme.dark.colors.notificationButton};
+  
   --star1:${({ theme }) => theme.dark.colors.stars[1]};
   --star2:${({ theme }) => theme.dark.colors.stars[2]};
   --star3:${({ theme }) => theme.dark.colors.stars[3]};

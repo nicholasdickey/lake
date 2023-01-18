@@ -4,7 +4,7 @@ import { Options } from '../lib/withSession';
 import Qwiket from './qwikets/qwiket';
 import { useAppContext } from '../lib/context';
 import { fetchTopic } from '../lib/lakeApi'
-
+import Disqus from './disqus'
 const Topic = () => {
   const { session, qparams } = useAppContext();
   const key: [u: string, threadid: string, withBody: number] = ['topic', qparams.threadid, 1];
@@ -20,6 +20,8 @@ const Topic = () => {
     }
     return <Qwiket extraWide={false} item={item} isTopic={true}></Qwiket>
   }
-  return <Qwiket extraWide={false} item={data?.item} isTopic={true}></Qwiket>
+  console.log("passing to Disqus:",data)
+  return <><Qwiket extraWide={false} item={data?.item} isTopic={true}></Qwiket>
+  <Disqus contextUrl={'/context/channel/qwiket'} forum={qparams.forum} title={data?.title} realDisqThreadid={qparams.threadid} cc={qparams.cc} slug={qparams.threadid}/></>
 }
 export default Topic;

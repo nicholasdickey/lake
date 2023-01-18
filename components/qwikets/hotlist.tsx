@@ -5,13 +5,14 @@ import { Qparams } from '../../lib/qparams'
 import { Options } from '../../lib/withSession';
 import { fetchQueue } from '../../lib/lakeApi';
 import NextImage from 'next/image';
+import Link from 'next/link';
 
 
 const HotlistBox=styled.div<Loud>`
    display:flex; 
    width:100%;
    position:relative;;
-   margin-bottom:24px;
+   margin-bottom:16px;
    margin-top:0px;
    background:${({loud})=>loud?'#000':'#222'};
 `
@@ -79,14 +80,15 @@ const SitenameBox=styled.div`
 `
 
 const HotlistItem=({ session, qparams,item,spaces }: { session: Options, qparams: Qparams,item:any,spaces:number}) => {
+    console.log("Hotlist item",item)
     return <ImageBox spaces={spaces} loud={session.loud} >
         <OpacityBox loud={session.loud}>
             <NextImage style={{objectFit:'cover'}} placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={item.image} alt={item.title} fill={true} /></OpacityBox>
-        <OverlayBox loud={session.loud}>
+            <Link href={`/${qparams.forum}/topic/${item.tag}/${item.slug}/${qparams.layoutNumber}/na`}><OverlayBox loud={session.loud}>
             <TitleBox>{item.title.slice(0,64)}</TitleBox>
             <Hr/>
             <SitenameBox>{item.site_name.slice(0,64)}</SitenameBox>
-        </OverlayBox></ImageBox>
+        </OverlayBox></Link></ImageBox>
 }
 const Hotlist = ({ session, qparams,spaces }: { session: Options, qparams: Qparams,spaces:number }) => {
 
@@ -94,7 +96,9 @@ const Hotlist = ({ session, qparams,spaces }: { session: Options, qparams: Qpara
 
     const key = ['queue', 'hot', qparams.newsline,/* qparams.forum, qparams.tag, 0, 0, session.sessionid, session.userslug,''*/];
     console.log('useSwr HOTLIST',key)
-    const { data, error: queueError } = useSWR(key, fetchQueue);
+    const { data, error: queueError } = useSWR(key, fetchQueue,{
+        refreshInterval:10000
+    });
     console.log("RENDER HOTLIST",spaces,session,key,data);
     if(!data||data.fallback){
         console.log("NO DATA or fallback")

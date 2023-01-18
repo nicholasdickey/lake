@@ -22,7 +22,7 @@ export default function Home({ session, qparams, fallback }: CommonProps) {
 /**
  * 
  * URL Schema:
- * /[forum]/[type=topic|home]/[tag]/[threadid]/[layoutNumber]/[commentid]
+ * /[forum]/[type=topic|home]/[tag]/[threadid]/[layoutNumber]/[cc]
  * /[forum]/[type=newsline]/[layoutNumber]/[navTab]
  * /[forum]/[type=solo]/[tag]/[layoutNumber]/[navTab]
  * 
@@ -46,8 +46,9 @@ export const getServerSideProps = withSessionSsr(
         const threadid = (type == 'topic' || type == 'home') ? ssr[3] : "";
         let layoutNumber = ((type == 'topic' || type == 'home') ? ssr[4] : type == 'solo' ? ssr[3] : ssr[2]) || "l1";
         let navTab = ((type == 'newsline') ? ssr[3] : type == "solo" ? ssr[4] : 0) || 1;
-        let commentid=(type=='topic'||type=='home')?ssr[5]:'';
-
+        let cc=(type=='topic'||type=='home')?ssr[5]:'';
+        if(!cc)
+            cc='';
         console.log("SSR args:", JSON.stringify({forum,type,threadid,tag,layoutNumber}))
 
         let ua = context.req.headers['user-agent'];
@@ -106,6 +107,7 @@ export const getServerSideProps = withSessionSsr(
             newsline,
             threadid,
             layoutNumber,
+            cc,
             timestamp: Date.now() / 1000 | 0
         }
         const isFirstServerCall = context.req?.url?.indexOf('/_next/data/') === -1

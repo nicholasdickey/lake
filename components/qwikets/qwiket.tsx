@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, ReactFragment, ReactNode } from "react";
 import styled from 'styled-components';
 import { Qparams } from '../../lib/qparams'
 import NextImage from 'next/image';
@@ -9,6 +9,7 @@ import { useAppContext } from "../../lib/context";
 import Link from 'next/link'
 import {TwitterTweetEmbed} from 'react-twitter-embed';
 import Markdown from 'markdown-to-jsx'
+import YouTube from 'react-youtube'
 
 
 interface IsTopic {
@@ -29,7 +30,8 @@ const VerticalWrap = styled.div<IsTopic>`
         font-weight:400;
     }
     blockquote {
-        border-left:1px;
+        border-left:4px solid;
+        padding-left:16px;
     }
 `
 const Row = styled.div`
@@ -38,6 +40,7 @@ const Row = styled.div`
    // padding-right:2px;
     align-items: center;
     justify-content: space-between;
+    margin-bottom:4px;
     //flex-wrap: wrap;
    // width: 100%;
     //padding: 0px;
@@ -55,26 +58,26 @@ font-size: 12px;
 const AuthorPoster = styled.div`
 font-size: 14px;   
 `
-const TimeSince = styled.div`
-font-size:10px;
+const TimeSince = styled.div<IsTopic>`
+font-size:${({isTopic})=>isTopic?14:10}px;
     
 `
-const Title = styled.div`
+const Title = styled.div<IsTopic>`
     
     //font-weight:500;
     line-height: 1.2;
-    font-size: 1.2rem; 
+    font-size: ${({isTopic})=>isTopic?2.2:1.2}rem; 
    
     text-align: left; 
-    margin-top:10px;
-    margin-bottom:10px;
+    margin-top:4px;
+    margin-bottom:4px;
    
 `
 const Description = styled.div`
     
     //font-weight:500;
    
-    margin-bottom:16px;
+    margin-bottom:2px;
    
 `
 const Image = styled.img`
@@ -100,8 +103,7 @@ const ImageBox = styled.div<ImageBoxProps>`
     position: relative;
     max-width: 100% !important;
     max-height: 100% !important;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 4px auto 4px auto;
     height:${({ extraWide, loud, isTopic }) => isTopic ? '440' : extraWide ? loud ? '264' : '200' : loud ? '164' : '120'}px;
     width:100%;  
     background:#000;
@@ -114,24 +116,24 @@ interface PubImageProps {
 const PubImage = styled.img<PubImageProps>`
     position: relative;
     //max-width: 48px;
-    margin-top: 10px;
+    margin-top: 4px;
     padding-top: 0px;
     margin-right: 16px;
     height:${({ isTopic }) => isTopic ? 64 : 28}px;
     width:auto;
     opacity:${({ loud, isTopic }) => (loud || isTopic) ? 1.0 : .8};
-    margin-bottom: 10px;
+    margin-bottom: 4px;
 `
 const PubImageBox = styled.div`
-    position: relative;
+    //position: relative;
    // object-fit: cover;
-    margin-top: 10px;
+   // margin-top: 10px;
     padding-top: 0px;
     margin-right: 16px;
    
-    margin-bottom: 10px;
-    height:auto;
-    width: 38px;;
+    margin-bottom: 0px;
+    //height:auto;
+    //width: 38px;;
     //height:28px;
    // min-width:28px; 
      //width:100%; 
@@ -170,11 +172,56 @@ const Right = styled.div`
 `
 const TwitterEmbed=({tweetid}:{tweetid:string})=>{
     console.log("TwitterEmbed",tweetid);
-    return <TwitterTweetEmbed tweetId={tweetid}/>
+    return <div></div>//<TwitterTweetEmbed tweetId={tweetid}/>
 
 }
-const Qwiket = ({ extraWide, item, isTopic }: { extraWide: boolean, item: any, isTopic: boolean }) => {
+const YoutubeEmbed=({videoid}:{videoid:string})=>{
+    const [hasWindow, setHasWindow] = useState(false);
+    console.log("YoutubeEmbed",videoid);
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+          setHasWindow(true);
+        }
+      }, []);
+    const opts={
+        height:"auto",
+        width:"100%"
+    }
+    return <div></div>// <>{hasWindow?<YouTube opts={opts} className="ut"  videoId={videoid}/>:null}</>
 
+}
+const Iframe=({children,...props})=>{
+    const [hasWindow, setHasWindow] = useState(false);
+    console.log("iframe");
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+          setHasWindow(true);
+        }
+      }, []);
+    const opts={
+        height:"auto",
+        width:"100%"
+    }
+    return <div></div>// <>{hasWindow?<YouTube opts={opts} className="ut"  videoId={videoid}/>:null}</>
+
+}
+const Figure=({children,...props})=>{
+    console.log("FIgure:",children)
+    return <div className="figure">{children}</div>
+}
+const Svg=({children,...props})=>{
+    return <div id="svg"></div>
+}
+const Picture=({children,...props})=>{
+    return <div id="picture"></div>
+}
+const Qwiket = ({ extraWide, item, isTopic }: { extraWide: boolean, item: any, isTopic: boolean }) => {
+   /* useEffect(()=>{
+        if(isTopic){
+        console.log("processing twitter",window.twttr);
+        window.twttr.widgets.load();}}
+    
+      )*/
     const { session, qparams } = useAppContext();
     const isReact = item && typeof item.qpostid !== 'undefined' && item.qpostid;
     let { description, title } = item ? item : { description: '', title: '' };
@@ -193,32 +240,55 @@ const Qwiket = ({ extraWide, item, isTopic }: { extraWide: boolean, item: any, i
             title = 'Loading...';
         const diff = TimeDifference(published_time, qparams.timestamp)
         let bodyHtml;
+        interface BodyBlock{
+            type:string;
+            content:string;
+            id?:string;
+        }
+        let bodyBlocks:Array<ReactNode>|null=null;
         if (body) {
-            const blocks = body.blocks;
+           /* const blocks = body.blocks;
             bodyHtml = blocks.reduce((accum: string, b: any) => {
                 console.log("reduce:", b, accum)
                 if (b.blockType == 'html') {
                     return accum += b.html;
                 }
             }, '')
+            */
+           bodyBlocks=body.map((b:BodyBlock)=>{
+          
+            return (b.type=="twitter"&&b.id)?<TwitterTweetEmbed tweetId={b.id} placeholder="Loading a Tweet..." /*options={{theme:session.dark?'dark':'light'}}*/ />:<ReactMarkdown rehypePlugins={[rehypeRaw]} >{b.content}</ReactMarkdown>
+           })
+
         }
-        bodyHtml=bodyHtml.replaceAll('twittertweetembed','TwitterTweetEmbed');
+        //bodyHtml=bodyHtml?.replaceAll('twittertweetembed','TwitterTweetEmbed');
+       // bodyHtml=bodyHtml?.replaceAll('youtubeembed','YoutubeEmbed');
+        //if(bodyHtml)
+        //bodyHtml=`<div>${bodyHtml}</div>`
+      //  bodyHtml=bodyHtml?.replaceAll('iframe','Iframe');
+        
         // console.log("checking for code tag",bodyHtml?.indexOf('<code>'));
 
-        // console.log("BODY:",bodyHtml)
+         console.log("BODY:",body)
         return <VerticalWrap isTopic={isTopic}>
             <Row><PubImageBox><PubImage loud={session.loud} isTopic={isTopic} placeholder={"blur"} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"      src={catIcon} alt={catName} /></PubImageBox>
-                <Right><SiteName isTopic={isTopic}>{site_name}</SiteName><TimeSince>{diff}</TimeSince></Right></Row>
+                <Right><SiteName isTopic={isTopic}>{site_name}</SiteName><TimeSince isTopic={isTopic}>{diff}</TimeSince></Right></Row>
             {author ? <Row>{author}</Row> : null}
-            <Row><Title>{title}</Title></Row>
+            <Row><Title isTopic={isTopic}>{title}</Title></Row>
             <Row><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
 
-            <Row><Body>{true?<Markdown  options={{
+            <Row><Body>{bodyBlocks?bodyBlocks :false?<Markdown  options={{
                         forceBlock: true,
                         overrides: {
-                            TwitterTweetEmbed:TwitterEmbed
+                            TwitterTweetEmbed:TwitterEmbed,
+                            YoutubeEmbed:YoutubeEmbed,
+                            svg:Svg,
+                            picture:Picture,
+                            figure:Figure,
+                           Iframe:Iframe
+                            
                             
                            /* img: {
                                 component: ImageRenderer,
@@ -248,10 +318,10 @@ const Qwiket = ({ extraWide, item, isTopic }: { extraWide: boolean, item: any, i
         return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/na`}><VerticalWrap isTopic={isTopic}>
             <Row><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"      placeholder={"blur"} src={catIcon} alt={catName} width={28} height={28} /></PubImageBox><Author>{thread_author ? thread_author + ", " + catName : catName}</Author></Row>
-            <Row><Title>{thread_title}</Title></Row>
+            <Row><Title isTopic={isTopic}>{thread_title}</Title></Row>
             <Row><Description><ReactMarkdown rehypePlugins={[rehypeRaw]} >{description}</ReactMarkdown></Description></Row>
             <Row><AvatarBox><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={author_avatar.indexOf('http') < 0 ? `https:${author_avatar}` : author_avatar} alt={author_name} fill={true} /></AvatarBox><AuthorPoster>{author_name}</AuthorPoster><TimeSince>{diff}</TimeSince></Row>
-            <Row><ReactMarkdown rehypePlugins={[rehypeRaw]} >{postBody}</ReactMarkdown></Row>
+            <Row><Markdown rehypePlugins={[rehypeRaw]} >{postBody}</Markdown></Row>
 
         </VerticalWrap></Link>
     }
@@ -269,10 +339,10 @@ const Qwiket = ({ extraWide, item, isTopic }: { extraWide: boolean, item: any, i
             return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/na`}><VerticalWrap isTopic={isTopic}>
                 <Row><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"     placeholder={"blur"} src={'https://qwiket.com/static/css/afnLogo.png'} alt={'America First News'} /></PubImageBox>
-                    <Right><SiteName isTopic={isTopic}>©{'am1.news'}</SiteName><TimeSince>{0}</TimeSince></Right></Row>
+                    <Right><SiteName isTopic={isTopic}>©{'am1.news'}</SiteName><TimeSince isTopic={isTopic}>{0}</TimeSince></Right></Row>
                 {author ? <Row>{author}</Row> : null}
-                <Row><Title>{title}</Title></Row>
-                <Row><ReactMarkdown rehypePlugins={[rehypeRaw]} >{'The Internet of Us'}</ReactMarkdown></Row>
+                <Row><Title isTopic={isTopic}>{title}</Title></Row>
+                <Row><Markdown rehypePlugins={[rehypeRaw]} >{'The Internet of Us'}</Markdown></Row>
                 <Row><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
 
             </VerticalWrap></Link>
@@ -280,10 +350,10 @@ const Qwiket = ({ extraWide, item, isTopic }: { extraWide: boolean, item: any, i
         return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/na`}><VerticalWrap isTopic={isTopic}>
             <Row><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} style={{ height: '38', width: 'auto' }} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"       placeholder={"blur"} src={catIcon} alt={catName} /></PubImageBox>
-                <Right><SiteName isTopic={isTopic}>©{site_name}</SiteName><TimeSince>{diff}</TimeSince></Right> </Row>
+                <Right><SiteName isTopic={isTopic}>©{site_name}</SiteName><TimeSince isTopic={isTopic}>{diff}</TimeSince></Right> </Row>
             {author ? <Row>{author}</Row> : null}
-            <Row><Title>{title}</Title></Row>
-            <Row><ReactMarkdown rehypePlugins={[rehypeRaw]} >{description}</ReactMarkdown></Row>
+            <Row><Title isTopic={isTopic}>{title}</Title></Row>
+            <Row><Markdown rehypePlugins={[rehypeRaw]} >{description}</Markdown></Row>
             <Row><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} style={{ maxWidth: "100%", height: "100%", objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
 
         </VerticalWrap></Link>

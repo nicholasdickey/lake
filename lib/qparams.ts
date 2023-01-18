@@ -8,5 +8,6 @@ export interface Qparams {
     navTab?:number,
     threadid?: string,
     layoutNumber?: string,
-    timestamp:number   
+    timestamp:number,
+    cc:string   
 }

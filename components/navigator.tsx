@@ -88,7 +88,7 @@ const Highlight=styled.div`
     color:var(--text);
 `
 const TabsWrap = styled.div`
-    font-size:14px;
+    font-size:12px;
     .selected-tab{
         border-width:1px;
         border-color:var(--text);

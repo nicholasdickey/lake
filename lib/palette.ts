@@ -7,6 +7,7 @@ export const palette = {
             lowlight: "#f8f8f8",     
             background: "#F5F5F5",// g[100]
             button: "#F5F5F5",
+            notificationButton:"#01579B",
             stars: [
                 "#000000",
                 "#388E3C", //green[700]
@@ -26,6 +27,7 @@ export const palette = {
             lowlight:"#444",
             background: "#303030",//"#607D8B", //bg[500]
             button:"#607D8B",
+            notificationButton:"#0277BD",
             stars: [
                 "#000000",
                 "#388E3C", //green[700]

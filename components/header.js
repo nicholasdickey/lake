@@ -1,3 +1,4 @@
+import React from 'react'
 import styled from 'styled-components';
 import useSWR from 'swr'
 import Link from 'next/link'
@@ -90,9 +91,9 @@ const Title = styled.div`
 const TitleBand = ({ title, leftLogo, rightLogo }) => {
 
 
-    return <TitleStyledWrapper>
+    return <Link href="/"><TitleStyledWrapper>
         <Logo src={leftLogo} /><Title>{title.toUpperCase()}</Title>{rightLogo ? <Logo src={rightLogo} /> : null}
-    </TitleStyledWrapper>
+    </TitleStyledWrapper></Link>
 }
 
 const StyledWrapper = styled((color, linkColor, ...props) => <div {...props} />)`
@@ -342,20 +343,20 @@ const MenuEntry = ({ link, name, as, gap, subMenu }) => {
 */
 //const LowlineWrapperParams
 const LowlineWrapper = styled.div`
-            display: flex;
-            margin-top: 10px;
-            margin-bottom:16px;
-            border-top: thin solid var(--text);
-            height: 30px;
-            border-bottom: ${props => (props.loud == 0 && props.band) ? null : 'thin solid var(--text)'};
-            width: 100%;
-            align-items: center;
-            font-family: Roboto;
-            justify-content: center;
-            font-size: 0.9rem;
-            @media(max-width: 749px) {
-                display: none;
-            } `
+    display: flex;
+    margin-top: 6px;
+    margin-bottom:16px;
+    border-top: thin solid var(--text);
+    height: 30px;
+    border-bottom: ${props => (props.loud == 0 && props.band) ? null : 'thin solid var(--text)'};
+    width: 100%;
+    align-items: center;
+    font-family: Roboto;
+    justify-content: center;
+    font-size: 0.9rem;
+    @media(max-width: 749px) {
+        display: none;
+    } `
 const VerticalTablet = styled.div`
             display: none;
             @media(min-width: 750px) {

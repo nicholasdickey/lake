@@ -5,6 +5,7 @@ declare module 'styled-components' {
     export interface DefaultTheme {
         light: {
             colors: {
+                notificationButton: Interpolation<ThemeProps<DefaultTheme>>
                 highlight:string
                 lowlight: string
                 text: string
@@ -16,6 +17,7 @@ declare module 'styled-components' {
         },
         dark: {
             colors: {
+                notificationButton: Interpolation<ThemeProps<DefaultTheme>>
                 lowlight: string
                 highlight: string
                 text: string

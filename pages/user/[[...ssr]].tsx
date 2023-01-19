@@ -99,9 +99,10 @@ export const getServerSideProps = withSessionSsr(
             newsline,
             threadid,
             layoutNumber,
+            cc:'',
             timestamp:Date.now()/1000|0
         }
-        const queues=await fetchQueues({width:options.width,layout:channelLayout,qparams, session:options});
+       // const queues=await fetchQueues({width:options.width,layout:channelLayout,qparams, session:options});
         let fallback={
             [newsline]: channelConfig,
             [unstable_serialize(['channelLayout',newsline, options.hasLayout, options.sessionid, options.userslug, type, options.dense, options.thick, layoutNumber])]: channelLayout,
@@ -109,7 +110,7 @@ export const getServerSideProps = withSessionSsr(
         }
       //  console.log("queues",queues)
       //  console.log("fallback",fallback)
-        fallback=Object.assign(fallback,queues);
+      //  fallback=Object.assign(fallback,queues);
       //  console.log("fallback after assign", fallback)
 
         const propsWrap = {

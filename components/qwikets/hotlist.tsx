@@ -42,15 +42,17 @@ interface Loud{
 }
 const OpacityBox=styled.div<Loud>`
      opacity:${({loud})=>loud?0.8:.4};
+   
 `
 const OverlayBox=styled.div<Loud>`
     position:absolute;
     height:${({loud})=>loud?84:78}px;
-    right:0px;
+    left:0px;
     bottom:0px;
     font-size:14px;
     font-weight:${({loud})=>loud?400:400};
     margin:16px 0px 4px 0px;
+   
    
     //font-family:roboto;
     

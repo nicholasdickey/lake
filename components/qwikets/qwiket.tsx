@@ -18,7 +18,7 @@ interface IsTopic {
 const VerticalWrap = styled.div<IsTopic>`
     border-color: grey;
     border-style: solid;
-    border-width:${({ isTopic }) => isTopic ? 0 : 1}px;
+    border-width:${({ isTopic }) => isTopic ? 1 : 1}px;
     cursor:pointer;
     padding-left:${({ isTopic }) => isTopic ? 16 : 6}px;
     padding-right:${({ isTopic }) => isTopic ? 16 : 6}px;
@@ -49,7 +49,7 @@ const Row = styled.div`
 `
 
 const SiteName = styled.div<IsTopic>`
-font-size:${({ isTopic }) => isTopic ? 18 : 12}px;   
+font-size:${({ isTopic }) => isTopic ? 28:12}px;   
 margin-right:20px;
 `
 
@@ -67,7 +67,7 @@ const Title = styled.div<IsTopic>`
     
     //font-weight:500;
     line-height: 1.2;
-    font-size: ${({isTopic})=>isTopic?2.2:1.2}rem; 
+    font-size: ${({isTopic})=>isTopic?2.0:1.2}rem; 
    
     text-align: left; 
     margin-top:4px;

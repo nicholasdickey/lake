@@ -46,24 +46,25 @@ const LeftHeader = styled.div`
   }
     
 `
-const Notifications = ({ qType, newsline, forum, lastid, sessionid, userslug, reset }: { qType: string, newsline: string, forum: string, lastid: string, sessionid: string, userslug: string, reset: any }) => {
-    const key = ['notif', qType, newsline, forum, '', 0, lastid, sessionid, userslug];
+const Notifications = ({ qType, newsline, forum, lastid, tail,sessionid, userslug, reset,tag }: { qType: string, newsline: string, forum: string, lastid: string, tail:number,sessionid: string, userslug: string, reset: any,tag:string }) => {
+    const key = ['notif', qType, newsline, forum, tag?tag:'', 0, lastid,sessionid, userslug,tail];
     const { data, error } = useSWR(key, fetchQueue, {
-        refreshInterval: qType == 'tag' || qType == 'topics' ? 24 * 3600 * 1000 : 5000
+        refreshInterval: qType == 'topics' ? 24 * 3600 * 1000 : 5000
     });
     const notifications = data?.newItems;
-    // console.log("REMDER QUEUE notif:", qType, lastid, notifications);
-    const name = qType == 'mix' ? 'news&views' : qType;
+  console.log("REMDER QUEUE notif:", qType, key, data);
+    const name = qType == 'mix' ? 'news&views' :qType=='tag'?'publication feed':qType=='topics'?'active topics': qType;
     const itemName = notifications == 1 ? 'Item' : 'Items';
     const onClick = () => {
         console.log("remder click");
         if (reset)
             setTimeout(() => { reset() }, 1);
     }
-    return <ColumnHeader>{qType != 'topics' && qType != 'tag' && +notifications > 0 ? <LeftHeader onClick={onClick}>Show {notifications} New {itemName}</LeftHeader> : <div />}<InnerHeader>{name}</InnerHeader></ColumnHeader>
+    return <ColumnHeader>{qType != 'topics' && +notifications > 0 ? <LeftHeader onClick={onClick}>Show {notifications} New {itemName}</LeftHeader> : <div />}<InnerHeader>{name}</InnerHeader></ColumnHeader>
 }
 const PlainHeader = ({ qType }: { qType: string }) => {
-    const name = qType == 'mix' ? 'news&views' : qType;
+    const name = qType == 'mix' ? 'news&views' :qType=='tag'?'publication feed':qType=='topics'?'active topics': qType;
+   
     return <ColumnHeader> <div /><InnerHeader>{name}</InnerHeader></ColumnHeader>
 }
 /**
@@ -134,25 +135,25 @@ const FirstSegment = ({ resetSegments, extraWide, qType, lastid, tail, pageIndex
     const [hd, setHd] = useState(hasData)
 
     const onData = useCallback((data: any, key: string, config: any) => {
-        console.log("segments onData fetchQueue remder", data.lastid, lastid, returnedLastid, data.tail, key, config)
+        console.log("onData FirstSegment segments onData fetchQueue remder", {qType,newLastid:data.lastid, lastid, returnedLastid, newTail:data.tail, key, items:data?.items})
         if (data && (data.lastid != lastid)) {
             setReturnedLastid(data.lastid);
             if (data.tail)
                 setReturnedTail(+data.tail);
-            console.log("remder segment. got new lastid", qType, data.lastid, lastid)
+            console.log("remder first segment. got new lastid", qType, data.lastid, lastid)
         }
     }, []);
     const key = ['queue', qType, qparams.newsline, qparams.forum, qType == 'tag' ? qparams.tag : '', pageIndex, lastid, session.sessionid, session.userslug, tail, ''];
-    console.log("remder Segment before fetchQueue", { key, qType, pageIndex, returnedLastid, returnedTail })
+    console.log("remder FirstSegment before fetchQueue", { key, qType, pageIndex, returnedLastid, returnedTail})
     const { data, error: queueError, mutate } = useSWR(key, fetchQueue, {
         // dedupingInterval: 200,
         onSuccess: onData
     });
-
+    const items=data?.items;
     const ref = useRef<HTMLDivElement | null>(null)
     const entry = useIntersectionObserver(ref, {})
     const isVisible = !!entry?.isIntersecting;
-    console.log("remder page:", qType, pageIndex, "isVisible:", isVisible)
+    console.log("remder FirstSegment first page:", {qType, pageIndex, isVisible,items:data?.items})
 
     const onScroll = useCallback(() => {
         const { scrollY } = window;
@@ -193,7 +194,7 @@ const FirstSegment = ({ resetSegments, extraWide, qType, lastid, tail, pageIndex
 
     //if (!pageIndex)
     //    console.log("REMDER SEGMENT page=", pageIndex, "isVisible:", isVisible, 'returnedLastid:', returnedLastid, data?.items);
-    if (!data) {
+    if (!items) {
         const item = {
             image: 'https://media.istockphoto.com/id/1280015859/photo/blue-lake-with-treeline-in-autumn-color-on-a-sunny-afternoon-in-northern-minnesota.jpg?s=612x612&w=0&k=20&c=smtj8bw1BW3gUI9rrxRnAzQKGWmTyMQYcODgbuWNMbc=',
             title: 'Loading...',
@@ -206,7 +207,8 @@ const FirstSegment = ({ resetSegments, extraWide, qType, lastid, tail, pageIndex
     }
    // return (<div ref={ref}>{data?.items?.map((item: any) => <Qwiket key={`sss[[sf[f]]]${item.slug}`} extraWide={extraWide} item={item} isTopic={false}></Qwiket>)}</div>)
 
-    return (<div ref={ref}>{qType !== 'tag' && qType != 'topics' ? <Notifications qType={qType} newsline={qparams.newsline} forum={qparams.forum} lastid={returnedLastid} sessionid={session.sessionid} userslug={session.userslug} reset={reset} /> : <PlainHeader qType={qType} />}{data?.items?.map((item: any) => <Qwiket key={`sss[[sf[f]]]${item.slug}`} extraWide={extraWide} item={item} isTopic={false}></Qwiket>)}</div>)
+    return (<div ref={ref}>{qType != 'topics' ? <Notifications qType={qType} newsline={qparams.newsline} forum={qparams.forum} lastid={returnedLastid} tail={returnedTail} sessionid={session.sessionid} userslug={session.userslug} reset={reset} tag={qType == 'tag' ? qparams.tag : ''}/> : <PlainHeader qType={qType} />}
+    {items.map((item: any) => <Qwiket key={`items[[sf[f]]]${item.slug}`} extraWide={extraWide} item={item} isTopic={false}></Qwiket>)}</div>)
 }
 const Queue = ({ setNotifications, extraWide, session, qparams, qType }: { setNotifications: any, extraWide: boolean, session: Options, qparams: Qparams, qType: string }) => {
 

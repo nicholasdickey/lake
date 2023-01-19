@@ -93,12 +93,13 @@ export const fetchQueue = async ([u, qType, newsline, forum, tag, page, lastid, 
          params += `&userslug=${userslug}`;
       else if (sessionid)
          params += `&sessionid=${sessionid}`;
-      if (u == 'notif')
-         params += '&countonly=1';
+     
       if (tail)
          params += `&tail=${tail}`;
       if (test)
          params += '&test=1';   //silo 4 
+      if (u == 'notif')
+         params += '&countonly=1'; //always the last for easier visibility in the dev tools   
       //  console.log("addParams",params)   
       return params;
    }

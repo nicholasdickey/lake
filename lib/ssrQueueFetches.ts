@@ -29,8 +29,8 @@ export const fetchQueues = async ({ width, layout, qparams, session }: { width: 
       type = 'tag';
     // qTypes.forEach(async (qType:string) => {
     console.log("==============>getKey:", `['queue',qType:${qType},newsline:${qparams.newsline},forum:${qparams.forum},tag:${qparams.forum},pageIndex:${0},lastid:${0},sessionid:${session.sessionid},userslug:${session.userslug},tail:${''}]`)
-    const key = ['queue', type, qparams.newsline, qparams.forum, qparams.tag, 0, 0, sessionid, session.userslug, '',''] as unknown as [u: string, qType: string, newsline: string, forum: string, tag: string, page: number, lastid: string, sessionid: string, userslug: string, tail: string, test: string,breakCache:string];
-    //const r = await fetchQueue(key); //to be parallelized with Promise.All
+    const key = ['queue', type, qparams.newsline, qparams.forum, qparams.tag, 0, 0, sessionid, session.userslug, '','',''] as unknown as [u: string, qType: string, newsline: string, forum: string, tag: string, page: number, lastid: string, sessionid: string, userslug: string, tail: number, test: string,breakCache:string];
+    const r = await fetchQueue(key); //to be parallelized with Promise.All
 
     // console.log("fetchQueues result add",unstable_serialize(key),key,r)
     result[unstable_serialize(key)] ={fallback:true};// r;

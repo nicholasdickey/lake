@@ -237,10 +237,10 @@ const Queue = ({ setNotifications, extraWide, session, qparams, qType }: { setNo
     //console.log("QueueRemder:", { qType, lastid });
 
     let resetSegments: any;
-    const generateFirstSegment = (comment ) => {
+    const generateFirstSegment = (comment:any ) => {
         console.log("segments remder generateFirstSegment", qType,comment)
         return [{
-            segment: <FirstSegment resetSegments={resetSegments} key={`wefho${0}`} extraWide={extraWide} qType={qType} lastid={0} tail={0} pageIndex={0} hasData={false} setData={setData} />,
+            segment: <FirstSegment resetSegments={resetSegments} key={`wefho${0}`} extraWide={extraWide} qType={qType} lastid={''} tail={0} pageIndex={0} hasData={false} setData={setData} />,
             tail: '',
             hasData: false
         }]

@@ -18,7 +18,7 @@ export default function Home({ session, qparams, fallback }: CommonProps) {
     if (!session)
         session = { width: 3000, dark: 1, dense: 0, thick: 0, band: 0, loud: 0, sessionid: '', userslug: '', hasLayout: false, hasNewslines: false };
     if (!qparams)
-        qparams = { forum: '', custom: false, type: 'unknown', newsline: 'fallback', tag: '', threadid: '', layoutNumber: 'l1', timestamp: 0 };
+        qparams = { cc: '', forum: '', custom: false, type: 'unknown', newsline: 'fallback', tag: '', threadid: '', layoutNumber: 'l1', timestamp: 0 };
     return <SWRConfig value={{ fallback }}><Common session={session} qparams={qparams} /></SWRConfig>
 }
 interface StaticParams {
@@ -67,6 +67,7 @@ export async function getStaticProps(props: StaticParams) {
         newsline,
         threadid,
         layoutNumber,
+        cc: '',
         timestamp: Date.now() / 1000 | 0
     }
     console.log('QPARAMS:', qparams)
@@ -81,7 +82,7 @@ export async function getStaticProps(props: StaticParams) {
 
 
     const layoutType = type == 'topic' ? 'context' : type;
-    
+
     const key: fetchChannelLayoutKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, layoutType, options.dense, options.thick, layoutNumber];
     console.log("CALLING fetchChannelLayout:", key);
     const channelLayout = await fetchChannelLayout(key);
@@ -143,7 +144,13 @@ export async function getStaticProps(props: StaticParams) {
 }
 export async function getStaticPaths() {
     return {
-        paths: [{ params: { static: ["usconservative"] } }, { params: { static: ["usconservative", "topic", "fnc", "51-slug-kyiv-hit-with-russian-missiles-in-first-attack-in-weeks"] } }],
+        paths: [{ params: { static: ["usconservative"] } },
+        {
+            params: { static: ["usconservative", "topic", "fnc", "51-slug-european-parliament-calls-for-iran-s-revolutionary-guard-to-be-put-on-the-eu-s-terrorist-list"] },
+        },
+        { 
+            params: { static: ["usconservative", "topic", "fnc", "51-slug-kyiv-hit-with-russian-missiles-in-first-attack-in-weeks"] } },
+        ],
         fallback: true, // can also be true or 'blocking'
     }
 }

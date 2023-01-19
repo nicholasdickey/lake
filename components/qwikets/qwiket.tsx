@@ -30,8 +30,9 @@ const VerticalWrap = styled.div<IsTopic>`
         font-weight:400;
     }
     blockquote {
-        border-left:4px solid;
+        border-left:4px solid grey;
         padding-left:16px;
+        margin-left:6px;
     }
 `
 const Row = styled.div`
@@ -190,7 +191,7 @@ const YoutubeEmbed=({videoid}:{videoid:string})=>{
     return <div></div>// <>{hasWindow?<YouTube opts={opts} className="ut"  videoId={videoid}/>:null}</>
 
 }
-const Iframe=({children,...props})=>{
+const Iframe=({children,...props}:{children:any})=>{
     const [hasWindow, setHasWindow] = useState(false);
     console.log("iframe");
     useEffect(() => {
@@ -205,14 +206,14 @@ const Iframe=({children,...props})=>{
     return <div></div>// <>{hasWindow?<YouTube opts={opts} className="ut"  videoId={videoid}/>:null}</>
 
 }
-const Figure=({children,...props})=>{
+const Figure=({children,...props}:{children:any})=>{
     console.log("FIgure:",children)
     return <div className="figure">{children}</div>
 }
-const Svg=({children,...props})=>{
+const Svg=({children,...props}:{children:any})=>{
     return <div id="svg"></div>
 }
-const Picture=({children,...props})=>{
+const Picture=({children,...props}:{children:any})=>{
     return <div id="picture"></div>
 }
 const Qwiket = ({ extraWide, item, isTopic }: { extraWide: boolean, item: any, isTopic: boolean }) => {
@@ -320,7 +321,8 @@ const Qwiket = ({ extraWide, item, isTopic }: { extraWide: boolean, item: any, i
               (max-width: 2200px) 50vw, 33vw"      placeholder={"blur"} src={catIcon} alt={catName} width={28} height={28} /></PubImageBox><Author>{thread_author ? thread_author + ", " + catName : catName}</Author></Row>
             <Row><Title isTopic={isTopic}>{thread_title}</Title></Row>
             <Row><Description><ReactMarkdown rehypePlugins={[rehypeRaw]} >{description}</ReactMarkdown></Description></Row>
-            <Row><AvatarBox><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={author_avatar.indexOf('http') < 0 ? `https:${author_avatar}` : author_avatar} alt={author_name} fill={true} /></AvatarBox><AuthorPoster>{author_name}</AuthorPoster><TimeSince>{diff}</TimeSince></Row>
+            <Row><AvatarBox><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={author_avatar.indexOf('http') < 0 ? `https:${author_avatar}` : author_avatar} alt={author_name} fill={true} /></AvatarBox><AuthorPoster>{author_name}</AuthorPoster>
+            <TimeSince isTopic={isTopic}>{diff}</TimeSince></Row>
             <Row><Markdown rehypePlugins={[rehypeRaw]} >{postBody}</Markdown></Row>
 
         </VerticalWrap></Link>

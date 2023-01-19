@@ -6,7 +6,7 @@ import { useAppContext } from '../lib/context'
 const Disqus = styled.div`
     color:var(--text);
     background-color: var(--background);
-    margin:6px;
+    margin:16px;
     #disqus_thread a{
           color:var(--text);        
 				

@@ -65,9 +65,10 @@ export const fetchTopic=async ([u,threadid, withBody]:[u:string,threadid:string,
    }
    return res ? res.data : null;
 }
-export const fetchQueue = async ([u, qType, newsline, forum, tag, page, lastid, sessionid, userslug, tail, test]: [u: string, qType: string, newsline: string, forum?: string, tag?: string, page?: number, lastid?: string, sessionid?: string, userslug?: string, tail?: string, test?: string]) => {
+export const fetchQueue = async ([u, qType, newsline, forum, tag, page, lastid, sessionid, userslug, tail, test,breakCache]:
+    [u: string, qType: string, newsline: string, forum?: string, tag?: string, page?: number, lastid?: string, sessionid?: string, userslug?: string, tail?: number, test?: string,breakCache?:string]) => {
    let params;
-   console.log("fetchQueue:", `['queue',qType:${qType},newsline:${newsline},forum:${forum},tag:${tag},page:${page},lastid:${lastid},sessionid:${sessionid},userslug:${userslug},tail:${tail}]`)
+   console.log("remder fetchQueue:", `['queue',qType:${qType},newsline:${newsline},forum:${forum},tag:${tag},page:${page},lastid:${lastid},sessionid:${sessionid},userslug:${userslug},tail:${tail}]`)
    if(!page)
    page=0;
    if(!lastid)
@@ -80,9 +81,11 @@ export const fetchQueue = async ([u, qType, newsline, forum, tag, page, lastid, 
    if(!userslug)
    userslug='';
    if(!tail)
-   tail='';
+   tail=0;
    if(!test)
    test='';
+   if(!breakCache)
+   breakCache='';
 
    const addParams = (params: string) => {
       //  console.log("addParams1",params)
@@ -119,7 +122,7 @@ export const fetchQueue = async ([u, qType, newsline, forum, tag, page, lastid, 
          console.log("fetchQueue params",params)
          break;
       case 'tag':
-         params = `tag=${tag}&type=tag&page=${page}&lastid=${lastid}`;
+         params = `newsline=${newsline}&tag=${tag}&type=tag&page=${page}&lastid=${lastid}`;
          params = addParams(params);
          break;
       case 'topics':

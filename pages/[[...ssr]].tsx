@@ -122,6 +122,7 @@ export const getServerSideProps = withSessionSsr(
         console.log("CALLING fetchChannelLayout:",key);
         const channelLayout = await fetchChannelLayout(key);
         console.log("GOT CHANNEL LAYOUT",JSON.stringify(channelLayout))
+        console.log("=================")
         const user = await fetchUser(['user', options.userslug])
       
         let fallback = {

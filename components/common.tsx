@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Router, { useRouter } from 'next/router'
 import React, { useState, useEffect, useCallback } from "react";
 import useSWR from 'swr'
+import useSWRImmutable from 'swr/immutable'
 import styled from 'styled-components';
 import { ThemeProvider, DefaultTheme } from 'styled-components'
 import axios from 'axios';
@@ -90,15 +91,11 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
   //return <div>Fallback</div>
 
 
-  console.log('home2', qparams)
   const { forum, custom, type, newsline, tag, threadid, layoutNumber } = qparams ? qparams : { forum: '', custom: false, type: 'unknown', newsline: 'qwiket', tag: '', threadid: '', layoutNumber: 'l1' };
-  console.log('home3')
-  const { data: channelConfig, error: channelError } = useSWR(newsline, fetchChannelConfig)
-  console.log('home31')
+  const { data: channelConfig, error: channelError } = useSWRImmutable(newsline, fetchChannelConfig)
   const [session, setSession] = useState(startSession);
-  console.log('home32')
   const [theme, setTheme] = useState(session.dark != -1 ? session.dark == 1 ? 'dark' : 'light' : "unknown")
-  console.log("R!:", session)
+  console.log("remder common.tsz: session.leftColumnOverride:", session.leftColumnOverride)
   const router = useRouter()
   //const sessionid=session.hasLayout?session.sessionid:'';
   //console.log("pathname:",router.asPath);
@@ -119,15 +116,15 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
     if (router.asPath.indexOf('/news/') >= 0) {
 
       const newpath = router.asPath.replace('/news/', '/user/');
-      //console.log(">>>>>>>>>>>>>>>>>>>>>>>>>updateSession, replace path to",router.asPath,newpath)
+      console.log("remder >>>>>>>>>>>>>>>>>>>>>>>>>updateSession, replace path to",router.asPath,newpath)
       router.replace(newpath, undefined, { shallow: true });
     }
-    console.log("updateSession ", theme, updSession)
+    //console.log("updateSession ", theme, updSession)
     const assigned = { ...Object.assign(session, updSession) }
-    console.log("new session: ", assigned, "old session:", session)
+    console.log("remder new session: ", assigned, "old session:", session)
     setSession(assigned);
     axios.post(`/api/session/save`, { session: updSession });
-  }, [session, router, theme]);
+  }, [session, router]);
 
   const updateSessionStealth = useCallback((updSession: object) => {
     //console.log("updateSession dark", theme, updSession)
@@ -169,23 +166,28 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
 
 
   }
-  console.log('home4')
   const layoutType = type == 'topic' ? 'context' : type;
   const key: fetchChannelLayoutKey = ['channelLayout', qparams.newsline, session.hasLayout, session.sessionid, session.userslug, layoutType, session.dense, session.thick, layoutNumber || 'l1'];
   console.log("RENDER LAYOUT, key=", key)
-  const { data: layout, error: layoutError } = useSWR(key, fetchChannelLayout)
+  
+  let { data: layout, error: layoutError } = useSWR(key, fetchChannelLayout)
 
-  console.log('home5')
   //console.log("RENDER: width=", session.width)
-  console.log("LAYOUT:", layout)
+  console.log("LAYOUT:", layout,session)
+  if(!layout)
+  return <div>Loading...</div>
+  //if(!layout)
+  //layout=oldLayout;
   //console.log("QPARAMS",qparams);
   //console.log("CHANNEL_CONFIG:", channelConfig)
   const hpads = layout?.hpads;
   //console.log ("render dark:",session)
 
   //opacity:${user.get("mask") ? 0.5 : 1.0};
+
+
   if (isFallback)
-    return <div>Loading...</div>
+    return <div>Fallback Loading...</div>
 
   return (
     <>

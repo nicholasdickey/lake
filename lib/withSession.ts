@@ -48,5 +48,6 @@ export interface Options{
     thick:number,
     dark?:number,
     loud:number,
-    band:number
+    band:number,
+    leftColumnOverride?:string,
 }

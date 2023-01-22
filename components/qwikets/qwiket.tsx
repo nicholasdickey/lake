@@ -167,6 +167,8 @@ const Body = styled.div`
     width:100%; 
 `
 const Right = styled.div`
+    padding-top:4px;
+    height:auot;
     display:flex;
     justify-content:space-between;
 
@@ -318,7 +320,7 @@ const Qwiket = ({ extraWide, item, isTopic }: { extraWide: boolean, item: any, i
         const diff = TimeDifference(createdat, qparams.timestamp)
         return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/na`}><VerticalWrap isTopic={isTopic}>
             <Row><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
-              (max-width: 2200px) 50vw, 33vw"      placeholder={"blur"} src={catIcon} alt={catName} width={28} height={28} /></PubImageBox><Author>{thread_author ? thread_author + ", " + catName : catName}</Author></Row>
+              (max-width: 2200px) 50vw, 33vw"      placeholder={"blur"} src={catIcon} alt={catName} width={28} height={28} /></PubImageBox><Author>{thread_author ? thread_author : catName}</Author></Row>
             <Row><Title isTopic={isTopic}>{thread_title}</Title></Row>
             <Row><Description><ReactMarkdown rehypePlugins={[rehypeRaw]} >{description}</ReactMarkdown></Description></Row>
             <Row><AvatarBox><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={author_avatar.indexOf('http') < 0 ? `https:${author_avatar}` : author_avatar} alt={author_name} fill={true} /></AvatarBox><AuthorPoster>{author_name}</AuthorPoster>

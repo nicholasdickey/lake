@@ -29,7 +29,7 @@ export const LayoutRes = ({ layout, res, qparams,session,updateSession }:{layout
  
     return <VerticalWrap>
         {session.band?<HotlistWrap><Hotlist session={session} qparams={qparams} spaces={layres.spaces}/> </HotlistWrap>:null}
-        <ColumnsView data-id="LayoutVIew">{columns.map((c:any) =><Column spaces={layres.spaces} key={`sdfpihww${key++}`} column={c} qparams={qparams}  session={session} updateSession={updateSession} />)}</ColumnsView></VerticalWrap>
+        <ColumnsView data-id="LayoutVIew">{columns.map((c:any,index:number) =><Column isLeft={index==0} spaces={layres.spaces} key={`sdfpihww${key++}`} column={c} qparams={qparams}  session={session} updateSession={updateSession} />)}</ColumnsView></VerticalWrap>
 
 
 }

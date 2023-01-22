@@ -153,7 +153,7 @@ const Band = ({ session, upd }:{session:Options,upd:any}) => {
 
 export const Topline = ({ updateTheme, session, layout, updateSession }:{ updateTheme:any, session:Options, layout:any, updateSession:any }) => {
   let upd = updateSession;
-  //console.log("RENDER TOPLINE");
+  console.log("RENDER TOPLINE",layout);
   let hpads = layout.hpads;
 
   // console.log("dark topline render",session)

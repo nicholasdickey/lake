@@ -79,7 +79,7 @@ const listRenderer = ({ qparams, rows, tag, ...rest }) => {
     return <InnerStyledColumn data-id="inner-styled-column" className="q-column">{rows}</InnerStyledColumn>
 }
 */
-export const Column = ({ spaces,column, qparams, session, updateSession }: { spaces:number,column: any, qparams: Qparams, session: Options, updateSession: any }) => {
+export const Column = ({ spaces,column, qparams, session, updateSession,isLeft }: { spaces:number,column: any, qparams: Qparams, session: Options, updateSession: any,isLeft:boolean }) => {
     
     const [notifications,setNotifications]=useState(0);
     console.log("Column notifications:",notifications)
@@ -91,9 +91,11 @@ export const Column = ({ spaces,column, qparams, session, updateSession }: { spa
     console.log("**************************************Column:", selector, type, msc, session)
     if (type == 'stc') {
         switch (selector) {
-            case 'twitter':
+            case 'twitter':    
+            
             case 'newsviews':
                 selector = 'mix';
+            case 'mix':    
             case 'newsline':
             case 'reacts':
         
@@ -108,7 +110,7 @@ export const Column = ({ spaces,column, qparams, session, updateSession }: { spa
                   }*/
                 return <StyledColumn width={width} data-id="styled-column">
                     
-                    <Queue setNotifications={setNotifications} extraWide={false} qType={selector} qparams={qparams} session={session} /></StyledColumn>
+                    <Queue isLeft={isLeft} setNotifications={setNotifications} extraWide={false} qType={selector} qparams={qparams} session={session} updateSession={updateSession}/></StyledColumn>
             }
            /* case "topic": {
                 // console.log("Column:topic")
@@ -153,7 +155,7 @@ export const Column = ({ spaces,column, qparams, session, updateSession }: { spa
                         <Topic />
                     </StyledColumn>
                     <StyledColumn width={rightWidth}>
-                        <Queue setNotifications={setNotifications} extraWide={true} qType={'tag'} qparams={qparams} session={session} />
+                        <Queue  isLeft={false} setNotifications={setNotifications} extraWide={true} qType={'tag'} qparams={qparams} session={session} updateSession={updateSession} />
                     </StyledColumn>
                 </MpColumn>
             }
@@ -162,7 +164,7 @@ export const Column = ({ spaces,column, qparams, session, updateSession }: { spa
                 rightWidth = '38.2%';
                 return <MpColumn width={width} data-id="mp-column">
                     <StyledColumn width={leftWidth}>                        
-                    <Queue setNotifications={setNotifications} extraWide={true} qType={selector} qparams={qparams} session={session} />
+                    <Queue  isLeft={false} setNotifications={setNotifications} extraWide={true} qType={selector} qparams={qparams} session={session} updateSession={updateSession}/>
                     </StyledColumn>
                     <StyledColumn width={rightWidth}>
 

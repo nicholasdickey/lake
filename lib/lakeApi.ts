@@ -25,9 +25,10 @@ export type fetchChannelLayoutKey= [u: string, slug: string, hasLayout: boolean,
 export const fetchChannelLayout = async ([u, slug, hasLayout, sessionid, userslug, type, dense, thick, layoutNumber]:fetchChannelLayoutKey) => {
    try {
       const sessionParam = hasLayout ? userslug ? `&userslug=${userslug}` : `&sessionid=${sessionid}` : ``
-      const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/layout/fetch?channel=${slug}${sessionParam}&pageType=${type}&dense=${dense}&thick=${thick}&layoutNumber=${layoutNumber}&API_KEY=${API_KEY}`
-      // console.log("calling lakeApi fetchChannelLayout, ", url)
+      const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/layout/fetch?channel=${slug}${sessionParam}&pageType=${type}&dense=${dense}&thick=${thick}&layoutNumber=${layoutNumber}`
+       console.log("calling lakeApi fetchChannelLayout, ", url)
       const res = await axios.get(url);
+      console.log("return ",res.data)
       return res.data;
    }
    catch (x) {
@@ -68,7 +69,7 @@ export const fetchTopic=async ([u,threadid, withBody]:[u:string,threadid:string,
 export const fetchQueue = async ([u, qType, newsline, forum, tag, page, lastid, sessionid, userslug, tail, test,breakCache]:
     [u: string, qType: string, newsline: string, forum?: string, tag?: string, page?: number, lastid?: string, sessionid?: string, userslug?: string, tail?: number, test?: string,breakCache?:string]) => {
    let params;
-   console.log("remder fetchQueue:", `['queue',qType:${qType},newsline:${newsline},forum:${forum},tag:${tag},page:${page},lastid:${lastid},sessionid:${sessionid},userslug:${userslug},tail:${tail}]`)
+  // console.log("remder fetchQueue:", `['queue',qType:${qType},newsline:${newsline},forum:${forum},tag:${tag},page:${page},lastid:${lastid},sessionid:${sessionid},userslug:${userslug},tail:${tail}]`)
    if(!page)
    page=0;
    if(!lastid)
@@ -132,8 +133,8 @@ export const fetchQueue = async ([u, qType, newsline, forum, tag, page, lastid, 
          break;
    }
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/queue/fetch?${params}`
-   if(qType=='hot')
-   console.log("hotlist calling lakeApi fetchQueue, ", url)
+   
+   console.log("remder fetchQueue url",url)
    let res;
    try {
       res = await axios.get(url)
@@ -143,6 +144,7 @@ export const fetchQueue = async ([u, qType, newsline, forum, tag, page, lastid, 
       res = await axios.get(url)
       console.log("retried successfully")
    }
+   console.log("remder return ",res.data)
    return res ? res.data : null;
 }
 export type fetchMyNewslineKey= [u: string, newsline: string, sessionid: string, userslug: string, hasNewsline: boolean];

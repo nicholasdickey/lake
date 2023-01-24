@@ -5,7 +5,7 @@ import Qwiket from './qwikets/qwiket';
 import { useAppContext } from '../lib/context';
 import { fetchTopic } from '../lib/lakeApi'
 import Disqus from './disqus'
-const Topic = () => {
+const Topic = ({singlePanel,fullPage}:{singlePanel?:boolean,fullPage?:boolean}) => {
   const { session, qparams } = useAppContext();
   const key: [u: string, threadid: string, withBody: number] = ['topic', qparams.threadid, 1];
   const { data, error } = useSWR(key, fetchTopic);
@@ -18,10 +18,10 @@ const Topic = () => {
       slug: 'loading'
 
     }
-    return <Qwiket extraWide={false} item={item} isTopic={true}></Qwiket>
+    return <Qwiket extraWide={false} item={item} isTopic={true} singlePanel={singlePanel}></Qwiket>
   }
   console.log("passing to Disqus:",data)
-  return <><Qwiket extraWide={false} item={data?.item} isTopic={true}></Qwiket>
-  <Disqus contextUrl={'/context/channel/qwiket'} forum={qparams.forum} title={data?.title} realDisqThreadid={qparams.threadid} cc={qparams.cc} slug={qparams.threadid}/></>
+  return <><Qwiket extraWide={false} item={data?.item} isTopic={true} singlePanel={singlePanel}></Qwiket>
+  <Disqus contextUrl={'/context/channel/qwiket'} forum={qparams.forum} title={data?.title} realDisqThreadid={qparams.threadid} cc={qparams.cc} slug={qparams.threadid} fullPage={fullPage}/></>
 }
 export default Topic;

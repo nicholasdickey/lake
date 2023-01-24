@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Qparams } from '../../lib/qparams';
 import { Options } from '../../lib/withSession'
@@ -39,7 +39,7 @@ const MpColumn = styled.div<Width>`
 width:${({ width }) => width};
 display:flex;
 `
-const ColumnHeader=styled.div`
+const ColumnHeader = styled.div`
     position:absolute;
     display:flex;
     justify-content: space-between;
@@ -47,7 +47,7 @@ const ColumnHeader=styled.div`
     width:100%;
     z-index:100;
 `
-const InnerHeader=styled.div`
+const InnerHeader = styled.div`
     margin-top:-7px;
     color:var(--highlight);
     font-weight:700;
@@ -58,7 +58,7 @@ const InnerHeader=styled.div`
     padding-right:6px;
     background:var(--background);
 `
-const LeftHeader=styled.div`
+const LeftHeader = styled.div`
     margin-top:-7px;
     color:#eee;//var(--highlight);
     font-weight:700;
@@ -79,27 +79,25 @@ const listRenderer = ({ qparams, rows, tag, ...rest }) => {
     return <InnerStyledColumn data-id="inner-styled-column" className="q-column">{rows}</InnerStyledColumn>
 }
 */
-export const Column = ({ spaces,column, qparams, session, updateSession,isLeft }: { spaces:number,column: any, qparams: Qparams, session: Options, updateSession: any,isLeft:boolean }) => {
-    
-    const [notifications,setNotifications]=useState(0);
-    console.log("Column notifications:",notifications)
-    let width = column.percentWidth;
+export const Column = ({ spaces, column, qparams, session, updateSession, isLeft,channelDetails }: { spaces: number, column: any, qparams: Qparams, session: Options, updateSession: any, isLeft: boolean,channelDetails:any }) => {
 
+
+    let width = column.percentWidth;
     let type = column.type;
     let selector = column.selector;
     let msc = column.msc;
-    console.log("**************************************Column:", selector, type, msc, session)
+    console.log("**************************************Column:", spaces, selector, type, msc, session)
     if (type == 'stc') {
         switch (selector) {
-            case 'twitter':    
-            
+            case 'twitter':
+
             case 'newsviews':
                 selector = 'mix';
-            case 'mix':    
+            case 'mix':
             case 'newsline':
             case 'reacts':
-        
-            case 'topics': {
+
+            case 'topics':
                 console.log(`Column>>>: ${selector}`, session)
                 /*  const renderer = ({ item, index, x, y, tag, qparams, channel }) => {
                       //const [ref, setRef] = useState(false);
@@ -109,53 +107,67 @@ export const Column = ({ spaces,column, qparams, session, updateSession,isLeft }
                       return <QwiketItem columnType={tag} topic={item} channel={channel} qparams={qparams} forceShow={false} approver={false} test={false} />
                   }*/
                 return <StyledColumn width={width} data-id="styled-column">
-                    
-                    <Queue isLeft={isLeft} setNotifications={setNotifications} extraWide={false} qType={selector} qparams={qparams} session={session} updateSession={updateSession}/></StyledColumn>
-            }
-           /* case "topic": {
-                // console.log("Column:topic")
 
-                //console.log("Column:feed")
-                const renderer = ({ item, index, x, y, tag, qparams, channel }) => {
-                    //const [ref, setRef] = useState(false);
-                    //  console.log("RENDERER:", item)
+                    <Queue isLeft={isLeft} extraWide={false} qType={selector} qparams={qparams} session={session} updateSession={updateSession} /></StyledColumn>
 
-
-                    return <QwiketItem data-id="qwiket-item" columnType={tag} topic={item} channel={channel} qparams={qparams} forceShow={false} approver={false} test={false} />
-                }
-                return <StyledColumn width={"100%"} data-id="styled-column">
-                    <Tag qparams={qparams} />
-                    <InnerTagWrap data-id="inner-tag-wrap">
-                        <TopicWrap>
-                            <Topic qparams={qparams} />
-                        </TopicWrap>
-
-                        <FeedWrap data-id="feed-wrap" >
-                            <InnerFeedWrap data-id="inner-feed-wrap">
-                                <Queue extraWide={false} qType={msc} qparams={qparams} session={session} />
-                            </InnerFeedWrap>
-                        </FeedWrap>
-                    </InnerTagWrap>
+            case 'tag':
+                return <StyledColumn width={'100%'}>
+                    <Queue isLeft={false} extraWide={true} qType={'tag'} qparams={qparams} session={session} updateSession={updateSession} />
                 </StyledColumn>
-            }*/
+
+            case 'topic':
+                return <StyledColumn width={'100%'}><ColumnHeader><div /><InnerHeader>{'topic'}</InnerHeader></ColumnHeader>
+                    <Topic singlePanel={spaces>2} fullPage={true}/>
+                </StyledColumn>
+            case 'navigator':
+                return <StyledColumn width={'100%'}>
+                    <Navigator session={session} qparams={qparams} updateSession={updateSession} />
+                </StyledColumn>
+
+            /* case "topic": {
+                 // console.log("Column:topic")
+ 
+                 //console.log("Column:feed")
+                 const renderer = ({ item, index, x, y, tag, qparams, channel }) => {
+                     //const [ref, setRef] = useState(false);
+                     //  console.log("RENDERER:", item)
+ 
+ 
+                     return <QwiketItem data-id="qwiket-item" columnType={tag} topic={item} channel={channel} qparams={qparams} forceShow={false} approver={false} test={false} />
+                 }
+                 return <StyledColumn width={"100%"} data-id="styled-column">
+                     <Tag qparams={qparams} />
+                     <InnerTagWrap data-id="inner-tag-wrap">
+                         <TopicWrap>
+                             <Topic qparams={qparams} />
+                         </TopicWrap>
+ 
+                         <FeedWrap data-id="feed-wrap" >
+                             <InnerFeedWrap data-id="inner-feed-wrap">
+                                 <Queue extraWide={false} qType={msc} qparams={qparams} session={session} />
+                             </InnerFeedWrap>
+                         </FeedWrap>
+                     </InnerTagWrap>
+                 </StyledColumn>
+             }*/
         }
     }
     else {
         if (type == 'mp') {
 
             let leftWidth, rightWidth;
-           
-            console.log("MP", column.width,selector, msc)
+
+            console.log("MP", column.width, selector, msc)
             if (selector == 'topic') {
-                leftWidth =`${((column.width-1)/column.width)*100}%`;
-                rightWidth =`${(1/column.width)*100}%`;
-                console.log("width left:",leftWidth,rightWidth)
+                leftWidth = `${((column.width - 1) / column.width) * 100}%`;
+                rightWidth = `${(1 / column.width) * 100}%`;
+                console.log("width left:", leftWidth, rightWidth)
                 return <MpColumn width={width} data-id="mp-column">
-                    <StyledColumn width={leftWidth}><ColumnHeader><div/><InnerHeader>{'topic'}</InnerHeader></ColumnHeader>
+                    <StyledColumn width={leftWidth}><ColumnHeader><div /><InnerHeader>{'topic'}</InnerHeader></ColumnHeader>
                         <Topic />
                     </StyledColumn>
                     <StyledColumn width={rightWidth}>
-                        <Queue  isLeft={false} setNotifications={setNotifications} extraWide={true} qType={'tag'} qparams={qparams} session={session} updateSession={updateSession} />
+                        <Queue isLeft={false} extraWide={true} qType={'tag'} qparams={qparams} session={session} updateSession={updateSession} />
                     </StyledColumn>
                 </MpColumn>
             }
@@ -163,8 +175,8 @@ export const Column = ({ spaces,column, qparams, session, updateSession,isLeft }
                 leftWidth = '61.8%';
                 rightWidth = '38.2%';
                 return <MpColumn width={width} data-id="mp-column">
-                    <StyledColumn width={leftWidth}>                        
-                    <Queue  isLeft={false} setNotifications={setNotifications} extraWide={true} qType={selector} qparams={qparams} session={session} updateSession={updateSession}/>
+                    <StyledColumn width={leftWidth}>
+                        <Queue isLeft={false} extraWide={true} qType={selector} qparams={qparams} session={session} updateSession={updateSession} />
                     </StyledColumn>
                     <StyledColumn width={rightWidth}>
 

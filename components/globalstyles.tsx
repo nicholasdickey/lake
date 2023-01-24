@@ -13,6 +13,10 @@ const lightValues = css`
   --star3:${({ theme }) => theme.light.colors.stars[3]};
   --star4:${({ theme }) => theme.light.colors.stars[4]};
   --star5:${({ theme }) => theme.light.colors.stars[5]};
+  --qwiket-border-stale:${({ theme }) => theme.light.colors.qwiketBorderStale};
+  --qwiket-border-recent:${({ theme }) => theme.light.colors.qwiketBorderRecent};
+  --qwiket-border-new:${({ theme }) => theme.light.colors.qwiketBorderNew};
+
 `;
 const darkValues = css`
   --text: ${({ theme }) => theme.dark.colors.text};
@@ -28,6 +32,11 @@ const darkValues = css`
   --star3:${({ theme }) => theme.dark.colors.stars[3]};
   --star4:${({ theme }) => theme.dark.colors.stars[4]};
   --star5:${({ theme }) => theme.dark.colors.stars[5]};
+
+  --qwiket-border-stale:${({ theme }) => theme.dark.colors.qwiketBorderStale};
+  --qwiket-border-recent:${({ theme }) => theme.dark.colors.qwiketBorderRecent};
+  --qwiket-border-new:${({ theme }) => theme.dark.colors.qwiketBorderNew};
+
 `;
 
 

@@ -193,6 +193,7 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
     <>
       <Head>
         <title>Lake</title>
+      
         <meta name="description" content="Online community newspaper" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
@@ -205,12 +206,12 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
           <GlobalStyle />
           <AppWrapper session={session} qparams={qparams}>
             <div>
-              <Topline updateTheme={updateTheme} session={session} layout={layout} updateSession={updateSession} />
+              <Topline updateTheme={updateTheme} session={session} layout={layout} updateSession={updateSession} channelDetails={channelConfig.channelDetails} />
               <Grid hpads={hpads}>
                 <PageWrap>
                   <Header session={session} channelSlug={channelConfig.channelSlug} channelDetails={channelConfig.channelDetails} newsline={channelConfig.newsline} layout={layout} qparams={qparams} updateSession={updateSession} />
 
-                  <LayoutView session={session} pageType={type} layout={layout} qparams={qparams} updateSession={updateSession} />
+                  <LayoutView session={session} pageType={type} layout={layout} qparams={qparams} updateSession={updateSession } channelDetails={channelConfig.channelDetails} />
 
                 </PageWrap>
               </Grid>

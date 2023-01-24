@@ -13,11 +13,14 @@ import YouTube from 'react-youtube'
 
 
 interface IsTopic {
-    isTopic: boolean
+    isTopic: boolean,
+    isTag?:boolean,
+    diff?:number,
+    singlePanel?:boolean
 }
 const VerticalWrap = styled.div<IsTopic>`
-    border-color: grey;
-    border-style: solid;
+    border-color:${({isTag,diff})=>(isTag&&diff&&(diff<3600))?'var(--qwiket-border-new) var(--qwiket-border-stale) var(--qwiket-border-new) var(--qwiket-border-new)':isTag&&diff&&diff<4*3600?'var(--qwiket-border-recent) var(--qwiket-border-stale) var(--qwiket-border-recent) var(--qwiket-border-recent)':'var(--qwiket-border-stale)'};
+    border-style: solid ${({isTopic,singlePanel})=>isTopic?singlePanel?'solid':'none':'solid'}  ${({isTopic})=>isTopic?'none':'solid'}   ${({isTopic})=>isTopic?'none':'solid'}  ;
     border-width:${({ isTopic }) => isTopic ? 1 : 1}px;
     cursor:pointer;
     padding-left:${({ isTopic }) => isTopic ? 16 : 6}px;
@@ -37,19 +40,14 @@ const VerticalWrap = styled.div<IsTopic>`
 `
 const Row = styled.div`
     display:flex;
-    //padding-left:2px;
-   // padding-right:2px;
     align-items: center;
     justify-content: space-between;
     margin-bottom:4px;
-    //flex-wrap: wrap;
-   // width: 100%;
-    //padding: 0px;
-   // position:relative;
+    font-size:1.0rem;
 `
 
 const SiteName = styled.div<IsTopic>`
-font-size:${({ isTopic }) => isTopic ? 28:12}px;   
+font-size:${({ isTopic }) => isTopic ? 22:12}px;   
 margin-right:20px;
 `
 
@@ -64,40 +62,27 @@ font-size:${({isTopic})=>isTopic?14:10}px;
     
 `
 const Title = styled.div<IsTopic>`
-    
-    //font-weight:500;
+
     line-height: 1.2;
-    font-size: ${({isTopic})=>isTopic?2.0:1.2}rem; 
+    font-size: ${({isTopic})=>isTopic?1.6:1.1}rem; 
    
     text-align: left; 
     margin-top:4px;
-    margin-bottom:4px;
-   
+    margin-bottom:4px; 
+    width:100%;
+    overflow-wrap:break-word;
 `
+
 const Description = styled.div`
-    
-    //font-weight:500;
-   
     margin-bottom:2px;
-   
-`
-const Image = styled.img`
-   
-    object-fit: cover;
-    padding-top: 20px;
-    padding-bottom:12px;
-    position: relative;
-    max-width: 100% !important;
-    margin-left: auto;
-    margin-right: auto;               
-`
+`   
+
 interface ImageBoxProps {
     extraWide: boolean,
     loud: number,
     isTopic: boolean
 }
-const ImageBox = styled.div<ImageBoxProps>`
-   
+const ImageBox = styled.div<ImageBoxProps>` 
     object-fit: cover;
     padding-top: 20px;
     padding-bottom:12px;
@@ -116,8 +101,7 @@ interface PubImageProps {
 }
 const PubImage = styled.img<PubImageProps>`
     position: relative;
-    //max-width: 48px;
-    margin-top: 4px;
+    margin-top: ${({isTopic})=>isTopic?16:6}px;
     padding-top: 0px;
     margin-right: 16px;
     height:${({ isTopic }) => isTopic ? 64 : 28}px;
@@ -126,19 +110,9 @@ const PubImage = styled.img<PubImageProps>`
     margin-bottom: 4px;
 `
 const PubImageBox = styled.div`
-    //position: relative;
-   // object-fit: cover;
-   // margin-top: 10px;
     padding-top: 0px;
     margin-right: 16px;
-   
     margin-bottom: 0px;
-    //height:auto;
-    //width: 38px;;
-    //height:28px;
-   // min-width:28px; 
-     //width:100%; 
-    //width:48px !important; 
 `
 
 const Avatar = styled.img`
@@ -147,8 +121,7 @@ const Avatar = styled.img`
     max-height: 38px;
     margin-top: 10px;
     padding-top: 0px;
-    margin-right: 16px;
-   
+    margin-right: 16px;  
     margin-bottom: 10px;
 `
 const AvatarBox = styled.div`
@@ -158,20 +131,19 @@ const AvatarBox = styled.div`
     margin-top: 10px;
     padding-top: 0px;
     margin-right: 16px;
-   
     margin-bottom: 10px;
     width:48px;
     height:48px;
 `
 const Body = styled.div`
     width:100%; 
+   
 `
 const Right = styled.div`
     padding-top:4px;
     height:auot;
     display:flex;
     justify-content:space-between;
-
 `
 const TwitterEmbed=({tweetid}:{tweetid:string})=>{
     console.log("TwitterEmbed",tweetid);
@@ -218,13 +190,11 @@ const Svg=({children,...props}:{children:any})=>{
 const Picture=({children,...props}:{children:any})=>{
     return <div id="picture"></div>
 }
-const Qwiket = ({ extraWide, item, isTopic }: { extraWide: boolean, item: any, isTopic: boolean }) => {
-   /* useEffect(()=>{
-        if(isTopic){
-        console.log("processing twitter",window.twttr);
-        window.twttr.widgets.load();}}
-    
-      )*/
+const Qwiket = ({ extraWide, item, isTopic,qType,singlePanel,fullPage }: { extraWide: boolean, item: any, isTopic: boolean,qType?:string,singlePanel?:boolean , fullPage?:boolean}) => {
+   
+    const isTag=qType=='tag';
+    console.log("Qwiket render ",singlePanel,isTopic, qType,isTag)  
+
     const { session, qparams } = useAppContext();
     const isReact = item && typeof item.qpostid !== 'undefined' && item.qpostid;
     let { description, title } = item ? item : { description: '', title: '' };
@@ -241,7 +211,7 @@ const Qwiket = ({ extraWide, item, isTopic }: { extraWide: boolean, item: any, i
 
         if (!title)
             title = 'Loading...';
-        const diff = TimeDifference(published_time, qparams.timestamp)
+        const {diff,timeString} = TimeDifference(published_time, qparams.timestamp)
         let bodyHtml;
         interface BodyBlock{
             type:string;
@@ -273,10 +243,11 @@ const Qwiket = ({ extraWide, item, isTopic }: { extraWide: boolean, item: any, i
         // console.log("checking for code tag",bodyHtml?.indexOf('<code>'));
 
          console.log("BODY:",body)
-        return <VerticalWrap isTopic={isTopic}>
+         console.log(JSON.stringify({isTopic,singlePanel}))
+        return <VerticalWrap isTopic={isTopic} singlePanel={singlePanel} >
             <Row><PubImageBox><PubImage loud={session.loud} isTopic={isTopic} placeholder={"blur"} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"      src={catIcon} alt={catName} /></PubImageBox>
-                <Right><SiteName isTopic={isTopic}>{site_name}</SiteName><TimeSince isTopic={isTopic}>{diff}</TimeSince></Right></Row>
+                <Right><SiteName isTopic={isTopic}>{site_name}</SiteName><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right></Row>
             {author ? <Row>{author}</Row> : null}
             <Row><Title isTopic={isTopic}>{title}</Title></Row>
             <Row><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage sizes="(max-width: 768px) 100vw,
@@ -317,14 +288,14 @@ const Qwiket = ({ extraWide, item, isTopic }: { extraWide: boolean, item: any, i
         let { author_avatar, tag, catName, catIcon, author_name, postBody, subscr_status, createdat, thread_author, thread_title, thread_description, thread_url, slug } = item;
         // console.log("React ",item)
 
-        const diff = TimeDifference(createdat, qparams.timestamp)
+        const {diff,timeString} = TimeDifference(createdat, qparams.timestamp)
         return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/na`}><VerticalWrap isTopic={isTopic}>
             <Row><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"      placeholder={"blur"} src={catIcon} alt={catName} width={28} height={28} /></PubImageBox><Author>{thread_author ? thread_author : catName}</Author></Row>
             <Row><Title isTopic={isTopic}>{thread_title}</Title></Row>
             <Row><Description><ReactMarkdown rehypePlugins={[rehypeRaw]} >{description}</ReactMarkdown></Description></Row>
             <Row><AvatarBox><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={author_avatar.indexOf('http') < 0 ? `https:${author_avatar}` : author_avatar} alt={author_name} fill={true} /></AvatarBox><AuthorPoster>{author_name}</AuthorPoster>
-            <TimeSince isTopic={isTopic}>{diff}</TimeSince></Row>
+            <TimeSince isTopic={isTopic}>{timeString}</TimeSince></Row>
             <Row><Markdown rehypePlugins={[rehypeRaw]} >{postBody}</Markdown></Row>
 
         </VerticalWrap></Link>
@@ -334,11 +305,12 @@ const Qwiket = ({ extraWide, item, isTopic }: { extraWide: boolean, item: any, i
         if (catName?.indexOf('Liberty Daily') >= 0) {
             catIcon = 'https://qwiket.com/static/css/afnLogo.png';
         }
-        const diff = TimeDifference(published_time, qparams.timestamp);
+        const {diff,timeString} = TimeDifference(published_time, qparams.timestamp);
         //  console.log("Render Qwuket", item.catIcon,item.image,item.title)
         if (!item.catIcon) {
             console.log("********************************************************************************************************")
         }
+        console.log("qwiket render 2 istag",isTag,'diff:',diff)
         if (slug == 'loading') {
             return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/na`}><VerticalWrap isTopic={isTopic}>
                 <Row><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
@@ -351,10 +323,10 @@ const Qwiket = ({ extraWide, item, isTopic }: { extraWide: boolean, item: any, i
 
             </VerticalWrap></Link>
         }
-        return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/na`}><VerticalWrap isTopic={isTopic}>
+        return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/na`}><VerticalWrap isTopic={isTopic} isTag={isTag} diff={diff}>
             <Row><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} style={{ height: '38', width: 'auto' }} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"       placeholder={"blur"} src={catIcon} alt={catName} /></PubImageBox>
-                <Right><SiteName isTopic={isTopic}>©{site_name}</SiteName><TimeSince isTopic={isTopic}>{diff}</TimeSince></Right> </Row>
+                <Right><SiteName isTopic={isTopic}>©{site_name}</SiteName><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right> </Row>
             {author ? <Row>{author}</Row> : null}
             <Row><Title isTopic={isTopic}>{title}</Title></Row>
             <Row><Markdown rehypePlugins={[rehypeRaw]} >{description}</Markdown></Row>

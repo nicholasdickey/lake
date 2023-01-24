@@ -3,6 +3,7 @@ const StyledCheckbox = styled.div`
   display: inline-block;
   margin-bottom:4px;
   
+  
   > input {
     opacity: 0;
   }
@@ -21,18 +22,22 @@ const StyledCheckbox = styled.div`
       left:0; top: 1px;
       width: 14px; height: 14px; /* dim. de la case */
       border: 1px solid #aaa;
-      //background: #f8f8f8;
+      //background: lightblue;//#a8a8a8;
       background:var(--lowlight);
       border-radius: 3px; /* angles arrondis */
       box-shadow: inset 0 1px 3px rgba(0,0,0,.3); /* légère ombre interne */
      
     }
+    
     &:after {
-      content: '✔';
+      
+      content: '✔\fe0e';
       position: absolute;
-      top: -1px; left: 2px;
+      top: -3px; left: 4px;
       font-size: 16px;
-      color: #09ad7e;
+     // color:red;
+     //background:var(--lowlight);
+      color: #09ad7e ;
       transition: all .2s; /* on prévoit une animation */
      
     }
@@ -56,6 +61,7 @@ const StyledCheckbox = styled.div`
     &:after {
       opacity: 1; /* coche opaque */
       transform: scale(1); /* mise à l'échelle 1:1 */
+    
       
     }
   }

@@ -60,6 +60,10 @@ const LeftHeader = styled.div`
     color:#eee;//var(--highlight);
     font-weight:700;
     font-size:12px;
+    @media (max-width:1200px){
+        font-weight:400;
+        font-size:10px; 
+    }
     margin-right:6px;
     z-index:51;
     padding-left:6px;
@@ -143,8 +147,9 @@ const LeftSelector = ({ qType, sessionid, updateSession }: { qType: string, sess
         }</OpenedMenu> : null}</>
 
 }
-const Notifications = ({ isLeft, qType, newsline, forum, lastid, tail, sessionid, userslug, reset,  tag, updateSession }:
-    { isLeft: boolean, qType: string, newsline: string, forum: string, lastid: string, tail: number, sessionid: string, userslug: string, reset: any,  tag: string, updateSession: any }) => {
+const Notifications = ({ isLeft, qType, newsline, forum, lastid, tail, sessionid, userslug, reset, tag, updateSession,fullPage,channelDetails }:
+    { isLeft: boolean, qType: string, newsline: string, forum: string, lastid: string, tail: number, sessionid: string, userslug: string, reset: any, 
+        tag: string, updateSession: any,fullPage?:boolean,channelDetails?:any }) => {
     const key = ['notif', qType, newsline, forum, tag ? tag : '', 0, lastid, sessionid, userslug, tail];
     const { data, error } = useSWR(key, fetchQueue, {
         refreshInterval: qType == 'topics' ? 24 * 3600 * 1000 : 5000
@@ -163,7 +168,7 @@ const Notifications = ({ isLeft, qType, newsline, forum, lastid, tail, sessionid
     return <ColumnHeader>{qType != 'topics' && +notifications > 0 ? <LeftHeader onClick={onClick}>Show {notifications} New {itemName}</LeftHeader> : <div />}
         <InnerHeader>{name}{isLeft ? <LeftSelector qType={qType} sessionid={sessionid} updateSession={updateSession} /> : ''}</InnerHeader></ColumnHeader>
 }
-const PlainHeader = ({ qType }: { qType: string }) => {
+const PlainHeader = ({ qType,fullPage,channelDetails }: { qType: string,fullPage?:boolean,channelDetails?:boolean }) => {
 
     const name = qType == 'mix' ? 'news&views' : qType == 'tag' ? 'publication feed' : qType == 'topics' ? 'active topics' : qType == 'reacts' ? 'comments' : qType;
 
@@ -174,7 +179,7 @@ const PlainHeader = ({ qType }: { qType: string }) => {
  * @param param0 
  * @returns 
  */
-const Segment = ({ isLeft,  extraWide, qType, lastid, tail, pageIndex, hasData, setData }: {
+const Segment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, setData }: {
     isLeft: boolean,
     extraWide: boolean, qType: string, lastid: string, tail: number, pageIndex: number, hasData: boolean, setData: any
 }) => {
@@ -216,21 +221,21 @@ const Segment = ({ isLeft,  extraWide, qType, lastid, tail, pageIndex, hasData, 
         }
     }, [isVisible, hd, data, qType, pageIndex, setData]);
 
-    return (<div className="other-segments" ref={ref}>{data?.items?.map((item: any) => <Qwiket key={`queue-qwiket-${qType}-${item.slug}-${item.qpostid}`} extraWide={extraWide} item={item} isTopic={false}></Qwiket>)}</div>)
+    return (<div className="other-segments" ref={ref}>{data?.items?.map((item: any) => <Qwiket key={`queue-qwiket-${qType}-${item.slug}-${item.qpostid}`} extraWide={extraWide} item={item} isTopic={false} qType={qType}></Qwiket>)}</div>)
 }
 /**
  * A workaround the problems with swrInfinite
  * @param param0 
  * @returns 
  */
-const FirstSegment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, setData, updateSession }: {
-    isLeft: boolean,  extraWide: boolean, qType: string, lastid: string, tail: number, pageIndex: number, hasData: boolean, setData: any, updateSession: any
+const FirstSegment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, setData, updateSession,fullPage,channelDetails }: {
+    isLeft: boolean, extraWide: boolean, qType: string, lastid: string, tail: number, pageIndex: number, hasData: boolean, setData: any, updateSession: any,fullPage?:boolean,channelDetails:any
 }) => {
     const { session, qparams } = useAppContext();
     const [returnedLastid, setReturnedLastid] = useState(lastid);
     const [returnedTail, setReturnedTail] = useState(tail);
     const [hd, setHd] = useState(hasData)
-   
+
     const onData = useCallback((data: any, key: string, config: any) => {
         //console.log("onData FirstSegment segments onData fetchQueue remder", { isLeft,qType, newLastid: data.lastid, lastid, returnedLastid, newTail: data.tail, key, items: data?.items })
         if (data && (data.lastid != lastid)) {
@@ -241,20 +246,20 @@ const FirstSegment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasDa
         }
     }, []);
     const key = ['queue', qType, qparams.newsline, qparams.forum, qType == 'tag' ? qparams.tag : '', pageIndex, lastid, session.sessionid, session.userslug, tail, ''];
-    
-    
+
+
     //console.log("remder FirstSegment:", { key, qType, pageIndex, returnedLastid, returnedTail, isLeft })
-    
+
     const { data, error: queueError, mutate } = useSWR(key, fetchQueue, {
         onSuccess: onData
-    
-    
+
+
     });
     const items = data?.items;
     const ref = useRef<HTMLDivElement | null>(null)
     const entry = useIntersectionObserver(ref, {})
     const isVisible = !!entry?.isIntersecting;
-    
+
 
     const onScroll = useCallback(() => {
         const { scrollY } = window;
@@ -262,8 +267,8 @@ const FirstSegment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasDa
             mutate();
         }
     }, [lastid, mutate]);
-    
-    const reset = useCallback(() => {     
+
+    const reset = useCallback(() => {
         mutate();
     }, [mutate]);
 
@@ -296,15 +301,15 @@ const FirstSegment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasDa
             slug: 'loading'
 
         }
-        return <div ref={ref}><Qwiket key={`fallback-qwiket-${qType}-${item.slug}`} extraWide={extraWide} item={item} isTopic={false}></Qwiket></div>
+        return <div ref={ref}><Qwiket key={`fallback-qwiket-${qType}-${item.slug}`} extraWide={extraWide} item={item} isTopic={false} qType={qType}></Qwiket></div>
     }
-   
-    return (<div ref={ref}>{qType != 'topics' ? <Notifications isLeft={isLeft} qType={qType} newsline={qparams.newsline} forum={qparams.forum} lastid={returnedLastid} tail={returnedTail} sessionid={session.sessionid} userslug={session.userslug} reset={reset} tag={qType == 'tag' ? qparams.tag : ''} updateSession={updateSession} /> : <PlainHeader qType={qType} />}
-        {items.map((item: any) => <Qwiket key={`queue-qwiket-${qType}-${item.slug}-${item.qpostid}`} extraWide={extraWide} item={item} isTopic={false}></Qwiket>)}</div>)
+
+    return (<div ref={ref}>{qType != 'topics' ? <Notifications isLeft={isLeft} qType={qType} newsline={qparams.newsline} forum={qparams.forum} lastid={returnedLastid} tail={returnedTail} sessionid={session.sessionid} userslug={session.userslug} reset={reset} tag={qType == 'tag' ? qparams.tag : ''} updateSession={updateSession} fullPage={fullPage} channelDetails={channelDetails}/> : <PlainHeader qType={qType} fullPage={fullPage}  channelDetails={channelDetails}/>}
+        {items.map((item: any) => <Qwiket key={`queue-qwiket-${qType}-${item.slug}-${item.qpostid}`} extraWide={extraWide} item={item} isTopic={false} qType={qType}></Qwiket>)}</div>)
 }
 
-const Segments = ({ qType, isLeft, extraWide, updateSession }: { qType: string, isLeft: boolean, extraWide: boolean, updateSession: any }) => {
-    
+const Segments = ({ qType, isLeft, extraWide, updateSession,...props}: { qType: string, isLeft: boolean, extraWide: boolean, updateSession: any,fullPage?:boolean,channelDetails?:any }) => {
+    let generateFirstSegment;
     /**
      * setData called by the segment when receiving data, so that for the last segment a new segment can be appended to the segments array
      * 
@@ -314,7 +319,8 @@ const Segments = ({ qType, isLeft, extraWide, updateSession }: { qType: string, 
      * @param tail 
      * @returns 
      */
-    const setData =useCallback((data: any, pageIndex: number, hasData: boolean, tail: number) => {
+    const setData = useCallback((data: any, pageIndex: number, hasData: boolean, tail: number) => {
+       
         if (!segments || !segments.length) {
             console.log("remder no segments in setData")
             return;
@@ -327,40 +333,41 @@ const Segments = ({ qType, isLeft, extraWide, updateSession }: { qType: string, 
 
             )
         }
-     
+
         setSegments([...segments]) //immutable state
-    },[extraWide, isLeft, qType]);
-    const generateFirstSegment = (comment: any) => {
+    }, [extraWide, isLeft, qType]);
+
+    generateFirstSegment = (comment: any) => {
         console.log("segments >>>>>>>>>>>   remder generateFirstSegment", qType, comment)
         return [
-            <FirstSegment isLeft={isLeft} key={`first-segment-${qType}`} extraWide={extraWide} qType={qType} lastid={''} tail={0} pageIndex={0} hasData={false} setData={setData} updateSession={updateSession} />,
+            <FirstSegment isLeft={isLeft} key={`first-segment-${qType}`} extraWide={extraWide} qType={qType} lastid={''} tail={0} pageIndex={0} hasData={false} setData={setData} updateSession={updateSession} {...props}/>,
         ]
     }
     const [segments, setSegments] = useState(generateFirstSegment('Segments:useState'));
-    console.log('REMDER Segments:', JSON.stringify({qType,isLeft}))
+    console.log('REMDER Segments:', JSON.stringify({ qType, isLeft }))
     return <QueueWrap>{segments}</QueueWrap>
 
 }
-const Queue = ({ qType, isLeft, session, ...props }: { qType: string, isLeft: boolean, session: Options }) => {
+const Queue = ({ qType, isLeft, session, ...props }: { qType: string, isLeft: boolean, session: Options, extraWide: boolean, updateSession: any,qparams:Qparams,fullPage?:boolean ,channelDetails?:any}) => {
 
 
     qType = isLeft ? session.leftColumnOverride || qType : qType;
     let queue;
     switch (qType) {
         case 'newsline':
-            queue = <NewslineQueue  isLeft={isLeft} session={session} {...props} />;
+            queue = <NewslineQueue isLeft={isLeft} session={session} {...props} />;
             break;
         case 'mix':
-            queue = <MixQueue   isLeft={isLeft} session={session} {...props} />;
+            queue = <MixQueue isLeft={isLeft} session={session} {...props} />;
             break;
         case 'topics':
-            queue = <TopicsQueue  isLeft={isLeft} session={session} {...props} />;
+            queue = <TopicsQueue isLeft={isLeft} session={session} {...props} />;
             break;
         case 'tag':
-            queue = <TagQueue  isLeft={isLeft} session={session} {...props} />;
+            queue = <TagQueue isLeft={isLeft} session={session} {...props} />;
             break;
         default:
-            queue = <ReactsQueue  isLeft={isLeft} session={session} {...props} />;
+            queue = <ReactsQueue isLeft={isLeft} session={session} {...props} />;
 
     }
     return <QueueWrap>{queue}</QueueWrap>

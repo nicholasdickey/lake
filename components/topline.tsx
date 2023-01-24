@@ -7,6 +7,7 @@ import { Options } from '../lib/withSession';
 //import { updateSession } from '../qwiket-lib/actions/app'
 //import AlertWidget from './widgets/alert'
 import StyledCheckbox from './checkbox';
+import getLayoutWidth from '../lib/layoutWidth'
 
 /*const StyledCheckbox = styled(({ ...other }) => <div classes={{ checked: 'checked', disabled: 'disabled' }}{...other} />)`
   color: #eee !important;
@@ -26,14 +27,18 @@ import StyledCheckbox from './checkbox';
     color:  #aff; !important;
   }
 `; */
-const ToplineBand = styled.div`
+interface ToplineProps{
+  back:boolean
+}
+const ToplineBand = styled.div<ToplineProps>`
         width:100%;
-        height:30%;
+       margin-bottom:${({back})=>back?6:16}px;
+        //height:20%;
         display:block;
-        background-color:#000;
-        @media(max-width:749px){
+        background-color:${({back})=>back?`#111`:'#111'};
+       /* @media(max-width:749px){
             display:none;
-        }
+        }*/
     `
 interface Props {
   hpads: any;
@@ -43,7 +48,7 @@ const InnerBand = styled.div<Props>`
         padding-left: ${({ hpads }) => hpads.w0};
         padding-right:  ${({ hpads }) => hpads.w0};
         width: '100%';
-        @media(min-width:750px){
+        @media(min-width:50px){
             padding-left: ${({ hpads }) => hpads.w750};
             padding-right: ${({ hpads }) => hpads.w750};
         }
@@ -88,9 +93,10 @@ const InnerBand = styled.div<Props>`
 const StyledCheck = styled.div`
      display:flex;
       width:120px;
-     @media(max-width:1200px){
+    
+    /* @media(max-width:1200px){
          display:none;
-     }
+     }*/
  `
 const Check = ({ label, checked, onChange, disabled }: { label: string, checked: boolean, onChange: any, disabled: boolean }) => {
   return <StyledCheckbox
@@ -109,52 +115,53 @@ const Check = ({ label, checked, onChange, disabled }: { label: string, checked:
 
 
 const Loud = ({ session, upd }: { session: Options, upd: any }) => {
-  return <Check label='Loud' checked={session.loud == 1 ? true : false} disabled={false} onChange={(checked:boolean) => {
+  return <Check label='Loud' checked={session.loud == 1 ? true : false} disabled={false} onChange={(checked: boolean) => {
     console.log("Changed Loud")
     upd({ loud: checked ? 1 : 0 });
   }} />
 }
-const Thick = ({ session, upd }:{session:Options,upd:any}) => {
+const Thick = ({ session, upd }: { session: Options, upd: any }) => {
 
-  return <StyledCheck><Check disabled={false} label='Thick' checked={session.thick == 1 ? true : false} onChange={(checked:boolean) => {
+  return <StyledCheck><Check disabled={false} label='Thick' checked={session.thick == 1 ? true : false} onChange={(checked: boolean) => {
     console.log("Changed And The Band")
     upd({ thick: checked ? 1 : 0 });
   }} /></StyledCheck>
 }
-const Dense = ({ session, upd }:{session:Options,upd:any}) => {
+const Dense = ({ session, upd }: { session: Options, upd: any }) => {
 
-  return <StyledCheck><Check label='Dense' checked={session.dense == 1 ? true : false} disabled={!session.thick} onChange={(checked:boolean) => {
+  return <StyledCheck><Check label='Dense' checked={session.dense == 1 ? true : false} disabled={!session.thick} onChange={(checked: boolean) => {
     console.log("Changed And The Band")
     upd({ dense: checked ? 1 : 0 });
   }} /></StyledCheck>
 }
 const StyledMobileCheck = styled.div`
 display:flex;
-@media(max-width:750px){
+/*@media(max-width:750px){
     display:none;
-}
+}*/
 `
-const Dark = ({ session, updateTheme }:{ session:Options, updateTheme:any }) => {
+const Dark = ({ session, updateTheme }: { session: Options, updateTheme: any }) => {
   //console.log ("dark checkbox checked:", session.dark== 1)
-  return <StyledMobileCheck><Check label='Dark' checked={session.dark == 1 ? true : false} disabled={false} onChange={(checked:boolean) => {
+  return <StyledMobileCheck><Check label='Dark' checked={session.dark == 1 ? true : false} disabled={false} onChange={(checked: boolean) => {
     console.log("Changed Dark", checked)
     updateTheme(checked ? 'dark' : 'light');
     //setTimeout(() => location.reload(true), 200)
   }} /></StyledMobileCheck>
 }
 
-const Band = ({ session, upd }:{session:Options,upd:any}) => {
+const Band = ({ session, upd }: { session: Options, upd: any }) => {
 
-  return <StyledMobileCheck><Check  disabled={false} label='And The Band' checked={session.band == 1 ? true : false} onChange={(checked:boolean) => {
+  return <StyledMobileCheck><Check disabled={false} label='And The Band' checked={session.band == 1 ? true : false} onChange={(checked: boolean) => {
     console.log("Changed And The Band", checked)
     upd({ band: checked ? 1 : 0 });
   }} /></StyledMobileCheck>
 }
 
-export const Topline = ({ updateTheme, session, layout, updateSession }:{ updateTheme:any, session:Options, layout:any, updateSession:any }) => {
-  let upd = updateSession;
-  console.log("RENDER TOPLINE",layout);
-  let hpads = layout.hpads;
+export const Topline = ({ updateTheme, session, layout, updateSession, channelDetails }: { updateTheme: any, session: Options, layout: any, updateSession: any, channelDetails: any }) => {
+  const upd = updateSession;
+  console.log("RENDER TOPLINE", layout);
+  const hpads = layout.hpads;
+  const topline = channelDetails.topline;
 
   // console.log("dark topline render",session)
 
@@ -166,6 +173,15 @@ export const Topline = ({ updateTheme, session, layout, updateSession }:{ update
   }} /></Tooltip></div>*/
 
 
+  let width = getLayoutWidth(session.width);
+  return <ToplineBand back={width>600} data-id="topline">
+    {width == 600 ? <InnerBand hpads={hpads}><div/> <Loud upd={upd} session={session} />  <Dark updateTheme={updateTheme} session={session} /><div/></InnerBand> : null}
+    {width == 750 ? <InnerBand hpads={hpads}> <div/><Loud upd={upd} session={session} />  <Dark updateTheme={updateTheme} session={session} /><div/> </InnerBand> : null}
+    {width == 900 ? <InnerBand hpads={hpads}> <Loud upd={upd} session={session} />  <Dark updateTheme={updateTheme} session={session} /> <Band upd={upd} session={session} /></InnerBand> : null}
+    {width == 1200 ? <InnerBand hpads={hpads}> <Loud upd={upd} session={session} />  <Thick upd={upd} session={session} /> <Dark updateTheme={updateTheme} session={session} /> <Band upd={upd} session={session} /></InnerBand> : null}
+    {width == 1800 ? <InnerBand hpads={hpads}> <Loud upd={upd} session={session} />  <Thick upd={upd} session={session} />  <Dense upd={upd} session={session} /><Dark updateTheme={updateTheme} session={session} /> <Band upd={upd} session={session} /></InnerBand> : null}
+    {width == 2100 ? <InnerBand hpads={hpads}> <Loud upd={upd} session={session} />   <Thick upd={upd} session={session} />
+      <Dense upd={upd} session={session} /> <Dark updateTheme={updateTheme} session={session} /> <Band upd={upd} session={session} /></InnerBand> : null}
 
-  return <ToplineBand data-id="topline"><InnerBand hpads={hpads}><Loud upd={upd} session={session} /><Thick upd={upd} session={session} /><Dense upd={upd} session={session} /><Dark updateTheme={updateTheme} session={session} /><Band upd={upd} session={session} /></InnerBand></ToplineBand>
+  </ToplineBand>
 };

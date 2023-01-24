@@ -49,6 +49,6 @@ function timeConverter(time:number, timestamp:number) {
         res = date + ' ' + month + ' ' + year + ' ' //+ hour + ':' + min + ':' + sec ;
     }
    // console.log("returning",res)
-    return res;
+    return {timeString:res,diff};
 }
 export default timeConverter;

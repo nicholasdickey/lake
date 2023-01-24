@@ -3,10 +3,13 @@ import styled from 'styled-components';
 import { DiscussionEmbed } from 'disqus-react';
 import { useAppContext } from '../lib/context'
 
-const Disqus = styled.div`
+interface DisqusParams{
+  fullPage:boolean
+}
+const Disqus = styled.div<DisqusParams>`
     color:var(--text);
     background-color: var(--background);
-    margin:16px;
+    margin:${({fullPage})=>fullPage?4:16}px;
     #disqus_thread a{
           color:var(--text);        
 				
@@ -16,7 +19,7 @@ const Disqus = styled.div`
     }   
 `
 
-const Local = ({ contextUrl, forum, realDisqThreadid, cc, slug, title }: {  contextUrl: string, forum: string, realDisqThreadid: string,  cc: string, slug: string, title: string }) => {
+const Local = ({ contextUrl, forum, realDisqThreadid, cc, slug, title,fullPage }: {  contextUrl: string, forum: string, realDisqThreadid: string,  cc: string, slug: string, title: string,fullPage:boolean }) => {
     const { session, qparams } = useAppContext();
     if(!title)
         title='';
@@ -55,9 +58,9 @@ const Local = ({ contextUrl, forum, realDisqThreadid, cc, slug, title }: {  cont
       }*/
     //  console.log("local: identifier:%s",identifier,url)
     // console.log('Disqus url=%s','/disqus/'+site+'/'+encodeURIComponent(identifier)+'/'+encodeURIComponent(title)+'/'+encodeURIComponent(url));
-console.log("Disqus:",{forum,slug,t,url})
+console.log("Disqus:",{fullPage,forum,slug,t,url})
     return (
-        <Disqus><DiscussionEmbed
+        <Disqus fullPage={fullPage}><DiscussionEmbed
             shortname={forum}
             config={{
                 identifier: slug,

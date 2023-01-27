@@ -48,10 +48,11 @@ const W2100 = styled.div`
             display:flex;
         }
     `
-export const LayoutView = ({ session, pageType, layout,  ...props }:{session:Options,pageType:string,layout:any,qparams:Qparams,updateSession:any,channelDetails:any}) => {
+export const LayoutView = ({ session, pageType, layout,  ...props }:{session:Options,pageType:string,layout:any,qparams:Qparams,updateSession:any,channelDetails:any,qCache:any,setQCache:any}) => {
    // console.log("LAYOUT_VIEW:", layout);
     let layoutView = layout.layoutView;
     let columns = layout.columns;
+    console.log("dbg: LayoutView",session.leftColumnOverride)
    // let defaultWidth = session.get("defaultWidth");
    // console.log("defaultWidth:", +defaultWidth, +session.get("width"))
    //console.log("layoutView:",layoutView)

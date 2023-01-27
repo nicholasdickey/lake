@@ -23,7 +23,7 @@ const VerticalWrap = styled.div<IsTopic>`
     border-style: solid ${({isTopic,singlePanel})=>isTopic?singlePanel?'solid':'none':'solid'}  ${({isTopic})=>isTopic?'none':'solid'}   ${({isTopic})=>isTopic?'none':'solid'}  ;
     border-width:${({ isTopic }) => isTopic ? 1 : 1}px;
     cursor:pointer;
-    padding-left:${({ isTopic }) => isTopic ? 16 : 6}px;
+    padding-left:${({ isTopic }) => isTopic ? 16 : 8}px;
     padding-right:${({ isTopic }) => isTopic ? 16 : 6}px;
     padding-bottom:6px;
     width:100%;
@@ -53,12 +53,14 @@ margin-right:20px;
 
 const Author = styled.div`
 font-size: 12px;   
+margin-right:4px;
 `
 const AuthorPoster = styled.div`
 font-size: 14px;   
 `
 const TimeSince = styled.div<IsTopic>`
 font-size:${({isTopic})=>isTopic?14:10}px;
+margin-right:${({isTopic})=>isTopic?0:4}px;
     
 `
 const Title = styled.div<IsTopic>`
@@ -145,51 +147,15 @@ const Right = styled.div`
     display:flex;
     justify-content:space-between;
 `
-const TwitterEmbed=({tweetid}:{tweetid:string})=>{
-    console.log("TwitterEmbed",tweetid);
-    return <div></div>//<TwitterTweetEmbed tweetId={tweetid}/>
 
-}
-const YoutubeEmbed=({videoid}:{videoid:string})=>{
-    const [hasWindow, setHasWindow] = useState(false);
-    console.log("YoutubeEmbed",videoid);
-    useEffect(() => {
-        if (typeof window !== "undefined") {
-          setHasWindow(true);
-        }
-      }, []);
-    const opts={
-        height:"auto",
-        width:"100%"
-    }
-    return <div></div>// <>{hasWindow?<YouTube opts={opts} className="ut"  videoId={videoid}/>:null}</>
+const Comment=styled.div`
+    font-size:10px;
+    font-weight: 700;
+    border:solid grey 1px;
+    padding:1px 3px 1px 3px;
+    margin:1px 3px 1px 3px;
 
-}
-const Iframe=({children,...props}:{children:any})=>{
-    const [hasWindow, setHasWindow] = useState(false);
-    console.log("iframe");
-    useEffect(() => {
-        if (typeof window !== "undefined") {
-          setHasWindow(true);
-        }
-      }, []);
-    const opts={
-        height:"auto",
-        width:"100%"
-    }
-    return <div></div>// <>{hasWindow?<YouTube opts={opts} className="ut"  videoId={videoid}/>:null}</>
-
-}
-const Figure=({children,...props}:{children:any})=>{
-    console.log("FIgure:",children)
-    return <div className="figure">{children}</div>
-}
-const Svg=({children,...props}:{children:any})=>{
-    return <div id="svg"></div>
-}
-const Picture=({children,...props}:{children:any})=>{
-    return <div id="picture"></div>
-}
+`
 const Qwiket = ({ extraWide, item, isTopic,qType,singlePanel,fullPage }: { extraWide: boolean, item: any, isTopic: boolean,qType?:string,singlePanel?:boolean , fullPage?:boolean}) => {
    
     const isTag=qType=='tag';
@@ -253,32 +219,7 @@ const Qwiket = ({ extraWide, item, isTopic,qType,singlePanel,fullPage }: { extra
             <Row><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
 
-            <Row><Body>{bodyBlocks?bodyBlocks :false?<Markdown  options={{
-                        forceBlock: true,
-                        overrides: {
-                            TwitterTweetEmbed:TwitterEmbed,
-                            YoutubeEmbed:YoutubeEmbed,
-                            svg:Svg,
-                            picture:Picture,
-                            figure:Figure,
-                           Iframe:Iframe
-                            
-                            
-                           /* img: {
-                                component: ImageRenderer,
-                                props: {
-                                    setState,
-                                    index: `lightbox-${index}`,
-                                    state,
-                                },
-                            },
-                            a: {
-                                component: LinkRenderer,
-                                index: `link-${index}`,
-                                theme,
-                            },*/
-                        },
-                    }}>{bodyHtml ? bodyHtml : description}</Markdown>:<ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml : description}</ReactMarkdown>}</Body></Row>
+            <Row><Body>{bodyBlocks?bodyBlocks :<ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml : description}</ReactMarkdown>}</Body></Row>
 
         </VerticalWrap>
         
@@ -291,7 +232,8 @@ const Qwiket = ({ extraWide, item, isTopic,qType,singlePanel,fullPage }: { extra
         const {diff,timeString} = TimeDifference(createdat, qparams.timestamp)
         return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/na`}><VerticalWrap isTopic={isTopic}>
             <Row><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
-              (max-width: 2200px) 50vw, 33vw"      placeholder={"blur"} src={catIcon} alt={catName} width={28} height={28} /></PubImageBox><Author>{thread_author ? thread_author : catName}</Author></Row>
+              (max-width: 2200px) 50vw, 33vw"      placeholder={"blur"} src={catIcon} alt={catName} width={28} height={28} /></PubImageBox>
+              {qType=='mix'?<Comment>comment</Comment>:null}<Author>{thread_author ? thread_author : catName}</Author></Row>
             <Row><Title isTopic={isTopic}>{thread_title}</Title></Row>
             <Row><Description><ReactMarkdown rehypePlugins={[rehypeRaw]} >{description}</ReactMarkdown></Description></Row>
             <Row><AvatarBox><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={author_avatar.indexOf('http') < 0 ? `https:${author_avatar}` : author_avatar} alt={author_name} fill={true} /></AvatarBox><AuthorPoster>{author_name}</AuthorPoster>

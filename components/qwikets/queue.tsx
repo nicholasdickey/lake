@@ -116,7 +116,7 @@ const QueueWrap = styled.div`
 `
 
 const Arrow = () => <svg className="jss37 jss168" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation"><path d="M7 10l5 5 5-5z"></path></svg>
-const LeftSelector = ({ qType, sessionid, updateSession }: { qType: string, sessionid: string, updateSession: any }) => {
+const LeftSelector = ({ qType, sessionid, updateSession,reset }: { qType: string, sessionid: string, updateSession: any,reset:any }) => {
     const [opened, setOpened] = useState(false);
     const choices = [
         {
@@ -139,6 +139,7 @@ const LeftSelector = ({ qType, sessionid, updateSession }: { qType: string, sess
     const onClick = (type: string) => {
         updateSession({ leftColumnOverride: type });
         setOpened(false);
+        reset();
     }
     return <>
         <SelectButton onClick={() => setOpened(!opened)}><Arrow /></SelectButton>
@@ -166,7 +167,7 @@ const Notifications = ({ isLeft, qType, newsline, forum, lastid, tail, sessionid
     }
     // console.log("Notifications Remder",qType,name,isLeft,data)
     return <ColumnHeader>{qType != 'topics' && +notifications > 0 ? <LeftHeader onClick={onClick}>Show {notifications} New {itemName}</LeftHeader> : <div />}
-        <InnerHeader>{name}{isLeft ? <LeftSelector qType={qType} sessionid={sessionid} updateSession={updateSession} /> : ''}</InnerHeader></ColumnHeader>
+        <InnerHeader>{name}{isLeft ? <LeftSelector qType={qType} sessionid={sessionid} updateSession={updateSession} reset={reset} /> : ''}</InnerHeader></ColumnHeader>
 }
 const PlainHeader = ({ qType,fullPage,channelDetails }: { qType: string,fullPage?:boolean,channelDetails?:boolean }) => {
 
@@ -229,7 +230,7 @@ const Segment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, s
  * @returns 
  */
 const FirstSegment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, setData, updateSession,fullPage,channelDetails }: {
-    isLeft: boolean, extraWide: boolean, qType: string, lastid: string, tail: number, pageIndex: number, hasData: boolean, setData: any, updateSession: any,fullPage?:boolean,channelDetails:any
+    isLeft: boolean, extraWide: boolean, qType: string, lastid: string, tail: number, pageIndex: number, hasData: boolean, setData: any, updateSession: any,fullPage?:boolean,channelDetails?:any
 }) => {
     const { session, qparams } = useAppContext();
     const [returnedLastid, setReturnedLastid] = useState(lastid);
@@ -237,7 +238,7 @@ const FirstSegment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasDa
     const [hd, setHd] = useState(hasData)
 
     const onData = useCallback((data: any, key: string, config: any) => {
-        //console.log("onData FirstSegment segments onData fetchQueue remder", { isLeft,qType, newLastid: data.lastid, lastid, returnedLastid, newTail: data.tail, key, items: data?.items })
+        console.log("dbg onData FirstSegment segments onData fetchQueue remder", { isLeft,qType, newLastid: data.lastid, lastid, returnedLastid, newTail: data.tail, key, items: data?.items })
         if (data && (data.lastid != lastid)) {
             setReturnedLastid(data.lastid);
             if (data.tail)
@@ -245,13 +246,14 @@ const FirstSegment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasDa
             //  console.log("remder first segment. got new lastid", qType, data.lastid, lastid)
         }
     }, []);
-    const key = ['queue', qType, qparams.newsline, qparams.forum, qType == 'tag' ? qparams.tag : '', pageIndex, lastid, session.sessionid, session.userslug, tail, ''];
+    const key = ['queue', qType, qparams.newsline, qparams.forum, qType == 'tag' ? qparams.tag : '', pageIndex, 0, session.sessionid, session.userslug, 0, ''];
 
 
     //console.log("remder FirstSegment:", { key, qType, pageIndex, returnedLastid, returnedTail, isLeft })
 
     const { data, error: queueError, mutate } = useSWR(key, fetchQueue, {
-        onSuccess: onData
+        onSuccess: onData,
+        revalidateIfStale:false
 
 
     });
@@ -269,7 +271,9 @@ const FirstSegment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasDa
     }, [lastid, mutate]);
 
     const reset = useCallback(() => {
-        mutate();
+        setReturnedTail(0);
+        setReturnedTail(0)
+        setTimeout(()=>mutate(),1);
     }, [mutate]);
 
     useEffect(() => {
@@ -303,7 +307,7 @@ const FirstSegment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasDa
         }
         return <div ref={ref}><Qwiket key={`fallback-qwiket-${qType}-${item.slug}`} extraWide={extraWide} item={item} isTopic={false} qType={qType}></Qwiket></div>
     }
-
+    console.log(`dbg: FirstSegment`,{lastid:returnedLastid,tail:returnedTail})
     return (<div ref={ref}>{qType != 'topics' ? <Notifications isLeft={isLeft} qType={qType} newsline={qparams.newsline} forum={qparams.forum} lastid={returnedLastid} tail={returnedTail} sessionid={session.sessionid} userslug={session.userslug} reset={reset} tag={qType == 'tag' ? qparams.tag : ''} updateSession={updateSession} fullPage={fullPage} channelDetails={channelDetails}/> : <PlainHeader qType={qType} fullPage={fullPage}  channelDetails={channelDetails}/>}
         {items.map((item: any) => <Qwiket key={`queue-qwiket-${qType}-${item.slug}-${item.qpostid}`} extraWide={extraWide} item={item} isTopic={false} qType={qType}></Qwiket>)}</div>)
 }
@@ -338,7 +342,7 @@ const Segments = ({ qType, isLeft, extraWide, updateSession,...props}: { qType: 
     }, [extraWide, isLeft, qType]);
 
     generateFirstSegment = (comment: any) => {
-        console.log("segments >>>>>>>>>>>   remder generateFirstSegment", qType, comment)
+        console.log("dbg g: segments >>>>>>>>>>>   remder generateFirstSegment", qType, comment)
         return [
             <FirstSegment isLeft={isLeft} key={`first-segment-${qType}`} extraWide={extraWide} qType={qType} lastid={''} tail={0} pageIndex={0} hasData={false} setData={setData} updateSession={updateSession} {...props}/>,
         ]
@@ -349,8 +353,9 @@ const Segments = ({ qType, isLeft, extraWide, updateSession,...props}: { qType: 
 
 }
 const Queue = ({ qType, isLeft, session, ...props }: { qType: string, isLeft: boolean, session: Options, extraWide: boolean, updateSession: any,qparams:Qparams,fullPage?:boolean ,channelDetails?:any}) => {
-
-
+    var randomstring = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    const [guid,setGuid]=useState(randomstring())
+    console.log("dbg q: queue render",guid,qType)
     qType = isLeft ? session.leftColumnOverride || qType : qType;
     let queue;
     switch (qType) {

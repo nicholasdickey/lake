@@ -85,12 +85,13 @@ background-color:var(--background);
 
 
 export default function Home({ session: startSession, qparams }: CommonProps) {
+
   console.log("HOME:", qparams, startSession);
   const isFallback = qparams && qparams.newsline != 'fallback' ? false : true;
   //if(isFallback)
   //return <div>Fallback</div>
 
-
+  const [qCache,setQCache]=useState({})
   const { forum, custom, type, newsline, tag, threadid, layoutNumber } = qparams ? qparams : { forum: '', custom: false, type: 'unknown', newsline: 'qwiket', tag: '', threadid: '', layoutNumber: 'l1' };
   const { data: channelConfig, error: channelError } = useSWRImmutable(newsline, fetchChannelConfig)
   const [session, setSession] = useState(startSession);
@@ -107,21 +108,21 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
   }, [theme]);
 
   // const [ userConfig, userConfigError ] = useSWR(`/api/v1/user/config?custom=${custom?1:0}&channel=${channel}&forum=${forum}`, fetcher)
-  const resize = (width: number) => {
+  const resize = useCallback((width: number) => {
     if (custom) {
       updateSession({ width })
     }
-  }
+  },[custom])
   const updateSession = useCallback((updSession: object) => {
     if (router.asPath.indexOf('/news/') >= 0) {
 
       const newpath = router.asPath.replace('/news/', '/user/');
-      console.log("remder >>>>>>>>>>>>>>>>>>>>>>>>>updateSession, replace path to",router.asPath,newpath)
+      console.log("dbg remder >>>>>>>>>>>>>>>>>>>>>>>>>updateSession, replace path to",router.asPath,newpath)
       router.replace(newpath, undefined, { shallow: true });
     }
     //console.log("updateSession ", theme, updSession)
     const assigned = { ...Object.assign(session, updSession) }
-    console.log("remder new session: ", assigned, "old session:", session)
+    console.log("dbg remder new session: ", assigned, "old session:", session)
     setSession(assigned);
     axios.post(`/api/session/save`, { session: updSession });
   }, [session, router]);
@@ -130,6 +131,7 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
     //console.log("updateSession dark", theme, updSession)
     const assigned = { ...Object.assign(session, updSession) }
     setSession(assigned);
+ 
     axios.post(`/api/session/save`, { session: updSession });
   }, [session]);
   const updateTheme = useCallback((theme: string) => {
@@ -152,11 +154,12 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
   }, [theme, session.dark, updateSession, updateSessionStealth]);
   useEffect(() => {
     const handleResize = () => {
-      resize(window.innerWidth)
+      if(window.innerWidth!=session.width)
+        resize(window.innerWidth)
     }
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  });
+  },[resize]);
 
 
   if (isBrowser()) {
@@ -211,7 +214,7 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
                 <PageWrap>
                   <Header session={session} channelSlug={channelConfig.channelSlug} channelDetails={channelConfig.channelDetails} newsline={channelConfig.newsline} layout={layout} qparams={qparams} updateSession={updateSession} />
 
-                  <LayoutView session={session} pageType={type} layout={layout} qparams={qparams} updateSession={updateSession } channelDetails={channelConfig.channelDetails} />
+                  <LayoutView session={session} pageType={type} layout={layout} qparams={qparams} updateSession={updateSession } channelDetails={channelConfig.channelDetails} qCache={qCache} setQCache={setQCache} />
 
                 </PageWrap>
               </Grid>

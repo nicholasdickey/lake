@@ -79,77 +79,57 @@ const listRenderer = ({ qparams, rows, tag, ...rest }) => {
     return <InnerStyledColumn data-id="inner-styled-column" className="q-column">{rows}</InnerStyledColumn>
 }
 */
-export const Column = ({ spaces, column, qparams, session, updateSession, isLeft,channelDetails }: { spaces: number, column: any, qparams: Qparams, session: Options, updateSession: any, isLeft: boolean,channelDetails:any }) => {
+var randomstring = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+export const Column = ({ spaces, column, qparams, session, updateSession, isLeft, channelDetails, qCache, setQCache }: { spaces: number, column: any, qparams: Qparams, session: Options, updateSession: any, isLeft: boolean, channelDetails: any, qCache: any, setQCache: any }) => {
 
 
     let width = column.percentWidth;
     let type = column.type;
     let selector = column.selector;
     let msc = column.msc;
+  
     console.log("**************************************Column:", spaces, selector, type, msc, session)
     if (type == 'stc') {
         switch (selector) {
-            case 'twitter':
-
+            case 'twitter': //tbd
             case 'newsviews':
                 selector = 'mix';
             case 'mix':
             case 'newsline':
             case 'reacts':
-
             case 'topics':
-                console.log(`Column>>>: ${selector}`, session)
-                /*  const renderer = ({ item, index, x, y, tag, qparams, channel }) => {
-                      //const [ref, setRef] = useState(false);
-                      //  console.log("RENDERER:", item)
-      
-      
-                      return <QwiketItem columnType={tag} topic={item} channel={channel} qparams={qparams} forceShow={false} approver={false} test={false} />
-                  }*/
-                return <StyledColumn width={width} data-id="styled-column">
-
-                    <Queue isLeft={isLeft} extraWide={false} qType={selector} qparams={qparams} session={session} updateSession={updateSession} /></StyledColumn>
-
             case 'tag':
-                return <StyledColumn width={'100%'}>
-                    <Queue isLeft={false} extraWide={true} qType={'tag'} qparams={qparams} session={session} updateSession={updateSession} />
-                </StyledColumn>
+                selector = isLeft ? session.leftColumnOverride ||selector : selector;
+                if(isLeft)
+                console.log(`dbg Column>>>: ${selector}`, session.leftColumnOverride)
+                  
+                //use cache for columns
+                let q;// = qCache[selector];
+                if (!q) {
+                    console.log('dbg q fresh not from cache',selector)
+                    q = <Queue isLeft={isLeft} extraWide={false} qType={selector} qparams={qparams} session={session} updateSession={updateSession} />
+                   // qCache[selector] = q;
+                   // setQCache(qCache)
+                }
+                else {
+                    console.log(`dbg: q from cache`,selector)
+                }
+                return <StyledColumn width={width} data-id="styled-column" key={`${selector}-column`}>{q}</StyledColumn>;
+            /*  case 'tag':
+                  return <StyledColumn width={'100%'}>
+                      <Queue isLeft={false} extraWide={true} qType={'tag'} qparams={qparams} session={session} updateSession={updateSession} />
+                  </StyledColumn>*/
 
             case 'topic':
-                return <StyledColumn width={'100%'}><ColumnHeader><div /><InnerHeader>{'topic'}</InnerHeader></ColumnHeader>
-                    <Topic singlePanel={spaces>2} fullPage={true}/>
+                return <StyledColumn width={'100%'} key="main-topic" ><ColumnHeader><div /><InnerHeader>{'topic'}</InnerHeader></ColumnHeader>
+                    <Topic singlePanel={spaces > 2} fullPage={true} />
                 </StyledColumn>
-            case 'navigator':
-                return <StyledColumn width={'100%'}>
+            case 'navigator': // for now not caching
+                return <StyledColumn width={'100%'} key="main-navigator">
                     <Navigator session={session} qparams={qparams} updateSession={updateSession} />
                 </StyledColumn>
 
-            /* case "topic": {
-                 // console.log("Column:topic")
- 
-                 //console.log("Column:feed")
-                 const renderer = ({ item, index, x, y, tag, qparams, channel }) => {
-                     //const [ref, setRef] = useState(false);
-                     //  console.log("RENDERER:", item)
- 
- 
-                     return <QwiketItem data-id="qwiket-item" columnType={tag} topic={item} channel={channel} qparams={qparams} forceShow={false} approver={false} test={false} />
-                 }
-                 return <StyledColumn width={"100%"} data-id="styled-column">
-                     <Tag qparams={qparams} />
-                     <InnerTagWrap data-id="inner-tag-wrap">
-                         <TopicWrap>
-                             <Topic qparams={qparams} />
-                         </TopicWrap>
- 
-                         <FeedWrap data-id="feed-wrap" >
-                             <InnerFeedWrap data-id="inner-feed-wrap">
-                                 <Queue extraWide={false} qType={msc} qparams={qparams} session={session} />
-                             </InnerFeedWrap>
-                         </FeedWrap>
-                     </InnerTagWrap>
-                 </StyledColumn>
-             }*/
+
         }
     }
     else {
@@ -162,24 +142,33 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
                 leftWidth = `${((column.width - 1) / column.width) * 100}%`;
                 rightWidth = `${(1 / column.width) * 100}%`;
                 console.log("width left:", leftWidth, rightWidth)
-                return <MpColumn width={width} data-id="mp-column">
+                let q;// = qCache[`tag-mp`];
+                if (!q) {
+                    q = <Queue isLeft={false} extraWide={true} qType={'tag'} qparams={qparams} session={session} updateSession={updateSession} />
+                    //qCache['tag-mp'] = q;
+                    //setQCache(qCache)
+                }
+
+                return <MpColumn width={width} data-id="mp-column" key='topic-mp'>
                     <StyledColumn width={leftWidth}><ColumnHeader><div /><InnerHeader>{'topic'}</InnerHeader></ColumnHeader>
                         <Topic />
                     </StyledColumn>
-                    <StyledColumn width={rightWidth}>
-                        <Queue isLeft={false} extraWide={true} qType={'tag'} qparams={qparams} session={session} updateSession={updateSession} />
-                    </StyledColumn>
+                    <StyledColumn width={rightWidth} key="tag-mp"> {q}</StyledColumn>
                 </MpColumn>
             }
             else {
                 leftWidth = '61.8%';
                 rightWidth = '38.2%';
+                let q;// = qCache[`newsline-mp`];
+                console.log("dbg q:",q)
+                if (!q) {
+                    q = <Queue key={`newsline-mp-${randomstring()}`} isLeft={false} extraWide={true} qType={selector} qparams={qparams} session={session} updateSession={updateSession} />
+                   // qCache['newsline-mp'] = q;
+                   // setQCache(qCache)
+                }
                 return <MpColumn width={width} data-id="mp-column">
-                    <StyledColumn width={leftWidth}>
-                        <Queue isLeft={false} extraWide={true} qType={selector} qparams={qparams} session={session} updateSession={updateSession} />
-                    </StyledColumn>
-                    <StyledColumn width={rightWidth}>
-
+                    <StyledColumn width={leftWidth} key='newsline-mp'>{q}</StyledColumn>
+                    <StyledColumn width={rightWidth} key="navigator-mp">
                         <Navigator session={session} qparams={qparams} updateSession={updateSession} />
                     </StyledColumn>
                 </MpColumn>

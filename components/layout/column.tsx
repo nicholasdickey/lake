@@ -116,6 +116,7 @@ const RotateLeft = styled.div`
 `
 interface FullPageParam{
     fullPage:boolean
+ 
 }
 const SelectButton = styled.div<FullPageParam>`
     width: auto;
@@ -137,6 +138,10 @@ const SelectButton = styled.div<FullPageParam>`
        // background:var(--lowlight);
         color:${(fullPage)=>fullPage?null:'var(--button)'}; 
   }
+`
+const Pushdown=styled.div`
+    height:19px;
+   
 `
 const Arrow = () => <svg className="jss37 jss168" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation"><path d="M7 10l5 5 5-5z"></path></svg>
 interface SelectorChoice {
@@ -212,9 +217,9 @@ const LeftSelector = ({ qType, updateSession, name, fullPage }: { qType: string,
     }
 
     return <>{fullPage ?
-        <Swipe onSwipeMove={(position, event) => swipe(position, event, qparams.type)}><InnerSwipe><SelectButton onClick={()=>rotate(qparams.type, -1)}><RotateLeft><Arrow /></RotateLeft></SelectButton>
+        <Swipe onSwipeMove={(position, event) => swipe(position, event, qparams.type)}><InnerSwipe><SelectButton fullPage={fullPage} onClick={()=>rotate(qparams.type, -1)}><RotateLeft><Arrow /></RotateLeft></SelectButton>
             <div onClick={() => setOpened(!opened)}>{name}</div>
-            <SelectButton onClick={()=>rotate(qparams.type, 1)} >
+            <SelectButton fullPage={fullPage} onClick={()=>rotate(qparams.type, 1)} >
                 <RotateRight>
                     <Arrow />
                 </RotateRight>
@@ -225,7 +230,7 @@ const LeftSelector = ({ qType, updateSession, name, fullPage }: { qType: string,
         :
         <>
             <div onClick={() => setOpened(!opened)}>{name}</div>
-            <SelectButton onClick={() => setOpened(!opened)}> <Arrow /></SelectButton>
+            <SelectButton fullPage={fullPage} onClick={() => setOpened(!opened)}> <Arrow /></SelectButton>
             {opened ? <OpenedMenu opened={opened}>{choices.map(c => <SelectItem onClick={() => { onClick(c.qType) }} key={`selected-${qType}`} selected={c.selected} >{c.tag}</SelectItem>)
             }</OpenedMenu> : null}</>}
     </>
@@ -296,7 +301,7 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
             case 'navigator': // for now not caching
                 return <StyledColumn width={'100%'} key="main-navigator">
                     <ColumnHeader> <InnerHeader>{isLeft ? <LeftSelector qType={selector} name={selector} updateSession={updateSession} fullPage={fullPage} /> : selector}</InnerHeader></ColumnHeader>
-                    <Navigator session={session} qparams={qparams} updateSession={updateSession} />
+                    <Pushdown></Pushdown><Navigator session={session} qparams={qparams} updateSession={updateSession} />
                 </StyledColumn>
 
 

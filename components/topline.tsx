@@ -32,7 +32,7 @@ interface ToplineProps{
 }
 const ToplineBand = styled.div<ToplineProps>`
         width:100%;
-       margin-bottom:${({back})=>back?6:16}px;
+       margin-bottom:${({back})=>back?6:10}px;
         //height:20%;
         display:block;
         background-color:${({back})=>back?`#111`:'#111'};

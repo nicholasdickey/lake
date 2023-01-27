@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
+
 import styled from 'styled-components';
+import Swipe from "react-easy-swipe";
 import { Qparams } from '../../lib/qparams';
 import { Options } from '../../lib/withSession'
 import Queue from '../qwikets/queue';
 import Navigator from '../navigator';
 import Topic from '../topic';
-
+import { useAppContext } from "../../lib/context";
 
 //const QwiketItem = () => <div>QwiketItem</div>
 const Tag = () => <div>Tag</div>
@@ -39,15 +41,51 @@ const MpColumn = styled.div<Width>`
 width:${({ width }) => width};
 display:flex;
 `
+interface Opened {
+    opened: boolean;
+}
+const OpenedMenu = styled.div<Opened>`
+    position:absolute;
+    display:block;
+    margin-top:16px;
+    margin-left:-16px;
+    margin-right:20px;
+    
+    width:150%;
+    right:0px;
+    z-index:102;
+   // padding-left:6px;
+    border:1px solid;
+    background:var(--background);// ${({ opened }) => opened ? 'var(--highlight)' : 'var(--lowlight)'};
+
+`
+interface Selected {
+    selected: boolean;
+}
+const SelectItem = styled.div<Selected>`
+    z-index:102;
+    padding:10px;
+    margin:2px;
+    border:1px solid var(--grey);
+    background:var(--lowlight);
+    cursor:pointer;
+    &:hover {
+        background:var(--background);  
+  
+    }
+    
+`
 const ColumnHeader = styled.div`
     position:absolute;
     display:flex;
-    justify-content: space-between;
+    right:0px;
+    justify-content: flex-end;
     //height:28px;
-    width:100%;
+    width:auto;
     z-index:100;
 `
 const InnerHeader = styled.div`
+display:flex;
     margin-top:-7px;
     color:var(--highlight);
     font-weight:700;
@@ -73,21 +111,164 @@ const LeftHeader = styled.div`
     width:auto;
     
 `
-
+const InnerSwipe = styled.div`
+    display:flex;
+`
 /*
 const listRenderer = ({ qparams, rows, tag, ...rest }) => {
     return <InnerStyledColumn data-id="inner-styled-column" className="q-column">{rows}</InnerStyledColumn>
 }
 */
-var randomstring = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-export const Column = ({ spaces, column, qparams, session, updateSession, isLeft, channelDetails, qCache, setQCache }: { spaces: number, column: any, qparams: Qparams, session: Options, updateSession: any, isLeft: boolean, channelDetails: any, qCache: any, setQCache: any }) => {
 
+const RotateRight = styled.div`
+    transform:rotate(-90deg);
+    margin-top:-2px;
+`
+const RotateLeft = styled.div`
+    transform:rotate(90deg);
+    margin-top:-2px;
+`
 
+const SelectButton = styled.div`
+    width: auto;
+    height: auto;
+    overflow: hidden;
+    min-height: 1.1875em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    fill: currentColor;
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    font-size: 24px;
+    transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    user-select: none;
+    flex-shrink: 0;
+    margin-top:-5px;
+    &:hover {
+       // background:var(--lowlight);
+        color:var(--button); 
+  }
+`
+const Arrow = () => <svg className="jss37 jss168" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation"><path d="M7 10l5 5 5-5z"></path></svg>
+interface SelectorChoice {
+    qType: string,
+    tag: string,
+    selected?: boolean
+}
+const LeftSelector = ({ qType, updateSession, name, fullPage }: { qType: string, updateSession: any, name: string, fullPage?: boolean }) => {
+    const [opened, setOpened] = useState(false);
+    const { channelDetails, qparams, newslineSingleSelectors, topicSingleSelectors } = useAppContext();
+
+    console.log("LeftSelector", fullPage)
+    const choices = [
+        {
+            qType: 'mix',
+            tag: 'news&views',
+            selected: qType == 'mix'
+        },
+        {
+            qType: 'newsline',
+            tag: 'newsline',
+            selected: qType == 'newsline'
+        },
+        {
+            qType: 'reacts',
+            tag: 'comments',
+            selected: qType == 'reacts'
+        }
+    ]
+    console.log("remder LeftSelector", fullPage, qType, channelDetails)
+    const onClick = (type: string) => {
+        console.log("onClick",type)
+        updateSession({ leftColumnOverride: type });
+        setOpened(false);
+        // reset();
+    }
+
+    /*const rotateSelector = ({ dir, router }: { dir: number, router: any }) => {
+
+        const { channel, forum, type, newsline, tag, threadid, layoutNumber, cc, navTab } = qparams;
+        const { mobileLayouts } = channelDetails;
+        const lNum: number = +layoutNumber.split('l')[1];
+        const limit = type == 'topic' ? mobileLayouts.topic : mobileLayouts.newsline;
+        let newlNum = lNum + dir;
+        if (newlNum > limit)
+            newlNum = 1;
+        if (newlNum < 1)
+            newlNum = limit;
+        const url = (type == 'topic' && type == 'home') ? `/${forum}/${type}/${tag}/${threadid}/l${newlNum}/${cc}` :
+            type == 'newsline' ? `/${forum}/${type}/l${newlNum}${navTab ? '/' + navTab : ''}` : `/${forum}/solo/${tag}/${newlNum}${navTab ? '/' + navTab : ''}`
+        console.log(`dbg: rotateLayout`, { dir, lNum, newlNum, url })
+        router.push(url, undefined);
+    }*/
+    const rotate = (type: string, dir: number) => {
+        if (type == 'newsline' || type == 'solo') {
+            let index = newslineSingleSelectors.findIndex((s: SelectorChoice) => s.qType == qType);
+            index += 1 * dir;
+            if (index >= newslineSingleSelectors.length)
+                index = 0;
+            const node = newslineSingleSelectors[index];
+            console.log("rotate:", node, index, newslineSingleSelectors)
+            updateSession({ leftColumnOverride: node.qType });
+
+        }
+        else {
+            let index = topicSingleSelectors.findIndex((s: SelectorChoice) => s.qType == qType);
+            index += 1 * dir;
+            if (index >= topicSingleSelectors.length)
+                index = 0;
+            const node = topicSingleSelectors[index];
+            updateSession({ leftColumnOverride: node.qType });
+        }
+    }
+
+    const swipe = (position: any, event: any, type: string) => {
+        console.log("swipe", position, event, type);
+        if (position.x > 5 && position.y < 10 && position.y > -10) {
+            console.log("RIGHT SWIPE")
+            rotate(type, 1)
+        }
+        if (position.x < -5 && position.y < 10 && position.y > -10) {
+            console.log("LEFT SWIPE")
+            rotate(type, -1)
+        }
+    }
+    let fullChoices = [];
+    if (fullPage) {
+        fullChoices = qparams.type == 'newsline' || qparams.type == 'solo' ? newslineSingleSelectors.map((p: SelectorChoice) => Object.assign(p, { selected: p.qType == qType })) : topicSingleSelectors.map((p: SelectorChoice) => Object.assign(p, { selected: p.qType == qType }))
+    }
+
+    return <>{fullPage ? 
+    <Swipe onSwipeMove={(position, event) => swipe(position, event, qparams.type)}><InnerSwipe><SelectButton><RotateLeft><Arrow /></RotateLeft></SelectButton>
+        <div onClick={() => setOpened(!opened)}>{name}</div>
+        <SelectButton >
+            <RotateRight>
+                <Arrow />
+            </RotateRight>
+        </SelectButton></InnerSwipe>
+        {opened ? <OpenedMenu opened={opened}>{fullChoices.map((c: any) => <SelectItem onClick={() => { onClick(c.qType) }} key={`selected-${qType}`} selected={c.selected} >{c.tag}</SelectItem>)
+        }</OpenedMenu> : null}
+    </Swipe>
+    :
+    <>
+    <div onClick={() => setOpened(!opened)}>{name}</div>
+    <SelectButton onClick={() => setOpened(!opened)}> <Arrow /></SelectButton>
+    {opened ? <OpenedMenu opened={opened}>{choices.map(c => <SelectItem onClick={() => { onClick(c.qType) }} key={`selected-${qType}`} selected={c.selected} >{c.tag}</SelectItem>)
+    }</OpenedMenu> : null}</>}
+    </>
+}
+
+export const Column = ({ spaces, column, qparams, session, updateSession, isLeft, qCache, setQCache, ...props }: { spaces: number, column: any, qparams: Qparams, session: Options, updateSession: any, isLeft: boolean, channelDetails: any, qCache: any, setQCache: any }) => {
+   
     let width = column.percentWidth;
     let type = column.type;
     let selector = column.selector;
     let msc = column.msc;
-  
+    const fullPage = spaces < 3;
+    selector = isLeft ? session.leftColumnOverride || selector : selector;
+                
+    console.log("After OverrideColumn:",{isLeft, spaces, selector, type, msc, session});
     console.log("**************************************Column:", spaces, selector, type, msc, session)
     if (type == 'stc') {
         switch (selector) {
@@ -99,33 +280,41 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
             case 'reacts':
             case 'topics':
             case 'tag':
-                selector = isLeft ? session.leftColumnOverride ||selector : selector;
-                if(isLeft)
-                console.log(`dbg Column>>>: ${selector}`, session.leftColumnOverride)
-                  
+               
+                const name = selector == 'mix' ? 'news&views' : selector == 'tag' ? 'publication feed' : selector == 'topics' ? 'active topics' : selector == 'reacts' ? 'comments' : selector;
+
+                // if(isLeft)
+                // console.log(`dbg Column>>>: ${selector}`, session.leftColumnOverride)
+
                 //use cache for columns
                 let q;// = qCache[selector];
                 if (!q) {
-                    console.log('dbg q fresh not from cache',selector)
-                    q = <Queue isLeft={isLeft} extraWide={false} qType={selector} qparams={qparams} session={session} updateSession={updateSession} />
-                   // qCache[selector] = q;
-                   // setQCache(qCache)
+                    // console.log('dbg q fresh not from cache',selector)
+                    q = <Queue isLeft={isLeft} extraWide={false} qType={selector} updateSession={updateSession} fullPage={fullPage}{...props} />
+                    // qCache[selector] = q;
+                    // setQCache(qCache)
                 }
                 else {
-                    console.log(`dbg: q from cache`,selector)
+                    // console.log(`dbg: q from cache`,selector)
                 }
-                return <StyledColumn width={width} data-id="styled-column" key={`${selector}-column`}>{q}</StyledColumn>;
+                console.log('dbg column:', selector, name)
+                return <StyledColumn width={width} data-id="styled-column" key={`${selector}-column`}>
+                    <ColumnHeader> <InnerHeader>{isLeft ? <LeftSelector qType={selector} name={name} updateSession={updateSession} fullPage={fullPage} /> : name}</InnerHeader></ColumnHeader>
+                    {q}
+                </StyledColumn>;
             /*  case 'tag':
                   return <StyledColumn width={'100%'}>
                       <Queue isLeft={false} extraWide={true} qType={'tag'} qparams={qparams} session={session} updateSession={updateSession} />
                   </StyledColumn>*/
 
             case 'topic':
-                return <StyledColumn width={'100%'} key="main-topic" ><ColumnHeader><div /><InnerHeader>{'topic'}</InnerHeader></ColumnHeader>
+                return <StyledColumn width={'100%'} key="main-topic" ><ColumnHeader><div /></ColumnHeader>
+                    <ColumnHeader> <InnerHeader>{isLeft ? <LeftSelector qType={selector} name={selector} updateSession={updateSession}  fullPage={fullPage}/> : selector}</InnerHeader></ColumnHeader>
                     <Topic singlePanel={spaces > 2} fullPage={true} />
                 </StyledColumn>
             case 'navigator': // for now not caching
                 return <StyledColumn width={'100%'} key="main-navigator">
+                    <ColumnHeader> <InnerHeader>{isLeft ? <LeftSelector qType={selector} name={selector} updateSession={updateSession} fullPage={fullPage} /> : selector}</InnerHeader></ColumnHeader>
                     <Navigator session={session} qparams={qparams} updateSession={updateSession} />
                 </StyledColumn>
 
@@ -137,38 +326,50 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
 
             let leftWidth, rightWidth;
 
-            console.log("MP", column.width, selector, msc)
+            // console.log("MP", column.width, selector, msc)
             if (selector == 'topic') {
                 leftWidth = `${((column.width - 1) / column.width) * 100}%`;
                 rightWidth = `${(1 / column.width) * 100}%`;
-                console.log("width left:", leftWidth, rightWidth)
+                //  console.log("width left:", leftWidth, rightWidth)
                 let q;// = qCache[`tag-mp`];
                 if (!q) {
-                    q = <Queue isLeft={false} extraWide={true} qType={'tag'} qparams={qparams} session={session} updateSession={updateSession} />
+                    q = <Queue isLeft={false} extraWide={true} qType={'tag'} fullPage={fullPage} updateSession={updateSession} />
                     //qCache['tag-mp'] = q;
                     //setQCache(qCache)
                 }
 
                 return <MpColumn width={width} data-id="mp-column" key='topic-mp'>
-                    <StyledColumn width={leftWidth}><ColumnHeader><div /><InnerHeader>{'topic'}</InnerHeader></ColumnHeader>
+                    <StyledColumn width={leftWidth}>
+                        <ColumnHeader> <InnerHeader>{isLeft ? <LeftSelector qType={selector} name={'topic'} updateSession={updateSession} /> : 'topic'}</InnerHeader></ColumnHeader>
+
                         <Topic />
                     </StyledColumn>
-                    <StyledColumn width={rightWidth} key="tag-mp"> {q}</StyledColumn>
+                    <StyledColumn width={rightWidth} key="tag-mp">
+                        <ColumnHeader> <InnerHeader>{isLeft ? <LeftSelector qType={'tag'} name={'publication feed'} updateSession={updateSession} /> : 'publication feed'}</InnerHeader></ColumnHeader>
+
+                        {q}</StyledColumn>
                 </MpColumn>
             }
             else {
                 leftWidth = '61.8%';
                 rightWidth = '38.2%';
                 let q;// = qCache[`newsline-mp`];
-                console.log("dbg q:",q)
+                const name = 'newsline'
+                // console.log("dbg q:",q)
                 if (!q) {
-                    q = <Queue key={`newsline-mp-${randomstring()}`} isLeft={false} extraWide={true} qType={selector} qparams={qparams} session={session} updateSession={updateSession} />
-                   // qCache['newsline-mp'] = q;
-                   // setQCache(qCache)
+                    q = <Queue key={`newsline-mp`} isLeft={false} extraWide={true} qType={selector} fullPage={fullPage} updateSession={updateSession} />
+                    // qCache['newsline-mp'] = q;
+                    // setQCache(qCache)
                 }
                 return <MpColumn width={width} data-id="mp-column">
-                    <StyledColumn width={leftWidth} key='newsline-mp'>{q}</StyledColumn>
+                    <StyledColumn width={leftWidth} key='newsline-mp'>
+
+                        <ColumnHeader> <InnerHeader>{isLeft ? <LeftSelector qType={selector} name={name} updateSession={updateSession} /> : name}</InnerHeader></ColumnHeader>
+
+                        {q}</StyledColumn>
                     <StyledColumn width={rightWidth} key="navigator-mp">
+                        <ColumnHeader> <InnerHeader>{isLeft ? <LeftSelector qType={selector} name={'navigator'} updateSession={updateSession} /> : ''}</InnerHeader></ColumnHeader>
+
                         <Navigator session={session} qparams={qparams} updateSession={updateSession} />
                     </StyledColumn>
                 </MpColumn>

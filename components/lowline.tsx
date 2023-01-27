@@ -10,7 +10,7 @@ interface LowlineWrapperParams {
 }
 const LowlineWrapper = styled.div<LowlineWrapperParams>`
     display: flex;
-    margin-top: 6px;
+    margin-top: 10px;
     margin-bottom:16px;
     ${({loud})=>loud?'border-top: thin solid var(--text);':
      '@media (min-width:600px) {border-top: thin solid var(--text);}'}

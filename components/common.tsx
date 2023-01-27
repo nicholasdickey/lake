@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import Router, { useRouter } from 'next/router'
+import  { useRouter } from 'next/router'
 import React, { useState, useEffect, useCallback } from "react";
 import useSWR from 'swr'
 import useSWRImmutable from 'swr/immutable'
@@ -96,7 +96,7 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
   const { data: channelConfig, error: channelError } = useSWRImmutable(newsline, fetchChannelConfig)
   const [session, setSession] = useState(startSession);
   const [theme, setTheme] = useState(session.dark != -1 ? session.dark == 1 ? 'dark' : 'light' : "unknown")
-  console.log("remder common.tsz: session.leftColumnOverride:", session.leftColumnOverride)
+ // console.log("remder common.tsz: session.leftColumnOverride:", session.leftColumnOverride)
   const router = useRouter()
   //const sessionid=session.hasLayout?session.sessionid:'';
   //console.log("pathname:",router.asPath);
@@ -117,12 +117,12 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
     if (router.asPath.indexOf('/news/') >= 0) {
 
       const newpath = router.asPath.replace('/news/', '/user/');
-      console.log("dbg remder >>>>>>>>>>>>>>>>>>>>>>>>>updateSession, replace path to",router.asPath,newpath)
+     // console.log("dbg remder >>>>>>>>>>>>>>>>>>>>>>>>>updateSession, replace path to",router.asPath,newpath)
       router.replace(newpath, undefined, { shallow: true });
     }
     //console.log("updateSession ", theme, updSession)
     const assigned = { ...Object.assign(session, updSession) }
-    console.log("dbg remder new session: ", assigned, "old session:", session)
+   // console.log("dbg remder new session: ", assigned, "old session:", session)
     setSession(assigned);
     axios.post(`/api/session/save`, { session: updSession });
   }, [session, router]);
@@ -171,12 +171,12 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
   }
   const layoutType = type == 'topic' ? 'context' : type;
   const key: fetchChannelLayoutKey = ['channelLayout', qparams.newsline, session.hasLayout, session.sessionid, session.userslug, layoutType, session.dense, session.thick, layoutNumber || 'l1'];
-  console.log("RENDER LAYOUT, key=", key)
+ // console.log("RENDER LAYOUT, key=", key)
   
   let { data: layout, error: layoutError } = useSWR(key, fetchChannelLayout)
 
   //console.log("RENDER: width=", session.width)
-  console.log("LAYOUT:", layout,session)
+ // console.log("LAYOUT:", layout,session)
   if(!layout)
   return <div>Loading...</div>
   //if(!layout)
@@ -207,7 +207,7 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
       <main className={roboto.className}>
         <ThemeProvider theme={palette}>
           <GlobalStyle />
-          <AppWrapper session={session} qparams={qparams}>
+          <AppWrapper session={session} qparams={qparams} channelDetails={channelConfig.channelDetails}>
             <div>
               <Topline updateTheme={updateTheme} session={session} layout={layout} updateSession={updateSession} channelDetails={channelConfig.channelDetails} />
               <Grid hpads={hpads}>

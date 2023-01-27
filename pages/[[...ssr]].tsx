@@ -49,7 +49,7 @@ export const getServerSideProps = withSessionSsr(
         let cc=(type=='topic'||type=='home')?ssr[5]:'';
         if(!cc)
             cc='';
-        console.log("SSR args:", JSON.stringify({forum,type,threadid,tag,layoutNumber}))
+      //  console.log("SSR args:", JSON.stringify({forum,type,threadid,tag,layoutNumber}))
 
         let ua = context.req.headers['user-agent'];
         const bowser = Bowser.getParser(ua ? ua : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36');
@@ -65,7 +65,7 @@ export const getServerSideProps = withSessionSsr(
 
         // get encrypted session from the cookie or initialize the default   
         let options = context.req.session?.options;
-        console.log("SSR. gpt session options", options)
+       // console.log("SSR. gpt session options", options)
 
         if (!options) {
             var randomstring = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -91,13 +91,13 @@ export const getServerSideProps = withSessionSsr(
         if (typeof options.userslug === 'undefined')
             options.userslug = '';
 
-        console.log("Options:", options)
+       // console.log("Options:", options)
         
         // TBA pre-fetching data for SSR, for now all data fetched client-side   
         const newsline = 'qwiket';
 
 
-        console.log("SSR SESSION",options)
+       // console.log("SSR SESSION",options)
         const qparams = {
             custom: true,
             forum,
@@ -119,10 +119,10 @@ export const getServerSideProps = withSessionSsr(
         //console.log("GOT channelConfig",channelConfig)
         const layoutType=type=='topic'?'context':type;
         const key:fetchChannelLayoutKey=['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, layoutType, options.dense, options.thick, layoutNumber];
-        console.log("CALLING fetchChannelLayout:",key);
+        //console.log("CALLING fetchChannelLayout:",key);
         const channelLayout = await fetchChannelLayout(key);
-        console.log("GOT CHANNEL LAYOUT",JSON.stringify(channelLayout))
-        console.log("=================")
+        //console.log("GOT CHANNEL LAYOUT",JSON.stringify(channelLayout))
+       // console.log("=================")
         const user = await fetchUser(['user', options.userslug])
       
         let fallback = {
@@ -175,7 +175,7 @@ export const getServerSideProps = withSessionSsr(
         if (type=='topic'){
             const key:[u:string,threadid:string,withBody:number]=['topic',threadid, 1];
             const topic=await fetchTopic(key);
-            console.log("GOT TOPIC:",JSON.stringify(topic))
+           // console.log("GOT TOPIC:",JSON.stringify(topic))
            
             fallback[unstable_serialize(key)] = topic;
         }
@@ -187,6 +187,6 @@ export const getServerSideProps = withSessionSsr(
             }
         };
 
-        console.log("propsWrap",JSON.stringify({ propsWrap }))
+       // console.log("propsWrap",JSON.stringify({ propsWrap }))
         return propsWrap;
     })

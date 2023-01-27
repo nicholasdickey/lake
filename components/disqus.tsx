@@ -19,8 +19,10 @@ const Disqus = styled.div<DisqusParams>`
     }   
 `
 
-const Local = ({ contextUrl, forum, realDisqThreadid, cc, slug, title,fullPage }: {  contextUrl: string, forum: string, realDisqThreadid: string,  cc: string, slug: string, title: string,fullPage:boolean }) => {
+const Local = ({ contextUrl, forum, realDisqThreadid, cc, slug, title,fullPage }: {  contextUrl: string, forum: string, realDisqThreadid: string,  cc: string, slug: string, title: string,fullPage?:boolean }) => {
     const { session, qparams } = useAppContext();
+   if(!fullPage)
+   fullPage=false;
     if(!title)
         title='';
     console.log('LOCAL RENDER %s', title)

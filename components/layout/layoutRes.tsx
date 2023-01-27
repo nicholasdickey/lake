@@ -22,14 +22,12 @@ justify-content:space-between;
 `
 export const LayoutRes = ({ layout, res, qparams,session,...props }:{layout:any,res:any,qparams:Qparams,session:Options,updateSession:any,channelDetails:any,qCache:any,setQCache:any}) => {
     let layres = layout[res];
-    console.log("layoutview LAYRES",res, layres,session);
+   // console.log("layoutview LAYRES",res, layres,session);
     let columns = layres.columns;
-    console.log('layoutview:',{ columns })
+  //  console.log('layoutview:',{ columns })
     let key=0;
  
     return <VerticalWrap>
         {session.band&&res!="w000"?<HotlistWrap><Hotlist session={session} qparams={qparams} spaces={layres.spaces}/> </HotlistWrap>:null}
         <ColumnsView data-id="LayoutVIew">{columns.map((c:any,index:number) =><Column key={`column-${index}`} isLeft={index==0} spaces={layres.spaces} column={c} qparams={qparams}  session={session} {...props} />)}</ColumnsView></VerticalWrap>
-
-
 }

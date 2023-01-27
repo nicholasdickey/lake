@@ -171,7 +171,7 @@ const Qwiket = ({ extraWide, item, isTopic,qType,singlePanel,fullPage }: { extra
             image = 'https://qwiket.com/static/css/afnLogo.png';
         if (!catIcon)
             catIcon = 'https://qwiket.com/static/css/afnLogo.png';
-        if (catName.indexOf('Liberty Daily') >= 0) {
+        if (catName?.indexOf('Liberty Daily') >= 0) {
             catIcon = 'https://qwiket.com/static/css/afnLogo.png';
         }
 
@@ -211,15 +211,15 @@ const Qwiket = ({ extraWide, item, isTopic,qType,singlePanel,fullPage }: { extra
          console.log("BODY:",body)
          console.log(JSON.stringify({isTopic,singlePanel}))
         return <VerticalWrap isTopic={isTopic} singlePanel={singlePanel} >
-            <Row><PubImageBox><PubImage loud={session.loud} isTopic={isTopic} placeholder={"blur"} sizes="(max-width: 768px) 100vw,
+            <Row key="r1"><PubImageBox><PubImage loud={session.loud} isTopic={isTopic} placeholder={"blur"} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"      src={catIcon} alt={catName} /></PubImageBox>
                 <Right><SiteName isTopic={isTopic}>{site_name}</SiteName><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right></Row>
             {author ? <Row>{author}</Row> : null}
-            <Row><Title isTopic={isTopic}>{title}</Title></Row>
-            <Row><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage sizes="(max-width: 768px) 100vw,
+            <Row key="r2"><Title isTopic={isTopic}>{title}</Title></Row>
+            <Row  key="r3"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
 
-            <Row><Body>{bodyBlocks?bodyBlocks :<ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml : description}</ReactMarkdown>}</Body></Row>
+            <Row  key="r4"><Body>{bodyBlocks?bodyBlocks :<ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml : description}</ReactMarkdown>}</Body></Row>
 
         </VerticalWrap>
         
@@ -231,14 +231,14 @@ const Qwiket = ({ extraWide, item, isTopic,qType,singlePanel,fullPage }: { extra
 
         const {diff,timeString} = TimeDifference(createdat, qparams.timestamp)
         return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/na`}><VerticalWrap isTopic={isTopic}>
-            <Row><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
+            <Row  key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"      placeholder={"blur"} src={catIcon} alt={catName} width={28} height={28} /></PubImageBox>
               {qType=='mix'?<Comment>comment</Comment>:null}<Author>{thread_author ? thread_author : catName}</Author></Row>
-            <Row><Title isTopic={isTopic}>{thread_title}</Title></Row>
-            <Row><Description><ReactMarkdown rehypePlugins={[rehypeRaw]} >{description}</ReactMarkdown></Description></Row>
-            <Row><AvatarBox><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={author_avatar.indexOf('http') < 0 ? `https:${author_avatar}` : author_avatar} alt={author_name} fill={true} /></AvatarBox><AuthorPoster>{author_name}</AuthorPoster>
+            <Row  key="r2"><Title isTopic={isTopic}>{thread_title}</Title></Row>
+            <Row key="r3"><Description><ReactMarkdown rehypePlugins={[rehypeRaw]} >{description}</ReactMarkdown></Description></Row>
+            <Row  key="r4"><AvatarBox><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={author_avatar.indexOf('http') < 0 ? `https:${author_avatar}` : author_avatar} alt={author_name} fill={true} /></AvatarBox><AuthorPoster>{author_name}</AuthorPoster>
             <TimeSince isTopic={isTopic}>{timeString}</TimeSince></Row>
-            <Row><Markdown rehypePlugins={[rehypeRaw]} >{postBody}</Markdown></Row>
+            <Row  key="r5"><Markdown rehypePlugins={[rehypeRaw]} >{postBody}</Markdown></Row>
 
         </VerticalWrap></Link>
     }
@@ -255,24 +255,24 @@ const Qwiket = ({ extraWide, item, isTopic,qType,singlePanel,fullPage }: { extra
         console.log("qwiket render 2 istag",isTag,'diff:',diff)
         if (slug == 'loading') {
             return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/na`}><VerticalWrap isTopic={isTopic}>
-                <Row><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
+                <Row  key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"     placeholder={"blur"} src={'https://qwiket.com/static/css/afnLogo.png'} alt={'America First News'} /></PubImageBox>
                     <Right><SiteName isTopic={isTopic}>©{'am1.news'}</SiteName><TimeSince isTopic={isTopic}>{0}</TimeSince></Right></Row>
                 {author ? <Row>{author}</Row> : null}
-                <Row><Title isTopic={isTopic}>{title}</Title></Row>
-                <Row><Markdown rehypePlugins={[rehypeRaw]} >{'The Internet of Us'}</Markdown></Row>
-                <Row><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
+                <Row  key="r2"><Title isTopic={isTopic}>{title}</Title></Row>
+                <Row  key="r3"><Markdown rehypePlugins={[rehypeRaw]} >{'The Internet of Us'}</Markdown></Row>
+                <Row key="r4" ><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
 
             </VerticalWrap></Link>
         }
         return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/na`}><VerticalWrap isTopic={isTopic} isTag={isTag} diff={diff}>
-            <Row><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} style={{ height: '38', width: 'auto' }} sizes="(max-width: 768px) 100vw,
+            <Row  key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} style={{ height: '38', width: 'auto' }} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"       placeholder={"blur"} src={catIcon} alt={catName} /></PubImageBox>
                 <Right><SiteName isTopic={isTopic}>©{site_name}</SiteName><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right> </Row>
             {author ? <Row>{author}</Row> : null}
-            <Row><Title isTopic={isTopic}>{title}</Title></Row>
-            <Row><Markdown rehypePlugins={[rehypeRaw]} >{description}</Markdown></Row>
-            <Row><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} style={{ maxWidth: "100%", height: "100%", objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
+            <Row key="r2"><Title isTopic={isTopic}>{title}</Title></Row>
+            <Row key="r3"><Markdown rehypePlugins={[rehypeRaw]} >{description}</Markdown></Row>
+            <Row key="r4"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} style={{ maxWidth: "100%", height: "100%", objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
 
         </VerticalWrap></Link>
     }

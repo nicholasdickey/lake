@@ -124,78 +124,11 @@ const RotateLeft=styled.div`
     margin-top:-2px;
 `
 const Arrow = () => <svg className="jss37 jss168" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation"><path d="M7 10l5 5 5-5z"></path></svg>
-const LeftSelector = ({ qType,  updateSession, reset, name, fullPage}: { qType: string, updateSession: any, reset: any, name: string, fullPage?: boolean }) => {
-    const [opened, setOpened] = useState(false);
-    const { channelDetails,qparams,newslineSingleSelectors } = useAppContext();
-    const router = useRouter();
 
-    const choices = [
-        {
-            qType: 'mix',
-            tag: 'news&views',
-            selected: qType == 'mix'
-        },
-        {
-            qType: 'newsline',
-            tag: 'newsline',
-            selected: qType == 'newsline'
-        },
-        {
-            qType: 'reacts',
-            tag: 'comments',
-            selected: qType == 'reacts'
-        }
-    ]
-    console.log("remder LeftSelector", fullPage,qType,channelDetails)
-    const onClick = (type: string) => {
-        updateSession({ leftColumnOverride: type });
-        setOpened(false);
-        reset();
-    }
-    
-    const rotateLayout=({dir,router}:{dir:number,router:any})=>{
-       
-       const {channel,forum,type,newsline,tag,threadid,layoutNumber,cc,navTab}=qparams;
-       const {mobileLayouts}=channelDetails;
-       const lNum:number=+layoutNumber.split('l')[1];
-       const limit=type=='topic'?mobileLayouts.topic:mobileLayouts.newsline;
-       let newlNum=lNum+dir;
-       if (newlNum>limit)
-            newlNum=1;
-       if(newlNum<1)
-            newlNum=limit;
-        const url=(type=='topic'&&type=='home')?`/${forum}/${type}/${tag}/${threadid}/l${newlNum}/${cc}`:
-        type=='newsline'?`/${forum}/${type}/l${newlNum}${navTab?'/'+navTab:''}`:`/${forum}/solo/${tag}/${newlNum}${navTab?'/'+navTab:''}` 
-       console.log(`dbg: rotateLayout`,{dir,lNum, newlNum,url})
-     router.push(url, undefined);
-    }
-    const fullPageOnClick=(dir:number,router:any)=>{
-        rotateLayout({dir,router});
-    }
-
-
-    return <>{fullPage?<><SelectButton><RotateLeft><Arrow/></RotateLeft></SelectButton>
-    <div onClick={()=>fullPageOnClick(-1,router)}>{name}</div>
-    <SelectButton onClick={()=>fullPageOnClick(1,router)}><RotateRight><Arrow></Arrow></RotateRight></SelectButton></>
-    :
-    <>
-    <div onClick={() => setOpened(!opened)}>{name}</div>
-    <SelectButton onClick={() => setOpened(!opened)}>{fullPage?<RotateRight><Arrow></Arrow></RotateRight>:<Arrow />}</SelectButton>
-    {opened ? <OpenedMenu opened={opened}>{choices.map(c => <SelectItem onClick={() => { onClick(c.qType) }} key={`selected-${qType}`} selected={c.selected} >{c.tag}</SelectItem>)
-    }</OpenedMenu> : null}</>}</>
- 
-
-   /* return <>{fullPage?<SelectButton><RotateLeft><Arrow/></RotateLeft></SelectButton>:null}<div onClick={() => setOpened(!opened)}>{name}</div>
-        <SelectButton onClick={() => setOpened(!opened)}>{fullPage?<RotateRight><Arrow></Arrow></RotateRight>:<Arrow />}</SelectButton>
-        {opened ? <OpenedMenu opened={opened}>{choices.map(c => <SelectItem onClick={() => { onClick(c.qType) }} key={`selected-${qType}`} selected={c.selected} >{c.tag}</SelectItem>)
-
-        }</OpenedMenu> : null}</>*/
-
-}
 const Notifications = ({ isLeft, qType, newsline, forum, lastid, tail, sessionid, userslug, reset, tag, ...props }:
     {
         isLeft: boolean, qType: string, newsline: string, forum: string, lastid: string, tail: number, sessionid: string, userslug: string, reset: any,
-        tag: string, updateSession: any, fullPage?: boolean
+        tag: string
     }) => {
     const key = ['notif', qType, newsline, forum, tag ? tag : '', 0, lastid, sessionid, userslug, tail];
     const { data, error } = useSWR(key, fetchQueue, {
@@ -259,14 +192,13 @@ const Segment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, s
  * @param param0 
  * @returns 
  */
-const FirstSegment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, setData, updateSession, fullPage }: {
-    isLeft: boolean, extraWide: boolean, qType: string, lastid: string, tail: number, pageIndex: number, hasData: boolean, setData: any, updateSession: any, fullPage?: boolean
+const FirstSegment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, setData}: {
+    isLeft: boolean, extraWide: boolean, qType: string, lastid: string, tail: number, pageIndex: number, hasData: boolean, setData: any
 }) => {
     const { session, qparams } = useAppContext();
     const [returnedLastid, setReturnedLastid] = useState(lastid);
     const [returnedTail, setReturnedTail] = useState(tail);
     const [hd, setHd] = useState(hasData)
-    console.log("fullPage:",fullPage)
     const onData = useCallback((data: any, key: string, config: any) => {
        // console.log("dbg onData FirstSegment segments onData fetchQueue remder", { isLeft, qType, newLastid: data.lastid, lastid, returnedLastid, newTail: data.tail, key, items: data?.items })
         if (data) {
@@ -337,11 +269,11 @@ const FirstSegment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasDa
         return <div ref={ref}><Qwiket key={`fallback-qwiket-${qType}-${item.slug}`} extraWide={extraWide} item={item} isTopic={false} qType={qType}></Qwiket></div>
     }
   //  console.log(`dbg: FirstSegment`, { lastid: returnedLastid, tail: returnedTail })
-    return (<div ref={ref}>{qType != 'topics' ? <Notifications isLeft={isLeft} qType={qType} newsline={qparams.newsline} forum={qparams.forum} lastid={returnedLastid} tail={returnedTail} sessionid={session.sessionid} userslug={session.userslug} reset={reset} tag={qType == 'tag' ? qparams.tag : ''} updateSession={updateSession} fullPage={fullPage}  /> :null}
+    return (<div ref={ref}>{qType != 'topics' ? <Notifications isLeft={isLeft} qType={qType} newsline={qparams.newsline} forum={qparams.forum} lastid={returnedLastid} tail={returnedTail} sessionid={session.sessionid} userslug={session.userslug} reset={reset} tag={qType == 'tag' ? qparams.tag : ''}  /> :null}
         {items.map((item: any) => <Qwiket key={`queue-qwiket-${qType}-${item.slug}-${item.qpostid}`} extraWide={extraWide} item={item} isTopic={false} qType={qType}></Qwiket>)}</div>)
 }
 
-const Segments = ({ qType, isLeft, extraWide, updateSession, ...props }: { qType: string, isLeft: boolean, extraWide: boolean, updateSession: any, fullPage?: boolean }) => {
+const Segments = ({ qType, isLeft, extraWide,  ...props }: { qType: string, isLeft: boolean, extraWide: boolean }) => {
     let generateFirstSegment;
     /**
      * setData called by the segment when receiving data, so that for the last segment a new segment can be appended to the segments array
@@ -373,7 +305,7 @@ const Segments = ({ qType, isLeft, extraWide, updateSession, ...props }: { qType
     generateFirstSegment = (comment: any) => {
         //console.log("dbg g: segments >>>>>>>>>>>   remder generateFirstSegment", qType, comment)
         return [
-            <FirstSegment isLeft={isLeft} key={`first-segment-${qType}`} extraWide={extraWide} qType={qType} lastid={''} tail={0} pageIndex={0} hasData={false} setData={setData} updateSession={updateSession} {...props} />,
+            <FirstSegment isLeft={isLeft} key={`first-segment-${qType}`} extraWide={extraWide} qType={qType} lastid={''} tail={0} pageIndex={0} hasData={false} setData={setData}  {...props} />,
         ]
     }
     const [segments, setSegments] = useState(generateFirstSegment('Segments:useState'));
@@ -381,7 +313,7 @@ const Segments = ({ qType, isLeft, extraWide, updateSession, ...props }: { qType
     return <QueueWrap>{segments}</QueueWrap>
 
 }
-const Queue = ({ qType, isLeft,  ...props }: { qType: string, isLeft: boolean, extraWide: boolean, updateSession: any, fullPage?: boolean}) => {
+const Queue = ({ qType, isLeft,  ...props }: { qType: string, isLeft: boolean, extraWide: boolean}) => {
     var randomstring = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     //const [guid, setGuid] = useState(randomstring())
     const { session } = useAppContext();

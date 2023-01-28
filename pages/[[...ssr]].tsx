@@ -41,7 +41,7 @@ export const getServerSideProps = withSessionSsr(
         let type = ssr[1];
         if (!type)
             type = 'newsline';
-
+        console.log("TYPE:",type)
         const tag = (type == 'topic' || type == 'home' || type == 'solo') ? ssr[2] : "";
         const threadid = (type == 'topic' || type == 'home') ? ssr[3] : "";
         let layoutNumber = ((type == 'topic' || type == 'home') ? ssr[4] : type == 'solo' ? ssr[3] : ssr[2]) || "l1";

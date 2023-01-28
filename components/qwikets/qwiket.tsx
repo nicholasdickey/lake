@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, ReactFragment, ReactNode } from "react";
+import { useRouter } from 'next/router'
 import styled from 'styled-components';
 import { Qparams } from '../../lib/qparams'
 import NextImage from 'next/image';
@@ -7,24 +8,25 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { useAppContext } from "../../lib/context";
 import Link from 'next/link'
-import {TwitterTweetEmbed} from 'react-twitter-embed';
+import { TwitterTweetEmbed } from 'react-twitter-embed';
 import Markdown from 'markdown-to-jsx'
+import Swipe from "react-easy-swipe"
 import YouTube from 'react-youtube'
 
 
 interface IsTopic {
     isTopic: boolean,
-    isTag?:boolean,
-    diff?:number,
-    singlePanel?:boolean
+    isTag?: boolean,
+    diff?: number,
+    singlePanel?: boolean
 }
 const VerticalWrap = styled.div<IsTopic>`
-    border-color:${({isTag,diff})=>(isTag&&diff&&(diff<3600))?'var(--qwiket-border-new) var(--qwiket-border-stale) var(--qwiket-border-new) var(--qwiket-border-new)':isTag&&diff&&diff<4*3600?'var(--qwiket-border-recent) var(--qwiket-border-stale) var(--qwiket-border-recent) var(--qwiket-border-recent)':'var(--qwiket-border-stale)'};
-    border-style: solid ${({isTopic,singlePanel})=>isTopic?singlePanel?'solid':'none':'solid'}  ${({isTopic})=>isTopic?'none':'solid'}   ${({isTopic})=>isTopic?'none':'solid'}  ;
+    border-color:${({ isTag, diff }) => (isTag && diff && (diff < 3600)) ? 'var(--qwiket-border-new) var(--qwiket-border-stale) var(--qwiket-border-new) var(--qwiket-border-new)' : isTag && diff && diff < 4 * 3600 ? 'var(--qwiket-border-recent) var(--qwiket-border-stale) var(--qwiket-border-recent) var(--qwiket-border-recent)' : 'var(--qwiket-border-stale)'};
+    border-style: solid ${({ isTopic, singlePanel }) => isTopic ? singlePanel ? 'solid' : 'none' : 'solid'}  ${({ isTopic }) => isTopic ? 'none' : 'solid'}   ${({ isTopic }) => isTopic ? 'none' : 'solid'}  ;
     border-width:${({ isTopic }) => isTopic ? 1 : 1}px;
     cursor:pointer;
-    padding-left:${({ isTopic }) => isTopic ? 16 : 8}px;
-    padding-right:${({ isTopic }) => isTopic ? 16 : 6}px;
+    padding-left:${({ isTopic }) => isTopic ? 8 : 8}px;
+    padding-right:${({ isTopic }) => isTopic ? 8 : 6}px;
     padding-bottom:6px;
     width:100%;
     margin-bottom:6px;
@@ -47,7 +49,7 @@ const Row = styled.div`
 `
 
 const SiteName = styled.div<IsTopic>`
-font-size:${({ isTopic }) => isTopic ? 22:12}px;   
+font-size:${({ isTopic }) => isTopic ? 22 : 12}px;   
 margin-right:20px;
 `
 
@@ -59,14 +61,14 @@ const AuthorPoster = styled.div`
 font-size: 14px;   
 `
 const TimeSince = styled.div<IsTopic>`
-font-size:${({isTopic})=>isTopic?14:10}px;
-margin-right:${({isTopic})=>isTopic?0:4}px;
+font-size:${({ isTopic }) => isTopic ? 14 : 10}px;
+margin-right:${({ isTopic }) => isTopic ? 0 : 4}px;
     
 `
 const Title = styled.div<IsTopic>`
 
     line-height: 1.2;
-    font-size: ${({isTopic})=>isTopic?1.6:1.1}rem; 
+    font-size: ${({ isTopic }) => isTopic ? 1.6 : 1.1}rem; 
    
     text-align: left; 
     margin-top:4px;
@@ -77,7 +79,7 @@ const Title = styled.div<IsTopic>`
 
 const Description = styled.div`
     margin-bottom:2px;
-`   
+`
 
 interface ImageBoxProps {
     extraWide: boolean,
@@ -103,7 +105,7 @@ interface PubImageProps {
 }
 const PubImage = styled.img<PubImageProps>`
     position: relative;
-    margin-top: ${({isTopic})=>isTopic?16:6}px;
+    margin-top: ${({ isTopic }) => isTopic ? 16 : 6}px;
     padding-top: 0px;
     margin-right: 16px;
     height:${({ isTopic }) => isTopic ? 64 : 28}px;
@@ -148,7 +150,7 @@ const Right = styled.div`
     justify-content:space-between;
 `
 
-const Comment=styled.div`
+const Comment = styled.div`
     font-size:10px;
     font-weight: 700;
     border:solid grey 1px;
@@ -156,11 +158,11 @@ const Comment=styled.div`
     margin:1px 3px 1px 3px;
 
 `
-const Qwiket = ({ extraWide, item, isTopic,qType,singlePanel,fullPage }: { extraWide: boolean, item: any, isTopic: boolean,qType?:string,singlePanel?:boolean , fullPage?:boolean}) => {
-   
-    const isTag=qType=='tag';
-    console.log("Qwiket render ",singlePanel,isTopic, qType,isTag)  
+const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { extraWide: boolean, item: any, isTopic: boolean, qType?: string, singlePanel?: boolean, fullPage?: boolean }) => {
 
+    const isTag = qType == 'tag';
+    console.log("Qwiket render ", singlePanel, isTopic, qType, isTag)
+    const router = useRouter();
     const { session, qparams } = useAppContext();
     const isReact = item && typeof item.qpostid !== 'undefined' && item.qpostid;
     let { description, title } = item ? item : { description: '', title: '' };
@@ -177,68 +179,83 @@ const Qwiket = ({ extraWide, item, isTopic,qType,singlePanel,fullPage }: { extra
 
         if (!title)
             title = 'Loading...';
-        const {diff,timeString} = TimeDifference(published_time, qparams.timestamp)
-        let bodyHtml;
-        interface BodyBlock{
-            type:string;
-            content:string;
-            id?:string;
+        const { diff, timeString } = TimeDifference(published_time, qparams.timestamp)
+        let bodyHtml: string;
+        interface BodyBlock {
+            type: string;
+            content: string;
+            id?: string;
         }
-        let bodyBlocks:Array<ReactNode>|null=null;
+        let bodyBlocks: Array<ReactNode> | null = null;
         if (body) {
-           /* const blocks = body.blocks;
-            bodyHtml = blocks.reduce((accum: string, b: any) => {
-                console.log("reduce:", b, accum)
-                if (b.blockType == 'html') {
-                    return accum += b.html;
-                }
-            }, '')
-            */
-           bodyBlocks=body.map((b:BodyBlock)=>{
-          
-            return (b.type=="twitter"&&b.id)?<TwitterTweetEmbed tweetId={b.id} placeholder="Loading a Tweet..." /*options={{theme:session.dark?'dark':'light'}}*/ />:<ReactMarkdown rehypePlugins={[rehypeRaw]} >{b.content}</ReactMarkdown>
-           })
+            /* const blocks = body.blocks;
+             bodyHtml = blocks.reduce((accum: string, b: any) => {
+                 console.log("reduce:", b, accum)
+                 if (b.blockType == 'html') {
+                     return accum += b.html;
+                 }
+             }, '')
+             */
+            bodyBlocks = body.map((b: BodyBlock) => {
+
+                return (b.type == "twitter" && b.id) ? <TwitterTweetEmbed tweetId={b.id} placeholder="Loading a Tweet..." /*options={{theme:session.dark?'dark':'light'}}*/ /> : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{b.content}</ReactMarkdown>
+            })
 
         }
         //bodyHtml=bodyHtml?.replaceAll('twittertweetembed','TwitterTweetEmbed');
-       // bodyHtml=bodyHtml?.replaceAll('youtubeembed','YoutubeEmbed');
+        // bodyHtml=bodyHtml?.replaceAll('youtubeembed','YoutubeEmbed');
         //if(bodyHtml)
         //bodyHtml=`<div>${bodyHtml}</div>`
-      //  bodyHtml=bodyHtml?.replaceAll('iframe','Iframe');
-        
+        //  bodyHtml=bodyHtml?.replaceAll('iframe','Iframe');
+
         // console.log("checking for code tag",bodyHtml?.indexOf('<code>'));
 
-         console.log("BODY:",body)
-         console.log(JSON.stringify({isTopic,singlePanel}))
-        return <VerticalWrap isTopic={isTopic} singlePanel={singlePanel} >
+        console.log("BODY:", body)
+        console.log(JSON.stringify({ isTopic, singlePanel }))
+
+        const swipe = (position: any, event: any, type: string) => {
+            console.log("swipe", position, event, type);
+            if (position.x > 5 && position.y < 10 && position.y > -10) {
+                console.log("RIGHT SWIPE")
+                router.push(item.url);
+                //rotate(type, 1)
+            }
+            if (position.x < -5 && position.y < 10 && position.y > -10) {
+                console.log("LEFT SWIPE")
+                router.back();
+            }
+        }
+        return <Swipe onSwipeMove={(position, event) => swipe(position, event, qparams.type)}><VerticalWrap isTopic={isTopic} singlePanel={singlePanel} >
             <Row key="r1"><PubImageBox><PubImage loud={session.loud} isTopic={isTopic} placeholder={"blur"} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"      src={catIcon} alt={catName} /></PubImageBox>
                 <Right><SiteName isTopic={isTopic}>{site_name}</SiteName><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right></Row>
             {author ? <Row>{author}</Row> : null}
-            <Row key="r2"><Title isTopic={isTopic}>{title}</Title></Row>
-            <Row  key="r3"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage sizes="(max-width: 768px) 100vw,
+            <Row key="r2"><Link href={item.url}><Title isTopic={isTopic}>{title}</Title></Link></Row>
+            <Row key="3.1">{item.url}</Row>
+            <Row key="r3"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
+          
+            <Row key="r4"><Body>{bodyBlocks ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml : description}</ReactMarkdown>}</Body></Row>
 
-            <Row  key="r4"><Body>{bodyBlocks?bodyBlocks :<ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml : description}</ReactMarkdown>}</Body></Row>
+        </VerticalWrap></Swipe>
 
-        </VerticalWrap>
-        
 
     }
     else if (isReact) {
-        let { author_avatar, tag, catName, catIcon, author_name, postBody, subscr_status, createdat, thread_author, thread_title, thread_description, thread_url, slug } = item;
+        let { id, author_avatar, tag, catName, catIcon, author_name, postBody, subscr_status, createdat, thread_author, thread_title, thread_description, thread_url, slug } = item;
         // console.log("React ",item)
-
-        const {diff,timeString} = TimeDifference(createdat, qparams.timestamp)
-        return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/na`}><VerticalWrap isTopic={isTopic}>
-            <Row  key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
+        if (id)
+            console.log("disqus id:", id)
+        const { diff, timeString } = TimeDifference(createdat, qparams.timestamp)
+        return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/${id}/#comment-${id}`}><VerticalWrap isTopic={isTopic}>
+            <Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"      placeholder={"blur"} src={catIcon} alt={catName} width={28} height={28} /></PubImageBox>
-              {qType=='mix'?<Comment>comment</Comment>:null}<Author>{thread_author ? thread_author : catName}</Author></Row>
-            <Row  key="r2"><Title isTopic={isTopic}>{thread_title}</Title></Row>
+                {qType == 'mix' ? <Comment>comment</Comment> : null}<Author>{thread_author ? thread_author : catName}</Author></Row>
+            <Row key="r2"><Title isTopic={isTopic}>{thread_title}</Title></Row>
             <Row key="r3"><Description><ReactMarkdown rehypePlugins={[rehypeRaw]} >{description}</ReactMarkdown></Description></Row>
-            <Row  key="r4"><AvatarBox><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={author_avatar.indexOf('http') < 0 ? `https:${author_avatar}` : author_avatar} alt={author_name} fill={true} /></AvatarBox><AuthorPoster>{author_name}</AuthorPoster>
-            <TimeSince isTopic={isTopic}>{timeString}</TimeSince></Row>
-            <Row  key="r5"><Markdown rehypePlugins={[rehypeRaw]} >{postBody}</Markdown></Row>
+            <Row key="r4"><AvatarBox><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={author_avatar.indexOf('http') < 0 ? `https:${author_avatar}` : author_avatar} alt={author_name} fill={true} /></AvatarBox><AuthorPoster>{author_name}</AuthorPoster>
+                <TimeSince isTopic={isTopic}>{timeString}</TimeSince></Row>
+            <Row key="r5"><Markdown rehypePlugins={[rehypeRaw]} >{postBody}</Markdown></Row>
 
         </VerticalWrap></Link>
     }
@@ -247,26 +264,26 @@ const Qwiket = ({ extraWide, item, isTopic,qType,singlePanel,fullPage }: { extra
         if (catName?.indexOf('Liberty Daily') >= 0) {
             catIcon = 'https://qwiket.com/static/css/afnLogo.png';
         }
-        const {diff,timeString} = TimeDifference(published_time, qparams.timestamp);
+        const { diff, timeString } = TimeDifference(published_time, qparams.timestamp);
         //  console.log("Render Qwuket", item.catIcon,item.image,item.title)
         if (!item.catIcon) {
             console.log("********************************************************************************************************")
         }
-        console.log("qwiket render 2 istag",isTag,'diff:',diff)
+        console.log("qwiket render 2 istag", isTag, 'diff:', diff)
         if (slug == 'loading') {
             return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/na`}><VerticalWrap isTopic={isTopic}>
-                <Row  key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
+                <Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"     placeholder={"blur"} src={'https://qwiket.com/static/css/afnLogo.png'} alt={'America First News'} /></PubImageBox>
                     <Right><SiteName isTopic={isTopic}>©{'am1.news'}</SiteName><TimeSince isTopic={isTopic}>{0}</TimeSince></Right></Row>
                 {author ? <Row>{author}</Row> : null}
-                <Row  key="r2"><Title isTopic={isTopic}>{title}</Title></Row>
-                <Row  key="r3"><Markdown rehypePlugins={[rehypeRaw]} >{'The Internet of Us'}</Markdown></Row>
+                <Row key="r2"><Title isTopic={isTopic}>{title}</Title></Row>
+                <Row key="r3"><Markdown rehypePlugins={[rehypeRaw]} >{'The Internet of Us'}</Markdown></Row>
                 <Row key="r4" ><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
 
             </VerticalWrap></Link>
         }
         return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/na`}><VerticalWrap isTopic={isTopic} isTag={isTag} diff={diff}>
-            <Row  key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} style={{ height: '38', width: 'auto' }} sizes="(max-width: 768px) 100vw,
+            <Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} style={{ height: '38', width: 'auto' }} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"       placeholder={"blur"} src={catIcon} alt={catName} /></PubImageBox>
                 <Right><SiteName isTopic={isTopic}>©{site_name}</SiteName><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right> </Row>
             {author ? <Row>{author}</Row> : null}

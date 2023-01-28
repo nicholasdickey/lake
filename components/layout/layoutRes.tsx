@@ -22,7 +22,7 @@ justify-content:space-between;
 `
 export const LayoutRes = ({ layout, res, qparams,session,...props }:{layout:any,res:any,qparams:Qparams,session:Options,updateSession:any,channelDetails:any,qCache:any,setQCache:any}) => {
     let layres = layout[res];
-   // console.log("layoutview LAYRES",res, layres,session);
+   console.log("layoutview LAYRES",res, layres,session);
     let columns = layres.columns;
   //  console.log('layoutview:',{ columns })
     let key=0;

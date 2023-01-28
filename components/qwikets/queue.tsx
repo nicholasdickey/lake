@@ -162,11 +162,10 @@ const Segment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, s
     extraWide: boolean, qType: string, lastid: string, tail: number, pageIndex: number, hasData: boolean, setData: any
 }) => {
     const { session, qparams } = useAppContext();
-    const [returnedLastid, setReturnedLastid] = useState(lastid);
-    const [returnedTail, setReturnedTail] = useState(tail);
+  
     const [hd, setHd] = useState(hasData)
    
-    const key = ['queue', qType, qparams.newsline, qparams.forum, qType == 'tag' ? qparams.tag : '', pageIndex, lastid, session.sessionid, session.userslug, returnedTail, ''];
+    const key = ['queue', qType, qparams.newsline, qparams.forum, qType == 'tag' ? qparams.tag : '', pageIndex, lastid, session.sessionid, session.userslug, tail, ''];
     // console.log("Segment before fetchQueue", { qType, pageIndex, returnedLastid, returnedTail })
     const { data, error: queueError, mutate } = useSWR(key, fetchQueue);
 
@@ -179,8 +178,10 @@ const Segment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, s
         /**
          * Once roll into view, and has data - call setData to possibly append a new sibming segment
          */
-        if (!hd && data && isVisible) {
+        console.log(`dbgi: secondary segment, test for setData`,{qType,pageIndex,hd,data,isVisible})
+        if (data && isVisible) {
             setData(data, pageIndex, true, data.tail ? data.tail : '');
+           // setTimeout(()=>setData(data, pageIndex, true, data.tail ? data.tail : ''),1);
             setHd(true)
         }
     }, [isVisible, hd, data, qType, pageIndex, setData]);
@@ -192,8 +193,8 @@ const Segment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, s
  * @param param0 
  * @returns 
  */
-const FirstSegment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, setData}: {
-    isLeft: boolean, extraWide: boolean, qType: string, lastid: string, tail: number, pageIndex: number, hasData: boolean, setData: any
+const FirstSegment = ({ resetSegments,isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, setData}: {
+    resetSegments:any,isLeft: boolean, extraWide: boolean, qType: string, lastid: string, tail: number, pageIndex: number, hasData: boolean, setData: any
 }) => {
     const { session, qparams } = useAppContext();
     const [returnedLastid, setReturnedLastid] = useState(lastid);
@@ -202,6 +203,7 @@ const FirstSegment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasDa
     const onData = useCallback((data: any, key: string, config: any) => {
        // console.log("dbg onData FirstSegment segments onData fetchQueue remder", { isLeft, qType, newLastid: data.lastid, lastid, returnedLastid, newTail: data.tail, key, items: data?.items })
         if (data) {
+            console.log(`dbgi: OnData FirstSegment`);
             setReturnedLastid(data.lastid);
             setReturnedTail(+data.tail);
             //  console.log("remder first segment. got new lastid", qType, data.lastid, lastid)
@@ -227,14 +229,19 @@ const FirstSegment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasDa
     const onScroll = useCallback(() => {
         const { scrollY } = window;
         if (scrollY == 0) {
+            setHd(false)
             mutate();
+            console.log(`dbgi: FirstSegment calling resetSegments`)
+            resetSegments();
         }
-    }, [lastid, mutate]);
+    }, [mutate, resetSegments]);
 
     const reset = useCallback(() => {
         // setReturnedTail(0);
         // setReturnedTail(0)
+        setHd(false)
         setTimeout(() => mutate(), 1);
+        resetSegments();
     }, [mutate]);
 
     useEffect(() => {
@@ -246,10 +253,10 @@ const FirstSegment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasDa
     }, []);
 
     useEffect(() => {
-        console.log("remder to test a call setData", { hd, isVisible, qType, pageIndex, data })
-        if (!hd && data && isVisible) {
-            console.log("&&&&&&&&&&&&&&&&&&&&&&&& remder to a call setData", { isVisible, qType, pageIndex, data })
-            setData(data, pageIndex, true, data.tail ? data.tail : '');
+        console.log("dbgi: remder to test a call setData", { hd, isVisible, qType, pageIndex, data })
+        if ( data && isVisible) {
+            console.log(" dbgi: &&&&&&&&&&&&&&&&&&&&&&&& remder to a call setData", { isVisible, qType, pageIndex, data })
+            setData(data, pageIndex, true, data.tail ? data.tail : '')
             setHd(true)
         }
     }, [isVisible, hd, data, qType, pageIndex, setData]);
@@ -285,16 +292,17 @@ const Segments = ({ qType, isLeft, extraWide,  ...props }: { qType: string, isLe
      * @returns 
      */
     const setData = useCallback((data: any, pageIndex: number, hasData: boolean, tail: number) => {
-
+        console.log('dbgi: Segments, testing segments',{qType,pageIndex,segments})
         if (!segments || !segments.length) {
            // console.log("remder no segments in setData")
             return;
         }
+        console.log('dbgi: Segments, testing length',{pageIndex,length:segments.length})
         if (pageIndex == segments.length - 1) {
-
+           console.log(`dbgi: Segments adding a segment`,{qType,pageIndex,lastid:data.lastid,tail:data.tail});
            // console.log("remder ---> adding segments for fetchData pageIndex:", pageIndex, qType, 'segments:', segments)
             segments.push(
-                <Segment isLeft={isLeft} key={`segment-${qType}-${pageIndex + 1}`} extraWide={extraWide} qType={qType} lastid={data.lastid} tail={tail} pageIndex={pageIndex + 1} hasData={false} setData={setData} />,
+                <Segment isLeft={isLeft} key={`segment-${qType}-${pageIndex + 1}`} extraWide={extraWide} qType={qType} lastid={data.lastid} tail={data.tail} pageIndex={pageIndex + 1} hasData={false} setData={setData} />,
 
             )
         }
@@ -302,10 +310,18 @@ const Segments = ({ qType, isLeft, extraWide,  ...props }: { qType: string, isLe
         setSegments([...segments]) //immutable state
     }, [extraWide, isLeft, qType]);
 
+    const resetSegments=()=>{
+        const oldSegments=[...segments];
+        segments.splice(1); // I need instant response
+
+        console.log(`dbgi: resetSegments ${qType}`,{segments,oldSegments})
+       // setSegments(newSegments)
+    };
+
     generateFirstSegment = (comment: any) => {
         //console.log("dbg g: segments >>>>>>>>>>>   remder generateFirstSegment", qType, comment)
         return [
-            <FirstSegment isLeft={isLeft} key={`first-segment-${qType}`} extraWide={extraWide} qType={qType} lastid={''} tail={0} pageIndex={0} hasData={false} setData={setData}  {...props} />,
+            <FirstSegment resetSegments={resetSegments} isLeft={isLeft} key={`first-segment-${qType}`} extraWide={extraWide} qType={qType} lastid={''} tail={0} pageIndex={0} hasData={false} setData={setData}  {...props} />,
         ]
     }
     const [segments, setSegments] = useState(generateFirstSegment('Segments:useState'));

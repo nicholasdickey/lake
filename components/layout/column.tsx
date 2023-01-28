@@ -152,7 +152,8 @@ interface SelectorChoice {
 const LeftSelector = ({ qType, updateSession, name, fullPage }: { qType: string, updateSession: any, name: string, fullPage?: boolean }) => {
     const [opened, setOpened] = useState(false);
     const { channelDetails, qparams, newslineSingleSelectors, topicSingleSelectors } = useAppContext();
-
+    if(!fullPage)
+    fullPage=false;
     console.log("LeftSelector", fullPage)
     const choices = [
         {
@@ -244,10 +245,10 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
     let msc = column.msc;
     const [topicOverride, setTopicOverride] = useState({ leftColumnOverride: 'topic' });
     const fullPage = spaces < 3;
-    console.log("**** FirstColumn:", JSON.stringify({isLeft,spaces, selector, type, msc, session}))
+    console.log("**** FirstColumn:", JSON.stringify({qparamsType:qparams.type,isLeft,spaces, selector, type, msc, session}))
     if (selector == 'newsviews')
         selector = 'mix';
-    selector = isLeft ? ((qparams.type == 'newsline' || qparams.type == 'solo') ? session.leftColumnOverride : topicOverride.leftColumnOverride) || selector : selector;
+    selector = fullPage?isLeft ? ((qparams.type == 'newsline' || qparams.type == 'solo') ? session.leftColumnOverride : topicOverride.leftColumnOverride) || selector : selector: (qparams.type == 'newsline' || qparams.type == 'solo')?session.leftColumnOverride||selector:selector;
    
     const name = selector == 'mix' ? 'news&views' : selector == 'tag' ? 'publication feed' : selector == 'topics' ? 'active topics' : selector == 'reacts' ? 'comments' : selector;
 
@@ -312,8 +313,9 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
 
             let leftWidth, rightWidth;
 
-            // console.log("MP", column.width, selector, msc)
+            console.log("column MP", column.width, selector, msc)
             if (selector == 'topic') {
+                console.log("MP column Topic")
                 leftWidth = `${((column.width - 1) / column.width) * 100}%`;
                 rightWidth = `${(1 / column.width) * 100}%`;
                 //  console.log("width left:", leftWidth, rightWidth)

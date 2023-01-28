@@ -25,12 +25,12 @@ const Local = ({ contextUrl, forum, realDisqThreadid, cc, slug, title,fullPage }
    fullPage=false;
     if(!title)
         title='';
-    console.log('LOCAL RENDER %s', title)
+    console.log('LOCAL RENDER %s', title,cc)
     //if (title) {
     var t = title.replace(/"/g, '\'');
     t = t.replace(':', '-');
     //t=channel?('['+channel+'] '+t):t
-    cc = cc ? '#' + cc : '';
+    cc = cc ? '#comment-' + cc : '';
     let url = "https://qwiket.com" + contextUrl + "/topic/" + realDisqThreadid + cc;
     // console.log('title=%s',t)
     //console.log('channel=%s',channel)

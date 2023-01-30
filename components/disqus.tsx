@@ -18,9 +18,23 @@ const Disqus = styled.div<DisqusParams>`
         font-family:roboto;
     }   
 `
+const CommentsButton=styled.div`
+  width:auto;
+  padding:4px;
+  border:solid grey 1px;
+  background-color: var(--notificationButton);
+  color:#eee;
 
+`
+const CommentsButtonWrap=styled.div`
+  width:100%;
+  display:flex;
+  justify-content: space-around;
+
+`
 const Local = ({ contextUrl, forum, realDisqThreadid, cc, slug, title,fullPage }: {  contextUrl: string, forum: string, realDisqThreadid: string,  cc: string, slug: string, title: string,fullPage?:boolean }) => {
     const { session, qparams } = useAppContext();
+    const [draw,setDraw]=useState(cc&&cc.length>1?true:false)
    if(!fullPage)
    fullPage=false;
     if(!title)
@@ -60,8 +74,8 @@ const Local = ({ contextUrl, forum, realDisqThreadid, cc, slug, title,fullPage }
       }*/
     //  console.log("local: identifier:%s",identifier,url)
     // console.log('Disqus url=%s','/disqus/'+site+'/'+encodeURIComponent(identifier)+'/'+encodeURIComponent(title)+'/'+encodeURIComponent(url));
-console.log("Disqus:",{fullPage,forum,slug,t,url})
-    return (
+    console.log("Disqus:",{fullPage,forum,slug,t,url,cc,draw})
+    return <>{true?
         <Disqus fullPage={fullPage}><DiscussionEmbed
             shortname={forum}
             config={{
@@ -69,7 +83,9 @@ console.log("Disqus:",{fullPage,forum,slug,t,url})
                 title: t,
                 url
             }} /></Disqus>
-    )
+            :<CommentsButtonWrap><CommentsButton onClick={()=>setDraw(true)}><a>Show Comments</a></CommentsButton></CommentsButtonWrap>
+            
+          }</>
 
 
 

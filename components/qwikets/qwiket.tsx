@@ -155,7 +155,7 @@ const Comment = styled.div`
     font-weight: 700;
     border:solid grey 1px;
     padding:1px 3px 1px 3px;
-    margin:1px 3px 1px 3px;
+    margin:1px 16px 1px 3px;
 
 `
 const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { extraWide: boolean, item: any, isTopic: boolean, qType?: string, singlePanel?: boolean, fullPage?: boolean }) => {
@@ -180,7 +180,7 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
         if (!title)
             title = 'Loading...';
         const { diff, timeString } = TimeDifference(published_time, qparams.timestamp)
-        let bodyHtml: string;
+        let bodyHtml: string='';
         interface BodyBlock {
             type: string;
             content: string;
@@ -231,7 +231,7 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
                 <Right><SiteName isTopic={isTopic}>{site_name}</SiteName><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right></Row>
             {author ? <Row>{author}</Row> : null}
             <Row key="r2"><Link href={item.url}><Title isTopic={isTopic}>{title}</Title></Link></Row>
-            <Row key="3.1">{item.url}</Row>
+            <Row key="3.1"><Link href={item.url}>{item.url}</Link></Row>
             <Row key="r3"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
           
@@ -271,7 +271,7 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
         }
         console.log("qwiket render 2 istag", isTag, 'diff:', diff)
         if (slug == 'loading') {
-            return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/na`}><VerticalWrap isTopic={isTopic}>
+            return <Link href={`/${qparams.forum}/topic/${tag}/${slug}${qparams.layoutNumber!='l1'?'/'+qparams.layoutNumber:''}`}><VerticalWrap isTopic={isTopic}>
                 <Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"     placeholder={"blur"} src={'https://qwiket.com/static/css/afnLogo.png'} alt={'America First News'} /></PubImageBox>
                     <Right><SiteName isTopic={isTopic}>©{'am1.news'}</SiteName><TimeSince isTopic={isTopic}>{0}</TimeSince></Right></Row>
@@ -282,7 +282,7 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
 
             </VerticalWrap></Link>
         }
-        return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/na`}><VerticalWrap isTopic={isTopic} isTag={isTag} diff={diff}>
+        return <Link href={`/${qparams.forum}/topic/${tag}/${slug}${qparams.layoutNumber!='l1'?'/'+qparams.layoutNumber:''}`}><VerticalWrap isTopic={isTopic} isTag={isTag} diff={diff}>
             <Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} style={{ height: '38', width: 'auto' }} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"       placeholder={"blur"} src={catIcon} alt={catName} /></PubImageBox>
                 <Right><SiteName isTopic={isTopic}>©{site_name}</SiteName><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right> </Row>

@@ -1,12 +1,49 @@
 
 import axios from 'axios'
-
+import{Options} from '../lib/withSession';
 const API_KEY = process.env.API_KEY;
 
 const lakeApi = (url: string) => {
    url = `${process.env.NEXT_PUBLIC_LAKEAPI}${url}`
    //console.log("calling lakeApi, ",url)
    return axios.get(url).then(res => res.data)
+}
+export const updateUserSession=async(userslug:string,options:Options)=>{
+   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/user/updateSession?`
+   console.log("calling lakeApi initLogin ", url)
+   const res = await axios.post(url,{
+      userslug,
+      options
+   });
+   return res.data.userSession;
+}
+export const getUserSession=async(userslug:string)=>{
+   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/user/fetchSession?`
+   console.log("calling lakeApi initLogin ", url)
+   const res = await axios.post(url,{
+      userslug   
+   });
+   return res.data.userSession;
+}
+export const initLoginSession=async(userslug:string,options:Options)=>{
+   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/user/initLogin?`
+   console.log("calling lakeApi initLogin ", url)
+   const res = await axios.post(url,{
+      userslug,
+      options
+   });
+   return res.data.userSession;
+}
+
+export const processLoginCode=async (code:string)=>{
+   const url = `${process.env.NEXT_PUBLIC_QWIKET_API}/api?task=disqus-login&code=${code}`;
+   const res = await axios.get(url);
+   console.log("processLoginCode returned from axios get ",url,res.data)
+   if(res.data.success){
+      const user=res.data.user;
+      return user;
+   }
+   return false;
 }
 export const fetchChannelConfig = async (slug: string) => {
    try {

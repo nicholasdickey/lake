@@ -123,7 +123,7 @@ const RotateLeft=styled.div`
     transform:rotate(90deg);
     margin-top:-2px;
 `
-const Arrow = () => <svg className="jss37 jss168" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation"><path d="M7 10l5 5 5-5z"></path></svg>
+//const Arrow = () => <svg className="jss37 jss168" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation"><path d="M7 10l5 5 5-5z"></path></svg>
 
 const Notifications = ({ isLeft, qType, newsline, forum, lastid, tail, sessionid, userslug, reset, tag, ...props }:
     {

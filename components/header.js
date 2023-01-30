@@ -7,6 +7,9 @@ import { useRouter } from 'next/router'
 import Image from 'next/image'
 import { fetchUser } from '../lib/lakeApi';
 import Lowline from './lowline';
+import { UilGlassMartiniAlt } from '@iconscout/react-unicons'
+
+import { useAppContext } from "../lib/context";
 
 //import Menu from '@material-ui/core/Menu';
 //import MenuItem from '@material-ui/core/MenuItem';
@@ -17,6 +20,7 @@ import Lowline from './lowline';
 
 
 import { UilStar } from '@iconscout/react-unicons'
+import { UilNewspaper } from '@iconscout/react-unicons'
 //import { UisStar } from '@iconscout/react-unicons'
 const UisStar = UilStar;
 const TitleStyledWrapper = styled.div`
@@ -26,6 +30,7 @@ align-items:center;
 font-family: Playfair Display !important;
 justify-content:center;
 font-size:2rem;
+
 /*@media(max-width:749px){
     display:none;
 }*/
@@ -99,10 +104,13 @@ const Logo = styled((props) => {
     }
 `
 const Title = styled.div`
-    font-size:2.0rem;
+    font-size:1.6rem;
     text-align:center;
     margin-left:30px;
     margin-right:30px;
+    @media(min-width:600px){
+        font-size:1.4rem;
+    }
     @media(min-width:900px){
         font-size:2.2rem;
     }
@@ -130,12 +138,13 @@ const TitleBand = ({ title, leftLogo, rightLogo }) => {
     </TitleStyledWrapper></Link>
 }
 
-const StyledWrapper = styled((color, linkColor, ...props) => <div {...props} />)`
+const StyledWrapper = styled.div`
 display:flex;
+//height:120px;
 width:100%;
 align-items:center;
 font-family: Playfair Display !important;
-justify-content:center;
+justify-content:space-around;
 font-size:1.8rem;
 /*@media(max-width:749px){
     display:none;
@@ -154,12 +163,13 @@ color:${props => props.theme.color};
 
 const HorizWrap = styled.div`
     display:flex;
-    justify-content:flex-begin;
+    justify-content:flex-start;
     margin-left:40px;
     margin-right:40px;
 `
 const SubTitle = styled.div`
-    font-size:1.4rem;
+    display:flex;
+    font-size:1.2rem;
     text-align:center;
     margin-left:10px;
     margin-right:10px;
@@ -182,6 +192,25 @@ const AvatarGroup = styled.div`
         display:flex;
         align-items:flex-begin;
      `
+const Dateline=styled.div`
+    font-size:0.7rem;
+    color:#808080;
+    //margin-left:20px;
+`     
+const Martini=styled.div`
+    margin-left:30px;
+    margin-top:2px;
+`
+const Home=styled.div`
+    margin-right:30px;
+    margin-top:2px;
+`
+const VerticalWrap=styled.div`
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+`
+
 const DatelineBand = ({ channelSlug, session, channelDetails, user }) => {
 
     let subscr_status = +user?.subscr_status;
@@ -190,27 +219,33 @@ const DatelineBand = ({ channelSlug, session, channelDetails, user }) => {
     //console.log({ subscr_status })
 
 
-
+    const {  qparams } = useAppContext();
 
 
 
     let hometown = channelDetails.hometown;
     let channel = channelSlug;
     // console.log("CHANNEL:", channel)
-    let date = new Date();
-    let dateStrging = date.toDateString();
+   
+    const time=qparams.timestamp;
+    var date = new Date(time * 1000);
+    //let date = new Date(time);
+    let dateStrging = date.toLocaleString("en-US", {timeZone: "America/Chicago",dateStyle:"medium"})//date.toDateString();
     let name = user?.user_name;
     let approver = user?.approver;
     let avatar = user?.avatar;
 
     let isLoggedIn = user ? 1 : 0;
-    console.log({ isLoggedIn })
+    console.log('dateline',{ isLoggedIn,dateStrging,hometown })
+   // return <div/> 
+    //return<SubTitle>{`${dateStrging}  ${hometown}`}</SubTitle>
     return <StyledWrapper>
-        <HorizWrap><SubTitle>{`${dateStrging}  ${hometown}`}</SubTitle></HorizWrap>
-        {isLoggedIn ? <HorizWrap><AvatarGroup><Image src={avatar} width={32} height={32} />{subscr_status > 0 ? <SubscriberStar /> : null}</AvatarGroup></HorizWrap> : null}
+        <VerticalWrap>
+            <HorizWrap><Dateline>{`${dateStrging} | ${hometown}`}</Dateline></HorizWrap>
+            {isLoggedIn ? <HorizWrap><AvatarGroup><Image src={avatar} width={32} height={32} />{subscr_status > 0 ? <SubscriberStar /> : null}</AvatarGroup></HorizWrap> : null}
 
         {
-            !isLoggedIn ? <div placeHolder={<SubTitle><a>Sign In</a>&nbsp; Subscribe</SubTitle>} /> :
+            !isLoggedIn ? <SubTitle><Home><Link href={'/'}><UilNewspaper size="16" color="#888"/></Link></Home><a>Sign-in</a>&nbsp;|&nbsp; <a>Subscribe</a> <Martini><a><UilGlassMartiniAlt size="16" color="#888" /></a></Martini></SubTitle>:
                 <HorizWrap>
                     <SubTitle>
                         <a onClick={() => { console.log("sign out:", `/disqus-logout?channel=${channel}`); window.location = `/channel/${channel}?logout=1` }}>
@@ -224,7 +259,7 @@ const DatelineBand = ({ channelSlug, session, channelDetails, user }) => {
 
 
                 </HorizWrap>
-        }
+        }</VerticalWrap>
     </StyledWrapper >
 }
 

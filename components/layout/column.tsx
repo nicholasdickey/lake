@@ -248,7 +248,19 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
     console.log("**** FirstColumn:", JSON.stringify({qparamsType:qparams.type,isLeft,spaces, selector, type, msc, session}))
     if (selector == 'newsviews')
         selector = 'mix';
-    selector = fullPage?isLeft ? ((qparams.type == 'newsline' || qparams.type == 'solo') ? session.leftColumnOverride : topicOverride.leftColumnOverride) || selector : selector: (qparams.type == 'newsline' || qparams.type == 'solo')?session.leftColumnOverride||selector:selector;
+
+    if(fullPage){
+        if(qparams.type == 'newsline' || qparams.type == 'solo'){
+            selector=session.leftColumnOverride ||selector;
+        }
+        else {
+            selector= topicOverride.leftColumnOverride||selector;
+        }
+    }
+    else if(isLeft){
+        selector=session.leftColumnOverride ||selector;
+    }
+   // selector = fullPage?isLeft ? ((qparams.type == 'newsline' || qparams.type == 'solo') ? esession.leftColumnOverrid : topicOverride.leftColumnOverride) || selector : selector: (qparams.type == 'newsline' || qparams.type == 'solo')?session.leftColumnOverride||selector:selector;
    
     const name = selector == 'mix' ? 'news&views' : selector == 'tag' ? 'publication feed' : selector == 'topics' ? 'active topics' : selector == 'reacts' ? 'comments' : selector;
 

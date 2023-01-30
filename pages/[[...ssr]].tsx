@@ -2,8 +2,10 @@ import React from "react"
 import Common, { CommonProps } from "../components/common"
 import Bowser from "bowser";
 import { SWRConfig, unstable_serialize } from 'swr'
+import axios from 'axios';
 import { fetchChannelConfig, fetchChannelLayout, fetchUser, fetchMyNewsline, fetchPublications, 
-    fetchPublicationCategories, fetchPublicationsKey, fetchMyNewslineKey, Filters,fetchChannelLayoutKey,fetchTopic } from '../lib/lakeApi';
+    fetchPublicationCategories, fetchPublicationsKey, fetchMyNewslineKey, Filters,
+    fetchChannelLayoutKey,fetchTopic,processLoginCode,initLoginSession } from '../lib/lakeApi';
 import { withSessionSsr } from '../lib/withSession';
 import { fetchQueues } from '../lib/ssrQueueFetches';
 
@@ -31,7 +33,7 @@ export default function Home({ session, qparams, fallback }: CommonProps) {
 
 export const getServerSideProps = withSessionSsr(
     async function getServerSideProps(context: GetServerSidePropsContext) {
-
+        var code:string|undefined = context.query["code"] as string|undefined;
         // parse dynamic params:
         let ssr = context.params?.ssr as string[];
         if (!ssr)
@@ -110,9 +112,28 @@ export const getServerSideProps = withSessionSsr(
             cc,
             timestamp: Date.now() / 1000 | 0
         }
-        const isFirstServerCall = context.req?.url?.indexOf('/_next/data/') === -1
-       
+        //const isFirstServerCall = context.req?.url?.indexOf('/_next/data/') === -1
+       if(code){
+            const user= await processLoginCode(code);
+            if(user){
+                const {username}=user;
+                axios.post(`/api/session/save`, { session: {userslug:username} });
+                if(context.req.session.options){
+                    context.req.session.options.userslug = username;
+                    await context.req.session.save();
+                    const userSession=await initLoginSession(username,options)
+                    if(userSession){
+                        options=userSession;
+                        context.req.session.options = options;
+                        await context.req.session.save();
+                    }
+                }
 
+            }
+        } 
+        else if(options.userslug){
+            //getUserSession 
+        }
 
         const channelConfig = await fetchChannelConfig(newsline);
         //const sessionid=options.hasNewslines?options.sessionid:'';

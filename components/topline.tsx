@@ -159,7 +159,7 @@ const Band = ({ session, upd }: { session: Options, upd: any }) => {
 
 export const Topline = ({ updateTheme, session, layout, updateSession, channelDetails }: { updateTheme: any, session: Options, layout: any, updateSession: any, channelDetails: any }) => {
   const upd = updateSession;
-  console.log("RENDER TOPLINE", layout);
+  //console.log("RENDER TOPLINE", layout);
   const hpads = layout.hpads;
   const topline = channelDetails.topline;
 

@@ -161,7 +161,7 @@ const Comment = styled.div`
 const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { extraWide: boolean, item: any, isTopic: boolean, qType?: string, singlePanel?: boolean, fullPage?: boolean }) => {
 
     const isTag = qType == 'tag';
-    console.log("Qwiket render ", singlePanel, isTopic, qType, isTag)
+    //console.log("Qwiket render ", singlePanel, isTopic, qType, isTag)
     const router = useRouter();
     const { session, qparams } = useAppContext();
     const isReact = item && typeof item.qpostid !== 'undefined' && item.qpostid;
@@ -210,8 +210,8 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
 
         // console.log("checking for code tag",bodyHtml?.indexOf('<code>'));
 
-        console.log("BODY:", body)
-        console.log(JSON.stringify({ isTopic, singlePanel }))
+        //console.log("BODY:", body)
+        //console.log(JSON.stringify({ isTopic, singlePanel }))
 
         const swipe = (position: any, event: any, type: string) => {
             console.log("swipe", position, event, type);
@@ -269,7 +269,7 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
         if (!item.catIcon) {
             console.log("********************************************************************************************************")
         }
-        console.log("qwiket render 2 istag", isTag, 'diff:', diff)
+       // console.log("qwiket render 2 istag", isTag, 'diff:', diff)
         if (slug == 'loading') {
             return <Link href={`/${qparams.forum}/topic/${tag}/${slug}${qparams.layoutNumber!='l1'?'/'+qparams.layoutNumber:''}`}><VerticalWrap isTopic={isTopic}>
                 <Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,

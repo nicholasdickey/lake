@@ -20,7 +20,7 @@ const Topic = ({singlePanel,fullPage}:{singlePanel?:boolean,fullPage?:boolean}) 
     }
     return <Qwiket extraWide={false} item={item} isTopic={true} singlePanel={singlePanel}></Qwiket>
   }
-  console.log("passing to Disqus:",data)
+ // console.log("passing to Disqus:",data)
   return <><Qwiket extraWide={false} item={data?.item} isTopic={true} singlePanel={singlePanel}></Qwiket>
   <Disqus contextUrl={'/context/channel/qwiket'} forum={qparams.forum} title={data?.title} realDisqThreadid={qparams.threadid} cc={qparams.cc} slug={qparams.threadid} fullPage={fullPage}/></>
 }

@@ -86,7 +86,7 @@ background-color:var(--background);
 
 export default function Home({ session: startSession, qparams }: CommonProps) {
 
-  console.log("HOME:", qparams, startSession);
+ // console.log("HOME:", qparams, startSession);
   const isFallback = qparams && qparams.newsline != 'fallback' ? false : true;
   //if(isFallback)
   //return <div>Fallback</div>

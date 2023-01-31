@@ -82,7 +82,7 @@ const SitenameBox=styled.div`
 `
 
 const HotlistItem=({ session, qparams,item,spaces }: { session: Options, qparams: Qparams,item:any,spaces:number}) => {
-    console.log("Hotlist item",item)
+    //console.log("Hotlist item",item)
     return <ImageBox spaces={spaces} loud={session.loud} >
         <OpacityBox loud={session.loud}>
             <NextImage style={{objectFit:'cover'}} placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={item.image} alt={item.title} fill={true} /></OpacityBox>
@@ -97,13 +97,13 @@ const Hotlist = ({ session, qparams,spaces }: { session: Options, qparams: Qpara
     //const [lastid, setLastid] = useState(0);
 
     const key = ['queue', 'hot', qparams.newsline,/* qparams.forum, qparams.tag, 0, 0, session.sessionid, session.userslug,''*/];
-    console.log('useSwr HOTLIST',key)
+   // console.log('useSwr HOTLIST',key)
     const { data, error: queueError } = useSWR(key, fetchQueue,{
         refreshInterval:10000
     });
-    console.log("RENDER HOTLIST",spaces,session,key,data);
+   // console.log("RENDER HOTLIST",spaces,session,key,data);
     if(!data||data.fallback){
-        console.log("NO DATA or fallback")
+       // console.log("NO DATA or fallback")
         let fallbackData=[];
         for(let i=0;i<spaces;i++){
             fallbackData.push(<HotlistItem key={`hotlistitem-${i}`} session={session} qparams={qparams} item={{

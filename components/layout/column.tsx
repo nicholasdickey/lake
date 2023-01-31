@@ -154,7 +154,7 @@ const LeftSelector = ({ qType, updateSession, name, fullPage }: { qType: string,
     const { channelDetails, qparams, newslineSingleSelectors, topicSingleSelectors } = useAppContext();
     if(!fullPage)
     fullPage=false;
-    console.log("LeftSelector", fullPage)
+   // console.log("LeftSelector", fullPage)
     const choices = [
         {
             qType: 'mix',
@@ -172,7 +172,7 @@ const LeftSelector = ({ qType, updateSession, name, fullPage }: { qType: string,
             selected: qType == 'reacts'
         }
     ]
-    console.log("remder LeftSelector", fullPage, qType, channelDetails)
+   // console.log("remder LeftSelector", fullPage, qType, channelDetails)
     const onClick = (type: string) => {
         console.log("onClick", type)
         updateSession({ leftColumnOverride: type });
@@ -187,7 +187,7 @@ const LeftSelector = ({ qType, updateSession, name, fullPage }: { qType: string,
             if (index >= newslineSingleSelectors.length)
                 index = 0;
             const node = newslineSingleSelectors[index];
-            console.log("rotate:", node, index, newslineSingleSelectors)
+           // console.log("rotate:", node, index, newslineSingleSelectors)
             updateSession({ leftColumnOverride: node.qType });
 
         }
@@ -245,7 +245,7 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
     let msc = column.msc;
     const [topicOverride, setTopicOverride] = useState({ leftColumnOverride: 'topic' });
     const fullPage = spaces < 3;
-    console.log("**** FirstColumn:", JSON.stringify({qparamsType:qparams.type,isLeft,spaces, selector, type, msc, session}))
+  //  console.log("**** FirstColumn:", JSON.stringify({qparamsType:qparams.type,isLeft,spaces, selector, type, msc, session}))
     if (selector == 'newsviews')
         selector = 'mix';
 
@@ -264,12 +264,12 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
    
     const name = selector == 'mix' ? 'news&views' : selector == 'tag' ? 'publication feed' : selector == 'topics' ? 'active topics' : selector == 'reacts' ? 'comments' : selector;
 
-    console.log("After OverrideColumn:", { isLeft, spaces, selector, type, msc, session });
+  //  console.log("After OverrideColumn:", { isLeft, spaces, selector, type, msc, session });
 
     if(qparams.type=='newsline'||qparams.type=='solo'){
         if(selector=='topic'||selector=='feed')
         selector='mix';
-        console.log("setTopicOverride")
+       // console.log("setTopicOverride")
         setTimeout(()=>setTopicOverride({ leftColumnOverride: 'topic' }),1);
     }
     //console.log("**************************************Column:", spaces, selector, type, msc, session)
@@ -292,7 +292,7 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
                 else {
                     // console.log(`dbg: q from cache`,selector)
                 }
-                console.log('dbg column:', selector, name)
+              // console.log('dbg column:', selector, name)
                 return <StyledColumn width={width} data-id="styled-column" key={`${selector}-column`}>
                     <ColumnHeader> <InnerHeader>{isLeft ? <LeftSelector qType={selector} name={name} updateSession={updateSession} fullPage={fullPage} /> : name}</InnerHeader></ColumnHeader>
                     {q}
@@ -325,9 +325,9 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
 
             let leftWidth, rightWidth;
 
-            console.log("column MP", column.width, selector, msc)
+           // console.log("column MP", column.width, selector, msc)
             if (selector == 'topic') {
-                console.log("MP column Topic")
+               // console.log("MP column Topic")
                 leftWidth = `${((column.width - 1) / column.width) * 100}%`;
                 rightWidth = `${(1 / column.width) * 100}%`;
                 //  console.log("width left:", leftWidth, rightWidth)

@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { withSessionRoute, Options } from "../../../lib/withSession";
+import {updateUserSession} from "../../../lib/lakeApi"
 export default withSessionRoute(handler);
 var randomstring = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 /**
@@ -26,8 +27,11 @@ async function handler(
     let inSession = body.session ? (body.session) : {};
     console.log("inSession:",inSession)
     req.session.options = Object.assign(options, inSession);
-
+  
     await req.session.save();
+    if(req.session.options?.userslug){
+       await updateUserSession(req.session.options.userslug,req.session.options);
+    }
 
     res.status(200).json({})
 }

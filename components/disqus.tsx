@@ -39,7 +39,7 @@ const Local = ({ contextUrl, forum, realDisqThreadid, cc, slug, title,fullPage }
    fullPage=false;
     if(!title)
         title='';
-    console.log('LOCAL RENDER %s', title,cc)
+   // console.log('LOCAL RENDER %s', title,cc)
     //if (title) {
     var t = title.replace(/"/g, '\'');
     t = t.replace(':', '-');
@@ -74,7 +74,7 @@ const Local = ({ contextUrl, forum, realDisqThreadid, cc, slug, title,fullPage }
       }*/
     //  console.log("local: identifier:%s",identifier,url)
     // console.log('Disqus url=%s','/disqus/'+site+'/'+encodeURIComponent(identifier)+'/'+encodeURIComponent(title)+'/'+encodeURIComponent(url));
-    console.log("Disqus:",{fullPage,forum,slug,t,url,cc,draw})
+  // console.log("Disqus:",{fullPage,forum,slug,t,url,cc,draw})
     return <>{true?
         <Disqus fullPage={fullPage}><DiscussionEmbed
             shortname={forum}

@@ -1,5 +1,6 @@
 
 import axios from 'axios'
+import { off } from 'process';
 import{Options} from '../lib/withSession';
 const API_KEY = process.env.API_KEY;
 
@@ -10,7 +11,7 @@ const lakeApi = (url: string) => {
 }
 export const updateUserSession=async(userslug:string,options:Options)=>{
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/user/updateSession?`
-   console.log("calling lakeApi initLogin ", url)
+   console.log("calling lakeApi user/updateSession ", url)
    const res = await axios.post(url,{
       userslug,
       options
@@ -19,7 +20,7 @@ export const updateUserSession=async(userslug:string,options:Options)=>{
 }
 export const getUserSession=async(userslug:string)=>{
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/user/fetchSession?`
-   console.log("calling lakeApi initLogin ", url)
+   console.log("calling lakeApi user/fetchSession ", url)
    const res = await axios.post(url,{
       userslug   
    });
@@ -27,16 +28,19 @@ export const getUserSession=async(userslug:string)=>{
 }
 export const initLoginSession=async(userslug:string,options:Options)=>{
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/user/initLogin?`
-   console.log("calling lakeApi initLogin ", url)
+   console.log("calling lakeApi user/initLogin ", url)
    const res = await axios.post(url,{
       userslug,
       options
    });
-   return res.data.userSession;
+   return res.data.userSession||null;
 }
 
-export const processLoginCode=async (code:string)=>{
-   const url = `${process.env.NEXT_PUBLIC_QWIKET_API}/api?task=disqus-login&code=${code}`;
+export const processLoginCode=async (code:string,appid:string)=>{
+   if(!appid)
+   appid='1013';
+   const url = `${process.env.NEXT_PUBLIC_QWIKET_API}/api?task=disqus-login&code=${code}&appid=${appid}`;
+   
    const res = await axios.get(url);
    console.log("processLoginCode returned from axios get ",url,res.data)
    if(res.data.success){
@@ -48,9 +52,9 @@ export const processLoginCode=async (code:string)=>{
 export const fetchChannelConfig = async (slug: string) => {
    try {
       const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/channel/fetch?slug=${slug}`
-      console.log("calling lakeApi fetchChannelConfig ", url)
+    //  console.log("calling lakeApi fetchChannelConfig ", url)
       const res = await axios.get(url);
-      console.log("returned from axios get ",url,res.data)
+    //  console.log("returned from axios get ",url,res.data)
       return res.data
    }
    catch (x) {
@@ -63,9 +67,9 @@ export const fetchChannelLayout = async ([u, slug, hasLayout, sessionid, userslu
    try {
       const sessionParam = hasLayout ? userslug ? `&userslug=${userslug}` : `&sessionid=${sessionid}` : ``
       const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/layout/fetch?channel=${slug}${sessionParam}&pageType=${type}&dense=${dense}&thick=${thick}&layoutNumber=${layoutNumber}`
-       console.log("calling lakeApi fetchChannelLayout, ", url)
+    //   console.log("calling lakeApi fetchChannelLayout, ", url)
       const res = await axios.get(url);
-      console.log("return ",res.data)
+    //  console.log("return ",res.data)
       return res.data;
    }
    catch (x) {
@@ -171,7 +175,7 @@ export const fetchQueue = async ([u, qType, newsline, forum, tag, page, lastid, 
    }
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/queue/fetch?${params}`
    
-   console.log("remder fetchQueue url",url)
+  // console.log("remder fetchQueue url",url)
    let res;
    try {
       res = await axios.get(url)
@@ -192,7 +196,7 @@ export const fetchMyNewsline = async ([u, newsline, sessionid, userslug, hasNews
       sessionid = "";
 
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/newsline/fetch?navigator=1`
-   console.log("calling lakeApi fetchNAvigator, ", url)
+ //  console.log("calling lakeApi fetchNAvigator, ", url)
    let res;
    try {
       res = await axios.post(url, {
@@ -227,11 +231,11 @@ const filterValues = (filters: Filters) => {
    const filterKeys:string[] = Object.keys(filters);
    let out: string[] = [];
    for (let i = 0; i < filterKeys.length; i++) {
-      console.log("filterValues iter", i, filterKeys[i], filters[filterKeys[i]])
+      //console.log("filterValues iter", i, filterKeys[i], filters[filterKeys[i]])
       if (filters[filterKeys[i]])
          out.push(filterKeys[i])
    }
-   console.log("filterValues out:", out)
+ //  console.log("filterValues out:", out)
    return out;
 }
 export const fetchPublications = async ([u, newsline, sessionid, userslug, filters, q, hasNewsline]: fetchPublicationsKey) => {
@@ -250,7 +254,7 @@ export const fetchPublications = async ([u, newsline, sessionid, userslug, filte
    if (!q)
       q = "";
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/newsline/fetchAll`
-   console.log("calling lakeApi fetchAll, ", url, outFilters, q)
+ //  console.log("calling lakeApi fetchAll, ", url, outFilters, q)
    let res;
    try {
       res = await axios.post(url, {
@@ -289,7 +293,7 @@ export const fetchPublicationCategories = async ([u, newsline,]: [u: string, new
 
 
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/newsline/fetchPublicationCategories`
-   console.log("calling lakeApi fetchPublicationCategories, ", url)
+ // console.log("calling lakeApi fetchPublicationCategories, ", url)
    let res;
    try {
       res = await axios.post(url, {
@@ -320,7 +324,7 @@ export const updateMyNewsline = async ({ newsline, tag, switch: switchParam, ses
 
 
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/newsline/update`
-   console.log("calling lakeApi update, ", url)
+ //  console.log("calling lakeApi update, ", url)
    let res;
    try {
       res = await axios.post(url, {
@@ -336,8 +340,8 @@ export const updateMyNewsline = async ({ newsline, tag, switch: switchParam, ses
 
    }
    const data = res ? res.data : null;
-   console.log("inside updateMyNewsline", data);
-   console.log("newsline:", data.newsline)
+  // console.log("inside updateMyNewsline", data);
+  // console.log("newsline:", data.newsline)
    if (data?.success) {
       return data.newsline;
    }
@@ -355,7 +359,7 @@ export const updatePublications = async ({ newsline, tag, switch: switchParam, f
       outFilters = filterValues(filters);
 
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/newsline/updateAll`
-   console.log(" calling lakeApi updateAll, ", url,sessionid,)
+ //  console.log(" calling lakeApi updateAll, ", url,sessionid,)
    let res;
    try {
       res = await axios.post(url, {
@@ -374,8 +378,8 @@ export const updatePublications = async ({ newsline, tag, switch: switchParam, f
 
    }
    const data = res ? res.data : null;
-   console.log("inside updatePublications", data);
-   console.log("publications:", data.publications)
+  // console.log("inside updatePublications", data);
+ //  console.log("publications:", data.publications)
    if (data?.success) {
       return data.publications;
    }

@@ -236,7 +236,7 @@ const DatelineBand = ({ channelSlug, session, channelDetails, user }) => {
     let avatar = user?.avatar;
 
     let isLoggedIn = user ? 1 : 0;
-    console.log('dateline',{ isLoggedIn,dateStrging,hometown })
+    //console.log('dateline',{ isLoggedIn,dateStrging,hometown })
    // return <div/> 
     //return<SubTitle>{`${dateStrging}  ${hometown}`}</SubTitle>
     return <StyledWrapper>

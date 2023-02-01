@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 
-import { CURRENCY, MIN_AMOUNT, MAX_AMOUNT } from '../../../config'
-import { formatAmountForStripe } from '../../../utils/stripe-helpers'
+import { CURRENCY, MIN_AMOUNT, MAX_AMOUNT } from '../../../components/stripe/config'
+import { formatAmountForStripe } from '../../../lib/stripe-helpers'
 
 import Stripe from 'stripe'
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   // https://github.com/stripe/stripe-node#configuration
-  apiVersion: '2020-08-27',
+    apiVersion: '2022-11-15',
 })
 
 export default async function handler(

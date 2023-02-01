@@ -39,7 +39,7 @@ export const initLoginSession=async(userslug:string,options:Options)=>{
 
 export const processLoginCode=async (code:string,appid:string)=>{
    if(!appid)
-   appid='1013';
+   appid=process.env.NEXT_PUBLIC_APPID||'1013';
    const url = `${process.env.NEXT_PUBLIC_QWIKET_API}/api?task=disqus-login&code=${code}&appid=${appid}`;
    
    const res = await axios.get(url);

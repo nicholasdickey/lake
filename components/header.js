@@ -8,7 +8,7 @@ import Image from 'next/image'
 import { fetchUser } from '../lib/lakeApi';
 import Lowline from './lowline';
 import { UilGlassMartiniAlt } from '@iconscout/react-unicons'
-
+import { Playfair_Display } from '@next/font/google';
 import { useAppContext } from "../lib/context";
 
 //import Menu from '@material-ui/core/Menu';
@@ -24,11 +24,12 @@ import { UilNewspaper } from '@iconscout/react-unicons'
 import axios from 'axios';
 //import { UisStar } from '@iconscout/react-unicons'
 const UisStar = UilStar;
+const playfair = Playfair_Display({ subsets: ['latin'], weight: [ '500',], style: ['normal'] })
 const TitleStyledWrapper = styled.div`
 display:flex;
 width:100%;
 align-items:center;
-font-family: Playfair Display !important;
+//font-family: Playfair Display !important;
 justify-content:center;
 font-size:2rem;
 
@@ -135,7 +136,7 @@ const TitleBand = ({ title, leftLogo, rightLogo }) => {
 
 
     return <Link href="/"><TitleStyledWrapper>
-        <Logo src={leftLogo} /><Title>{title.toUpperCase()}</Title>{rightLogo ? <Logo src={rightLogo} /> : null}
+        <Logo src={leftLogo} /><Title className={playfair.className}>{title.toUpperCase()}</Title>{rightLogo ? <Logo src={rightLogo} /> : null}
     </TitleStyledWrapper></Link>
 }
 
@@ -144,7 +145,7 @@ display:flex;
 //height:120px;
 width:100%;
 align-items:center;
-font-family: Playfair Display !important;
+//font-family: Playfair Display !important;
 justify-content:space-around;
 font-size:1.8rem;
 /*@media(max-width:749px){
@@ -165,17 +166,21 @@ color:${props => props.theme.color};
 const HorizWrap = styled.div`
     display:flex;
     justify-content:flex-start;
-    margin-left:40px;
-    margin-right:40px;
+    margin-left:6px;
+    margin-right:6px;
 `
 const SubTitle = styled.div`
     display:flex;
-    font-size:1.2rem;
+    font-size:0.9rem;
     text-align:center;
-    margin-left:10px;
-    margin-right:10px;
+    margin-left:4px;
+    margin-right:4px;
+
+    @media(min-width:900px){
+        font-size:1.2rem;
+    }
     @media(min-width:1200px){
-        font-size:1.3rem;
+        font-size:1.2rem;
     }
     @media(min-width:1400px){
         font-size:1.4rem;
@@ -244,17 +249,18 @@ const DatelineBand = ({ channelSlug,  channelDetails, user,updateSession }) => {
     let avatar = user?.avatar;
 
     let isLoggedIn = user ? 1 : 0;
+    const {setLoading}=useAppContext();
     //console.log('dateline',{ isLoggedIn,dateStrging,hometown })
     // return <div/> 
     //return<SubTitle>{`${dateStrging}  ${hometown}`}</SubTitle>
-    return <StyledWrapper>
+    return <StyledWrapper className={playfair.className}>
         <VerticalWrap>
             <HorizWrap><Dateline>{`${dateStrging} | ${hometown}`}</Dateline></HorizWrap>
             {false ? <HorizWrap><AvatarGroup><Image src={avatar} width={32} height={32} />{subscr_status > 0 ? <SubscriberStar /> : null}</AvatarGroup></HorizWrap> : null}
 
             {
                 !isLoggedIn ? <SubTitle><Home><Link href={'/'}><UilNewspaper size="16" color="#888" /></Link></Home>
-                <Link href={`/api/session/login?href=${encodeURIComponent(router.asPath)}`}>Sign-in</Link>&nbsp;|&nbsp; <a>Subscribe</a> <Martini><a><UilGlassMartiniAlt size="16" color="#888" /></a></Martini></SubTitle> :
+                <Link onClick={()=>setLoading("Logging-in via Disqus...")} href={`/api/session/login?href=${encodeURIComponent(router.asPath)}`}>Sign-in</Link>&nbsp;|&nbsp; <a>Subscribe</a> <Martini><a><UilGlassMartiniAlt size="16" color="#888" /></a></Martini></SubTitle> :
                     <HorizWrap>
                         <SubTitle><Home><Link href={'/'}><UilNewspaper size="16" color="#888" /></Link></Home>
                             <a onClick={()=>logout(updateSession)}>
@@ -286,7 +292,7 @@ export const Header = ({ session, layout, channelSlug, channelDetails, newsline,
     // console.log("channelDetails",channelDetails)
     //  console.log({ newsline: newsline.toJS(), session: session.toJS() })
 
-    return <StyledHeader>
+    return <StyledHeader className={playfair.classname}>
         <TitleBand title={`${newsline.slug != channelSlug ? `${channelDetails.shortname}:` : ''}${newsline.displayName}`} leftLogo={channelDetails.logo} rightLogo={newsline.logo} />
         <DatelineBand channelSlug={channelSlug} session={session} user={user} channelDetails={channelDetails} updateSession={updateSession} />
         <Lowline session={session} lowline={channelDetails.lowline} />

@@ -28,6 +28,7 @@ export interface CommonProps {
   fallback?: any
 }
 const roboto = Roboto({ subsets: ['latin'], weight: ['300', '400', '700'], style: ['normal', 'italic'] })
+
 const isBrowser = () => typeof window !== `undefined`
 interface GridProps {
   hpads: any;
@@ -75,7 +76,23 @@ const PageWrap = styled.div`
   flex-direction:column;
   align-items:center;
   `;
+const Loading=styled.div`
 
+  position: fixed;
+  z-index: 9999;
+  top: 50%;
+  left: 50%;
+  background-color:var(--background);
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  opacity:0.8;
+  font-weight:700;
+
+`
 /*color:var(--text);
 background-color:var(--background);
 */
@@ -96,6 +113,7 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
   const { data: channelConfig, error: channelError } = useSWRImmutable(newsline, fetchChannelConfig)
   const [session, setSession] = useState(startSession);
   const [theme, setTheme] = useState(session.dark != -1 ? session.dark == 1 ? 'dark' : 'light' : "unknown")
+  const [loading,setLoading]=useState("");
  // console.log("remder common.tsz: session.leftColumnOverride:", session.leftColumnOverride)
   const router = useRouter()
   //const sessionid=session.hasLayout?session.sessionid:'';
@@ -178,7 +196,7 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
   //console.log("RENDER: width=", session.width)
  // console.log("LAYOUT:", layout,session)
   if(!layout)
-  return <div>Loading...</div>
+  return <Loading className={roboto.className}>Loading...</Loading>
   //if(!layout)
   //layout=oldLayout;
   //console.log("QPARAMS",qparams);
@@ -190,7 +208,7 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
 
 
   if (isFallback)
-    return <div>Fallback Loading...</div>
+    return <Loading className={roboto.className}>Fallback Loading...</Loading>
 
   return (
     <>
@@ -204,11 +222,11 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
 
 
       </Head>
-      <main className={roboto.className}>
+      <main className={roboto.className} >
         <ThemeProvider theme={palette}>
           <GlobalStyle />
-          <AppWrapper session={session} qparams={qparams} channelDetails={channelConfig.channelDetails}>
-            <div>
+          <AppWrapper session={session} qparams={qparams} channelDetails={channelConfig.channelDetails} setLoading={setLoading}>
+            {loading?<Loading className={roboto.className}>{loading}</Loading>:null}<div>
               <Topline updateTheme={updateTheme} session={session} layout={layout} updateSession={updateSession} channelDetails={channelConfig.channelDetails} />
               <Grid hpads={hpads}>
                 <PageWrap>

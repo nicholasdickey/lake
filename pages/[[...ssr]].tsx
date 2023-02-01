@@ -53,10 +53,13 @@ export const getServerSideProps = withSessionSsr(
         const {code,state}:{code:string,state:string}=context.query as any;
         // parse dynamic params:
         let ssr = context.params?.ssr as string[];
-        if (!ssr)
             ssr = ["usconservative"];
         let [forum] = ssr;
-      //  console.log("FORUM:", forum)
+        console.log("FORUM:", forum)
+        if(forum=='index'){
+            console.log("INDEX FORUM")
+            forum='usconservative';
+        }
         let type = ssr[1];
         if (!type)
             type = 'newsline';

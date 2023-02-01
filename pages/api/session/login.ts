@@ -20,7 +20,7 @@ async function handler(
    // let options: Options = req.session.options ;
    // const {sessionid}=options;
    let {appid=1013,href='/'}=req.query;
-   const state=encodeURIComponent(JSON.stringify({href,appid}));
+   const state=encodeURIComponent(`{"href":"${href}"}`);
    const url = `${process.env.NEXT_PUBLIC_QWIKET_API}/api?task=disqus-login&appid=${appid}&state=${state}`;
    console.log("LOGIN API:",url)
    let result;

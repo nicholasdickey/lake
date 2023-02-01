@@ -33,7 +33,8 @@ export const initLoginSession=async(userslug:string,options:Options)=>{
       userslug,
       options
    });
-   return res.data.userSession||null;
+   console.log("initLogin returned",res.data)
+   return JSON.parse(res.data.userSession)||null;
 }
 
 export const processLoginCode=async (code:string,appid:string)=>{
@@ -87,7 +88,7 @@ export const fetchUser = async ([u, userslug]: [u: string, userslug: string]) =>
       const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/user/fetch?userslug=${userslug}`
       // console.log("calling lakeApi, ",url)
       const res = await axios.get(url);
-      return res.data;
+      return res.data.user;
    }
    catch (x) {
       console.log("EXCEPTION in fetchUser", x)

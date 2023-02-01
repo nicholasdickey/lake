@@ -21,6 +21,7 @@ import { useAppContext } from "../lib/context";
 
 import { UilStar } from '@iconscout/react-unicons'
 import { UilNewspaper } from '@iconscout/react-unicons'
+import axios from 'axios';
 //import { UisStar } from '@iconscout/react-unicons'
 const UisStar = UilStar;
 const TitleStyledWrapper = styled.div`
@@ -192,74 +193,82 @@ const AvatarGroup = styled.div`
         display:flex;
         align-items:flex-begin;
      `
-const Dateline=styled.div`
+const Dateline = styled.div`
     font-size:0.7rem;
     color:#808080;
     //margin-left:20px;
-`     
-const Martini=styled.div`
+`
+const Martini = styled.div`
     margin-left:30px;
     margin-top:2px;
 `
-const Home=styled.div`
+const Home = styled.div`
     margin-right:30px;
     margin-top:2px;
 `
-const VerticalWrap=styled.div`
+const VerticalWrap = styled.div`
     display:flex;
     flex-direction: column;
     align-items: center;
 `
+const login=async (href)=>{
+    await axios.get(`/api/session/login?href=${encodeURIComponent(href)}`)
 
-const DatelineBand = ({ channelSlug, session, channelDetails, user }) => {
+}
+const logout=async (updateSession)=>{
+    console.log("logout:updateSession",updateSession)
+  await updateSession({userslug:''})
+}
+const DatelineBand = ({ channelSlug,  channelDetails, user,updateSession }) => {
 
     let subscr_status = +user?.subscr_status;
     if (!subscr_status)
         subscr_status = 0;
     //console.log({ subscr_status })
+    const router=useRouter(); 
 
+    const { qparams } = useAppContext();
 
-    const {  qparams } = useAppContext();
-
-
+    console.log('DATELINE FFuser:', user ,updateSession)
 
     let hometown = channelDetails.hometown;
     let channel = channelSlug;
     // console.log("CHANNEL:", channel)
-   
-    const time=qparams.timestamp;
+
+    const time = qparams.timestamp;
     var date = new Date(time * 1000);
     //let date = new Date(time);
-    let dateStrging = date.toLocaleString("en-US", {timeZone: "America/Chicago",dateStyle:"medium"})//date.toDateString();
+    let dateStrging = date.toLocaleString("en-US", { timeZone: "America/Chicago", dateStyle: "medium" })//date.toDateString();
     let name = user?.user_name;
     let approver = user?.approver;
     let avatar = user?.avatar;
 
     let isLoggedIn = user ? 1 : 0;
     //console.log('dateline',{ isLoggedIn,dateStrging,hometown })
-   // return <div/> 
+    // return <div/> 
     //return<SubTitle>{`${dateStrging}  ${hometown}`}</SubTitle>
     return <StyledWrapper>
         <VerticalWrap>
             <HorizWrap><Dateline>{`${dateStrging} | ${hometown}`}</Dateline></HorizWrap>
-            {isLoggedIn ? <HorizWrap><AvatarGroup><Image src={avatar} width={32} height={32} />{subscr_status > 0 ? <SubscriberStar /> : null}</AvatarGroup></HorizWrap> : null}
+            {false ? <HorizWrap><AvatarGroup><Image src={avatar} width={32} height={32} />{subscr_status > 0 ? <SubscriberStar /> : null}</AvatarGroup></HorizWrap> : null}
 
-        {
-            !isLoggedIn ? <SubTitle><Home><Link href={'/'}><UilNewspaper size="16" color="#888"/></Link></Home><a>Sign-in</a>&nbsp;|&nbsp; <a>Subscribe</a> <Martini><a><UilGlassMartiniAlt size="16" color="#888" /></a></Martini></SubTitle>:
-                <HorizWrap>
-                    <SubTitle>
-                        <a onClick={() => { console.log("sign out:", `/disqus-logout?channel=${channel}`); window.location = `/channel/${channel}?logout=1` }}>
-                            Sign Out
-                        </a>
-                    </SubTitle>
-                    {!approver ? <SubTitle>
-                        |
-                    </SubTitle> : null}
-                    <SubTitle> {`${isLoggedIn ? approver ? '[' + name + ']' : name : 'Subscribe'}`}</SubTitle>
+            {
+                !isLoggedIn ? <SubTitle><Home><Link href={'/'}><UilNewspaper size="16" color="#888" /></Link></Home>
+                <Link href={`/api/session/login?href=${encodeURIComponent(router.asPath)}`}>Sign-in</Link>&nbsp;|&nbsp; <a>Subscribe</a> <Martini><a><UilGlassMartiniAlt size="16" color="#888" /></a></Martini></SubTitle> :
+                    <HorizWrap>
+                        <SubTitle><Home><Link href={'/'}><UilNewspaper size="16" color="#888" /></Link></Home>
+                            <a onClick={()=>logout(updateSession)}>
+                                Sign Out
+                            </a>
+                        </SubTitle>
+                        {!approver ? <SubTitle>
+                            |
+                        </SubTitle> : null}
+                        <SubTitle> {`${isLoggedIn ? approver ? '[' + name + ']' : name : 'Subscribe'}`}<Martini><a><UilGlassMartiniAlt size="16" color="#888" /></a></Martini></SubTitle>
 
 
-                </HorizWrap>
-        }</VerticalWrap>
+                    </HorizWrap>
+            }</VerticalWrap>
     </StyledWrapper >
 }
 
@@ -272,6 +281,7 @@ width:100%;
 export const Header = ({ session, layout, channelSlug, channelDetails, newsline, qparams, updateSession }) => {
 
     const { data: user, error: userError } = useSWR(['user', session.userslug], fetchUser)
+    
     // console.log("dark header render",session)
     // console.log("channelDetails",channelDetails)
     //  console.log({ newsline: newsline.toJS(), session: session.toJS() })

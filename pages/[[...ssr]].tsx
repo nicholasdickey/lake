@@ -133,16 +133,17 @@ export const getServerSideProps = withSessionSsr(
         }
         //const isFirstServerCall = context.req?.url?.indexOf('/_next/data/') === -1
         if (code) {
-          //  console.log("CODE: ",code,state);
+            console.log("CODE: ",code,state);
             const jsonState=JSON.parse(state);
             const {href,appid}=jsonState;
             console.log("CODE: ",code,state,href,appid);
-            const user = await processLoginCode(code,appid);
+            const  user= await processLoginCode(code,appid);
             if (user) {
                 const { slug } = user;
-
+                console.log("ffff1")
               //  axios.post(`/api/session/save`, { session: { userslug: slug } });
                 if (context.req.session.options) {
+                    console.log("context.req.session.option")
                     context.req.session.options.userslug = slug;
                     await context.req.session.save();
 
@@ -155,9 +156,18 @@ export const getServerSideProps = withSessionSsr(
                         await context.req.session.save();
                     }
                 }
+                console.log("redirecting after code",href)
+                return {
+                    redirect: {
+                      permanent: false,
+                      destination: href,
+                    },
+                    props:{},
+                  };
 
             }
-            context.res.writeHeader(301,{Location:href} );
+           
+            //context.res.writeHeader(301,{Location:href} );
         }
         else if (options.userslug) {
             const userSession = await getUserSession(options.userslug)

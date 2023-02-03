@@ -3,9 +3,10 @@ import { useCallback, useState } from "react";
 import styled from 'styled-components';
 import { Options } from '../lib/withSession';
 import { Qparams } from '../lib/qparams';
+import Link from 'next/link'
 import useSWR, { useSWRConfig } from 'swr';
 import useSWRImmutable from 'swr/immutable'
-import { fetchMyNewsline, fetchPublications, fetchPublicationCategories, updateMyNewsline, updatePublications, fetchPublicationsKey, fetchMyNewslineKey,Filters } from '../lib/lakeApi';
+import { fetchMyNewsline, fetchPublications, fetchPublicationCategories, updateMyNewsline, updatePublications, fetchPublicationsKey, fetchMyNewslineKey, Filters } from '../lib/lakeApi';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import NextImage from 'next/image';
@@ -84,7 +85,7 @@ const Name = styled.div`
     margin-right:16px;
     color:var(--highlight);
 `
-const Highlight=styled.div`
+const Highlight = styled.div`
     color:var(--text);
 `
 const TabsWrap = styled.div`
@@ -152,7 +153,7 @@ const Check = ({ label, checked, onChange, disabled }: { label?: string, checked
 const Navigator = ({ session, qparams, updateSession }: { session: Options, qparams: Qparams, updateSession: any }) => {
     const router = useRouter();
     let { newsline, navTab } = qparams;
-    
+
 
     console.log("Navigator, navTab=", navTab, router.query)
     if (router.query) {
@@ -189,8 +190,8 @@ interface Publication {
     switch: string;
     icon: string,
     tag: string;
-    default:boolean;
-    description:string
+    default: boolean;
+    description: string
 }
 const MyNewsline = ({ session, qparams, updateSession }: { session: Options, qparams: Qparams, updateSession: any }) => {
     const { newsline } = qparams;
@@ -200,10 +201,15 @@ const MyNewsline = ({ session, qparams, updateSession }: { session: Options, qpa
     const { data: myNewsline, error: myNewslineError, mutate } = useSWR(key, fetchMyNewsline);
     console.log("MyNewsline", myNewsline);
 
-    return <><VerticalSpacer/>{myNewsline ? myNewsline.map((n: Publication) => <>
-        <PublicationRow key={`afkkqkqqqq-${n.tag}`}><Left><PubImageBox><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={n.icon} alt={n.name} fill={true} /></PubImageBox>
-            <Name>{!n.default?<Highlight>{n.name}</Highlight>:<>{n.name}</>}</Name></Left>
-            <Check checked={n.switch == 'on'} onChange={async (s:boolean) => {
+    return <><VerticalSpacer />{myNewsline ? myNewsline.map((n: Publication) => <>
+        <PublicationRow key={`afkkqkqqqq-${n.tag}`}>
+            <Link href={`/${qparams.forum}/solo/${n.tag}/${qparams.layoutNumber}/${qparams.navTab}`}><Left>
+                <PubImageBox>
+                    <NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={n.icon} alt={n.name} fill={true} />
+                </PubImageBox>
+                <Name>{!n.default ? <Highlight>{n.name}</Highlight> : <>{n.name}</>}</Name>
+            </Left></Link>
+            <Check checked={n.switch == 'on'} onChange={async (s: boolean) => {
                 updateSession({ hasNewslines: true });
                 mutate(updateMyNewsline({ tag: n.tag, switch: s ? 'on' : 'off', newsline, sessionid, userslug: session.userslug }),
                     {
@@ -223,7 +229,7 @@ const MyNewsline = ({ session, qparams, updateSession }: { session: Options, qpa
                     })
             }} disabled={false} />
         </PublicationRow>
-        
+
     </>) : "Loading..."}</>
 }
 
@@ -234,22 +240,22 @@ const Publications = ({ session, qparams, updateSession }: { session: Options, q
     let { sessionid, userslug, hasNewslines } = session;
     //sessionid//=hasNewslines?sessionid:'';
     const [q, setQ] = useState("");
-  
+
     const { data: publicationCategories, error: publicationCategoriesError }: { data: FilterDatum[], error: string | undefined } = useSWRImmutable(['publicationCategories', newsline], fetchPublicationCategories);
 
 
-    const [filters, setFilters]: [filters: Filters, setFilters: any] = useState(() => publicationCategories?publicationCategories.reduce((accum:Filters, currentVal) => {
+    const [filters, setFilters]: [filters: Filters, setFilters: any] = useState(() => publicationCategories ? publicationCategories.reduce((accum: Filters, currentVal) => {
 
         accum[currentVal.tag] = true;
         console.log("reduce:", currentVal, accum)
         return accum;
-    },{}):{});
-    console.log("RENDER PUBLICATIONS",session)
+    }, {}) : {});
+    console.log("RENDER PUBLICATIONS", session)
     // const out = filterValues(filters);
     //console.log("out", out)
     console.log("filters", filters)
-    const key:fetchPublicationsKey=['publications', newsline,  sessionid , userslug, filters, q,hasNewslines];
-    const { data: publications, error: publicationsError,mutate:mutatePublications } = useSWR(key, fetchPublications, {
+    const key: fetchPublicationsKey = ['publications', newsline, sessionid, userslug, filters, q, hasNewslines];
+    const { data: publications, error: publicationsError, mutate: mutatePublications } = useSWR(key, fetchPublications, {
         revalidateOnFocus: false,
         revalidateOnReconnect: false
     });
@@ -265,30 +271,35 @@ const Publications = ({ session, qparams, updateSession }: { session: Options, q
             if (doFetch) {
                 //  setTimeout(() => {
                 //const out = filterValues(filters);
-               // console.log("call mutate=>", filters);
-                const key:fetchPublicationsKey=['publications', newsline,sessionid, userslug, filters, q,hasNewslines];
+                // console.log("call mutate=>", filters);
+                const key: fetchPublicationsKey = ['publications', newsline, sessionid, userslug, filters, q, hasNewslines];
                 mutate(key, undefined, { revalidate: true });
-               // console.log("after mutate")
+                // console.log("after mutate")
                 // }, 1);
             }
             setFilters(newFilters);
         }
         //}
-    }, [filters, mutate, sessionid, userslug, newsline, q,hasNewslines])
+    }, [filters, mutate, sessionid, userslug, newsline, q, hasNewslines])
     //  const { data:publicationCategories, error: publicationCategoriesError } = useSWR(['publicationCategories', newsline], fetchPublicationCategories);
     //  console.log("publicationCategories",publicationCategories)
 
     console.log("render publications", publications)
     return <><SearchBox ><SearchField
         placeholder="Search..."
-        onSearchClick={(t: string) => { setQ(t); } }
+        onSearchClick={(t: string) => { setQ(t); }}
         searchText="" classNames={undefined} disabled={undefined} onChange={undefined} onEnter={undefined} onBlur={undefined} //artifact of using a legacy jsx component
-        theme={undefined}    /></SearchBox><Hr /><Row>
+        theme={undefined} /></SearchBox><Hr /><Row>
             <FilterWrap> <FiltersContainer newsline={newsline} callback={setF} publicationCategories={publicationCategories} /></FilterWrap>
         </Row><Hr />
-        {publications ? publications.map((n: Publication) => <><PublicationRow key={`afpqhqpd-${n.name}`}><Left><PubImageBox><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={n.icon} alt={n.name} fill={true} /></PubImageBox>
-            <Name><Highlight>{n.name}</Highlight></Name></Left>
-            <Check checked={n.switch == 'on'} onChange={async (s:boolean) => {
+        {publications ? publications.map((n: Publication) => <><PublicationRow key={`afpqhqpd-${n.name}`}>
+        <Link href={`/${qparams.forum}/solo/${n.tag}/${qparams.layoutNumber}/${qparams.navTab}`}><Left>
+                <PubImageBox>
+                    <NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={n.icon} alt={n.name} fill={true} />
+                </PubImageBox>
+                <Name><Highlight>{n.name}</Highlight></Name>
+            </Left></Link>
+            <Check checked={n.switch == 'on'} onChange={async (s: boolean) => {
                 console.log("PUBLICATION ON CLICK callling mutate")
                 //need to mutate session.hasNewslines
                 updateSession({ hasNewslines: true });
@@ -310,7 +321,7 @@ const Publications = ({ session, qparams, updateSession }: { session: Options, q
                     })
             }} disabled={false} />
         </PublicationRow>
-        <Description>{n.description}</Description></>
+            <Description>{n.description}</Description></>
         ) : "Loading..."}{publicationsError}</>
 }
 interface FilterDatum {
@@ -320,13 +331,13 @@ interface FilterDatum {
 }
 const FiltersContainer = ({ newsline, callback, publicationCategories }: { newsline: string, callback: any, publicationCategories: any }) => {
     console.log("publicationCategories-->", publicationCategories)
-    return <Left>{publicationCategories ? publicationCategories.map((f:FilterDatum) => <Filter key={`wwfvpvh-${f.name}`} name={f.name} tag={f.tag} callback={callback}></Filter>) : 'Loading...'}</Left>
+    return <Left>{publicationCategories ? publicationCategories.map((f: FilterDatum) => <Filter key={`wwfvpvh-${f.name}`} name={f.name} tag={f.tag} callback={callback}></Filter>) : 'Loading...'}</Left>
 }
 const Filter = ({ name, tag, callback }: { name: string, tag: string, callback: any }) => {
     const [checked, setChecked] = useState(true);
-    callback(tag, checked ? true :false, false);
-    return <FilterRow>{name}  
-    <Check checked={checked} onChange={(c: boolean) => { setChecked(c); callback(tag, c ? 'on' : 'off', true) }} disabled={false} />
+    callback(tag, checked ? true : false, false);
+    return <FilterRow>{name}
+        <Check checked={checked} onChange={(c: boolean) => { setChecked(c); callback(tag, c ? 'on' : 'off', true) }} disabled={false} />
     </FilterRow>
 }
 

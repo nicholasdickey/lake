@@ -96,7 +96,7 @@ const Hotlist = ({ session, qparams,spaces }: { session: Options, qparams: Qpara
 
     //const [lastid, setLastid] = useState(0);
 
-    const key = ['queue', 'hot', qparams.newsline,/* qparams.forum, qparams.tag, 0, 0, session.sessionid, session.userslug,''*/];
+    const key = ['queue', 'hot', qparams.newsline,0,/* qparams.forum, qparams.tag, 0, 0, session.sessionid, session.userslug,''*/];
    // console.log('useSwr HOTLIST',key)
     const { data, error: queueError } = useSWR(key, fetchQueue,{
         refreshInterval:10000

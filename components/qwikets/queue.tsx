@@ -130,7 +130,8 @@ const Notifications = ({ isLeft, qType, newsline, forum, lastid, tail, sessionid
         isLeft: boolean, qType: string, newsline: string, forum: string, lastid: string, tail: number, sessionid: string, userslug: string, reset: any,
         tag: string
     }) => {
-    const key = ['notif', qType, newsline, forum, tag ? tag : '', 0, lastid, sessionid, userslug, tail];
+    const { session, qparams } = useAppContext();
+    const key = ['notif', qType, newsline,qparams.type=='solo'?1:0, forum,  (qType == 'tag'||qparams.type=='solo') ? qparams.tag : '', 0, lastid, sessionid, userslug, tail];
     const { data, error } = useSWR(key, fetchQueue, {
         refreshInterval: qType == 'topics' ? 24 * 3600 * 1000 : 5000
     });
@@ -165,7 +166,9 @@ const Segment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, s
   
     const [hd, setHd] = useState(hasData)
    
-    const key = ['queue', qType, qparams.newsline, qparams.forum, qType == 'tag' ? qparams.tag : '', pageIndex, lastid, session.sessionid, session.userslug, tail, ''];
+//    const key = ['queue', qType, qparams.newsline, qparams.type=='solo'?1:0,qparams.forum, (qType == 'tag'||qparams.type=='solo') ? qparams.tag : '', pageIndex, lastid, session.sessionid, session.userslug, tail, ''];
+    const key = ['queue', qType, qparams.newsline, qType=='newsline'&&qparams.type=='solo'?1:0,qparams.forum, (qType == 'tag'||qType=='newsline'&&qparams.type=='solo') ? qparams.tag : '', pageIndex, 0, session.sessionid, session.userslug, 0, ''];
+
     // console.log("Segment before fetchQueue", { qType, pageIndex, returnedLastid, returnedTail })
     const { data, error: queueError, mutate } = useSWR(key, fetchQueue);
 
@@ -209,10 +212,10 @@ const FirstSegment = ({ resetSegments,isLeft, extraWide, qType, lastid, tail, pa
             //  console.log("remder first segment. got new lastid", qType, data.lastid, lastid)
         }
     }, []);
-    const key = ['queue', qType, qparams.newsline, qparams.forum, qType == 'tag' ? qparams.tag : '', pageIndex, 0, session.sessionid, session.userslug, 0, ''];
+    const key = ['queue', qType, qparams.newsline, qType=='newsline'&&qparams.type=='solo'?1:0,qparams.forum, (qType == 'tag'||qType=='newsline'&&qparams.type=='solo') ? qparams.tag : '', pageIndex, 0, session.sessionid, session.userslug, 0, ''];
 
 
-    //console.log("remder FirstSegment:", { key, qType, pageIndex, returnedLastid, returnedTail, isLeft })
+    console.log("remder FirstSegment:", { type:qparams.type,key, qType, pageIndex, returnedLastid, returnedTail, isLeft })
 
     const { data, error: queueError, mutate } = useSWR(key, fetchQueue, {
         onSuccess: onData,

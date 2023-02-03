@@ -129,10 +129,10 @@ const Thick = ({ session, upd }: { session: Options, upd: any }) => {
 }
 const Dense = ({ session, upd }: { session: Options, upd: any }) => {
 
-  return <StyledCheck><Check label='Dense' checked={session.dense == 1 ? true : false} disabled={!session.thick} onChange={(checked: boolean) => {
+  return <StyledMobileCheck><Check label='Dense' checked={session.dense == 1 ? true : false} onChange={(checked: boolean) => {
     console.log("Changed And The Band")
     upd({ dense: checked ? 1 : 0 });
-  }} /></StyledCheck>
+  }} /></StyledMobileCheck>
 }
 const StyledMobileCheck = styled.div`
 display:flex;
@@ -175,6 +175,17 @@ export const Topline = ({ updateTheme, session, layout, updateSession, channelDe
 
   let width = getLayoutWidth(session.width);
   return <ToplineBand back={width>600} data-id="topline">
+  {width == 600 ? <InnerBand hpads={hpads}><div/> <Loud upd={upd} session={session} />  <Dark updateTheme={updateTheme} session={session} /><div/></InnerBand> : null}
+  {width == 750 ? <InnerBand hpads={hpads}> <div/><Loud upd={upd} session={session} />  <Dark updateTheme={updateTheme} session={session} /><div/> </InnerBand> : null}
+  {width == 900 ? <InnerBand hpads={hpads}> <Loud upd={upd} session={session} />  <Dark updateTheme={updateTheme} session={session} /> <Band upd={upd} session={session} /></InnerBand> : null}
+  {width == 1200 ? <InnerBand hpads={hpads}> <Loud upd={upd} session={session} />  <Dense upd={upd} session={session} /><Dark updateTheme={updateTheme} session={session} /> <Band upd={upd} session={session} /></InnerBand> : null}
+  {width == 1800 ? <InnerBand hpads={hpads}> <Loud upd={upd} session={session} />  <Dense upd={upd} session={session} /><Dark updateTheme={updateTheme} session={session} /> <Band upd={upd} session={session} /></InnerBand> : null}
+  {width == 2100 ? <InnerBand hpads={hpads}> <Loud upd={upd} session={session} />  
+    <Dense upd={upd} session={session} /> <Dark updateTheme={updateTheme} session={session} /> <Band upd={upd} session={session} /></InnerBand> : null}
+
+</ToplineBand>
+/*
+  return <ToplineBand back={width>600} data-id="topline">
     {width == 600 ? <InnerBand hpads={hpads}><div/> <Loud upd={upd} session={session} />  <Dark updateTheme={updateTheme} session={session} /><div/></InnerBand> : null}
     {width == 750 ? <InnerBand hpads={hpads}> <div/><Loud upd={upd} session={session} />  <Dark updateTheme={updateTheme} session={session} /><div/> </InnerBand> : null}
     {width == 900 ? <InnerBand hpads={hpads}> <Loud upd={upd} session={session} />  <Dark updateTheme={updateTheme} session={session} /> <Band upd={upd} session={session} /></InnerBand> : null}
@@ -183,5 +194,5 @@ export const Topline = ({ updateTheme, session, layout, updateSession, channelDe
     {width == 2100 ? <InnerBand hpads={hpads}> <Loud upd={upd} session={session} />   <Thick upd={upd} session={session} />
       <Dense upd={upd} session={session} /> <Dark updateTheme={updateTheme} session={session} /> <Band upd={upd} session={session} /></InnerBand> : null}
 
-  </ToplineBand>
+  </ToplineBand>*/
 };

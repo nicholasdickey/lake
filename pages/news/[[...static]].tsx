@@ -144,13 +144,7 @@ export async function getStaticProps(props: StaticParams) {
 }
 export async function getStaticPaths() {
     return {
-        paths: [{ params: { static: ["usconservative"] } },
-        {
-            params: { static: ["usconservative", "topic", "fnc", "51-slug-european-parliament-calls-for-iran-s-revolutionary-guard-to-be-put-on-the-eu-s-terrorist-list"] },
-        },
-        { 
-            params: { static: ["usconservative", "topic", "fnc", "51-slug-kyiv-hit-with-russian-missiles-in-first-attack-in-weeks"] } },
-        ],
+        paths: [{ params: { static: ["usconservative"] } }],
         fallback: true, // can also be true or 'blocking'
     }
 }

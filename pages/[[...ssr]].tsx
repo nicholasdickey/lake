@@ -187,7 +187,7 @@ export const getServerSideProps = withSessionSsr(
         const channelConfig = await fetchChannelConfig(newsline);
         //const sessionid=options.hasNewslines?options.sessionid:'';
         //console.log("GOT channelConfig",channelConfig)
-        const layoutType = type == 'topic' ? 'context' : type;
+        const layoutType = type == 'topic' ? 'context' :type=='solo'?'newsline':type;
         const key: fetchChannelLayoutKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, layoutType, options.dense, options.thick, layoutNumber];
         //console.log("CALLING fetchChannelLayout:",key);
         const channelLayout = await fetchChannelLayout(key);

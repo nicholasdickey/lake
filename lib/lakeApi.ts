@@ -108,8 +108,8 @@ export const fetchTopic=async ([u,threadid, withBody]:[u:string,threadid:string,
    }
    return res ? res.data : null;
 }
-export const fetchQueue = async ([u, qType, newsline, forum, tag, page, lastid, sessionid, userslug, tail, test,breakCache]:
-    [u: string, qType: string, newsline: string, forum?: string, tag?: string, page?: number, lastid?: string, sessionid?: string, userslug?: string, tail?: number, test?: string,breakCache?:string]) => {
+export const fetchQueue = async ([u, qType, newsline, solo, forum, tag, page, lastid, sessionid, userslug, tail, test,breakCache]:
+    [u: string, qType: string, newsline: string, solo:number,forum?: string, tag?: string, page?: number, lastid?: string, sessionid?: string, userslug?: string, tail?: number, test?: string,breakCache?:string]) => {
    let params;
   // console.log("remder fetchQueue:", `['queue',qType:${qType},newsline:${newsline},forum:${forum},tag:${tag},page:${page},lastid:${lastid},sessionid:${sessionid},userslug:${userslug},tail:${tail}]`)
    if(!page)
@@ -129,6 +129,8 @@ export const fetchQueue = async ([u, qType, newsline, forum, tag, page, lastid, 
    test='';
    if(!breakCache)
    breakCache='';
+   if(!solo)
+   solo=0;
 
    const addParams = (params: string) => {
       //  console.log("addParams1",params)
@@ -136,7 +138,9 @@ export const fetchQueue = async ([u, qType, newsline, forum, tag, page, lastid, 
          params += `&userslug=${userslug}`;
       else if (sessionid)
          params += `&sessionid=${sessionid}`;
-     
+      if(solo==1){
+         params+=`&tag=${tag}&solo=1`
+      } 
       if (tail)
          params += `&tail=${tail}`;
       if (test)

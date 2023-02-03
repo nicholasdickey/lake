@@ -185,7 +185,7 @@ const LeftSelector = ({ qType, updateSession, name, fullPage }: { qType: string,
             let index = newslineSingleSelectors.findIndex((s: SelectorChoice) => s.qType == qType);
             index += 1 * dir;
             if (index >= newslineSingleSelectors.length)
-                index = 0;
+                index = 0; 
             const node = newslineSingleSelectors[index];
            // console.log("rotate:", node, index, newslineSingleSelectors)
             updateSession({ leftColumnOverride: node.qType });
@@ -262,8 +262,8 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
     }
    // selector = fullPage?isLeft ? ((qparams.type == 'newsline' || qparams.type == 'solo') ? esession.leftColumnOverrid : topicOverride.leftColumnOverride) || selector : selector: (qparams.type == 'newsline' || qparams.type == 'solo')?session.leftColumnOverride||selector:selector;
    
-    const name = selector == 'mix' ? 'news&views' : selector == 'tag' ? 'publication feed' : selector == 'topics' ? 'active topics' : selector == 'reacts' ? 'comments' : selector;
-
+    const name = selector == 'mix' ? 'news&views' : selector == 'tag' ? 'publication feed' : selector == 'topics' ? 'active topics' : selector == 'reacts' ? 'comments' : qparams.type=='solo'?`solo ${qparams.tag}`:selector;
+   
   //  console.log("After OverrideColumn:", { isLeft, spaces, selector, type, msc, session });
 
     if(qparams.type=='newsline'||qparams.type=='solo'){
@@ -354,7 +354,7 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
                 leftWidth = '61.8%';
                 rightWidth = '38.2%';
                 let q;// = qCache[`newsline-mp`];
-                const name = 'newsline'
+               // const name = 'newsline'
                 // console.log("dbg q:",q)
                 if (!q) {
                     q = <Queue key={`newsline-mp`} isLeft={false} extraWide={true} qType={selector} />

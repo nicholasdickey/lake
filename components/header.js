@@ -24,7 +24,7 @@ import { UilNewspaper } from '@iconscout/react-unicons'
 import axios from 'axios';
 //import { UisStar } from '@iconscout/react-unicons'
 const UisStar = UilStar;
-const playfair = Playfair_Display({ subsets: ['latin'], weight: [ '500',], style: ['normal'] })
+const playfair = Playfair_Display({ subsets: ['latin'], weight: [ '400',], style: ['normal'] })
 const TitleStyledWrapper = styled.div`
 display:flex;
 width:100%;
@@ -75,23 +75,23 @@ const Logo = styled((props) => {
     return <img  {...props} />
 })`
     display:none;
-    margin-left:30px;
-    margin-right:30px;
+    margin-left:10px;
+    margin-right:10px;
     @media(min-width:600px){
         display:block;
-         width:40px;
-        height:40px;
+         width:70px;
+        height:70px;
     }
-    @media(min-width:1000px){
+    @media(min-width:900px){
         display:block;
-         width:50px;
-        height:50px;
+         width:90px;
+        height:90px;
     }
 
     @media(min-width:1200px){
         display:block;
-        width:60px;
-        height:60px;
+        width:90px;
+        height:90px;
     }
    
     @media(min-width:1800px){

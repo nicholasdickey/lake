@@ -68,7 +68,7 @@ export const fetchChannelLayout = async ([u, slug, hasLayout, sessionid, userslu
    try {
       const sessionParam = hasLayout ? userslug ? `&userslug=${userslug}` : `&sessionid=${sessionid}` : ``
       const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/layout/fetch?channel=${slug}${sessionParam}&pageType=${type}&dense=${dense}&thick=${thick}&layoutNumber=${layoutNumber}`
-    //   console.log("calling lakeApi fetchChannelLayout, ", url)
+       console.log("calling lakeApi fetchChannelLayout, ", url)
       const res = await axios.get(url);
     //  console.log("return ",res.data)
       return res.data;

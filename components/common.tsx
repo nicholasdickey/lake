@@ -189,7 +189,7 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
   }
   const layoutType = type == 'topic' ? 'context' :type=='solo'?'newsline':type;
   const key: fetchChannelLayoutKey = ['channelLayout', qparams.newsline, session.hasLayout, session.sessionid, session.userslug, layoutType, session.dense, session.thick, layoutNumber || 'l1'];
- // console.log("RENDER LAYOUT, key=", key)
+  console.log("RENDER LAYOUT, key=", key)
   
   let { data: layout, error: layoutError } = useSWR(key, fetchChannelLayout)
 

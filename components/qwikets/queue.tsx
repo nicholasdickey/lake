@@ -177,7 +177,7 @@ const Segment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, s
     const isVisible = !!entry?.isIntersecting
     //console.log("remder page:", qType, pageIndex, "isVisible:", isVisible)
 
-    useEffect(() => {
+  //  useEffect(() => {
         /**
          * Once roll into view, and has data - call setData to possibly append a new sibming segment
          */
@@ -185,9 +185,9 @@ const Segment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, s
         if (data && isVisible) {
             setData(data, pageIndex, true, data.tail ? data.tail : '');
            // setTimeout(()=>setData(data, pageIndex, true, data.tail ? data.tail : ''),1);
-            setHd(true)
+           // setHd(true)
         }
-    }, [isVisible, hd, data, qType, pageIndex, setData]);
+  //  }, [isVisible, data, qType, pageIndex, setData]);
 
     return (<div className="other-segments" ref={ref}>{data?.items?.map((item: any) => <Qwiket key={`queue-qwiket-${qType}-${item.slug}-${item.qpostid}`} extraWide={extraWide} item={item} isTopic={false} qType={qType}></Qwiket>)}</div>)
 }
@@ -255,14 +255,14 @@ const FirstSegment = ({ resetSegments,isLeft, extraWide, qType, lastid, tail, pa
         }
     }, []);
 
-    useEffect(() => {
+    //useEffect(() => {
         //console.log("dbgi: remder to test a call setData", { hd, isVisible, qType, pageIndex, data })
         if ( data && isVisible) {
            // console.log(" dbgi: &&&&&&&&&&&&&&&&&&&&&&&& remder to a call setData", { isVisible, qType, pageIndex, data })
             setData(data, pageIndex, true, data.tail ? data.tail : '')
-            setHd(true)
+           // setHd(true)
         }
-    }, [isVisible, hd, data, qType, pageIndex, setData]);
+    //}, [isVisible, data, qType, pageIndex, setData]);
 
 
     //if (!pageIndex)
@@ -300,17 +300,18 @@ const Segments = ({ qType, isLeft, extraWide,  ...props }: { qType: string, isLe
            // console.log("remder no segments in setData")
             return;
         }
-       // console.log('dbgi: Segments, testing length',{pageIndex,length:segments.length})
+        console.log('dbgi: Segments, testing length',{pageIndex,length:segments.length})
         if (pageIndex == segments.length - 1) {
-          // console.log(`dbgi: Segments adding a segment`,{qType,pageIndex,lastid:data.lastid,tail:data.tail});
-           // console.log("remder ---> adding segments for fetchData pageIndex:", pageIndex, qType, 'segments:', segments)
+            console.log(`dbgi: Segments adding a segment`,{qType,pageIndex,lastid:data.lastid,tail:data.tail});
+            
+            // console.log("remder ---> adding segments for fetchData pageIndex:", pageIndex, qType, 'segments:', segments)
             segments.push(
                 <Segment isLeft={isLeft} key={`segment-${qType}-${pageIndex + 1}`} extraWide={extraWide} qType={qType} lastid={data.lastid} tail={data.tail} pageIndex={pageIndex + 1} hasData={false} setData={setData} />,
-
             )
+       
         }
-
         setSegments([...segments]) //immutable state
+
     }, [extraWide, isLeft, qType]);
 
     const resetSegments=()=>{

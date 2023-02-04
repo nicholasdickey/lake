@@ -29,6 +29,10 @@ const ImageBox=styled.div<ImageBoxParams>`
     //margin-right: 16px; 
     //margin-bottom: 10px;
     min-height:${({spaces,loud})=>(loud==1?640:420)/spaces}px;  
+    @media(max-width:900px){
+        min-height:96px;
+    }
+
     //min-width:${({spaces})=>164/spaces}px;
     //height:${({spaces}) => 100/spaces}%;   
     //width:${({spaces}) => 100/spaces}%;   

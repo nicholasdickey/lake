@@ -129,7 +129,7 @@ const Thick = ({ session, upd }: { session: Options, upd: any }) => {
 }
 const Dense = ({ session, upd }: { session: Options, upd: any }) => {
 
-  return <StyledMobileCheck><Check label='Dense' checked={session.dense == 1 ? true : false} onChange={(checked: boolean) => {
+  return <StyledMobileCheck><Check disabled={false} label='Dense' checked={session.dense == 1 ? true : false} onChange={(checked: boolean) => {
     console.log("Changed And The Band")
     upd({ dense: checked ? 1 : 0 });
   }} /></StyledMobileCheck>

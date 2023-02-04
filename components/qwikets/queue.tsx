@@ -174,7 +174,12 @@ const Segment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, s
 
     const ref = useRef<HTMLDivElement | null>(null)
     const entry = useIntersectionObserver(ref, {})
-    const isVisible = !!entry?.isIntersecting
+    /*if (entry&&entry.boundingClientRect.top > 0) {
+        console.log("entry BELOW") // do things if below
+      } else {
+        console.log("dbgi: entry ABOVE") // do things if above
+      }*/
+    const isVisible = !!entry?.isIntersecting ||entry&&entry.boundingClientRect.top < 0
     //console.log("remder page:", qType, pageIndex, "isVisible:", isVisible)
 
   //  useEffect(() => {
@@ -301,12 +306,12 @@ const Segments = ({ qType, isLeft, extraWide,  ...props }: { qType: string, isLe
             return;
         }
         console.log('dbgi: Segments, testing length',{pageIndex,length:segments.length})
-        if (pageIndex == segments.length - 1) {
+        if (pageIndex >= segments.length - 1) {
             console.log(`dbgi: Segments adding a segment`,{qType,pageIndex,lastid:data.lastid,tail:data.tail});
             
             // console.log("remder ---> adding segments for fetchData pageIndex:", pageIndex, qType, 'segments:', segments)
             segments.push(
-                <Segment isLeft={isLeft} key={`segment-${qType}-${pageIndex + 1}`} extraWide={extraWide} qType={qType} lastid={data.lastid} tail={data.tail} pageIndex={pageIndex + 1} hasData={false} setData={setData} />,
+                <Segment isLeft={isLeft} key={`segment-${qType}-${segments.length}`} extraWide={extraWide} qType={qType} lastid={data.lastid} tail={data.tail} pageIndex={pageIndex + 1} hasData={false} setData={setData} />,
             )
        
         }

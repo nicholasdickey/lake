@@ -47,7 +47,7 @@ const PublicationRow = styled.div`
     flex-wrap: wrap;
     width: 100%;
     //padding: 0px;
-    height:36px;
+    //height:48px;
    // position:relative;
 `
 const Description = styled.div`
@@ -56,9 +56,11 @@ const Description = styled.div`
     font-size: 11px;
     align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
+    //flex-wrap: wrap;
     color:var(--highlight);
-    height:34px;
+    //height:34px;
+    margin-top:4px;
+    padding-right:16px;
 `
 const Left = styled.div`
     display:flex;
@@ -80,10 +82,14 @@ const PubImageBox = styled.div`
     height:28px;
     width:28px;  
 `
-
-const Name = styled.div`
+interface Dense{
+    dense:boolean;
+}
+const Name = styled.div<Dense>`
     margin-right:16px;
     color:var(--highlight);
+    name:34px;
+    font-size:${({dense})=>dense?9:12}px;
 `
 const Highlight = styled.div`
     color:var(--text);
@@ -132,6 +138,9 @@ const SearchBox = styled.div`
         //border-color:${props => props.color};
         background-color:var(--background);
     }
+`
+const PublicationWrap=styled.div`
+    margin-bottom:16px;
 `
 
 const Check = ({ label, checked, onChange, disabled }: { label?: string, checked: boolean, onChange: any, disabled: boolean }) => {
@@ -207,7 +216,7 @@ const MyNewsline = ({ session, qparams, updateSession }: { session: Options, qpa
                 <PubImageBox>
                     <NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={n.icon} alt={n.name} fill={true} />
                 </PubImageBox>
-                <Name>{!n.default ? <Highlight>{n.name}</Highlight> : <>{n.name}</>}</Name>
+                <Name dense={session.dense==1}>{!n.default ? <Highlight>{n.name}</Highlight> : <>{n.name}</>}</Name>
             </Left></Link>
             <Check checked={n.switch == 'on'} onChange={async (s: boolean) => {
                 updateSession({ hasNewslines: true });
@@ -292,12 +301,12 @@ const Publications = ({ session, qparams, updateSession }: { session: Options, q
         theme={undefined} /></SearchBox><Hr /><Row>
             <FilterWrap> <FiltersContainer newsline={newsline} callback={setF} publicationCategories={publicationCategories} /></FilterWrap>
         </Row><Hr />
-        {publications ? publications.map((n: Publication) => <><PublicationRow key={`afpqhqpd-${n.name}`}>
+        {publications ? publications.map((n: Publication) => <PublicationWrap><PublicationRow key={`afpqhqpd-${n.name}`}>
         <Link href={`/${qparams.forum}/solo/${n.tag}/${qparams.layoutNumber}/${qparams.navTab}`}><Left>
                 <PubImageBox>
                     <NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={n.icon} alt={n.name} fill={true} />
                 </PubImageBox>
-                <Name><Highlight>{n.name}</Highlight></Name>
+                <Name dense={session.dense==1}><Highlight>{n.name}</Highlight></Name>
             </Left></Link>
             <Check checked={n.switch == 'on'} onChange={async (s: boolean) => {
                 console.log("PUBLICATION ON CLICK callling mutate")
@@ -321,7 +330,7 @@ const Publications = ({ session, qparams, updateSession }: { session: Options, q
                     })
             }} disabled={false} />
         </PublicationRow>
-            <Description>{n.description}</Description></>
+            <Description>{n.description}</Description></PublicationWrap>
         ) : "Loading..."}{publicationsError}</>
 }
 interface FilterDatum {

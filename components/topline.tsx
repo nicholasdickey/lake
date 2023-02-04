@@ -122,7 +122,7 @@ const Loud = ({ session, upd }: { session: Options, upd: any }) => {
 }
 const Thick = ({ session, upd }: { session: Options, upd: any }) => {
 
-  return <StyledCheck><Check disabled={false} label='Thick' checked={session.thick == 1 ? true : false} onChange={(checked: boolean) => {
+  return <StyledCheck><Check disabled={session.dense==1} label='Thick' checked={session.thick == 1 ? true : false} onChange={(checked: boolean) => {
     console.log("Changed And The Band")
     upd({ thick: checked ? 1 : 0 });
   }} /></StyledCheck>
@@ -178,10 +178,10 @@ export const Topline = ({ updateTheme, session, layout, updateSession, channelDe
   {width == 600 ? <InnerBand hpads={hpads}><div/> <Loud upd={upd} session={session} />  <Dark updateTheme={updateTheme} session={session} /><div/></InnerBand> : null}
   {width == 750 ? <InnerBand hpads={hpads}> <div/><Loud upd={upd} session={session} />  <Dark updateTheme={updateTheme} session={session} /><div/> </InnerBand> : null}
   {width == 900 ? <InnerBand hpads={hpads}> <Loud upd={upd} session={session} />  <Dark updateTheme={updateTheme} session={session} /> <Band upd={upd} session={session} /></InnerBand> : null}
-  {width == 1200 ? <InnerBand hpads={hpads}> <Loud upd={upd} session={session} />  <Dense upd={upd} session={session} /><Dark updateTheme={updateTheme} session={session} /> <Band upd={upd} session={session} /></InnerBand> : null}
-  {width == 1800 ? <InnerBand hpads={hpads}> <Loud upd={upd} session={session} />  <Dense upd={upd} session={session} /><Dark updateTheme={updateTheme} session={session} /> <Band upd={upd} session={session} /></InnerBand> : null}
+  {width == 1200 ? <InnerBand hpads={hpads}> <Loud upd={upd} session={session} />   <Thick upd={upd} session={session} /> <Dense upd={upd} session={session} /><Dark updateTheme={updateTheme} session={session} /> <Band upd={upd} session={session} /></InnerBand> : null}
+  {width == 1800 ? <InnerBand hpads={hpads}> <Loud upd={upd} session={session} />   <Thick upd={upd} session={session} /> <Dense upd={upd} session={session} /><Dark updateTheme={updateTheme} session={session} /> <Band upd={upd} session={session} /></InnerBand> : null}
   {width == 2100 ? <InnerBand hpads={hpads}> <Loud upd={upd} session={session} />  
-    <Dense upd={upd} session={session} /> <Dark updateTheme={updateTheme} session={session} /> <Band upd={upd} session={session} /></InnerBand> : null}
+  <Thick upd={upd} session={session} />  <Dense upd={upd} session={session} /> <Dark updateTheme={updateTheme} session={session} /> <Band upd={upd} session={session} /></InnerBand> : null}
 
 </ToplineBand>
 /*

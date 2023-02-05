@@ -225,7 +225,7 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
       <main className={roboto.className} >
         <ThemeProvider theme={palette}>
           <GlobalStyle />
-          <AppWrapper session={session} qparams={qparams} channelDetails={channelConfig.channelDetails} setLoading={setLoading}>
+          <AppWrapper session={session} qparams={qparams} channelDetails={channelConfig.channelDetails} newsline={channelConfig.newsline} setLoading={setLoading}>
             {loading?<Loading className={roboto.className}>{loading}</Loading>:null}<div>
               <Topline updateTheme={updateTheme} session={session} layout={layout} updateSession={updateSession} channelDetails={channelConfig.channelDetails} />
               <Grid hpads={hpads}>

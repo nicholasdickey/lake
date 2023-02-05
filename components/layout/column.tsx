@@ -7,6 +7,7 @@ import { Options } from '../../lib/withSession'
 import Queue from '../qwikets/queue';
 import Navigator from '../navigator';
 import Topic from '../topic';
+import Twitter from '../twitter';
 import { useAppContext } from "../../lib/context";
 
 //const QwiketItem = () => <div>QwiketItem</div>
@@ -262,7 +263,7 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
     }
    // selector = fullPage?isLeft ? ((qparams.type == 'newsline' || qparams.type == 'solo') ? esession.leftColumnOverrid : topicOverride.leftColumnOverride) || selector : selector: (qparams.type == 'newsline' || qparams.type == 'solo')?session.leftColumnOverride||selector:selector;
    
-    const name = selector == 'mix' ? 'news&views' : selector == 'tag' ? 'publication feed' : selector == 'topics' ? 'active topics' : selector == 'reacts' ? 'comments' : qparams.type=='solo'?`solo ${qparams.tag}`:selector;
+    const name = selector == 'mix' ? 'news&views' : selector == 'tag' ? 'publication feed' : selector == 'topics' ? 'active topics' : selector == 'reacts' ? 'comments' : qparams.type=='solo'?`solo ${qparams.tag=='ld'?'basement':qparams.tag}`:selector;
    
   //  console.log("After OverrideColumn:", { isLeft, spaces, selector, type, msc, session });
 
@@ -276,6 +277,10 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
     if (type == 'stc') {
         switch (selector) {
             case 'twitter': //tbd
+              return <StyledColumn width={width} data-id="styled-column" key={`${selector}-column`}>
+              <ColumnHeader> <InnerHeader>{isLeft ? <LeftSelector qType={selector} name={name} updateSession={updateSession} fullPage={fullPage} /> : name}</InnerHeader></ColumnHeader>
+              <Twitter/>
+          </StyledColumn>;
             case 'newsviews':
             case 'mix':
             case 'newsline':

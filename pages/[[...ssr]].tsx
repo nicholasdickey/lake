@@ -11,6 +11,8 @@ import {
 import { withSessionSsr } from '../lib/withSession';
 import { fetchQueues } from '../lib/ssrQueueFetches';
 import {Options} from '../lib/withSession';
+import Config from '../lib/config';
+import shallowEqual from '../lib/shallowEqual';
 
 import {
     GetServerSidePropsContext,
@@ -23,19 +25,7 @@ export default function Home({ session, qparams, fallback }: CommonProps) {
 
     return <SWRConfig value={{ fallback }}><Common session={session} qparams={qparams} /></SWRConfig>
 }
-function shallowEqual(object1:any, object2:any) {
-    const keys1 = Object.keys(object1);
-    const keys2 = Object.keys(object2);
-    if (keys1.length !== keys2.length) {
-        return false;
-    }
-    for (let key of keys1) {
-        if (object1[key] !== object2[key]) {
-            return false;
-        }
-    }
-    return true;
-}
+
 /**
  * 
  * URL Schema:
@@ -48,8 +38,9 @@ function shallowEqual(object1:any, object2:any) {
 
 export const getServerSideProps = withSessionSsr(
     async function getServerSideProps(context: GetServerSidePropsContext) {
-      //  const code: string | undefined = context.query["code"] as string | undefined;
-      //  const state: string | undefined = context.query["state"] as string | undefined;
+      
+        const host=context.req.headers.host;
+        console.log("HOST:",host)
         const {code,state}:{code:string,state:string}=context.query as any;
         // parse dynamic params:
         let ssr = context.params?.ssr as string[];
@@ -186,7 +177,7 @@ export const getServerSideProps = withSessionSsr(
 
         const channelConfig = await fetchChannelConfig(newsline);
         //const sessionid=options.hasNewslines?options.sessionid:'';
-        //console.log("GOT channelConfig",channelConfig)
+        console.log("GOT channelConfig",channelConfig)
         const layoutType = type == 'topic' ? 'context' :type=='solo'?'newsline':type;
         const key: fetchChannelLayoutKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, layoutType, options.dense, options.thick, layoutNumber];
         //console.log("CALLING fetchChannelLayout:",key);

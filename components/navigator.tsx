@@ -90,6 +90,9 @@ const Name = styled.div<Dense>`
     color:var(--highlight);
     name:34px;
     font-size:${({dense})=>dense?9:12}px;
+    @media(min-width:1800px){
+        font-size:14px;
+    }
 `
 const Highlight = styled.div`
     color:var(--text);

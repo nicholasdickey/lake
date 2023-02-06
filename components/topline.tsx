@@ -181,7 +181,7 @@ export const Topline = ({ updateTheme, session, layout, updateSession, channelDe
   {width == 1200 ? <InnerBand hpads={hpads}> <Loud upd={upd} session={session} />   <Thick upd={upd} session={session} /> <Dense upd={upd} session={session} /><Dark updateTheme={updateTheme} session={session} /> <Band upd={upd} session={session} /></InnerBand> : null}
   {width == 1800 ? <InnerBand hpads={hpads}> <Loud upd={upd} session={session} />   <Thick upd={upd} session={session} /> <Dense upd={upd} session={session} /><Dark updateTheme={updateTheme} session={session} /> <Band upd={upd} session={session} /></InnerBand> : null}
   {width == 2100 ? <InnerBand hpads={hpads}> <Loud upd={upd} session={session} />  
-  <Thick upd={upd} session={session} />  <Dense upd={upd} session={session} /> <Dark updateTheme={updateTheme} session={session} /> <Band upd={upd} session={session} /></InnerBand> : null}
+  <Thick upd={upd} session={session} />  <Dark updateTheme={updateTheme} session={session} /> <Band upd={upd} session={session} /></InnerBand> : null}
 
 </ToplineBand>
 /*

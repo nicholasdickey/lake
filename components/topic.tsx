@@ -7,7 +7,7 @@ import { fetchTopic } from '../lib/lakeApi'
 import Disqus from './disqus'
 const Topic = ({singlePanel,fullPage}:{singlePanel?:boolean,fullPage?:boolean}) => {
   const { session, qparams } = useAppContext();
-  const key: [u: string, threadid: string, withBody: number] = ['topic', qparams.threadid, 1];
+  const key: [u: string, threadid: string, withBody: number,userslug:string] = ['topic', qparams.threadid, 1,session.userslug];
   const { data, error } = useSWR(key, fetchTopic);
   if (!data) {
     const item = {

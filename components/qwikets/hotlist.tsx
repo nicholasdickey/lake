@@ -28,7 +28,11 @@ const ImageBox=styled.div<ImageBoxParams>`
    
     //margin-right: 16px; 
     //margin-bottom: 10px;
-    min-height:${({spaces,loud})=>(loud==1?640:420)/spaces}px;  
+    min-height:${({spaces,loud})=>(loud==1?140:100)}px;  
+    @media(max-width:900px){
+        min-height:96px;
+    }
+
     //min-width:${({spaces})=>164/spaces}px;
     //height:${({spaces}) => 100/spaces}%;   
     //width:${({spaces}) => 100/spaces}%;   
@@ -82,7 +86,7 @@ const SitenameBox=styled.div`
 `
 
 const HotlistItem=({ session, qparams,item,spaces }: { session: Options, qparams: Qparams,item:any,spaces:number}) => {
-    //console.log("Hotlist item",item)
+    console.log("Hotlist item",item)
     return <ImageBox spaces={spaces} loud={session.loud} >
         <OpacityBox loud={session.loud}>
             <NextImage style={{objectFit:'cover'}} placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={item.image} alt={item.title} fill={true} /></OpacityBox>
@@ -96,7 +100,7 @@ const Hotlist = ({ session, qparams,spaces }: { session: Options, qparams: Qpara
 
     //const [lastid, setLastid] = useState(0);
 
-    const key = ['queue', 'hot', qparams.newsline,/* qparams.forum, qparams.tag, 0, 0, session.sessionid, session.userslug,''*/];
+    const key = ['queue', 'hot', qparams.newsline,0,/* qparams.forum, qparams.tag, 0, 0, session.sessionid, session.userslug,''*/];
    // console.log('useSwr HOTLIST',key)
     const { data, error: queueError } = useSWR(key, fetchQueue,{
         refreshInterval:10000
@@ -106,6 +110,7 @@ const Hotlist = ({ session, qparams,spaces }: { session: Options, qparams: Qpara
        // console.log("NO DATA or fallback")
         let fallbackData=[];
         for(let i=0;i<spaces;i++){
+
             fallbackData.push(<HotlistItem key={`hotlistitem-${i}`} session={session} qparams={qparams} item={{
                 image:'https://media.istockphoto.com/id/1280015859/photo/blue-lake-with-treeline-in-autumn-color-on-a-sunny-afternoon-in-northern-minnesota.jpg?s=612x612&w=0&k=20&c=smtj8bw1BW3gUI9rrxRnAzQKGWmTyMQYcODgbuWNMbc=',
                 title:'Loading...',

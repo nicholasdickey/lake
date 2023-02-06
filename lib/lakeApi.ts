@@ -39,7 +39,7 @@ export const initLoginSession=async(userslug:string,options:Options)=>{
 
 export const processLoginCode=async (code:string,appid:string)=>{
    if(!appid)
-   appid='1013';
+   appid=process.env.NEXT_PUBLIC_APPID||'1013';
    const url = `${process.env.NEXT_PUBLIC_QWIKET_API}/api?task=disqus-login&code=${code}&appid=${appid}`;
    
    const res = await axios.get(url);
@@ -68,7 +68,7 @@ export const fetchChannelLayout = async ([u, slug, hasLayout, sessionid, userslu
    try {
       const sessionParam = hasLayout ? userslug ? `&userslug=${userslug}` : `&sessionid=${sessionid}` : ``
       const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/layout/fetch?channel=${slug}${sessionParam}&pageType=${type}&dense=${dense}&thick=${thick}&layoutNumber=${layoutNumber}`
-    //   console.log("calling lakeApi fetchChannelLayout, ", url)
+       console.log("calling lakeApi fetchChannelLayout, ", url)
       const res = await axios.get(url);
     //  console.log("return ",res.data)
       return res.data;
@@ -95,8 +95,10 @@ export const fetchUser = async ([u, userslug]: [u: string, userslug: string]) =>
    }
    return null;
 }
-export const fetchTopic=async ([u,threadid, withBody]:[u:string,threadid:string,withBody:number])=>{
-   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/topic/fetch?slug=${encodeURIComponent(threadid)}&withBody=${withBody}`;
+export const fetchTopic=async ([u,threadid, withBody,userslug]:[u:string,threadid:string,withBody:number,userslug?:string])=>{
+   if(!userslug)
+   userslug='';
+   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/topic/fetch?slug=${encodeURIComponent(threadid)}&withBody=${withBody}&userslugt=${userslug}`;
    let res;
    try {
       res = await axios.get(url)
@@ -108,8 +110,8 @@ export const fetchTopic=async ([u,threadid, withBody]:[u:string,threadid:string,
    }
    return res ? res.data : null;
 }
-export const fetchQueue = async ([u, qType, newsline, forum, tag, page, lastid, sessionid, userslug, tail, test,breakCache]:
-    [u: string, qType: string, newsline: string, forum?: string, tag?: string, page?: number, lastid?: string, sessionid?: string, userslug?: string, tail?: number, test?: string,breakCache?:string]) => {
+export const fetchQueue = async ([u, qType, newsline, solo, forum, tag, page, lastid, sessionid, userslug, tail, test,breakCache]:
+    [u: string, qType: string, newsline: string, solo:number,forum?: string, tag?: string, page?: number, lastid?: string, sessionid?: string, userslug?: string, tail?: number, test?: string,breakCache?:string]) => {
    let params;
   // console.log("remder fetchQueue:", `['queue',qType:${qType},newsline:${newsline},forum:${forum},tag:${tag},page:${page},lastid:${lastid},sessionid:${sessionid},userslug:${userslug},tail:${tail}]`)
    if(!page)
@@ -129,6 +131,8 @@ export const fetchQueue = async ([u, qType, newsline, forum, tag, page, lastid, 
    test='';
    if(!breakCache)
    breakCache='';
+   if(!solo)
+   solo=0;
 
    const addParams = (params: string) => {
       //  console.log("addParams1",params)
@@ -136,7 +140,9 @@ export const fetchQueue = async ([u, qType, newsline, forum, tag, page, lastid, 
          params += `&userslug=${userslug}`;
       else if (sessionid)
          params += `&sessionid=${sessionid}`;
-     
+      if(solo==1){
+         params+=`&tag=${tag}&solo=1`
+      } 
       if (tail)
          params += `&tail=${tail}`;
       if (test)
@@ -186,7 +192,7 @@ export const fetchQueue = async ([u, qType, newsline, forum, tag, page, lastid, 
       res = await axios.get(url)
       console.log("retried successfully")
    }
-   console.log("remder return ",res.data)
+   //console.log("remder return ",res.data)
    return res ? res.data : null;
 }
 export type fetchMyNewslineKey= [u: string, newsline: string, sessionid: string, userslug: string, hasNewsline: boolean];

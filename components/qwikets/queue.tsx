@@ -130,7 +130,8 @@ const Notifications = ({ isLeft, qType, newsline, forum, lastid, tail, sessionid
         isLeft: boolean, qType: string, newsline: string, forum: string, lastid: string, tail: number, sessionid: string, userslug: string, reset: any,
         tag: string
     }) => {
-    const key = ['notif', qType, newsline, forum, tag ? tag : '', 0, lastid, sessionid, userslug, tail];
+    const { session, qparams } = useAppContext();
+    const key = ['notif', qType, newsline,qparams.type=='solo'?1:0, forum,  (qType == 'tag'||qparams.type=='solo') ? qparams.tag : '', 0, lastid, sessionid, userslug, tail];
     const { data, error } = useSWR(key, fetchQueue, {
         refreshInterval: qType == 'topics' ? 24 * 3600 * 1000 : 5000
     });
@@ -165,16 +166,23 @@ const Segment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, s
   
     const [hd, setHd] = useState(hasData)
    
-    const key = ['queue', qType, qparams.newsline, qparams.forum, qType == 'tag' ? qparams.tag : '', pageIndex, lastid, session.sessionid, session.userslug, tail, ''];
+//    const key = ['queue', qType, qparams.newsline, qparams.type=='solo'?1:0,qparams.forum, (qType == 'tag'||qparams.type=='solo') ? qparams.tag : '', pageIndex, lastid, session.sessionid, session.userslug, tail, ''];
+    const key = ['queue', qType, qparams.newsline, qType=='newsline'&&qparams.type=='solo'?1:0,qparams.forum, (qType == 'tag'||qType=='newsline'&&qparams.type=='solo') ? qparams.tag : '', pageIndex, 0, session.sessionid, session.userslug, 0, ''];
+
     // console.log("Segment before fetchQueue", { qType, pageIndex, returnedLastid, returnedTail })
     const { data, error: queueError, mutate } = useSWR(key, fetchQueue);
 
     const ref = useRef<HTMLDivElement | null>(null)
     const entry = useIntersectionObserver(ref, {})
-    const isVisible = !!entry?.isIntersecting
+    /*if (entry&&entry.boundingClientRect.top > 0) {
+        console.log("entry BELOW") // do things if below
+      } else {
+        console.log("dbgi: entry ABOVE") // do things if above
+      }*/
+    const isVisible = !!entry?.isIntersecting ||entry&&entry.boundingClientRect.top < 0
     //console.log("remder page:", qType, pageIndex, "isVisible:", isVisible)
 
-    useEffect(() => {
+  //  useEffect(() => {
         /**
          * Once roll into view, and has data - call setData to possibly append a new sibming segment
          */
@@ -182,9 +190,9 @@ const Segment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, s
         if (data && isVisible) {
             setData(data, pageIndex, true, data.tail ? data.tail : '');
            // setTimeout(()=>setData(data, pageIndex, true, data.tail ? data.tail : ''),1);
-            setHd(true)
+           // setHd(true)
         }
-    }, [isVisible, hd, data, qType, pageIndex, setData]);
+  //  }, [isVisible, data, qType, pageIndex, setData]);
 
     return (<div className="other-segments" ref={ref}>{data?.items?.map((item: any) => <Qwiket key={`queue-qwiket-${qType}-${item.slug}-${item.qpostid}`} extraWide={extraWide} item={item} isTopic={false} qType={qType}></Qwiket>)}</div>)
 }
@@ -209,10 +217,10 @@ const FirstSegment = ({ resetSegments,isLeft, extraWide, qType, lastid, tail, pa
             //  console.log("remder first segment. got new lastid", qType, data.lastid, lastid)
         }
     }, []);
-    const key = ['queue', qType, qparams.newsline, qparams.forum, qType == 'tag' ? qparams.tag : '', pageIndex, 0, session.sessionid, session.userslug, 0, ''];
+    const key = ['queue', qType, qparams.newsline, qType=='newsline'&&qparams.type=='solo'?1:0,qparams.forum, (qType == 'tag'||qType=='newsline'&&qparams.type=='solo') ? qparams.tag : '', pageIndex, 0, session.sessionid, session.userslug, 0, ''];
 
 
-    //console.log("remder FirstSegment:", { key, qType, pageIndex, returnedLastid, returnedTail, isLeft })
+    console.log("remder FirstSegment:", { type:qparams.type,key, qType, pageIndex, returnedLastid, returnedTail, isLeft })
 
     const { data, error: queueError, mutate } = useSWR(key, fetchQueue, {
         onSuccess: onData,
@@ -252,14 +260,14 @@ const FirstSegment = ({ resetSegments,isLeft, extraWide, qType, lastid, tail, pa
         }
     }, []);
 
-    useEffect(() => {
+    //useEffect(() => {
         //console.log("dbgi: remder to test a call setData", { hd, isVisible, qType, pageIndex, data })
         if ( data && isVisible) {
            // console.log(" dbgi: &&&&&&&&&&&&&&&&&&&&&&&& remder to a call setData", { isVisible, qType, pageIndex, data })
             setData(data, pageIndex, true, data.tail ? data.tail : '')
-            setHd(true)
+           // setHd(true)
         }
-    }, [isVisible, hd, data, qType, pageIndex, setData]);
+    //}, [isVisible, data, qType, pageIndex, setData]);
 
 
     //if (!pageIndex)
@@ -297,17 +305,18 @@ const Segments = ({ qType, isLeft, extraWide,  ...props }: { qType: string, isLe
            // console.log("remder no segments in setData")
             return;
         }
-       // console.log('dbgi: Segments, testing length',{pageIndex,length:segments.length})
-        if (pageIndex == segments.length - 1) {
-          // console.log(`dbgi: Segments adding a segment`,{qType,pageIndex,lastid:data.lastid,tail:data.tail});
-           // console.log("remder ---> adding segments for fetchData pageIndex:", pageIndex, qType, 'segments:', segments)
+        console.log('dbgi: Segments, testing length',{pageIndex,length:segments.length})
+        if (pageIndex >= segments.length - 1) {
+            console.log(`dbgi: Segments adding a segment`,{qType,pageIndex,lastid:data.lastid,tail:data.tail});
+            
+            // console.log("remder ---> adding segments for fetchData pageIndex:", pageIndex, qType, 'segments:', segments)
             segments.push(
-                <Segment isLeft={isLeft} key={`segment-${qType}-${pageIndex + 1}`} extraWide={extraWide} qType={qType} lastid={data.lastid} tail={data.tail} pageIndex={pageIndex + 1} hasData={false} setData={setData} />,
-
+                <Segment isLeft={isLeft} key={`segment-${qType}-${segments.length}`} extraWide={extraWide} qType={qType} lastid={data.lastid} tail={data.tail} pageIndex={pageIndex + 1} hasData={false} setData={setData} />,
             )
+       
         }
-
         setSegments([...segments]) //immutable state
+
     }, [extraWide, isLeft, qType]);
 
     const resetSegments=()=>{

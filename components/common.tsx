@@ -15,7 +15,8 @@ import GlobalStyle from '../components/globalstyles'
 import { palette } from '../lib/palette';
 import { LayoutView } from './layout/layoutView';
 import { Roboto } from '@next/font/google';
-import { AppWrapper } from '../lib/context'
+import { AppWrapper } from '../lib/context';
+import ScrollToTopButton from './scrollToTopButton';
 
 
 /**
@@ -187,9 +188,9 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
 
 
   }
-  const layoutType = type == 'topic' ? 'context' : type;
+  const layoutType = type == 'topic' ? 'context' :type=='solo'?'newsline':type;
   const key: fetchChannelLayoutKey = ['channelLayout', qparams.newsline, session.hasLayout, session.sessionid, session.userslug, layoutType, session.dense, session.thick, layoutNumber || 'l1'];
- // console.log("RENDER LAYOUT, key=", key)
+  console.log("RENDER LAYOUT, key=", key)
   
   let { data: layout, error: layoutError } = useSWR(key, fetchChannelLayout)
 
@@ -209,7 +210,8 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
 
   if (isFallback)
     return <Loading className={roboto.className}>Fallback Loading...</Loading>
-
+   
+ 
   return (
     <>
       <Head>
@@ -225,7 +227,7 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
       <main className={roboto.className} >
         <ThemeProvider theme={palette}>
           <GlobalStyle />
-          <AppWrapper session={session} qparams={qparams} channelDetails={channelConfig.channelDetails} setLoading={setLoading}>
+          <AppWrapper session={session} qparams={qparams} channelDetails={channelConfig.channelDetails} newsline={channelConfig.newsline} setLoading={setLoading}>
             {loading?<Loading className={roboto.className}>{loading}</Loading>:null}<div>
               <Topline updateTheme={updateTheme} session={session} layout={layout} updateSession={updateSession} channelDetails={channelConfig.channelDetails} />
               <Grid hpads={hpads}>
@@ -236,6 +238,7 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
 
                 </PageWrap>
               </Grid>
+              <ScrollToTopButton/>
             </div>
           </AppWrapper>
         </ThemeProvider>

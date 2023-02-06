@@ -95,8 +95,10 @@ export const fetchUser = async ([u, userslug]: [u: string, userslug: string]) =>
    }
    return null;
 }
-export const fetchTopic=async ([u,threadid, withBody]:[u:string,threadid:string,withBody:number])=>{
-   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/topic/fetch?slug=${encodeURIComponent(threadid)}&withBody=${withBody}`;
+export const fetchTopic=async ([u,threadid, withBody,userslug]:[u:string,threadid:string,withBody:number,userslug?:string])=>{
+   if(!userslug)
+   userslug='';
+   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/topic/fetch?slug=${encodeURIComponent(threadid)}&withBody=${withBody}&userslugt=${userslug}`;
    let res;
    try {
       res = await axios.get(url)

@@ -4,7 +4,8 @@ const config = {
             hosts: [`qwiket.com`, `lake-taupe.vercel.app`, `ng.d4rum.com`, `am1.news`],
             newsline: `qwiket`,
             defaultForum: `usconservative`,
-            forums: `usconservative`
+            forums: `usconservative`,
+            twitterUrl:'',
         }
     ]
 }

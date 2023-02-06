@@ -184,12 +184,22 @@ export const getServerSideProps = withSessionSsr(
         const channelLayout = await fetchChannelLayout(key);
         console.log("GOT CHANNEL LAYOUT", JSON.stringify(channelLayout))
        // console.log("=================")
-       
+        const staleLKey= ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, layoutType, 0,1, layoutNumber];
+        const staleLKey1= ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, layoutType, 0,0, layoutNumber];
+        const staleLKey2= ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, layoutType, 1,0, layoutNumber];
+        const staleLKey3= ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, layoutType, 1,1, layoutNumber];
+        
+        
         const user = await fetchUser(['user', options.userslug])
 
         let fallback = {
             [newsline]: channelConfig,
             [unstable_serialize(key)]: channelLayout,
+            [unstable_serialize(staleLKey)]: channelLayout, // to provide SWR with stale date to avoid flashing loading screen
+            [unstable_serialize(staleLKey1)]: channelLayout,
+            [unstable_serialize(staleLKey2)]: channelLayout,
+            [unstable_serialize(staleLKey3)]: channelLayout,
+            
             [unstable_serialize(['user', options?options.userslug:''])]: user
         }
 
@@ -235,7 +245,7 @@ export const getServerSideProps = withSessionSsr(
           //  console.log("fallback after assign", fallback)
           */
         if (type == 'topic') {
-            const key: [u: string, threadid: string, withBody: number] = ['topic', threadid, 1];
+            const key: [u: string, threadid: string, withBody: number,userslug:string] = ['topic', threadid, 1,options.userslug];
             const topic = await fetchTopic(key);
             // console.log("GOT TOPIC:",JSON.stringify(topic))
 

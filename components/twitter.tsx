@@ -33,22 +33,27 @@ const CommentsButtonWrap=styled.div`
   justify-content: space-around;
 
 `
+const Loading=styled.div`
+padding:20px;
+`
 const Twitter = () => {
     const { session, qparams,newsline } = useAppContext();
     const ref=useRef(null);
-   /*useEffect(() => {
+    const [loading,setLoading]=useState(true);
+   useEffect(() => {
         window.twttr.widgets.load(ref.current);
-      }, []);*/
+      }, []);
 
     const url:string=newsline.twitter;
     const theme=session.dark;
     console.log("render Twitter embed",url)
     
  
-    return <div  ref={ref}><TwitterTimelineEmbed   
+    return <>{loading?<Loading>Loading the @AM1_NEWS Tweeter timeline... Elon, fix this!</Loading>:null}<div  ref={ref}><TwitterTimelineEmbed   
         sourceType="url"
         url={url}
-        //noHeader
-        theme={theme==1?"dark":"light"} /></div>
+        noHeader
+        onLoad={()=>setLoading(false)}
+        theme={theme==1?"dark":"light"} /></div></>
 }
 export default Twitter;

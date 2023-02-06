@@ -158,6 +158,17 @@ const Comment = styled.div`
     margin:1px 16px 1px 3px;
 
 `
+const TweetEmbedContainer=styled.div`
+    width:100%;
+    position:relative;
+    margin-top:20px;
+    margin-bottom:20px;
+    `
+const TweetEmbed=styled.div`
+    margin-left:auto;
+    margin-right:auto;
+    max-width:540px;
+`
 const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { extraWide: boolean, item: any, isTopic: boolean, qType?: string, singlePanel?: boolean, fullPage?: boolean }) => {
 
     const isTag = qType == 'tag';
@@ -198,7 +209,7 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
              */
             bodyBlocks = body.map((b: BodyBlock) => {
 
-                return (b.type == "twitter" && b.id) ? <TwitterTweetEmbed tweetId={b.id} placeholder="Loading a Tweet..." /*options={{theme:session.dark?'dark':'light'}}*/ /> : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{b.content}</ReactMarkdown>
+                return (b.type == "twitter" && b.id) ? <TweetEmbedContainer><TweetEmbed><TwitterTweetEmbed tweetId={b.id} placeholder="Loading a Tweet..." /*options={{theme:session.dark?'dark':'light'}}*/ /></TweetEmbed></TweetEmbedContainer> : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{b.content}</ReactMarkdown>
             })
 
         }

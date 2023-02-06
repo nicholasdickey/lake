@@ -194,7 +194,7 @@ export default function Home({ session: startSession, qparams,meta }: CommonProp
     <>
       <Head>
         <title>{meta?.title}</title>
-        <link rel="shortcut icon" href="/favicon.ico" />
+       
         <meta name="trademark" content='THE INTERNET OF US' />
         <meta name="description" content={meta?.description} />
         <meta property="og:description" content={meta?.description} />
@@ -206,13 +206,17 @@ export default function Home({ session: startSession, qparams,meta }: CommonProp
         <meta property="og:site_name" content={meta?.site_name} />
         {meta?.url?<meta property="og:url" content={meta?.url} />:null}
         <meta property="og:image" content={meta?.image} />
-        <link rel="shortcut icon" type="image/png" href="/static/css/blue-bell.png" />
-
+        
+        <link
+                        rel="shortcut icon"
+                        type="image/png"
+                        href={"/blue-bell.png"}
+                    />
 
 
         
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        
 
       </Head>
       <main className={roboto.className} >

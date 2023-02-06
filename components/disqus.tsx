@@ -41,6 +41,7 @@ const Local = ({ contextUrl, forum, realDisqThreadid, cc, slug, title,fullPage }
         title='';
    // console.log('LOCAL RENDER %s', title,cc)
     //if (title) {
+  
     var t = title.replace(/"/g, '\'');
     t = t.replace(':', '-');
     //t=channel?('['+channel+'] '+t):t

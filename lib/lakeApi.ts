@@ -192,7 +192,7 @@ export const fetchQueue = async ([u, qType, newsline, solo, forum, tag, page, la
       res = await axios.get(url)
       console.log("retried successfully")
    }
-   console.log("remder return ",res.data)
+   //console.log("remder return ",res.data)
    return res ? res.data : null;
 }
 export type fetchMyNewslineKey= [u: string, newsline: string, sessionid: string, userslug: string, hasNewsline: boolean];

@@ -49,6 +49,7 @@ export const getServerSideProps = withSessionSsr(
         if(!ssr)
             ssr = ["usconservative"];
         let [forum] = ssr;
+       
         console.log("FORUM:", forum)
         if(forum=='index'){
             console.log("INDEX FORUM")
@@ -214,14 +215,15 @@ export const getServerSideProps = withSessionSsr(
         if (type == 'topic') {
             const key: [u: string, threadid: string, withBody: number,userslug:string] = ['topic', threadid, 1,options.userslug];
             const topic = await fetchTopic(key);
-            // console.log("GOT TOPIC:",JSON.stringify(topic))
+            console.log("GOT TOPIC:",JSON.stringify(topic))
             fallback[unstable_serialize(key)] = topic;
-            meta.description=topic.description;
-            meta.site_name=topic.site_name;
-            meta.title=`${topic.catName}: ${topic.title}`;
-            meta.image=topic.image;
-            meta.publishedTime=topic.shared_time;
-            meta.url=topic.shared_time;
+            const {item}=topic;
+            meta.description=item.description;
+            meta.site_name=item.site_name;
+            meta.title=`${item.catName}: ${item.title}`;
+            meta.image=item.image;
+            meta.publishedTime=item.shared_time;
+            meta.url=item.shared_time;
         }
         else {
             meta.description=channelConfig.channelDetails.description;
@@ -230,6 +232,7 @@ export const getServerSideProps = withSessionSsr(
             meta.image==channelConfig.channelDetails.logo;
             meta.publishedTime=Date.now()/1000|0; 
         }
+        console.log("META",type,JSON.stringify(meta))
         const propsWrap = {
             props: {
                 session: options,

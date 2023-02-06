@@ -15,7 +15,8 @@ import GlobalStyle from '../components/globalstyles'
 import { palette } from '../lib/palette';
 import { LayoutView } from './layout/layoutView';
 import { Roboto } from '@next/font/google';
-import { AppWrapper } from '../lib/context'
+import { AppWrapper } from '../lib/context';
+import ScrollToTopButton from './scrollToTopButton';
 
 
 /**
@@ -209,7 +210,8 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
 
   if (isFallback)
     return <Loading className={roboto.className}>Fallback Loading...</Loading>
-
+   
+ 
   return (
     <>
       <Head>
@@ -236,6 +238,7 @@ export default function Home({ session: startSession, qparams }: CommonProps) {
 
                 </PageWrap>
               </Grid>
+              <ScrollToTopButton/>
             </div>
           </AppWrapper>
         </ThemeProvider>

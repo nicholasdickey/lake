@@ -167,7 +167,7 @@ const Navigator = ({ session, qparams, updateSession }: { session: Options, qpar
     let { newsline, navTab } = qparams;
 
 
-    console.log("Navigator, navTab=", navTab, router.query)
+    //console.log("Navigator, navTab=", navTab, router.query)
     if (router.query) {
         const ssr = router.query.ssr;
         if (ssr) {
@@ -176,7 +176,7 @@ const Navigator = ({ session, qparams, updateSession }: { session: Options, qpar
         }
     }
 
-    console.log("Navigator2, navTab=", navTab)
+    //console.log("Navigator2, navTab=", navTab)
 
     return <TabsWrap><Tabs focusTabOnClick={false} defaultFocus={false} selectedTabClassName="selected-tab" defaultIndex={+(navTab || 1)} onSelect={(i) => {
         console.log("select ", i)
@@ -211,7 +211,7 @@ const MyNewsline = ({ session, qparams, updateSession }: { session: Options, qpa
     //sessionid=hasNewslines?sessionid:'';
     const key: fetchMyNewslineKey = ['navigator', newsline, sessionid, userslug, hasNewslines];
     const { data: myNewsline, error: myNewslineError, mutate } = useSWR(key, fetchMyNewsline);
-    console.log("MyNewsline", myNewsline);
+    //console.log("MyNewsline", myNewsline);
 
     return <><VerticalSpacer />{myNewsline ? myNewsline.map((n: Publication) => <>
         <PublicationRow key={`afkkqkqqqq-${n.tag}`}>

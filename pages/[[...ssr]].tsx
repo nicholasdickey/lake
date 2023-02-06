@@ -19,11 +19,13 @@ import {
     GetServerSidePropsResult,
     NextApiHandler,
 } from "next";
+import { stringify } from "querystring";
+import { networkInterfaces } from "os";
 
 
-export default function Home({ session, qparams, fallback }: CommonProps) {
+export default function Home({ session, qparams, fallback,meta }: CommonProps) {
 
-    return <SWRConfig value={{ fallback }}><Common session={session} qparams={qparams} /></SWRConfig>
+    return <SWRConfig value={{ fallback }}><Common session={session} qparams={qparams} meta={meta} /></SWRConfig>
 }
 
 /**
@@ -112,7 +114,6 @@ export const getServerSideProps = withSessionSsr(
         // TBA pre-fetching data for SSR, for now all data fetched client-side   
         const newsline = 'qwiket';
 
-
         // console.log("SSR SESSION",options)
         const qparams = {
             custom: true,
@@ -159,7 +160,6 @@ export const getServerSideProps = withSessionSsr(
                     },
                     props:{},
                   };
-
             }
            
             //context.res.writeHeader(301,{Location:href} );
@@ -176,7 +176,7 @@ export const getServerSideProps = withSessionSsr(
         }
 
         const channelConfig = await fetchChannelConfig(newsline);
-        //const sessionid=options.hasNewslines?options.sessionid:'';
+       
         console.log("GOT channelConfig",channelConfig)
         const layoutType = type == 'topic' ? 'context' :type=='solo'?'newsline':type;
         const key: fetchChannelLayoutKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, layoutType, options.dense, options.thick, layoutNumber];
@@ -198,64 +198,44 @@ export const getServerSideProps = withSessionSsr(
             [unstable_serialize(staleLKey)]: channelLayout, // to provide SWR with stale date to avoid flashing loading screen
             [unstable_serialize(staleLKey1)]: channelLayout,
             [unstable_serialize(staleLKey2)]: channelLayout,
-            [unstable_serialize(staleLKey3)]: channelLayout,
-            
+            [unstable_serialize(staleLKey3)]: channelLayout,    
             [unstable_serialize(['user', options?options.userslug:''])]: user
         }
 
-        /*
-          const queues = await fetchQueues({ width: options.width, layout: channelLayout, qparams, session: options});
-          //console.log("retirned fetchQueues",JSON.stringify(queues,null,4))
-          
-         
-          if (type == 'newsline') {
-              if (navTab == 1) {
-                  const key: fetchMyNewslineKey = ['navigator', newsline, options.sessionid, options.userslug, options.hasNewslines];
-                //  const myNewsline = await fetchMyNewsline(key);
-                 // console.log("myNewsline:", myNewsline)
-                  fallback[unstable_serialize(key)] =[]// myNewsline;
-              }
-              else {
-                //  const publicationCategories = await fetchPublicationCategories(['publicationCategories', newsline])
-  
-                  fallback[unstable_serialize(['publicationCategories', newsline])] = []//publicationCategories;
-  
-                  const filters: Filters = {};
-                 // publicationCategories.forEach((f: { tag: string }) => filters[f.tag] = true);
-                  //console.log("filter:",filters);
-                  const key: fetchPublicationsKey = ['publications', newsline, options.sessionid, options.userslug, filters, '', options.hasNewslines];
-                //  const publications = await fetchPublications(key);
-                 // console.log("Publications key=:", key, publications);
-                  fallback[unstable_serialize(key)] =[]// publications;
-              }
-          }
-          else if (type=='topic'){
-              const key:[u:string,threadid:string,withBody:number]=['topic',threadid, 1];
-             // const topic=await fetchTopic(key);
-             // console.log("GOT TOPIC:",JSON.stringify(topic))
-             const topic={
-              fallback:true
-             }
-              fallback[unstable_serialize(key)] = topic;
-          }
-          //  console.log("queues",queues)
-          //  console.log("fallback",fallback)
-       
-          fallback = Object.assign(fallback, queues);
-          //  console.log("fallback after assign", fallback)
-          */
+        let meta:{
+            description?:string,
+            title?:string,
+            site_name?:string,
+            image?:string,
+            publishedTime?:number,
+            url?:string;
+            
+        }={};
         if (type == 'topic') {
             const key: [u: string, threadid: string, withBody: number,userslug:string] = ['topic', threadid, 1,options.userslug];
             const topic = await fetchTopic(key);
             // console.log("GOT TOPIC:",JSON.stringify(topic))
-
             fallback[unstable_serialize(key)] = topic;
+            meta.description=topic.description;
+            meta.site_name=topic.site_name;
+            meta.title=`${topic.catName}: ${topic.title}`;
+            meta.image=topic.image;
+            meta.publishedTime=topic.shared_time;
+            meta.url=topic.shared_time;
+        }
+        else {
+            meta.description=channelConfig.channelDetails.description;
+            meta.site_name=channelConfig.channelDetails.displayName;
+            meta.title=channelConfig.channelDetails.displayName
+            meta.image==channelConfig.channelDetails.logo;
+            meta.publishedTime=Date.now()/1000|0; 
         }
         const propsWrap = {
             props: {
                 session: options,
                 qparams,
-                fallback
+                fallback,
+                meta
             }
         };
 

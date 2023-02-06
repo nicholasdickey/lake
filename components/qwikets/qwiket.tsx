@@ -258,7 +258,7 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
         if (id)
             console.log("disqus id:", id)
         const { diff, timeString } = TimeDifference(createdat, qparams.timestamp)
-        return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/${id}/#comment-${id}`}><VerticalWrap isTopic={isTopic}>
+        return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/${id}/#comment-${id}`} legacyBehavior><a rel="nofollow"><VerticalWrap isTopic={isTopic}>
             <Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"      placeholder={"blur"} src={catIcon} alt={catName} width={28} height={28} /></PubImageBox>
                 {qType == 'mix' ? <Comment>comment</Comment> : null}<Author>{thread_author ? thread_author : catName}</Author></Row>
@@ -268,7 +268,7 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
                 <TimeSince isTopic={isTopic}>{timeString}</TimeSince></Row>
             <Row key="r5"><Markdown>{postBody}</Markdown></Row>
 
-        </VerticalWrap></Link>
+        </VerticalWrap></a></Link>
     }
     else {
         let { catIcon, catName, tag, image, site_name, published_time, author, slug }: { catIcon: string, catName: string, tag: string, image: string, site_name: string, published_time: number, author: string, slug: string } = item;

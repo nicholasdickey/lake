@@ -252,7 +252,7 @@
                          },
                          {
                              "type": "mp",
-                             "width": 3,
+                             "width": 4,
                              "selector": "newsline",
                              "msc": "navigator"
                          },
@@ -261,11 +261,7 @@
                              "width": 1,
                              "selector": "topics"
                          },
-                         {
-                             "type": "stc",
-                             "width": 1,
-                             "selector": "stickies"
-                         },
+                        
                          {
                              "type": "stc",
                              "width": 1,
@@ -277,7 +273,7 @@
                      "normal": [
                          {
                              "type": "stc",
-                             "width": 1,
+                             "width": 2,
                              "selector": "newsviews"
                          },
                          {
@@ -288,14 +284,10 @@
                          },
                          {
                              "type": "stc",
-                             "width": 1,
+                             "width": 2,
                              "selector": "topics"
-                         },
-                         {
-                             "type": "stc",
-                             "width": 1,
-                             "selector": "twitter"
                          }
+                        
                      ],
                      "thick": [
                          {
@@ -328,7 +320,7 @@
                          },
                          {
                              "type": "mp",
-                             "width": 4,
+                             "width": 5,
                              "selector": "newsline",
                              "msc": "navigator"
                          },
@@ -337,11 +329,7 @@
                              "width": 1,
                              "selector": "topics"
                          },
-                         {
-                             "type": "stc",
-                             "width": 1,
-                             "selector": "stickies"
-                         },
+                         
                          {
                              "type": "stc",
                              "width": 1,
@@ -526,59 +514,6 @@
                          },
                          {
                              "type": "mp",
-                             "width": 3,
-                             "selector": "topic",
-                             "msc": "feed"
-                         },
-                         {
-                             "type": "stc",
-                             "width": 1,
-                             "selector": "topics"
-                         },
-                         {
-                             "type": "stc",
-                             "width": 1,
-                             "selector": "stickies"
-                         },
-                         {
-                             "type": "stc",
-                             "width": 1,
-                             "selector": "twitter"
-                         }
-                     ]
-                 },
-                 "w2100": {
-                     "normal": [
-                         {
-                             "type": "stc",
-                             "width": 1,
-                             "selector": "newsviews"
-                         },
-                         {
-                             "type": "mp",
-                             "width": 4,
-                             "selector": "topic",
-                             "msc": "feed"
-                         },
-                         {
-                             "type": "stc",
-                             "width": 1,
-                             "selector": "topics"
-                         },
-                         {
-                             "type": "stc",
-                             "width": 1,
-                             "selector": "topics"
-                         }
-                     ],
-                     "thick": [
-                         {
-                             "type": "stc",
-                             "width": 1,
-                             "selector": "newsviews"
-                         },
-                         {
-                             "type": "mp",
                              "width": 5,
                              "selector": "topic",
                              "msc": "feed"
@@ -593,36 +528,75 @@
                              "width": 1,
                              "selector": "twitter"
                          }
-                     ],
-                     "dense": [
-                         {
-                             "type": "stc",
-                             "width": 1,
-                             "selector": "newsviews"
-                         },
-                         {
-                             "type": "mp",
-                             "width": 4,
-                             "selector": "topic",
-                             "msc": "feed"
-                         },
-                         {
-                             "type": "stc",
-                             "width": 1,
-                             "selector": "topics"
-                         },
-                         {
-                             "type": "stc",
-                             "width": 1,
-                             "selector": "stickies"
-                         },
-                         {
-                             "type": "stc",
-                             "width": 1,
-                             "selector": "twitter"
-                         }
                      ]
-                 }
+                 },
+                 "w2100": {
+                    "normal": [
+                        {
+                            "type": "stc",
+                            "width": 1,
+                            "selector": "newsviews"
+                        },
+                        {
+                            "type": "mp",
+                            "width": 5,
+                            "selector": "topic",
+                            "msc": "feed"
+                        },
+                        {
+                            "type": "stc",
+                            "width": 1,
+                            "selector": "topics"
+                        }
+                        
+                    ],
+                    "thick": [
+                        {
+                            "type": "stc",
+                            "width": 1,
+                            "selector": "newsviews"
+                        },
+                        {
+                            "type": "mp",
+                            "width": 5,
+                            "selector": "topic",
+                            "msc": "feed"
+                        },
+                        {
+                            "type": "stc",
+                            "width": 1,
+                            "selector": "topics"
+                        },
+                        {
+                            "type": "stc",
+                            "width": 1,
+                            "selector": "twitter"
+                        }
+                    ],
+                    "dense": [
+                        {
+                            "type": "stc",
+                            "width": 1,
+                            "selector": "newsviews"
+                        },
+                        {
+                            "type": "mp",
+                            "width": 5,
+                            "selector": "topic",
+                            "msc": "feed"
+                        },
+                        {
+                            "type": "stc",
+                            "width": 1,
+                            "selector": "topics"
+                        },
+                        {
+                            "type": "stc",
+                            "width": 1,
+                            "selector": "twitter"
+                        }
+                    ]
+                }
              }
          },
          "user": {

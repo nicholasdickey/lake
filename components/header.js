@@ -126,10 +126,10 @@ const Title = styled.div`
         font-size:4.5rem;
     }
     @media(min-width:1800px){
-        font-size:5.4rem;
+        font-size:4.8rem;
     }
     @media(min-width:2100px){
-        font-size:6.0rem;
+        font-size:4.0rem;
     }
 `
 const TitleBand = ({ title, leftLogo, rightLogo }) => {

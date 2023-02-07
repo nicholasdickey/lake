@@ -8,7 +8,8 @@ const ButtonContainer = styled.div`
     right:30px;
  `
 const Button = styled.button`
-
+    position:relative;
+    display:flex;
     cursor:pointer;
     width: 56px;
     height: 56px;
@@ -17,9 +18,8 @@ const Button = styled.button`
     border-radius: 50%;
     color: #fff;
     background-color: #3f51b5;
-    font-size: 1.375rem;;
+    font-size: 0.375rem;;
     box-sizing: border-box;
-    line-height: 1.75;
     &:hover{
        background-color: #2f41a5;  
     }
@@ -30,17 +30,16 @@ const Svg = styled.svg`
   
     margin-top:10px;
     fill: currentColor;
-    width: 1.4em;
-    height: 1.4em;
-    display: inline-block;
+    width: 2rem;
+    height: 2rem;
     transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     user-select: none;
-    flex-shrink: 0;
-
+    margin-left:auto;
+    margin-right:auto;
 `
 export default function ScrollToTopButton() {
     const [visible,setVisible]=useState(false)
-    console.log("Render Button")
+    //console.log("Render Button")
     const onScroll = useCallback(() => {
         const { scrollY } = window;
         console.log("onScroll",scrollY)

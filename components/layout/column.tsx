@@ -85,8 +85,17 @@ const ColumnHeader = styled.div`
     width:auto;
     z-index:100;
 `
+const LeftColumnHeader = styled.div`
+    position:absolute;
+    display:flex;
+    left:0px;
+    justify-content: flex-start;
+    //height:28px;
+    width:auto;
+    z-index:100;
+`
 const InnerHeader = styled.div`
-display:flex;
+    display:flex;
     margin-top:-7px;
     color:var(--highlight);
     font-weight:700;
@@ -345,12 +354,17 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
 
                 return <MpColumn width={width} data-id="mp-column" key='topic-mp'>
                     <StyledColumn width={leftWidth}>
-                        <ColumnHeader> <InnerHeader>{isLeft ? <LeftSelector qType={selector} name={'topic'} updateSession={updateSession} /> : 'topic'}</InnerHeader></ColumnHeader>
-
+                        <ColumnHeader> 
+                        <InnerHeader>{isLeft ? <LeftSelector qType={selector} name={'topic'} updateSession={updateSession} /> : 'topic'}</InnerHeader>
+                        
+                        </ColumnHeader>
+                        <LeftColumnHeader>
+                            <InnerHeader>{qparams.tag=='ld'?'basement':qparams.tag}</InnerHeader>
+                        </LeftColumnHeader>
                         <Topic />
                     </StyledColumn>
                     <StyledColumn width={rightWidth} key="tag-mp">
-                        <ColumnHeader> <InnerHeader>{isLeft ? <LeftSelector qType={'tag'} name={'publication feed'} updateSession={updateSession} /> : 'publication feed'}</InnerHeader></ColumnHeader>
+                        <ColumnHeader> <InnerHeader>{isLeft ? <LeftSelector qType={'tag'} name={'feed'} updateSession={updateSession} /> :qparams.tag=='ld'?'basement':qparams.tag+ ' feed'}</InnerHeader></ColumnHeader>
 
                         {q}</StyledColumn>
                 </MpColumn>

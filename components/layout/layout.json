@@ -229,7 +229,7 @@
                          },
                          {
                              "type": "mp",
-                             "width": 5,
+                             "width": 4,
                              "selector": "newsline",
                              "msc": "navigator"
                          },

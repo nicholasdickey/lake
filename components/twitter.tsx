@@ -41,7 +41,12 @@ const Twitter = () => {
     const ref=useRef(null);
     const [loading,setLoading]=useState(true);
    useEffect(() => {
+       try{
         window.twttr.widgets.load(ref.current);
+       }
+       catch(x){
+        console.log('handled twitter exception',x)
+       }
       }, []);
 
     const url:string=newsline.twitter;

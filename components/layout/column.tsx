@@ -20,6 +20,7 @@ interface Width {
 }
 const StyledColumn = styled.div<Width>`
 position:relative;
+text-overflow:ellipsis;
 width:${({ width }) => width};
 `
 const InnerStyledColumn = styled.div`

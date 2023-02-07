@@ -24,7 +24,7 @@ import { UilNewspaper } from '@iconscout/react-unicons'
 import axios from 'axios';
 //import { UisStar } from '@iconscout/react-unicons'
 const UisStar = UilStar;
-const playfair = Playfair_Display({ subsets: ['latin'], weight: [ '400',], style: ['normal'] })
+const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400',], style: ['normal'] })
 const TitleStyledWrapper = styled.div`
 display:flex;
 width:100%;
@@ -216,28 +216,29 @@ const VerticalWrap = styled.div`
     flex-direction: column;
     align-items: center;
 `
-const login=async (href)=>{
+const login = async (href) => {
     await axios.get(`/api/session/login?href=${encodeURIComponent(href)}`)
 
 }
-const logout=async (updateSession)=>{
-    console.log("logout:updateSession",updateSession)
-  await updateSession({userslug:''})
+const logout = async (updateSession) => {
+    console.log("logout:updateSession", updateSession)
+    await updateSession({ userslug: '' })
 }
-const DatelineBand = ({ channelSlug,  channelDetails, user,updateSession }) => {
+const DatelineBand = ({ channelSlug, channelDetails, user, updateSession }) => {
 
     let subscr_status = +user?.subscr_status;
     if (!subscr_status)
         subscr_status = 0;
     //console.log({ subscr_status })
-    const router=useRouter(); 
+    const router = useRouter();
 
     const { qparams } = useAppContext();
 
-    console.log('DATELINE FFuser:', user ,updateSession)
+    console.log('DATELINE FFuser:', user, updateSession)
 
-    let hometown = channelDetails.hometown;
+    const { hometown, lacantinaUrl } = channelDetails;
     let channel = channelSlug;
+    console.log("channel:", channel, hometown, lacantinaUrl)
     // console.log("CHANNEL:", channel)
 
     const time = qparams.timestamp;
@@ -249,7 +250,7 @@ const DatelineBand = ({ channelSlug,  channelDetails, user,updateSession }) => {
     let avatar = user?.avatar;
 
     let isLoggedIn = user ? 1 : 0;
-    const {setLoading}=useAppContext();
+    const { setLoading } = useAppContext();
     //console.log('dateline',{ isLoggedIn,dateStrging,hometown })
     // return <div/> 
     //return<SubTitle>{`${dateStrging}  ${hometown}`}</SubTitle>
@@ -260,17 +261,26 @@ const DatelineBand = ({ channelSlug,  channelDetails, user,updateSession }) => {
 
             {
                 !isLoggedIn ? <SubTitle><Home><Link href={'/'}><UilNewspaper size="16" color="#888" /></Link></Home>
-                <Link onClick={()=>setLoading("Logging-in via Disqus...")} href={`/api/session/login?href=${encodeURIComponent(router.asPath)}`}>Sign-in</Link>&nbsp;|&nbsp; <a>Subscribe</a> <Martini><a><UilGlassMartiniAlt size="16" color="#888" /></a></Martini></SubTitle> :
+                    <Link onClick={() => setLoading("Logging-in via Disqus...")} href={`/api/session/login?href=${encodeURIComponent(router.asPath)}`}>Sign-in</Link>&nbsp;|&nbsp; 
+                    <a>Subscribe</a> 
+                    <Link onClick={()=>console.log("lacantina click")} href={lacantinaUrl}><Martini><UilGlassMartiniAlt size="16" color="#888" /></Martini></Link>
+                    </SubTitle> :
                     <HorizWrap>
                         <SubTitle><Home><Link href={'/'}><UilNewspaper size="16" color="#888" /></Link></Home>
-                            <a onClick={()=>logout(updateSession)}>
+                            <a onClick={() => logout(updateSession)}>
                                 Sign Out
                             </a>
                         </SubTitle>
                         {!approver ? <SubTitle>
                             |
                         </SubTitle> : null}
-                        <SubTitle> {`${isLoggedIn ? approver ? '[' + name + ']' : name : 'Subscribe'}`}<Martini><a><UilGlassMartiniAlt size="16" color="#888" /></a></Martini></SubTitle>
+                        <SubTitle> {`${isLoggedIn ? approver ? '[' + name + ']' : name : 'Subscribe'}`}
+                            <Link onClick={()=>console.log("lacantina click")} href={lacantinaUrl}>
+                                <Martini>
+                                    <UilGlassMartiniAlt size="16" color="#888" />
+                                </Martini>
+                            </Link>
+                        </SubTitle>
 
 
                     </HorizWrap>
@@ -287,7 +297,7 @@ width:100%;
 export const Header = ({ session, layout, channelSlug, channelDetails, newsline, qparams, updateSession }) => {
 
     const { data: user, error: userError } = useSWR(['user', session.userslug], fetchUser)
-    
+
     // console.log("dark header render",session)
     // console.log("channelDetails",channelDetails)
     //  console.log({ newsline: newsline.toJS(), session: session.toJS() })

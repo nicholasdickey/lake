@@ -86,7 +86,7 @@ const SitenameBox=styled.div`
 `
 
 const HotlistItem=({ session, qparams,item,spaces }: { session: Options, qparams: Qparams,item:any,spaces:number}) => {
-    console.log("Hotlist item",item)
+   // console.log("Hotlist item",item)
     return <ImageBox spaces={spaces} loud={session.loud} >
         <OpacityBox loud={session.loud}>
             <NextImage style={{objectFit:'cover'}} placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={item.image} alt={item.title} fill={true} /></OpacityBox>

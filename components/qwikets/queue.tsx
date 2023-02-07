@@ -163,15 +163,16 @@ const Segment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, s
     extraWide: boolean, qType: string, lastid: string, tail: number, pageIndex: number, hasData: boolean, setData: any
 }) => {
     const { session, qparams } = useAppContext();
-  
+     
     const [hd, setHd] = useState(hasData)
    
 //    const key = ['queue', qType, qparams.newsline, qparams.type=='solo'?1:0,qparams.forum, (qType == 'tag'||qparams.type=='solo') ? qparams.tag : '', pageIndex, lastid, session.sessionid, session.userslug, tail, ''];
-    const key = ['queue', qType, qparams.newsline, qType=='newsline'&&qparams.type=='solo'?1:0,qparams.forum, (qType == 'tag'||qType=='newsline'&&qparams.type=='solo') ? qparams.tag : '', pageIndex, 0, session.sessionid, session.userslug, 0, ''];
+    const key = ['queue', qType, qparams.newsline, qType=='newsline'&&qparams.type=='solo'?1:0,qparams.forum, (qType == 'tag'||qType=='newsline'&&qparams.type=='solo') ? qparams.tag : '', pageIndex, lastid, session.sessionid, session.userslug, 0, ''];
 
-    // console.log("Segment before fetchQueue", { qType, pageIndex, returnedLastid, returnedTail })
+   // console.log("Segment before fetchQueue", { qType, pageIndex})
     const { data, error: queueError, mutate } = useSWR(key, fetchQueue);
-
+   // if(qType=='reacts'&& !data)
+   //     console.log(`SEGMENT ${pageIndex} nodata`)
     const ref = useRef<HTMLDivElement | null>(null)
     const entry = useIntersectionObserver(ref, {})
     /*if (entry&&entry.boundingClientRect.top > 0) {
@@ -188,6 +189,8 @@ const Segment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, s
          */
        // console.log(`dbgi: secondary segment, test for setData`,{qType,pageIndex,hd,data,isVisible})
         if (data && isVisible) {
+           // if(qType=='reacts')
+           // console.log("segment call setdata",pageIndex);
             setData(data, pageIndex, true, data.tail ? data.tail : '');
            // setTimeout(()=>setData(data, pageIndex, true, data.tail ? data.tail : ''),1);
            // setHd(true)
@@ -211,7 +214,7 @@ const FirstSegment = ({ resetSegments,isLeft, extraWide, qType, lastid, tail, pa
     const onData = useCallback((data: any, key: string, config: any) => {
        // console.log("dbg onData FirstSegment segments onData fetchQueue remder", { isLeft, qType, newLastid: data.lastid, lastid, returnedLastid, newTail: data.tail, key, items: data?.items })
         if (data) {
-           // console.log(`dbgi: OnData FirstSegment`);
+           // console.log(`dbgi: OnData FirstSegment`,data);
             setReturnedLastid(data.lastid);
             setReturnedTail(+data.tail);
             //  console.log("remder first segment. got new lastid", qType, data.lastid, lastid)
@@ -220,7 +223,7 @@ const FirstSegment = ({ resetSegments,isLeft, extraWide, qType, lastid, tail, pa
     const key = ['queue', qType, qparams.newsline, qType=='newsline'&&qparams.type=='solo'?1:0,qparams.forum, (qType == 'tag'||qType=='newsline'&&qparams.type=='solo') ? qparams.tag : '', pageIndex, 0, session.sessionid, session.userslug, 0, ''];
 
 
-    console.log("remder FirstSegment:", { type:qparams.type,key, qType, pageIndex, returnedLastid, returnedTail, isLeft })
+   // console.log("remder FirstSegment:", { type:qparams.type,key, qType, pageIndex, returnedLastid, returnedTail, isLeft })
 
     const { data, error: queueError, mutate } = useSWR(key, fetchQueue, {
         onSuccess: onData,
@@ -264,6 +267,8 @@ const FirstSegment = ({ resetSegments,isLeft, extraWide, qType, lastid, tail, pa
         //console.log("dbgi: remder to test a call setData", { hd, isVisible, qType, pageIndex, data })
         if ( data && isVisible) {
            // console.log(" dbgi: &&&&&&&&&&&&&&&&&&&&&&&& remder to a call setData", { isVisible, qType, pageIndex, data })
+          // if(qType=='reacts')
+          // console.log("first segment call setdata",pageIndex,data.lastid);
             setData(data, pageIndex, true, data.tail ? data.tail : '')
            // setHd(true)
         }
@@ -305,9 +310,10 @@ const Segments = ({ qType, isLeft, extraWide,  ...props }: { qType: string, isLe
            // console.log("remder no segments in setData")
             return;
         }
-        console.log('dbgi: Segments, testing length',{pageIndex,length:segments.length})
+       // console.log('dbgi: Segments, testing length',{pageIndex,length:segments.length})
         if (pageIndex >= segments.length - 1) {
-            console.log(`dbgi: Segments adding a segment`,{qType,pageIndex,lastid:data.lastid,tail:data.tail});
+          // if(qType=='reacts')
+          //  console.log(`dbgi: Segments adding a segment`,{qType,pageIndex,lastid:data.lastid,tail:data.tail});
             
             // console.log("remder ---> adding segments for fetchData pageIndex:", pageIndex, qType, 'segments:', segments)
             segments.push(
@@ -315,7 +321,7 @@ const Segments = ({ qType, isLeft, extraWide,  ...props }: { qType: string, isLe
             )
        
         }
-        setSegments([...segments]) //immutable state
+        setTimeout(()=>setSegments([...segments]),1); //immutable state
 
     }, [extraWide, isLeft, qType]);
 

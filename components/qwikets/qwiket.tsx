@@ -46,6 +46,13 @@ const Row = styled.div`
     justify-content: space-between;
     margin-bottom:4px;
     font-size:1.0rem;
+    
+    p{
+       text-overflow:ellipsis;
+       overflow:hidden;
+    }
+    
+
 `
 
 const SiteName = styled.div<IsTopic>`
@@ -156,7 +163,7 @@ const Comment = styled.div`
     border:solid grey 1px;
     padding:1px 3px 1px 3px;
     margin:1px 16px 1px 3px;
-
+   
 `
 const TweetEmbedContainer=styled.div`
     width:100%;
@@ -254,7 +261,7 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
     }
     else if (isReact) {
         let { id, author_avatar, tag, catName, catIcon, author_name, postBody, subscr_status, createdat, thread_author, thread_title, thread_description, thread_url, slug } = item;
-        // console.log("React ",item)
+         console.log("React ",item)
         if (id)
             console.log("disqus id:", id)
         const { diff, timeString } = TimeDifference(createdat, qparams.timestamp)
@@ -266,7 +273,7 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
             <Row key="r3"><Description><Markdown>{description}</Markdown></Description></Row>
             <Row key="r4"><AvatarBox><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={author_avatar.indexOf('http') < 0 ? `https:${author_avatar}` : author_avatar} alt={author_name} fill={true} /></AvatarBox><AuthorPoster>{author_name}</AuthorPoster>
                 <TimeSince isTopic={isTopic}>{timeString}</TimeSince></Row>
-            <Row key="r5"><Markdown>{postBody}</Markdown></Row>
+            <Row key="r5"><Markdown>{`<div style="width:100%;">${postBody}</div>`}</Markdown></Row>
 
         </VerticalWrap></a></Link>
     }

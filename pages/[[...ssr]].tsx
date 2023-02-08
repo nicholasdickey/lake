@@ -234,7 +234,7 @@ export const getServerSideProps = withSessionSsr(
         if (type == 'topic') {
             const key: [u: string, threadid: string, withBody: number, userslug: string] = ['topic', threadid, 1, options.userslug];
             const topic = await fetchTopic(key);
-            console.log("GOT TOPIC:", JSON.stringify(topic))
+           // console.log("GOT TOPIC:", JSON.stringify(topic))
             fallback[unstable_serialize(key)] = topic;
             const { item } = topic;
             meta.description = item.description;

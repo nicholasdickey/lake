@@ -40,6 +40,7 @@ export default function Home({ items, channelDetails, host, forum }: { channelDe
             return `<item>
             <link>${flink}</link>
             <title>${title}</title>
+            <description>${p.description}</description
             <pubDate>${isoDate}</pubDate>  
         </item>`
         }
@@ -104,6 +105,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
             <link>${flink}</link>
             <title>${title}</title>
             <pubDate>${isoDate}</pubDate>  
+            <description>${p.description}</description>
         </item>`
             }
             catch (x) {

@@ -37,10 +37,8 @@ export const initLoginSession=async(userslug:string,options:Options)=>{
    return JSON.parse(res.data.userSession)||null;
 }
 
-export const processLoginCode=async (code:string,appid:string)=>{
-   if(!appid)
-   appid=process.env.NEXT_PUBLIC_APPID||'1013';
-   const url = `${process.env.NEXT_PUBLIC_QWIKET_API}/api?task=disqus-login&code=${code}&appid=${appid}`;
+export const processLoginCode=async (code:string,host:string)=>{
+   const url = `${process.env.NEXT_PUBLIC_QWIKET_API}/api?task=disqus-login&code=${code}&host=${host}`;
    
    const res = await axios.get(url);
    console.log("processLoginCode returned from axios get ",url,res.data)

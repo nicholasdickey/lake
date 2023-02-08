@@ -19,6 +19,7 @@ import {
     GetServerSidePropsContext,
     GetServerSidePropsResult,
     NextApiHandler,
+    GetServerSideProps
 } from "next";
 import { stringify } from "querystring";
 import { networkInterfaces } from "os";
@@ -57,7 +58,7 @@ export default function Home({ session, qparams, fallback, meta, error }: HomePr
  */
 
 export const getServerSideProps = withSessionSsr(
-    async function getServerSideProps(context: GetServerSidePropsContext) {
+    async function getServerSideProps(context: GetServerSidePropsContext):Promise<any> {
 
         const host = context.req.headers.host;
         console.log("HOST:", host)
@@ -69,7 +70,7 @@ export const getServerSideProps = withSessionSsr(
         let [forum] = ssr;
 
         console.log("FORUM:", forum)
-        if (forum != 'usconservative') {
+        if (forum != process.env.DEFAULT_FORUM) {
             context.res.statusCode = 404;
             return { props: { error: 404 } }
         }
@@ -150,9 +151,9 @@ export const getServerSideProps = withSessionSsr(
         if (code) {
             console.log("CODE: ", code, state);
             const jsonState = JSON.parse(state);
-            const { href, appid } = jsonState;
-            console.log("CODE: ", code, state, href, appid);
-            const user = await processLoginCode(code, appid);
+            const { href } = jsonState;
+            console.log("CODE: ", code, state, href);
+            const user = await processLoginCode(code,host);
             if (user) {
                 const { slug } = user;
                 console.log("ffff1")

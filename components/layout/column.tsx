@@ -360,12 +360,12 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
                         
                         </ColumnHeader>
                         <LeftColumnHeader>
-                            <InnerHeader>{qparams.tag=='ld'?'basement':qparams.tag}</InnerHeader>
+                            <InnerHeader>{qparams.tag=='ld'?'basement':qparams.tag=='fq'?'americafirstnews':qparams.tag}</InnerHeader>
                         </LeftColumnHeader>
                         <Topic />
                     </StyledColumn>
                     <StyledColumn width={rightWidth} key="tag-mp">
-                        <ColumnHeader> <InnerHeader>{isLeft ? <LeftSelector qType={'tag'} name={'feed'} updateSession={updateSession} /> :qparams.tag=='ld'?'basement':qparams.tag+ ' feed'}</InnerHeader></ColumnHeader>
+                        <ColumnHeader> <InnerHeader>{isLeft ? <LeftSelector qType={'tag'} name={'feed'} updateSession={updateSession} /> :(qparams.tag=='ld'?'basement':qparams.tag=='fq'?'americafirstnews':qparams.tag)+ ' feed'}</InnerHeader></ColumnHeader>
 
                         {q}</StyledColumn>
                 </MpColumn>

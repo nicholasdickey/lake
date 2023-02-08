@@ -248,8 +248,8 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
               (max-width: 2200px) 50vw, 33vw"      src={catIcon} alt={catName} /></PubImageBox>
                 <Right><SiteName isTopic={isTopic}>{site_name}</SiteName><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right></Row>
             {author ? <Row>{author}</Row> : null}
-            <Row key="r2"><Link href={item.url}><Title isTopic={isTopic}>{title}</Title></Link></Row>
-            <Row key="3.1"><Link href={item.url}>{item.url}</Link></Row>
+            <Row key="r2"><Link href={item.url} legacyBehavior><a rel="nofollow"><Title isTopic={isTopic}>{title}</Title></a></Link></Row>
+            <Row key="3.1"><Link href={item.url} legacyBehavior><a rel="nofollow">{item.url}</a></Link></Row>
             <Row key="r3"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
           
@@ -289,7 +289,7 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
         }
        // console.log("qwiket render 2 istag", isTag, 'diff:', diff)
         if (slug == 'loading') {
-            return <Link href={`/${qparams.forum}/topic/${tag}/${slug}${qparams.layoutNumber!='l1'?'/'+qparams.layoutNumber:''}`}><VerticalWrap isTopic={isTopic}>
+            return <Link href={`/${qparams.forum}/topic/${tag}/${slug}${qparams.layoutNumber!='l1'?'/'+qparams.layoutNumber:''}`} legacyBehavior><a rel="nofollow"><VerticalWrap isTopic={isTopic}>
                 <Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"     placeholder={"blur"} src={'https://qwiket.com/static/css/afnLogo.png'} alt={'America First News'} /></PubImageBox>
                     <Right><SiteName isTopic={isTopic}>©{'am1.news'}</SiteName><TimeSince isTopic={isTopic}>{0}</TimeSince></Right></Row>
@@ -298,10 +298,10 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
                 <Row key="r3"><Markdown  >{'The Internet of Us'}</Markdown></Row>
                 <Row key="r4" ><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
 
-            </VerticalWrap></Link>
+            </VerticalWrap></a></Link>
         }
         console.log ("qwiketLink",`/${qparams.forum}/topic/${tag}/${slug}${qparams.layoutNumber!='l1'?'/'+qparams.layoutNumber:''}`);
-        return <Link href={`/${qparams.forum}/topic/${tag}/${slug}${qparams.layoutNumber!='l1'?'/'+qparams.layoutNumber:''}`}><VerticalWrap isTopic={isTopic} isTag={isTag} diff={diff}>
+        return <Link href={`/${qparams.forum}/topic/${tag}/${slug}${qparams.layoutNumber!='l1'?'/'+qparams.layoutNumber:''}`} legacyBehavior><a rel="nofollow"><VerticalWrap isTopic={isTopic} isTag={isTag} diff={diff}>
             <Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} style={{ height: '38', width: 'auto' }} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"       placeholder={"blur"} src={catIcon} alt={catName} /></PubImageBox>
                 <Right><SiteName isTopic={isTopic}>©{site_name}</SiteName><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right> </Row>
@@ -310,7 +310,7 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
             <Row key="r3"><Markdown  >{description}</Markdown></Row>
             <Row key="r4"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} style={{ maxWidth: "100%", height: "100%", objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
 
-        </VerticalWrap></Link>
+        </VerticalWrap></a></Link>
     }
 
 

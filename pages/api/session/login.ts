@@ -25,7 +25,7 @@ async function handler(
    //if(!appid)
    //appid=process.env.NEXT_PUBLIC_APPID||'1013';
    if(!appid)
-   appid='';
+   appid='1003';
    const state=encodeURIComponent(`{"href":"${href}"}`);
    const url = `${process.env.NEXT_PUBLIC_QWIKET_API}/api?task=disqus-login&appid=${appid}&state=${state}&host=${encodeURIComponent(host)}`;
    console.log("LOGIN API:",url)

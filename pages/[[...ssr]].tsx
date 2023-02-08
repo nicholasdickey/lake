@@ -58,10 +58,10 @@ export default function Home({ session, qparams, fallback, meta, error }: HomePr
  */
 
 export const getServerSideProps = withSessionSsr(
-    async function getServerSideProps(context: GetServerSidePropsContext):Promise<any> {
+    async function getServerSideProps(context: GetServerSidePropsContext): Promise<any> {
 
-        const host = context.req.headers.host;
-        console.log("HOST:", host)
+        const host = context.req.headers.host || "";
+        //console.log("HOST:", host)
         const { code, state }: { code: string, state: string } = context.query as any;
         // parse dynamic params:
         let ssr = context.params?.ssr as string[];
@@ -153,7 +153,7 @@ export const getServerSideProps = withSessionSsr(
             const jsonState = JSON.parse(state);
             const { href } = jsonState;
             console.log("CODE: ", code, state, href);
-            const user = await processLoginCode(code,host);
+            const user = await processLoginCode(code, host);
             if (user) {
                 const { slug } = user;
                 console.log("ffff1")
@@ -197,12 +197,12 @@ export const getServerSideProps = withSessionSsr(
 
         const channelConfig = await fetchChannelConfig(newsline);
 
-        console.log("GOT channelConfig", channelConfig)
+       // console.log("GOT channelConfig", channelConfig)
         const layoutType = type == 'topic' ? 'context' : type == 'solo' ? 'newsline' : type;
         const key: fetchChannelLayoutKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, layoutType, options.dense, options.thick, layoutNumber];
         //console.log("CALLING fetchChannelLayout:",key);
         const channelLayout = await fetchChannelLayout(key);
-        console.log("GOT CHANNEL LAYOUT", JSON.stringify(channelLayout))
+       // console.log("GOT CHANNEL LAYOUT", JSON.stringify(channelLayout))
         // console.log("=================")
         const staleLKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, layoutType, 0, 1, layoutNumber];
         const staleLKey1 = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, layoutType, 0, 0, layoutNumber];
@@ -251,7 +251,7 @@ export const getServerSideProps = withSessionSsr(
             meta.image == channelConfig.channelDetails.logo;
             meta.publishedTime = Date.now() / 1000 | 0;
         }
-        console.log("META", type, JSON.stringify(meta))
+       // console.log("META", type, JSON.stringify(meta))
         const propsWrap = {
             props: {
                 session: options,

@@ -20,7 +20,8 @@ async function handler(
    // let options: Options = req.session.options ;
    // const {sessionid}=options;
    let {appid,href='/'}=req.query;
-   const host=req.headers.host||'';
+   console.log("login: host=",req.headers.host)
+   const host=req.headers.host||'am1.news';
    //if(!appid)
    //appid=process.env.NEXT_PUBLIC_APPID||'1013';
    if(!appid)

@@ -37,6 +37,7 @@ async function handler(
    catch(x){
        console.log(x)
    }
+   return res.status(200).json({url,result});
    const json=result?.data;
    console.log("DISQUS-LOGIN", json);
    console.log(JSON.stringify({ json }));

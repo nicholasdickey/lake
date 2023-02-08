@@ -29,6 +29,7 @@ async function handler(
    const state=encodeURIComponent(`{"href":"${href}"}`);
    const url = `${process.env.NEXT_PUBLIC_QWIKET_API}/api?task=disqus-login&appid=${appid}&state=${state}&host=${encodeURIComponent(host)}`;
    console.log("LOGIN API:",url)
+   return res.status(200).json({url});
    let result;
    try {
        result = await axios.get(url);     

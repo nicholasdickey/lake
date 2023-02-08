@@ -47,13 +47,13 @@ export const getServerSideProps = withSessionSsr(
         // parse dynamic params:
         let ssr = context.params?.ssr as string[];
         if(!ssr)
-            ssr = ["usconservative"];
+            ssr = [`${process.env.DEFAULT_FORUM}`];
         let [forum] = ssr;
        
         console.log("FORUM:", forum)
         if(forum=='index'){
             console.log("INDEX FORUM")
-            forum='usconservative';
+            forum=process.env.DEFAULT_FORUM||'';
         }
         let type = ssr[1];
         if (!type)

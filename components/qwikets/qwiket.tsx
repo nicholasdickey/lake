@@ -261,9 +261,9 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
     }
     else if (isReact) {
         let { id, author_avatar, tag, catName, catIcon, author_name, postBody, subscr_status, createdat, thread_author, thread_title, thread_description, thread_url, slug } = item;
-         console.log("React ",item)
-        if (id)
-            console.log("disqus id:", id)
+       
+       // if (id)
+       //     console.log("disqus id:", id)
         const { diff, timeString } = TimeDifference(createdat, qparams.timestamp)
         return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/${id}/#comment-${id}`} legacyBehavior><a rel="nofollow"><VerticalWrap isTopic={isTopic}>
             <Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,

@@ -20,10 +20,13 @@ async function handler(
    // let options: Options = req.session.options ;
    // const {sessionid}=options;
    let {appid,href='/'}=req.query;
+   const host=req.headers.host||'';
+   //if(!appid)
+   //appid=process.env.NEXT_PUBLIC_APPID||'1013';
    if(!appid)
-   appid=process.env.NEXT_PUBLIC_APPID||'1013';
+   appid='';
    const state=encodeURIComponent(`{"href":"${href}"}`);
-   const url = `${process.env.NEXT_PUBLIC_QWIKET_API}/api?task=disqus-login&appid=${appid}&state=${state}`;
+   const url = `${process.env.NEXT_PUBLIC_QWIKET_API}/api?task=disqus-login&appid=${appid}&state=${state}&host=${encodeURIComponent(host)}`;
    console.log("LOGIN API:",url)
    let result;
    try {

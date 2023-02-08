@@ -108,12 +108,17 @@ export const fetchTopic=async ([u,threadid, withBody,userslug]:[u:string,threadi
    }
    return res ? res.data : null;
 }
-export const fetchQueue = async ([u, qType, newsline, solo, forum, tag, page, lastid, sessionid, userslug, tail, test,breakCache]:
-    [u: string, qType: string, newsline: string, solo:number,forum?: string, tag?: string, page?: number, lastid?: string, sessionid?: string, userslug?: string, tail?: number, test?: string,breakCache?:string]) => {
+export interface FetchQueueKey {
+   key:[u: string, qType: string, newsline: string, solo:number,forum?: string, tag?: string, page?: number, lastid?: string, sessionid?: string, userslug?: string, tail?: number, test?: string,breakCache?:string,size?:number]
+}
+export const fetchQueue = async ([u, qType, newsline, solo, forum, tag, page, lastid, sessionid, userslug, tail, test,breakCache,size]:FetchQueueKey["key"]
+    ) => {
    let params;
   // console.log("remder fetchQueue:", `['queue',qType:${qType},newsline:${newsline},forum:${forum},tag:${tag},page:${page},lastid:${lastid},sessionid:${sessionid},userslug:${userslug},tail:${tail}]`)
    if(!page)
    page=0;
+   if(!size)
+   size=0;
    if(!lastid)
    lastid='0';
    if(!forum)forum='';

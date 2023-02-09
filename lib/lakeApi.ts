@@ -9,6 +9,12 @@ const lakeApi = (url: string) => {
    //console.log("calling lakeApi, ",url)
    return axios.get(url).then(res => res.data)
 }
+export const fetchSitemap=async(newsline:string,startDate:string)=>{
+   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/sitemap/fetch?newsline=${newsline}&startDate=${startDate}`;
+   console.log("calling lakeApi fetchSitemap ", url)
+   const res = await axios.get(url);
+   return res.data.sitemap;
+}
 export const updateUserSession=async(userslug:string,options:Options)=>{
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/user/updateSession?`
    //console.log("calling lakeApi user/updateSession ", url)

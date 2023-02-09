@@ -81,7 +81,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         <description>${channelDetails.description}</description>
       `;
 
-        const rssItems = items.map((p, itemCount) => {
+        const rssItems = items.map((p:any, itemCount:number) => {
             try {
                 console.log("rss item:", JSON.stringify(p))
                 const title = `${p.site_name ? p.site_name + ': ' : ''}${p.title}` || ``;
@@ -112,7 +112,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                 console.log("Exception in rssItems", x)
             }
         })
-        const rss = rssItems.filter(p => p ? true : false)
+        const rss = rssItems.filter((p:any) => p ? true : false)
         const all = `${header}${rss} </channel>
     </rss>`
         context.res.setHeader('Content-Type', 'text/xml');

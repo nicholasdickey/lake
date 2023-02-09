@@ -25,7 +25,7 @@ async function handler(
     const body = req.body;
     
     let inSession = body.session ? (body.session) : {};
-    console.log("inSession:",inSession)
+    //console.log("inSession:",inSession)
     req.session.options = Object.assign(options, inSession);
   
     await req.session.save();

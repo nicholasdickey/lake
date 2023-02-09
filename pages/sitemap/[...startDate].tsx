@@ -23,6 +23,7 @@ export default function Home() {
  */
 
 export const getServerSideProps=async(context: GetServerSidePropsContext)=>{
+    console.log("params:",context.params)
     const host = context.req.headers.host || "";
     let [newsline,forum,startDate] = context.params?.startDate as string[];
     const topics=await fetchSitemap(newsline,startDate);

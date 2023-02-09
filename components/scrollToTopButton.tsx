@@ -42,7 +42,7 @@ export default function ScrollToTopButton() {
     //console.log("Render Button")
     const onScroll = useCallback(() => {
         const { scrollY } = window;
-        console.log("onScroll",scrollY)
+        //console.log("onScroll",scrollY)
         if (scrollY >= 10) {
          
            setVisible(true);

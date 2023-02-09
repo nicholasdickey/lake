@@ -147,12 +147,7 @@ const Notifications = ({ isLeft, qType, newsline, forum, lastid, tail, sessionid
     // console.log("Notifications Remder",qType,name,isLeft,data)
     return <ColumnHeader>{qType != 'topics' && +notifications > 0 ? <LeftHeader onClick={onClick}>Show {notifications} New {itemName}</LeftHeader> : <div />}</ColumnHeader>
 }
-const PlainHeader = ({ qType }: { qType: string}) => {
 
-    const name = qType == 'mix' ? 'news&views' : qType == 'tag' ? 'publication feed' : qType == 'topics' ? 'active topics' : qType == 'reacts' ? 'comments' : qType;
-
-    return <ColumnHeader> <div /><InnerHeader><div>{name} </div></InnerHeader></ColumnHeader>
-}
 /**
  * A workaround the problems with swrInfinite
  * @param param0 
@@ -340,7 +335,7 @@ const Segments = ({ qType, isLeft, extraWide,  ...props }: { qType: string, isLe
         ]
     }
     const [segments, setSegments] = useState(generateFirstSegment('Segments:useState'));
-  //  console.log('REMDER Segments:', JSON.stringify({ qType, isLeft }))
+    console.log('REMDER Segments:', JSON.stringify({ qType, isLeft }))
     return <QueueWrap>{segments}</QueueWrap>
 
 }
@@ -348,7 +343,7 @@ const Queue = ({ qType, isLeft,  ...props }: { qType: string, isLeft: boolean, e
     var randomstring = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     //const [guid, setGuid] = useState(randomstring())
     const { session } = useAppContext();
-    //console.log("dbg q: queue render", guid, qType)
+    console.log("dbg q: queue remder",  qType)
     qType = isLeft ? session.leftColumnOverride || qType : qType;
     let queue;
     switch (qType) {

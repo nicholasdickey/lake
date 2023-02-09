@@ -38,7 +38,7 @@ async function handler(
     await req.session.save();
 
     const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/newsline/update?navigator=1`
-    console.log("calling lakeApi fetchNAvigator, ", url)
+   // console.log("calling lakeApi fetchNAvigator, ", url)
     let result;
     try {
         result = await axios.post(url, {

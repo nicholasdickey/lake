@@ -11,7 +11,7 @@ const lakeApi = (url: string) => {
 }
 export const updateUserSession=async(userslug:string,options:Options)=>{
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/user/updateSession?`
-   console.log("calling lakeApi user/updateSession ", url)
+   //console.log("calling lakeApi user/updateSession ", url)
    const res = await axios.post(url,{
       userslug,
       options
@@ -20,7 +20,7 @@ export const updateUserSession=async(userslug:string,options:Options)=>{
 }
 export const getUserSession=async(userslug:string)=>{
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/user/fetchSession?`
-   console.log("calling lakeApi user/fetchSession ", url)
+  // console.log("calling lakeApi user/fetchSession ", url)
    const res = await axios.post(url,{
       userslug   
    });
@@ -28,7 +28,7 @@ export const getUserSession=async(userslug:string)=>{
 }
 export const initLoginSession=async(userslug:string,options:Options)=>{
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/user/initLogin?`
-   console.log("calling lakeApi user/initLogin ", url)
+   //console.log("calling lakeApi user/initLogin ", url)
    const res = await axios.post(url,{
       userslug,
       options
@@ -41,7 +41,7 @@ export const processLoginCode=async (code:string,host:string)=>{
    const url = `${process.env.NEXT_PUBLIC_QWIKET_API}/api?task=disqus-login&code=${code}&host=${host}`;
    
    const res = await axios.get(url);
-   console.log("processLoginCode returned from axios get ",url,res.data)
+   //console.log("processLoginCode returned from axios get ",url,res.data)
    if(res.data.success){
       const user=res.data.user;
       return user;
@@ -66,7 +66,7 @@ export const fetchChannelLayout = async ([u, slug, hasLayout, sessionid, userslu
    try {
       const sessionParam = hasLayout ? userslug ? `&userslug=${userslug}` : `&sessionid=${sessionid}` : ``
       const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/layout/fetch?channel=${slug}${sessionParam}&pageType=${type}&dense=${dense}&thick=${thick}&layoutNumber=${layoutNumber}`
-       console.log("calling lakeApi fetchChannelLayout, ", url)
+      // console.log("calling lakeApi fetchChannelLayout, ", url)
       const res = await axios.get(url);
     //  console.log("return ",res.data)
       return res.data;

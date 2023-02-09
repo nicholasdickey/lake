@@ -222,12 +222,13 @@ const MyNewsline = ({ session, qparams, updateSession }: { session: Options, qpa
                 <Name dense={session.dense==1}>{!n.default ? <Highlight>{n.name}</Highlight> : <>{n.name}</>}</Name>
             </Left></Link>
             <Check checked={n.switch == 'on'} onChange={async (s: boolean) => {
+               // console.log("onChange check")
                 updateSession({ hasNewslines: true });
                 mutate(updateMyNewsline({ tag: n.tag, switch: s ? 'on' : 'off', newsline, sessionid, userslug: session.userslug }),
                     {
                         optimisticData: myNewsline.map((p: Publication) => {
-                            if (p.tag = n.tag) {
-                                console.log("Optimistic update ", p.tag, s ? 'on' : 'off')
+                            if (p.tag == n.tag) {
+                               // console.log("check Optimistic update ", p.tag, s ? 'on' : 'off')
                                 return {
                                     ...p,
                                     switch: s ? 'on' : 'off'

@@ -23,6 +23,9 @@ import {
 } from "next";
 import { stringify } from "querystring";
 import { networkInterfaces } from "os";
+import {
+    fetchSitemap
+} from '../lib/lakeApi';
 
 interface HomeProps {
     session?: Options,
@@ -67,9 +70,24 @@ export const getServerSideProps = withSessionSsr(
         let ssr = context.params?.ssr as string[];
         if (!ssr)
             ssr = [`${process.env.DEFAULT_FORUM}`];
-        let [forum] = ssr;
+        let [forum] = ssr||[''];
 
         console.log("FORUM:", forum)
+        if(forum.indexOf("sitemap")==0 && forum.indexOf(".txt")>=0){
+           // console.log("params:",context.params)
+            const filename=forum.split(".")[0];
+            const parts=filename.split('_');
+            console.log('parts:', JSON.stringify(parts))
+            const host = context.req.headers.host || "";
+            let [dummy,newsline,forumR,startDate] =parts;// context.params?.startDate as string[];
+            const topics=await fetchSitemap(newsline,startDate);
+            const sitemap=topics.map(t=>`https://${host}/${forumR}/topic/${t}`).join('\n')
+            context.res.write(sitemap);//.split(',').map(t=>`${t}\n`));
+            context.res.end();
+            return {props:{}}
+        }
+
+
         if (forum != process.env.DEFAULT_FORUM) {
             context.res.statusCode = 404;
             return { props: { error: 404 } }

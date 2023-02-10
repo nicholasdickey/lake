@@ -251,8 +251,10 @@ export const getServerSideProps = withSessionSsr(
         } = {};
         if (type == 'topic') {
             const key: [u: string, threadid: string, withBody: number, userslug: string] = ['topic', threadid, 1, options.userslug];
+           try{
             const topic = await fetchTopic(key);
            // console.log("GOT TOPIC:", JSON.stringify(topic))
+
             fallback[unstable_serialize(key)] = topic;
             const { item } = topic;
             meta.description = item.description;
@@ -261,6 +263,12 @@ export const getServerSideProps = withSessionSsr(
             meta.image = item.image;
             meta.publishedTime = item.shared_time;
             meta.url = item.shared_time;
+           }
+           catch(x){
+            console.log("FETCH TOPIC ERROR",x);
+            context.res.statusCode = 404;
+            return { props: { error: 404 } }
+           }
         }
         else {
             meta.description = channelConfig.channelDetails.description;

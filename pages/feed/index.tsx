@@ -19,7 +19,7 @@ export default function Home({ items, channelDetails, host, forum }: { channelDe
       `;
     const rssItems = items.map((p, itemCount) => {
         try {
-            console.log("rss item:", JSON.stringify(p))
+          //  console.log("rss item:", JSON.stringify(p))
             const title = `${p.site_name ? p.site_name + ': ' : ''}${p.title}` || ``;
             const date = p.shared_time;
             if (!date || date == "null") return;
@@ -48,8 +48,9 @@ export default function Home({ items, channelDetails, host, forum }: { channelDe
             console.log("Exception in rssItems", x)
         }
     })
-    const all = `${header}${rssItems} </channel>
+    const all = `${header}${rssItems.join('\n')} </channel>
     </rss>`
+    console.log("RSS",all)
     return <div><div>{all}</div></div>;
 }
 
@@ -83,7 +84,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
         const rssItems = items.map((p:any, itemCount:number) => {
             try {
-                console.log("rss item:", JSON.stringify(p))
+              //  console.log("rss item:", JSON.stringify(p))
                 const title = `${p.site_name ? p.site_name + ': ' : ''}${p.title}` || ``;
                 const date = p.shared_time;
                 if (!date || date == "null") return;
@@ -101,19 +102,21 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     date * 1000
                 ).toISOString();
                 const flink = `https://${host}/${forum}/topic/${p.tag}/${p.slug}`;
-                return `<item>
+                return `
+        <item>
             <link>${flink}</link>
             <title>${title}</title>
             <pubDate>${isoDate}</pubDate>  
             <description>${p.description}</description>
-        </item>`
+        </item>
+        `
             }
             catch (x) {
                 console.log("Exception in rssItems", x)
             }
         })
         const rss = rssItems.filter((p:any) => p ? true : false)
-        const all = `${header}${rss} </channel>
+        const all = `${header}${rss.join('\n')} </channel>
     </rss>`
         context.res.setHeader('Content-Type', 'text/xml');
         context.res.write(all);

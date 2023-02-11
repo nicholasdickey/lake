@@ -51,6 +51,10 @@ const Row = styled.div`
        text-overflow:ellipsis;
        overflow:hidden;
     }
+    a{
+        text-overflow:ellipsis;
+        overflow:hidden;
+     }
     
 
 `

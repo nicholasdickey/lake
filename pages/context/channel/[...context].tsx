@@ -36,7 +36,8 @@ export const getServerSideProps=async(context: GetServerSidePropsContext)=>{
     const {tag}=item;
     console.log("TOPIC:",JSON.stringify(item))
     console.log("CONTEXT MIGRATION:",JSON.stringify({channel,tag,threadid,cc}));
-    const url=`/usconservative/topic/${tag}/${threadid}/l1${cc?`/${cc}#${cc}`:''}`;
+    
+    const url=`https://${process.env.CANONIC_DOMAIN}/usconservative/topic/${tag}/${threadid}/l1${cc?`/${cc}#${cc}`:''}`;
     console.log("CONTEXT REDIRECT",url)
     return {
         redirect: {

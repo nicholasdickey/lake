@@ -64,27 +64,28 @@ export const getServerSideProps = withSessionSsr(
     async function getServerSideProps(context: GetServerSidePropsContext): Promise<any> {
 
         const host = context.req.headers.host || "";
+      
         //console.log("HOST:", host)
         const { code, state }: { code: string, state: string } = context.query as any;
         // parse dynamic params:
         let ssr = context.params?.ssr as string[];
         if (!ssr)
             ssr = [`${process.env.DEFAULT_FORUM}`];
-        let [forum] = ssr||[''];
+        let [forum] = ssr || [''];
 
         console.log("FORUM:", forum)
-        if(forum.indexOf("sitemap")==0 && forum.indexOf(".txt")>=0){
-           // console.log("params:",context.params)
-            const filename=forum.split(".")[0];
-            const parts=filename.split('_');
+        if (forum.indexOf("sitemap") == 0 && forum.indexOf(".txt") >= 0) {
+            // console.log("params:",context.params)
+            const filename = forum.split(".")[0];
+            const parts = filename.split('_');
             console.log('parts:', JSON.stringify(parts))
             const host = context.req.headers.host || "";
-            let [dummy,newsline,forumR,startDate] =parts;// context.params?.startDate as string[];
-            const topics=await fetchSitemap(newsline,startDate);
-            const sitemap=topics.map((t:any)=>`https://${host}/${forumR}/topic/${t}`).join('\n')
+            let [dummy, newsline, forumR, startDate] = parts;// context.params?.startDate as string[];
+            const topics = await fetchSitemap(newsline, startDate);
+            const sitemap = topics.map((t: any) => `https://${host}/${forumR}/topic/${t}`).join('\n')
             context.res.write(sitemap);//.split(',').map(t=>`${t}\n`));
             context.res.end();
-            return {props:{}}
+            return { props: {} }
         }
 
 
@@ -115,7 +116,35 @@ export const getServerSideProps = withSessionSsr(
             defaultWidth = 900;
         else if (platformType == 'desktop')
             defaultWidth = 1200;
+       
+        const sourceDomainsString = process.env.SOURCE_DOMAINS || '';
+        const sourceDomains = sourceDomainsString.split(',');
+    
+    
+        sourceDomains.forEach((sd: string) => {
+            if (host.indexOf(sd) >= 0) {
+                if (type == 'topic' || type == 'home') {
+                    return {
+                        redirect: {
+                            permanent: true,
+                            destination: `https://${process.env.CANONIC_DOMAIN}/${forum}/home/${tag}/${threadid}`,
+                        },
+                        props: {},
+                    };
+                }
+                else {
+                    return {
+                        redirect: {
+                            permanent: true,
+                            destination: `https://${process.env.CANONIC_DOMAIN}`,
+                        },
+                        props: {},
+                    };
 
+                }
+            }
+            
+        });
 
         // get encrypted session from the cookie or initialize the default   
         let startoptions = context.req.session?.options || null;
@@ -215,12 +244,12 @@ export const getServerSideProps = withSessionSsr(
 
         const channelConfig = await fetchChannelConfig(newsline);
 
-       // console.log("GOT channelConfig", channelConfig)
+        // console.log("GOT channelConfig", channelConfig)
         const layoutType = type == 'topic' ? 'context' : type == 'solo' ? 'newsline' : type;
         const key: fetchChannelLayoutKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, layoutType, options.dense, options.thick, layoutNumber];
         //console.log("CALLING fetchChannelLayout:",key);
         const channelLayout = await fetchChannelLayout(key);
-       // console.log("GOT CHANNEL LAYOUT", JSON.stringify(channelLayout))
+        // console.log("GOT CHANNEL LAYOUT", JSON.stringify(channelLayout))
         // console.log("=================")
         const staleLKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, layoutType, 0, 1, layoutNumber];
         const staleLKey1 = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, layoutType, 0, 0, layoutNumber];
@@ -247,30 +276,30 @@ export const getServerSideProps = withSessionSsr(
             image?: string,
             publishedTime?: number,
             url?: string,
-            canonic?:string
+            canonic?: string
 
         } = {};
         if (type == 'topic') {
             const key: [u: string, threadid: string, withBody: number, userslug: string] = ['topic', threadid, 1, options.userslug];
-           try{
-            const topic = await fetchTopic(key);
-           // console.log("GOT TOPIC:", JSON.stringify(topic))
+            try {
+                const topic = await fetchTopic(key);
+                // console.log("GOT TOPIC:", JSON.stringify(topic))
 
-            fallback[unstable_serialize(key)] = topic;
-            const { item } = topic;
-            meta.description = item.description;
-            meta.site_name = item.site_name;
-            meta.title = `${item.catName}: ${item.title}`;
-            meta.image = item.image;
-            meta.publishedTime = item.shared_time;
-            meta.url = item.shared_time;
-            meta.canonic=`https://${process.env.CANONIC_DOMAIN}/${forum}/topic/${tag}/${threadid}`
-           }
-           catch(x){
-            console.log("FETCH TOPIC ERROR",x);
-            context.res.statusCode = 404;
-            return { props: { error: 404 } }
-           }
+                fallback[unstable_serialize(key)] = topic;
+                const { item } = topic;
+                meta.description = item.description;
+                meta.site_name = item.site_name;
+                meta.title = `${item.catName}: ${item.title}`;
+                meta.image = item.image;
+                meta.publishedTime = item.shared_time;
+                meta.url = item.shared_time;
+                meta.canonic = `https://${process.env.CANONIC_DOMAIN}/${forum}/topic/${tag}/${threadid}`
+            }
+            catch (x) {
+                console.log("FETCH TOPIC ERROR", x);
+                context.res.statusCode = 404;
+                return { props: { error: 404 } }
+            }
         }
         else {
             meta.description = channelConfig.channelDetails.description;
@@ -278,9 +307,9 @@ export const getServerSideProps = withSessionSsr(
             meta.title = channelConfig.channelDetails.displayName
             meta.image == channelConfig.channelDetails.logo;
             meta.publishedTime = Date.now() / 1000 | 0,
-            meta.canonic=`https://${process.env.CANONIC_DOMAIN}`
+                meta.canonic = `https://${process.env.CANONIC_DOMAIN}`
         }
-       // console.log("META", type, JSON.stringify(meta))
+        // console.log("META", type, JSON.stringify(meta))
         const propsWrap = {
             props: {
                 session: options,

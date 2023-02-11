@@ -64,7 +64,7 @@ export const getServerSideProps = withSessionSsr(
     async function getServerSideProps(context: GetServerSidePropsContext): Promise<any> {
 
         const host = context.req.headers.host || "";
-      
+
         //console.log("HOST:", host)
         const { code, state }: { code: string, state: string } = context.query as any;
         // parse dynamic params:
@@ -74,6 +74,42 @@ export const getServerSideProps = withSessionSsr(
         let [forum] = ssr || [''];
 
         console.log("FORUM:", forum)
+       /* if (forum == 'context') {
+            if (ssr[1] == 'channel') {
+                const threadid = ssr[3];
+                const commentCC = ssr[5];
+                console.log("CONTEXT MIGRATION:", JSON.stringify({ channel, topicDummy, threadid, ccDummy, commentCC }));
+                let cc = '';
+                if (commentCC)
+                    cc = commentCC.split('-')[1];
+                const key: [u: string, threadid: string, withBody: number, userslug: string] = ['topic', threadid, 0, ''];
+                const { item } = await fetchTopic(key);
+                const { tag } = item;
+                console.log("TOPIC:", JSON.stringify(item))
+                console.log("CONTEXT MIGRATION:", JSON.stringify({ channel, tag, threadid, cc }));
+
+                const url = `https://${process.env.CANONIC_DOMAIN}/usconservative/topic/${tag}/${threadid}/l1${cc ? `/${cc}#${cc}` : ''}`;
+                console.log("CONTEXT REDIRECT", url)
+
+            }
+            else {
+                const threadid = ssr[2];
+                const key: [u: string, threadid: string, withBody: number, userslug: string] = ['topic', threadid, 0, ''];
+                const { item } = await fetchTopic(key);
+                const { tag } = item;
+                console.log("TOPIC:", JSON.stringify(item))
+                console.log("CONTEXT MIGRATION:", JSON.stringify({ tag, threadid }));
+                const url = `https://${process.env.CANONIC_DOMAIN}/${process.env.DEFAULT_FORUM}/topic/${tag}/${threadid}`;
+                console.log("CONTEXT REDIRECT", url)
+                return {
+                    redirect: {
+                        permanent: true,
+                        destination: url,
+                    },
+                    props: {},
+                };
+            }
+        }*/
         if (forum.indexOf("sitemap") == 0 && forum.indexOf(".txt") >= 0) {
             // console.log("params:",context.params)
             const filename = forum.split(".")[0];
@@ -116,13 +152,13 @@ export const getServerSideProps = withSessionSsr(
             defaultWidth = 900;
         else if (platformType == 'desktop')
             defaultWidth = 1200;
-       
+
         const sourceDomainsString = process.env.SOURCE_DOMAINS || '';
         const sourceDomains = sourceDomainsString.split(',');
-    
-    
+
+
         sourceDomains.forEach((sd: string) => {
-            console.log("SOURCE DOMAINS: ",sd,host)
+            console.log("SOURCE DOMAINS: ", sd, host)
             if (host.indexOf(sd) >= 0) {
                 if (type == 'topic' || type == 'home') {
                     return {
@@ -144,7 +180,7 @@ export const getServerSideProps = withSessionSsr(
 
                 }
             }
-            
+
         });
 
         // get encrypted session from the cookie or initialize the default   

@@ -30,6 +30,7 @@ export interface CommonProps {
     image?:string,
     publishedTime?:number;
     url?:string;
+    canonic?:string;
     
 }
 }
@@ -195,6 +196,9 @@ export default function Home({ session: startSession, qparams,meta }: CommonProp
       <Head>
         <title>{meta?.title}</title>
        
+        <link rel="canonical" href={meta?.canonic}/>
+
+        
         <meta name="trademark" content='THE INTERNET OF US' />
         <meta name="description" content={meta?.description} />
         <meta property="og:description" content={meta?.description} />

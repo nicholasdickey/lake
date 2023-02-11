@@ -81,7 +81,7 @@ export const getServerSideProps = withSessionSsr(
             const host = context.req.headers.host || "";
             let [dummy,newsline,forumR,startDate] =parts;// context.params?.startDate as string[];
             const topics=await fetchSitemap(newsline,startDate);
-            const sitemap=topics.map(t=>`https://${host}/${forumR}/topic/${t}`).join('\n')
+            const sitemap=topics.map((t:any)=>`https://${host}/${forumR}/topic/${t}`).join('\n')
             context.res.write(sitemap);//.split(',').map(t=>`${t}\n`));
             context.res.end();
             return {props:{}}
@@ -246,7 +246,8 @@ export const getServerSideProps = withSessionSsr(
             site_name?: string,
             image?: string,
             publishedTime?: number,
-            url?: string;
+            url?: string,
+            canonic?:string
 
         } = {};
         if (type == 'topic') {
@@ -263,6 +264,7 @@ export const getServerSideProps = withSessionSsr(
             meta.image = item.image;
             meta.publishedTime = item.shared_time;
             meta.url = item.shared_time;
+            meta.canonic=`https://${process.env.CANONIC_DOMAIN}/${forum}/topic/${tag}/${threadid}`
            }
            catch(x){
             console.log("FETCH TOPIC ERROR",x);
@@ -275,7 +277,8 @@ export const getServerSideProps = withSessionSsr(
             meta.site_name = channelConfig.channelDetails.displayName;
             meta.title = channelConfig.channelDetails.displayName
             meta.image == channelConfig.channelDetails.logo;
-            meta.publishedTime = Date.now() / 1000 | 0;
+            meta.publishedTime = Date.now() / 1000 | 0,
+            meta.canonic=`https://${process.env.CANONIC_DOMAIN}`
         }
        // console.log("META", type, JSON.stringify(meta))
         const propsWrap = {

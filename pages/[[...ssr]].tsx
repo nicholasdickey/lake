@@ -122,6 +122,7 @@ export const getServerSideProps = withSessionSsr(
     
     
         sourceDomains.forEach((sd: string) => {
+            console.log("SOURCE DOMAINS: ",sd,host)
             if (host.indexOf(sd) >= 0) {
                 if (type == 'topic' || type == 'home') {
                     return {

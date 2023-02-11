@@ -156,7 +156,28 @@ export const getServerSideProps = withSessionSsr(
         const sourceDomainsString = process.env.SOURCE_DOMAINS || '';
         const sourceDomains = sourceDomainsString.split(',');
 
+        if(host!=process.env.CANONIC_DOMAIN){
+            console.log('host not eual canonic_domain')
+            if (type == 'topic' || type == 'home') {
+                return {
+                    redirect: {
+                        permanent: true,
+                        destination: `https://${process.env.CANONIC_DOMAIN}/${forum}/home/${tag}/${threadid}`,
+                    },
+                    props: {},
+                };
+            }
+            else {
+                return {
+                    redirect: {
+                        permanent: true,
+                        destination: `https://${process.env.CANONIC_DOMAIN}`,
+                    },
+                    props: {},
+                };
 
+            }
+        }
         sourceDomains.forEach((sd: string) => {
             console.log("SOURCE DOMAINS: ", sd, host)
             if (host.indexOf(sd) >= 0) {

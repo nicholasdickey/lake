@@ -65,7 +65,7 @@ export const getServerSideProps = withSessionSsr(
 
         const host = context.req.headers.host || "";
 
-        //console.log("HOST:", host)
+        console.log("HOST==>:", host)
         const { code, state }: { code: string, state: string } = context.query as any;
         // parse dynamic params:
         let ssr = context.params?.ssr as string[];

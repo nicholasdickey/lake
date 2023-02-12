@@ -217,7 +217,7 @@ const MyNewsline = ({ session, qparams, updateSession }: { session: Options, qpa
         <PublicationRow key={`afkkqkqqqq-${n.tag}`}>
             <Link href={`/${qparams.forum}/solo/${n.tag}/${qparams.layoutNumber}/${qparams.navTab}`}><Left>
                 <PubImageBox>
-                    <NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={n.icon} alt={n.name} fill={true} />
+                    <NextImage placeholder={"blur"} blurDataURL={'https://ucarecdn.com/d26e44d9-5ca8-4823-9450-47a60e3287c6/al90.png'} src={n.icon} alt={n.name} fill={true} />
                 </PubImageBox>
                 <Name dense={session.dense==1}>{!n.default ? <Highlight>{n.name}</Highlight> : <>{n.name}</>}</Name>
             </Left></Link>
@@ -308,7 +308,7 @@ const Publications = ({ session, qparams, updateSession }: { session: Options, q
         {publications ? publications.map((n: Publication) => <PublicationWrap><PublicationRow key={`afpqhqpd-${n.name}`}>
         <Link href={`/${qparams.forum}/solo/${n.tag}/${qparams.layoutNumber}/${qparams.navTab}`}><Left>
                 <PubImageBox>
-                    <NextImage placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={n.icon} alt={n.name} fill={true} />
+                    <NextImage placeholder={"blur"} blurDataURL={'https://ucarecdn.com/d26e44d9-5ca8-4823-9450-47a60e3287c6/al90.png'} src={n.icon} alt={n.name} fill={true} />
                 </PubImageBox>
                 <Name dense={session.dense==1}><Highlight>{n.name}</Highlight></Name>
             </Left></Link>

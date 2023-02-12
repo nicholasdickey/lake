@@ -340,11 +340,20 @@ export const getServerSideProps = withSessionSsr(
 
         } = {};
         if (type == 'topic' || type == 'home') {
+            const check=threadid.split('-slug-');
+            if(check.length<2&&threadid!='nro-is-moving-to-facebook-comments'){
+                context.res.statusCode = 404;
+                return { props: { error: 404 } }
+
+            }
             const key: FetchTopicKey = ['topic', threadid, 1, options.userslug, tag];
             try {
                 const topic = await fetchTopic(key);
                // console.log("GOT TOPIC:", JSON.stringify(topic))
-
+                if(!topic.success){
+                    context.res.statusCode = 404;
+                    return { props: { error: 404 } }
+                } 
                 fallback[unstable_serialize(key)] = topic;
                 const { item } = topic;
                 meta.description = item.description;
@@ -357,8 +366,8 @@ export const getServerSideProps = withSessionSsr(
             }
             catch (x) {
                 console.log("FETCH TOPIC ERROR", x);
-                context.res.statusCode = 404;
-                return { props: { error: 404 } }
+                context.res.statusCode = 503;
+                return { props: { error: 503 } }
             }
         }
         else {

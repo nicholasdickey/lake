@@ -89,7 +89,7 @@ const HotlistItem=({ session, qparams,item,spaces }: { session: Options, qparams
    // console.log("Hotlist item",item)
     return <ImageBox spaces={spaces} loud={session.loud} >
         <OpacityBox loud={session.loud}>
-            <NextImage style={{objectFit:'cover'}} placeholder={"blur"} blurDataURL={'https://qwiket.com/static/css/afnLogo.png'} src={item.image} alt={item.title} fill={true} /></OpacityBox>
+            <NextImage style={{objectFit:'cover'}} placeholder={"blur"} blurDataURL={'https://ucarecdn.com/d26e44d9-5ca8-4823-9450-47a60e3287c6/al90.png'} src={item.image} alt={item.title} fill={true} /></OpacityBox>
             <Link href={`/${qparams.forum}/topic/${item.tag}/${item.slug}${qparams.layoutNumber!='l1'?'/'+qparams.layoutNumber:''}`} legacyBehavior><a rel="nofollow"><OverlayBox loud={session.loud}>
             <TitleBox>{item.title.slice(0,64)}</TitleBox>
             <Hr/>

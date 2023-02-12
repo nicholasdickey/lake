@@ -7,7 +7,7 @@ import axios from 'axios';
 import {
     fetchChannelConfig, fetchChannelLayout, fetchUser, fetchMyNewsline, fetchPublications,
     fetchPublicationCategories, fetchPublicationsKey, fetchMyNewslineKey, Filters,
-    fetchChannelLayoutKey, fetchTopic, processLoginCode, initLoginSession, getUserSession
+    fetchChannelLayoutKey, fetchTopic, FetchTopicKey, processLoginCode, initLoginSession, getUserSession
 } from '../lib/lakeApi';
 import { withSessionSsr } from '../lib/withSession';
 import { fetchQueues } from '../lib/ssrQueueFetches';
@@ -74,42 +74,42 @@ export const getServerSideProps = withSessionSsr(
         let [forum] = ssr || [''];
 
         console.log("FORUM:", forum)
-       /* if (forum == 'context') {
-            if (ssr[1] == 'channel') {
-                const threadid = ssr[3];
-                const commentCC = ssr[5];
-                console.log("CONTEXT MIGRATION:", JSON.stringify({ channel, topicDummy, threadid, ccDummy, commentCC }));
-                let cc = '';
-                if (commentCC)
-                    cc = commentCC.split('-')[1];
-                const key: [u: string, threadid: string, withBody: number, userslug: string] = ['topic', threadid, 0, ''];
-                const { item } = await fetchTopic(key);
-                const { tag } = item;
-                console.log("TOPIC:", JSON.stringify(item))
-                console.log("CONTEXT MIGRATION:", JSON.stringify({ channel, tag, threadid, cc }));
-
-                const url = `https://${process.env.CANONIC_DOMAIN}/usconservative/topic/${tag}/${threadid}/l1${cc ? `/${cc}#${cc}` : ''}`;
-                console.log("CONTEXT REDIRECT", url)
-
-            }
-            else {
-                const threadid = ssr[2];
-                const key: [u: string, threadid: string, withBody: number, userslug: string] = ['topic', threadid, 0, ''];
-                const { item } = await fetchTopic(key);
-                const { tag } = item;
-                console.log("TOPIC:", JSON.stringify(item))
-                console.log("CONTEXT MIGRATION:", JSON.stringify({ tag, threadid }));
-                const url = `https://${process.env.CANONIC_DOMAIN}/${process.env.DEFAULT_FORUM}/topic/${tag}/${threadid}`;
-                console.log("CONTEXT REDIRECT", url)
-                return {
-                    redirect: {
-                        permanent: true,
-                        destination: url,
-                    },
-                    props: {},
-                };
-            }
-        }*/
+        /* if (forum == 'context') {
+             if (ssr[1] == 'channel') {
+                 const threadid = ssr[3];
+                 const commentCC = ssr[5];
+                 console.log("CONTEXT MIGRATION:", JSON.stringify({ channel, topicDummy, threadid, ccDummy, commentCC }));
+                 let cc = '';
+                 if (commentCC)
+                     cc = commentCC.split('-')[1];
+                 const key: [u: string, threadid: string, withBody: number, userslug: string] = ['topic', threadid, 0, ''];
+                 const { item } = await fetchTopic(key);
+                 const { tag } = item;
+                 console.log("TOPIC:", JSON.stringify(item))
+                 console.log("CONTEXT MIGRATION:", JSON.stringify({ channel, tag, threadid, cc }));
+ 
+                 const url = `https://${process.env.CANONIC_DOMAIN}/usconservative/topic/${tag}/${threadid}/l1${cc ? `/${cc}#${cc}` : ''}`;
+                 console.log("CONTEXT REDIRECT", url)
+ 
+             }
+             else {
+                 const threadid = ssr[2];
+                 const key: [u: string, threadid: string, withBody: number, userslug: string] = ['topic', threadid, 0, ''];
+                 const { item } = await fetchTopic(key);
+                 const { tag } = item;
+                 console.log("TOPIC:", JSON.stringify(item))
+                 console.log("CONTEXT MIGRATION:", JSON.stringify({ tag, threadid }));
+                 const url = `https://${process.env.CANONIC_DOMAIN}/${process.env.DEFAULT_FORUM}/topic/${tag}/${threadid}`;
+                 console.log("CONTEXT REDIRECT", url)
+                 return {
+                     redirect: {
+                         permanent: true,
+                         destination: url,
+                     },
+                     props: {},
+                 };
+             }
+         }*/
         if (forum.indexOf("sitemap") == 0 && forum.indexOf(".txt") >= 0) {
             // console.log("params:",context.params)
             const filename = forum.split(".")[0];
@@ -134,7 +134,9 @@ export const getServerSideProps = withSessionSsr(
             type = 'newsline';
         //  console.log("TYPE:", type)
         const tag = (type == 'topic' || type == 'home' || type == 'solo') ? ssr[2] : "";
-        const threadid = (type == 'topic' || type == 'home') ? ssr[3] : "";
+        let threadid = (type == 'topic' || type == 'home') ? ssr[3] : "";
+        if (!threadid)
+            threadid = '';
         let layoutNumber = ((type == 'topic' || type == 'home') ? ssr[4] : type == 'solo' ? ssr[3] : ssr[2]) || "l1";
         let navTab = ((type == 'newsline') ? ssr[3] : type == "solo" ? ssr[4] : 0) || 1;
         let cc = (type == 'topic' || type == 'home') ? ssr[5] : '';
@@ -156,7 +158,7 @@ export const getServerSideProps = withSessionSsr(
         const sourceDomainsString = process.env.SOURCE_DOMAINS || '';
         const sourceDomains = sourceDomainsString.split(',');
 
-        if(host!=process.env.CANONIC_DOMAIN){
+        if (host != process.env.CANONIC_DOMAIN) {
             console.log('host not eual canonic_domain')
             if (type == 'topic' || type == 'home') {
                 return {
@@ -178,31 +180,31 @@ export const getServerSideProps = withSessionSsr(
 
             }
         }
-        sourceDomains.forEach((sd: string) => {
-            console.log("SOURCE DOMAINS: ", sd, host)
-            if (host.indexOf(sd) >= 0) {
-                if (type == 'topic' || type == 'home') {
-                    return {
-                        redirect: {
-                            permanent: true,
-                            destination: `https://${process.env.CANONIC_DOMAIN}/${forum}/home/${tag}/${threadid}`,
-                        },
-                        props: {},
-                    };
-                }
-                else {
-                    return {
-                        redirect: {
-                            permanent: true,
-                            destination: `https://${process.env.CANONIC_DOMAIN}`,
-                        },
-                        props: {},
-                    };
-
-                }
-            }
-
-        });
+        /*   sourceDomains.forEach((sd: string) => {
+               console.log("SOURCE DOMAINS: ", sd, host)
+               if (host.indexOf(sd) >= 0) {
+                   if (type == 'topic' || type == 'home') {
+                       return {
+                           redirect: {
+                               permanent: true,
+                               destination: `https://${process.env.CANONIC_DOMAIN}/${forum}/home/${tag}/${threadid}`,
+                           },
+                           props: {},
+                       };
+                   }
+                   else {
+                       return {
+                           redirect: {
+                               permanent: true,
+                               destination: `https://${process.env.CANONIC_DOMAIN}`,
+                           },
+                           props: {},
+                       };
+   
+                   }
+               }
+   
+           }); */
 
         // get encrypted session from the cookie or initialize the default   
         let startoptions = context.req.session?.options || null;
@@ -303,7 +305,7 @@ export const getServerSideProps = withSessionSsr(
         const channelConfig = await fetchChannelConfig(newsline);
 
         // console.log("GOT channelConfig", channelConfig)
-        const layoutType = type == 'topic' ? 'context' : type == 'solo' ? 'newsline' : type;
+        const layoutType = type == 'topic' || type == 'home' ? 'context' : type == 'solo' ? 'newsline' : type;
         const key: fetchChannelLayoutKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, layoutType, options.dense, options.thick, layoutNumber];
         //console.log("CALLING fetchChannelLayout:",key);
         const channelLayout = await fetchChannelLayout(key);
@@ -337,11 +339,11 @@ export const getServerSideProps = withSessionSsr(
             canonic?: string
 
         } = {};
-        if (type == 'topic') {
-            const key: [u: string, threadid: string, withBody: number, userslug: string] = ['topic', threadid, 1, options.userslug];
+        if (type == 'topic' || type == 'home') {
+            const key: FetchTopicKey = ['topic', threadid, 1, options.userslug, tag];
             try {
                 const topic = await fetchTopic(key);
-                // console.log("GOT TOPIC:", JSON.stringify(topic))
+               // console.log("GOT TOPIC:", JSON.stringify(topic))
 
                 fallback[unstable_serialize(key)] = topic;
                 const { item } = topic;
@@ -377,6 +379,6 @@ export const getServerSideProps = withSessionSsr(
             }
         };
 
-        // console.log("propsWrap",JSON.stringify({ propsWrap }))
+        //  console.log("propsWrap",JSON.stringify({ propsWrap }))
         return propsWrap;
     })

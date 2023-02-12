@@ -3,11 +3,11 @@ import useSWR from 'swr';
 import { Options } from '../lib/withSession';
 import Qwiket from './qwikets/qwiket';
 import { useAppContext } from '../lib/context';
-import { fetchTopic } from '../lib/lakeApi'
+import { fetchTopic,FetchTopicKey } from '../lib/lakeApi'
 import Disqus from './disqus'
 const Topic = ({singlePanel,fullPage}:{singlePanel?:boolean,fullPage?:boolean}) => {
   const { session, qparams } = useAppContext();
-  const key: [u: string, threadid: string, withBody: number,userslug:string] = ['topic', qparams.threadid, 1,session.userslug];
+  const key:FetchTopicKey= ['topic', qparams.threadid, 1,session.userslug,qparams.tag];
   const { data, error } = useSWR(key, fetchTopic);
   if (!data) {
     const item = {

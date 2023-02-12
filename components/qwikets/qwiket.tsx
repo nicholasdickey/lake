@@ -189,8 +189,11 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
     const isReact = item && typeof item.qpostid !== 'undefined' && item.qpostid;
     let { description, title } = item ? item : { description: '', title: '' };
     //   console.log("Qwiket", {loud:session.loud,extraWide})
+    const homeLink=`/${qparams.forum}/home/${qparams.tag}`;
     if (isTopic) {
         let { catIcon, catName, tag, image, site_name, published_time, author, body }: { catIcon: string, catName: string, tag: string, image: string, site_name: string, published_time: number, author: string, slug: string, body: any } = item ? item : { catIcon: '', catName: '', tag: '', image: '', site_name: '', published_time: '', author: '', body: '' };
+        
+       // console.log("QWIKET:", { catIcon, catName, tag, image, site_name, published_time, author, body })
         if (!image)
             image = 'https://qwiket.com/static/css/afnLogo.png';
         if (!catIcon)
@@ -248,9 +251,9 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
             }
         }
         return <Swipe onSwipeMove={(position, event) => swipe(position, event, qparams.type)}><VerticalWrap isTopic={isTopic} singlePanel={singlePanel} >
-            <Row key="r1"><PubImageBox><PubImage loud={session.loud} isTopic={isTopic} placeholder={"blur"} sizes="(max-width: 768px) 100vw,
-              (max-width: 2200px) 50vw, 33vw"      src={catIcon} alt={catName} /></PubImageBox>
-                <Right><SiteName isTopic={isTopic}>{site_name}</SiteName><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right></Row>
+            <Row key="r1"><Link href={homeLink} legacyBehavior><a rel="nofollow"><PubImageBox><PubImage loud={session.loud} isTopic={isTopic} placeholder={"blur"} sizes="(max-width: 768px) 100vw,
+              (max-width: 2200px) 50vw, 33vw"      src={catIcon} alt={catName} /></PubImageBox></a></Link>
+                <Right><Link href={homeLink} legacyBehavior><a rel="nofollow"><SiteName isTopic={isTopic}>{site_name}</SiteName></a></Link><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right></Row>
             {author ? <Row>{author}</Row> : null}
             <Row key="r2"><Link href={item.url} legacyBehavior><a rel="nofollow"><Title isTopic={isTopic}>{title}</Title></a></Link></Row>
             <Row key="3.1"><Link href={item.url} legacyBehavior><a rel="nofollow">{item.url}</a></Link></Row>

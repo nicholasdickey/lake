@@ -5,7 +5,7 @@ interface StyledCheckboxParams{
 const StyledCheckbox = styled.div<StyledCheckboxParams>`
   display: inline-block;
   margin-bottom:4px;
-  width:${({label})=>label?160:24}px;
+  width:${({label})=>label=='And The Band'?160:null}px;
   
   
   > input {

@@ -90,6 +90,10 @@ const Name = styled.div<Dense>`
     color:var(--highlight);
     name:34px;
     font-size:${({dense})=>dense?9:12}px;
+    @media(max-width:1199px){
+        font-size:9px;
+        margin-right:0px;
+    }
     @media(min-width:1800px){
         font-size:14px;
     }
@@ -149,6 +153,7 @@ const PublicationWrap=styled.div`
 const Check = ({ label, checked, onChange, disabled }: { label?: string, checked: boolean, onChange: any, disabled: boolean }) => {
     return <StyledCheckbox
         onClick={() => onChange(!checked)}
+        label={null}
     >
         <input
             type="checkbox"

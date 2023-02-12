@@ -1,7 +1,11 @@
 import styled from 'styled-components';
-const StyledCheckbox = styled.div`
+interface StyledCheckboxParams{
+  label:string
+}
+const StyledCheckbox = styled.div<StyledCheckboxParams>`
   display: inline-block;
   margin-bottom:4px;
+  width:${({label})=>label?160:24}px;
   
   
   > input {

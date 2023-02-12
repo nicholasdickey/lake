@@ -92,7 +92,7 @@ const InnerBand = styled.div<Props>`
     `
 const StyledCheck = styled.div`
      display:flex;
-      width:120px;
+     
     
     /* @media(max-width:1200px){
          display:none;
@@ -101,6 +101,7 @@ const StyledCheck = styled.div`
 const Check = ({ label, checked, onChange, disabled }: { label: string, checked: boolean, onChange: any, disabled: boolean }) => {
   return <StyledCheckbox
     onClick={() => onChange(!checked)}
+    label={label}
   >
     <input
       type="checkbox"

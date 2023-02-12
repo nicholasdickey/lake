@@ -106,6 +106,7 @@ const InnerHeader = styled.div`
     padding-left:6px;
     padding-right:6px;
     background:var(--background);
+    height:0.7em;
 `
 
 const InnerSwipe = styled.div`

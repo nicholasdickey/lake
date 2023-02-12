@@ -17,6 +17,17 @@ const Disqus = styled.div<DisqusParams>`
     #disqus_thread div{
         font-family:roboto;
     }   
+    #disqus_thread{
+      color:var(--text);
+    }
+    #disqus_thread .btn{
+      color:var(--text) !important;
+    }
+    #disqus_thread .post-message{
+       color:var(--text) !important;
+    }
+   
+   
 `
 const CommentsButton=styled.div`
   width:auto;
@@ -79,6 +90,7 @@ const Local = ({ contextUrl, forum, realDisqThreadid, cc, slug, title,fullPage }
     return <>{true?
         <Disqus fullPage={fullPage}><DiscussionEmbed
             shortname={forum}
+            theme={session.dark}
             config={{
                 identifier: slug,
                 title: t,

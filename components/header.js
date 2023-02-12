@@ -234,11 +234,11 @@ const DatelineBand = ({ channelSlug, channelDetails, user, updateSession }) => {
 
     const { qparams } = useAppContext();
 
-    console.log('DATELINE FFuser:', user, updateSession)
+    //console.log('DATELINE FFuser:', user, updateSession)
 
     const { hometown, lacantinaUrl } = channelDetails;
     let channel = channelSlug;
-    console.log("channel:", channel, hometown, lacantinaUrl)
+    //console.log("channel:", channel, hometown, lacantinaUrl)
     // console.log("CHANNEL:", channel)
 
     const time = qparams.timestamp;

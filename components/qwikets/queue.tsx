@@ -335,7 +335,7 @@ const Segments = ({ qType, isLeft, extraWide,  ...props }: { qType: string, isLe
         ]
     }
     const [segments, setSegments] = useState(generateFirstSegment('Segments:useState'));
-    console.log('REMDER Segments:', JSON.stringify({ qType, isLeft }))
+    //console.log('REMDER Segments:', JSON.stringify({ qType, isLeft }))
     return <QueueWrap>{segments}</QueueWrap>
 
 }
@@ -343,7 +343,7 @@ const Queue = ({ qType, isLeft,  ...props }: { qType: string, isLeft: boolean, e
     var randomstring = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     //const [guid, setGuid] = useState(randomstring())
     const { session } = useAppContext();
-    console.log("dbg q: queue remder",  qType)
+   // console.log("dbg q: queue remder",  qType)
     qType = isLeft ? session.leftColumnOverride || qType : qType;
     let queue;
     switch (qType) {

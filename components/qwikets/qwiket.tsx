@@ -288,9 +288,9 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
         }
         const { diff, timeString } = TimeDifference(published_time, qparams.timestamp);
         //  console.log("Render Qwuket", item.catIcon,item.image,item.title)
-        if (!item.catIcon) {
+       /* if (!item.catIcon) {
             console.log("********************************************************************************************************")
-        }
+        }*/
        // console.log("qwiket render 2 istag", isTag, 'diff:', diff)
         if (slug == 'loading') {
             return <Link  href={`/${qparams.forum}/topic/${tag}/${slug}${qparams.layoutNumber!='l1'?'/'+qparams.layoutNumber:''}`} legacyBehavior><a rel="nofollow"><VerticalWrap isTopic={isTopic}>

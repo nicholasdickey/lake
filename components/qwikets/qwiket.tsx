@@ -46,7 +46,9 @@ const Row = styled.div`
     justify-content: space-between;
     margin-bottom:4px;
     font-size:1.0rem;
-    
+    width:100%;
+    text-overflow:ellipsis;
+    overflow:hidden;
     p{
        text-overflow:ellipsis;
        overflow:hidden;

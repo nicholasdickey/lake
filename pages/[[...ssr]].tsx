@@ -7,7 +7,7 @@ import axios from 'axios';
 import {
     fetchChannelConfig, fetchChannelLayout, fetchUser, fetchMyNewsline, fetchPublications,
     fetchPublicationCategories, fetchPublicationsKey, fetchMyNewslineKey, Filters,
-    fetchChannelLayoutKey, fetchTopic, FetchTopicKey, processLoginCode, initLoginSession, getUserSession
+    fetchAllSitemaps,fetchChannelLayoutKey, fetchTopic, FetchTopicKey, processLoginCode, initLoginSession, getUserSession
 } from '../lib/lakeApi';
 import { withSessionSsr } from '../lib/withSession';
 import { fetchQueues } from '../lib/ssrQueueFetches';
@@ -120,6 +120,14 @@ export const getServerSideProps = withSessionSsr(
             const topics = await fetchSitemap(newsline, startDate);
             const sitemap = topics.map((t: any) => `https://${host}/${forumR}/topic/${t}`).join('\n')
             context.res.write(sitemap);//.split(',').map(t=>`${t}\n`));
+            context.res.end();
+            return { props: {} }
+        }
+        if (forum.indexOf("robots.txt") == 0) {
+            // console.log("params:",context.params)
+            const sitemaps = await fetchAllSitemaps(process.env.DEFAULT_NEWSLINE||'', process.env.DEFAULT_FORUM||'');
+            const robots = sitemaps.map((t: any) => `Sitemap:  ${t}`).join('\n')
+            context.res.write(robots);//.split(',').map(t=>`${t}\n`));
             context.res.end();
             return { props: {} }
         }

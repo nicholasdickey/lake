@@ -341,7 +341,7 @@ export const getServerSideProps = withSessionSsr(
         } = {};
         if (type == 'topic' || type == 'home') {
             const check=threadid.split('-slug-');
-            if(check.length<2&&threadid!='nro-is-moving-to-facebook-comments'){
+            if(type=='topic'&&check.length<2&&threadid!='nro-is-moving-to-facebook-comments'){
                 context.res.statusCode = 404;
                 return { props: { error: 404 } }
 

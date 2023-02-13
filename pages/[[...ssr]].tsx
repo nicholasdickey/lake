@@ -150,7 +150,7 @@ export const getServerSideProps = withSessionSsr(
         let cc = (type == 'topic' || type == 'home') ? ssr[5] : '';
         if (!cc)
             cc = '';
-        //  console.log("SSR args:", JSON.stringify({forum,type,threadid,tag,layoutNumber}))
+          console.log("SSR args:", JSON.stringify({forum,type,threadid,tag,layoutNumber}))
 
         let ua = context.req.headers['user-agent'];
         const bowser = Bowser.getParser(ua ? ua : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36');
@@ -216,7 +216,7 @@ export const getServerSideProps = withSessionSsr(
 
         // get encrypted session from the cookie or initialize the default   
         let startoptions = context.req.session?.options || null;
-        console.log("SSR. gpt session options", startoptions)
+       // console.log("SSR. gpt session options", startoptions)
 
         if (!startoptions) {
             var randomstring = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -249,7 +249,7 @@ export const getServerSideProps = withSessionSsr(
         // TBA pre-fetching data for SSR, for now all data fetched client-side   
         const newsline = 'qwiket';
 
-         console.log("SSR SESSION",options)
+        // console.log("SSR SESSION",options)
         const qparams = {
             custom: true,
             forum,
@@ -262,7 +262,8 @@ export const getServerSideProps = withSessionSsr(
             cc,
             timestamp: Date.now() / 1000 | 0
         }
-        //const isFirstServerCall = context.req?.url?.indexOf('/_next/data/') === -1
+        const isFirstServerCall = context.req?.url?.indexOf('/_next/data/') === -1
+        console.log("IS FIRST SERVER CALL=",isFirstServerCall)
         if (code) {
             console.log("CODE: ", code, state);
             const jsonState = JSON.parse(state);

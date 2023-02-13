@@ -253,7 +253,7 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
                 router.back();
             }
         }
-        return <Swipe onSwipeMove={(position, event) => swipe(position, event, qparams.type)}><VerticalWrap isTopic={isTopic} singlePanel={singlePanel} >
+       /* return <Swipe onSwipeMove={(position, event) => swipe(position, event, qparams.type)}><VerticalWrap isTopic={isTopic} singlePanel={singlePanel} >
             <Row key="r1"><Link href={homeLink} legacyBehavior><a rel="nofollow"><PubImageBox><PubImage loud={session.loud} isTopic={isTopic} placeholder={"blur"} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"      src={catIcon} alt={catName} /></PubImageBox></a></Link>
                 <Right><Link href={homeLink} legacyBehavior><a rel="nofollow"><SiteName isTopic={isTopic}>{site_name}</SiteName></a></Link><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right></Row>
@@ -265,7 +265,20 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
           
             <Row key="r4"><Body>{bodyBlocks ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml : description}</ReactMarkdown>}</Body></Row>
 
-        </VerticalWrap></Swipe>
+        </VerticalWrap></Swipe>*/
+         return <VerticalWrap isTopic={isTopic} singlePanel={singlePanel} >
+         <Row key="r1"><Link href={homeLink} legacyBehavior><a rel="nofollow"><PubImageBox><PubImage loud={session.loud} isTopic={isTopic} placeholder={"blur"} sizes="(max-width: 768px) 100vw,
+           (max-width: 2200px) 50vw, 33vw"      src={catIcon} alt={catName} /></PubImageBox></a></Link>
+             <Right><Link href={homeLink} legacyBehavior><a rel="nofollow"><SiteName isTopic={isTopic}>{site_name}</SiteName></a></Link><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right></Row>
+         {author ? <Row>{author}</Row> : null}
+         <Row key="r2"><Link href={item.url} legacyBehavior><a rel="nofollow"><Title isTopic={isTopic}>{title}</Title></a></Link></Row>
+         <Row key="3.1"><Link href={item.url} legacyBehavior><a rel="nofollow">{item.url}</a></Link></Row>
+         <Row key="r3"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage sizes="(max-width: 768px) 100vw,
+           (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={blur} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
+       
+         <Row key="r4"><Body>{bodyBlocks ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml : description}</ReactMarkdown>}</Body></Row>
+
+     </VerticalWrap>
 
 
     }

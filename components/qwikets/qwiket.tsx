@@ -133,19 +133,19 @@ const PubImageBox = styled.div`
 `
 
 const Avatar = styled.img`
-    position: relative;
+    //position: relative;
     max-width: 38px;
     max-height: 38px;
-    margin-top: 10px;
+    //margin-top: 10px;
     padding-top: 0px;
     margin-right: 16px;  
-    margin-bottom: 10px;
+    //margin-bottom: 10px;
 `
 const AvatarBox = styled.div`
     position: relative;
     max-width: 38px;
     max-height: 38px;
-    margin-top: 10px;
+    margin-top: 16px;
     padding-top: 0px;
     margin-right: 16px;
     margin-bottom: 10px;
@@ -288,7 +288,7 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
        // if (id)
        //     console.log("disqus id:", id)
         const { diff, timeString } = TimeDifference(createdat, qparams.timestamp)
-        return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/${id}/#comment-${id}`} legacyBehavior><a rel="nofollow"><VerticalWrap isTopic={isTopic}>
+      /*  return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/${id}/#comment-${id}`} legacyBehavior><a rel="nofollow"><VerticalWrap isTopic={isTopic}>
             <Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"      placeholder={"blur"} src={catIcon} alt={catName} width={28} height={28} /></PubImageBox>
                 {qType == 'mix' ? <Comment>comment</Comment> : null}<Author>{thread_author ? thread_author : catName}</Author></Row>
@@ -298,7 +298,18 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
                 <TimeSince isTopic={isTopic}>{timeString}</TimeSince></Row>
             <Row key="r5"><Markdown>{`<div style="width:100%;">${postBody}</div>`}</Markdown></Row>
 
-        </VerticalWrap></a></Link>
+        </VerticalWrap></a></Link>*/
+        return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/${id}/#comment-${id}`} legacyBehavior><a rel="nofollow"><VerticalWrap isTopic={isTopic}>
+        <Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
+          (max-width: 2200px) 50vw, 33vw"      placeholder={"blur"} src={catIcon} alt={catName} width={28} height={28} /></PubImageBox>
+            {qType == 'mix' ? <Comment>comment</Comment> : null}<Author>{thread_author ? thread_author : catName}</Author></Row>
+        <Row key="r2"><Title isTopic={isTopic}>{thread_title}</Title></Row>
+        <Row key="r3"><Description><Markdown>{description}</Markdown></Description></Row>
+        <Row key="r4"><AvatarBox><Avatar placeholder={"blur"} src={author_avatar.indexOf('http') < 0 ? `https:${author_avatar}` : author_avatar} alt={author_name} /></AvatarBox><AuthorPoster>{author_name}</AuthorPoster>
+            <TimeSince isTopic={isTopic}>{timeString}</TimeSince></Row>
+        <Row key="r5"><Markdown>{`<div style="width:100%;">${postBody}</div>`}</Markdown></Row>
+
+    </VerticalWrap></a></Link>
     }
     else {
         let { catIcon, catName, tag, image, site_name, published_time, author, slug }: { catIcon: string, catName: string, tag: string, image: string, site_name: string, published_time: number, author: string, slug: string } = item;

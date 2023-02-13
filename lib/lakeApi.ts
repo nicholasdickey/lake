@@ -347,7 +347,7 @@ export const updateMyNewsline = async ({ newsline, tag, switch: switchParam, ses
 
 
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/newsline/update`
- //  console.log("calling lakeApi update, ", url)
+   console.log("calling lakeApi update, ", url,sessionid,userslug)
    let res;
    try {
       res = await axios.post(url, {
@@ -382,7 +382,7 @@ export const updatePublications = async ({ newsline, tag, switch: switchParam, f
       outFilters = filterValues(filters);
 
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/newsline/updateAll`
- //  console.log(" calling lakeApi updateAll, ", url,sessionid,)
+   console.log(" calling lakeApi updateAll, ", url,sessionid,)
    let res;
    try {
       res = await axios.post(url, {

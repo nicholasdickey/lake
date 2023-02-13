@@ -268,18 +268,18 @@ const Publications = ({ session, qparams, updateSession }: { session: Options, q
         console.log("reduce:", currentVal, accum)
         return accum;
     }, {}) : {});
-    console.log("RENDER PUBLICATIONS", session)
+ //   console.log("RENDER PUBLICATIONS", session)
     // const out = filterValues(filters);
     //console.log("out", out)
-    console.log("filters", filters)
+  //  console.log("filters", filters)
     const key: fetchPublicationsKey = ['publications', newsline, sessionid, userslug, filters, q, hasNewslines];
     const { data: publications, error: publicationsError, mutate: mutatePublications } = useSWR(key, fetchPublications, {
         revalidateOnFocus: false,
         revalidateOnReconnect: false
     });
-    console.log("Publications render, key=", key, publications)
+   // console.log("Publications render, key=", key, publications)
     const setF = useCallback((tag: string, action: boolean, doFetch: boolean) => {
-        console.log("Publications callback", tag, action)
+        //console.log("Publications callback", tag, action)
         //if (action) {
         let newFilters = { ...filters }
         if (filters[tag] != action) {
@@ -302,7 +302,7 @@ const Publications = ({ session, qparams, updateSession }: { session: Options, q
     //  const { data:publicationCategories, error: publicationCategoriesError } = useSWR(['publicationCategories', newsline], fetchPublicationCategories);
     //  console.log("publicationCategories",publicationCategories)
 
-    console.log("render publications", publications)
+ //   console.log("render publications", publications)
     return <><SearchBox ><SearchField
         placeholder="Search..."
         onSearchClick={(t: string) => { setQ(t); }}
@@ -318,7 +318,7 @@ const Publications = ({ session, qparams, updateSession }: { session: Options, q
                 <Name dense={session.dense==1}><Highlight>{n.name}</Highlight></Name>
             </Left></Link>
             <Check checked={n.switch == 'on'} onChange={async (s: boolean) => {
-                console.log("PUBLICATION ON CLICK callling mutate")
+              //  console.log("PUBLICATION ON CLICK callling mutate")
                 //need to mutate session.hasNewslines
                 updateSession({ hasNewslines: true });
 
@@ -348,7 +348,7 @@ interface FilterDatum {
 
 }
 const FiltersContainer = ({ newsline, callback, publicationCategories }: { newsline: string, callback: any, publicationCategories: any }) => {
-    console.log("publicationCategories-->", publicationCategories)
+   // console.log("publicationCategories-->", publicationCategories)
     return <Left>{publicationCategories ? publicationCategories.map((f: FilterDatum) => <Filter key={`wwfvpvh-${f.name}`} name={f.name} tag={f.tag} callback={callback}></Filter>) : 'Loading...'}</Left>
 }
 const Filter = ({ name, tag, callback }: { name: string, tag: string, callback: any }) => {

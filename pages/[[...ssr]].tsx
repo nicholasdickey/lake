@@ -216,7 +216,7 @@ export const getServerSideProps = withSessionSsr(
 
         // get encrypted session from the cookie or initialize the default   
         let startoptions = context.req.session?.options || null;
-        // console.log("SSR. gpt session options", options)
+        console.log("SSR. gpt session options", startoptions)
 
         if (!startoptions) {
             var randomstring = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -249,7 +249,7 @@ export const getServerSideProps = withSessionSsr(
         // TBA pre-fetching data for SSR, for now all data fetched client-side   
         const newsline = 'qwiket';
 
-        // console.log("SSR SESSION",options)
+         console.log("SSR SESSION",options)
         const qparams = {
             custom: true,
             forum,

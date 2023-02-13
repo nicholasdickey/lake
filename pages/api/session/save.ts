@@ -21,11 +21,11 @@ async function handler(
         return;
     }
     let options: Options = req.session.options ? req.session.options : ({ width: 0} as Options);
-   // console.log("inside save session handler",req.body)
+    console.log("inside save session handler",req.body)
     const body = req.body;
     
     let inSession = body.session ? (body.session) : {};
-    //console.log("inSession:",inSession)
+    console.log("inSession:",inSession)
     req.session.options = Object.assign(options, inSession);
   
     await req.session.save();

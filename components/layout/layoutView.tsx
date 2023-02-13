@@ -57,7 +57,7 @@ export const LayoutView = ({ session, pageType, layout,  ...props }:{session:Opt
    // console.log("defaultWidth:", +defaultWidth, +session.get("width"))
    // console.log("layoutView:",layoutView)
     let width = getLayoutWidth(session.width);
-   //  console.log("LAYOUTVIEW ", { width})
+    //console.log("LAYOUTVIEW ", { width})
     return <OuterWrapper>
         {width == 600 ? <W000><LayoutRes layout={layoutView} res="w000"  session={session} {...props} /></W000> : null}
         {width == 750 ? <W600><LayoutRes layout={layoutView} res="w600"  session={session} {...props} /></W600> : null}

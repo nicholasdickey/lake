@@ -166,8 +166,8 @@ const Segment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, s
 
    // console.log("Segment before fetchQueue", { qType, pageIndex})
     const { data, error: queueError, mutate } = useSWR(key, fetchQueue,{
-        revalidateIfStale: false,
-        revalidateOnMount:false
+        revalidateIfStale: false
+        //revalidateOnMount:false
     });
    // if(qType=='reacts'&& !data)
    //     console.log(`SEGMENT ${pageIndex} nodata`)
@@ -225,8 +225,8 @@ const FirstSegment = ({ resetSegments,isLeft, extraWide, qType, lastid, tail, pa
 
     const { data, error: queueError, mutate } = useSWR(key, fetchQueue, {
         onSuccess: onData,
-        revalidateIfStale: false,
-        revalidateOnMount:false
+        revalidateIfStale: false
+        //revalidateOnMount:false
 
 
     });

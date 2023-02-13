@@ -165,7 +165,10 @@ const Segment = ({ isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, s
     const key = ['queue', qType, qparams.newsline, qType=='newsline'&&qparams.type=='solo'?1:0,qparams.forum, (qType == 'tag'||qType=='newsline'&&qparams.type=='solo') ? qparams.tag : '', pageIndex, lastid, session.sessionid, session.userslug, 0, ''];
 
    // console.log("Segment before fetchQueue", { qType, pageIndex})
-    const { data, error: queueError, mutate } = useSWR(key, fetchQueue);
+    const { data, error: queueError, mutate } = useSWR(key, fetchQueue,{
+        revalidateIfStale: false,
+        revalidateOnMount:false
+    });
    // if(qType=='reacts'&& !data)
    //     console.log(`SEGMENT ${pageIndex} nodata`)
     const ref = useRef<HTMLDivElement | null>(null)
@@ -222,7 +225,8 @@ const FirstSegment = ({ resetSegments,isLeft, extraWide, qType, lastid, tail, pa
 
     const { data, error: queueError, mutate } = useSWR(key, fetchQueue, {
         onSuccess: onData,
-        revalidateIfStale: false
+        revalidateIfStale: false,
+        revalidateOnMount:false
 
 
     });

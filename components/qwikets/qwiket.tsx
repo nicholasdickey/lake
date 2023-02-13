@@ -243,12 +243,12 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
 
         const swipe = (position: any, event: any, type: string) => {
             console.log("swipe", position, event, type);
-            if (position.x > 5 && position.y < 10 && position.y > -10) {
+            if (position.x > 15 && position.y < 5 && position.y > -5) {
                 console.log("RIGHT SWIPE")
                 router.push(item.url);
                 //rotate(type, 1)
             }
-            if (position.x < -5 && position.y < 10 && position.y > -10) {
+            if (position.x < -15 && position.y < 5 && position.y > -5) {
                 console.log("LEFT SWIPE")
                 router.back();
             }

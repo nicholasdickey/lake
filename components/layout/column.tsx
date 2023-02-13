@@ -257,6 +257,7 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
     let msc = column.msc;
     const [topicOverride, setTopicOverride] = useState({ leftColumnOverride: 'topic' });
     const fullPage = spaces < 3;
+    //console.log("COLUMN RENDER",selector,type)
     //  console.log("**** FirstColumn:", JSON.stringify({qparamsType:qparams.type,isLeft,spaces, selector, type, msc, session}))
     if (selector == 'newsviews')
         selector = 'mix';
@@ -278,7 +279,7 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
     if (qparams.type == 'newsline' || qparams.type == 'solo') {
         if (selector == 'topic' || selector == 'feed')
             selector = 'mix';
-        setTimeout(() => setTopicOverride({ leftColumnOverride: 'topic' }), 1);
+      //???  setTimeout(() => setTopicOverride({ leftColumnOverride: 'topic' }), 1);
     }
     //console.log("**************************************Column:", spaces, selector, type, msc, session)
     if (type == 'stc') {

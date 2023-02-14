@@ -185,7 +185,7 @@ export const fetchQueue = async ([u, qType, newsline, solo, forum, tag, page, la
       case 'hot':
          params = `newsline=${newsline}&type=hot&page=${page}&lastid=${lastid}`;
          params = addParams(params);
-         console.log("fetchQueue params",params)
+        // console.log("fetchQueue params",params)
          break;
       case 'tag':
          params = `newsline=${newsline}&tag=${tag}&type=tag&page=${page}&lastid=${lastid}`;

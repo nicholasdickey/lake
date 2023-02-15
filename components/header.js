@@ -136,7 +136,7 @@ const TitleBand = ({ title, leftLogo, rightLogo }) => {
 
 
     return <Link href="/"><TitleStyledWrapper>
-        <Logo src={leftLogo} /><Title className={playfair.className}>{title.toUpperCase()}</Title>{rightLogo ? <Logo src={rightLogo} /> : null}
+        <Logo src={leftLogo} />DEV:<Title className={playfair.className}>{title.toUpperCase()}</Title>{rightLogo ? <Logo src={rightLogo} /> : null}
     </TitleStyledWrapper></Link>
 }
 

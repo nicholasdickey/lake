@@ -134,6 +134,8 @@ export const getServerSideProps = withSessionSsr(
 
 
         if (forum != process.env.DEFAULT_FORUM) {
+            //context.res.write();//.split(',').map(t=>`${t}\n`));
+            context.res.end();
            return { props: { error: 404 } };
             //context.res.statusCode = 404;
            // return { props: { error: 404 } }

@@ -315,26 +315,41 @@ export const getServerSideProps = withSessionSsr(
 
         // console.log("GOT channelConfig", channelConfig)
         const layoutType = type == 'topic' || type == 'home' ? 'context' : type == 'solo' ? 'newsline' : type;
-        const key: fetchChannelLayoutKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, layoutType, options.dense, options.thick, layoutNumber];
+        const newslineKey: fetchChannelLayoutKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, 'newsline', options.dense, options.thick, layoutNumber];
+        const contextKey: fetchChannelLayoutKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, 'context', options.dense, options.thick, layoutNumber];
+        
         //console.log("CALLING fetchChannelLayout:",key);
-        const channelLayout = await fetchChannelLayout(key);
+        const newslineLayout = await fetchChannelLayout(newslineKey);
         // console.log("GOT CHANNEL LAYOUT", JSON.stringify(channelLayout))
         // console.log("=================")
-        const staleLKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, layoutType, 0, 1, layoutNumber];
-        const staleLKey1 = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, layoutType, 0, 0, layoutNumber];
-        const staleLKey2 = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, layoutType, 1, 0, layoutNumber];
-        const staleLKey3 = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, layoutType, 1, 1, layoutNumber];
+        const newslineStaleLKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug,'newsline', 0, 1, layoutNumber];
+        const newslineStaleLKey1 = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, 'newsline', 0, 0, layoutNumber];
+        const newslineStaleLKey2 = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, 'newsline', 1, 0, layoutNumber];
+        const newslineStaleLKey3 = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, 'newsline', 1, 1, layoutNumber];
 
+        const contextLayout = await fetchChannelLayout(contextKey);
+        // console.log("GOT CHANNEL LAYOUT", JSON.stringify(channelLayout))
+        // console.log("=================")
+        const contextStaleLKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug,'context', 0, 1, layoutNumber];
+        const contextStaleLKey1 = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, 'context', 0, 0, layoutNumber];
+        const contextStaleLKey2 = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, 'context', 1, 0, layoutNumber];
+        const contextStaleLKey3 = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, 'context', 1, 1, layoutNumber];
 
         const user = await fetchUser(['user', options.userslug])
 
         let fallback = {
             [newsline]: channelConfig,
-            [unstable_serialize(key)]: channelLayout,
-            [unstable_serialize(staleLKey)]: channelLayout, // to provide SWR with stale date to avoid flashing loading screen
-            [unstable_serialize(staleLKey1)]: channelLayout,
-            [unstable_serialize(staleLKey2)]: channelLayout,
-            [unstable_serialize(staleLKey3)]: channelLayout,
+            [unstable_serialize(newslineKey)]: newslineLayout,
+            [unstable_serialize(newslineStaleLKey)]: newslineLayout, // to provide SWR with stale date to avoid flashing loading screen
+            [unstable_serialize(newslineStaleLKey1)]: newslineLayout,
+            [unstable_serialize(newslineStaleLKey2)]: newslineLayout,
+            [unstable_serialize(newslineStaleLKey3)]: newslineLayout,
+            [unstable_serialize(contextKey)]: contextLayout,
+            [unstable_serialize(contextStaleLKey)]: contextLayout, // to provide SWR with stale date to avoid flashing loading screen
+            [unstable_serialize(contextStaleLKey1)]: contextLayout,
+            [unstable_serialize(contextStaleLKey2)]: contextLayout,
+            [unstable_serialize(contextStaleLKey3)]: contextLayout,
+
             [unstable_serialize(['user', options ? options.userslug : ''])]: user
         }
 

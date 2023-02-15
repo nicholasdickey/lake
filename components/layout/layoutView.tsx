@@ -48,8 +48,8 @@ const W2100 = styled.div`
             display:flex;
         }
     `
-export const LayoutView = ({ session, pageType, layout,  ...props }:{session:Options,pageType:string,layout:any,qparams:Qparams,updateSession:any,channelDetails:any,qCache:any,setQCache:any}) => {
-   // console.log("LAYOUT_VIEW:", layout);
+export const LayoutView = ({session,  layout,  ...props }:{visible:boolean,card:string,session:Options,pageType:string,layout:any,qparams:Qparams,updateSession:any,channelDetails:any,qCache:any,setQCache:any}) => {
+    //console.log("d1b: LAYOUT_VIEW:", name,layout);
     let layoutView = layout.layoutView;
     let columns = layout.columns;
    // console.log("dbg: LayoutView",session.leftColumnOverride)
@@ -58,13 +58,14 @@ export const LayoutView = ({ session, pageType, layout,  ...props }:{session:Opt
    // console.log("layoutView:",layoutView)
     let width = getLayoutWidth(session.width);
     //console.log("LAYOUTVIEW ", { width})
+  //  console.log("d1b layoutView",name,pageType)
     return <OuterWrapper>
-        {width == 600 ? <W000><LayoutRes layout={layoutView} res="w000"  session={session} {...props} /></W000> : null}
-        {width == 750 ? <W600><LayoutRes layout={layoutView} res="w600"  session={session} {...props} /></W600> : null}
-        {width == 900 ? <W900><LayoutRes layout={layoutView} res="w900"  session={session}  {...props} /></W900> : null}
-        {width == 1200 ? <W1200><LayoutRes layout={layoutView} res="w1200" session={session}  {...props} /></W1200> : null}
-        {width == 1800 ? <W1800><LayoutRes layout={layoutView} res="w1800" session={session}  {...props} /></W1800> : null}
-        {width == 2100 ? <W2100><LayoutRes layout={layoutView} res="w2100"  session={session}  {...props} /></W2100> : null}
+        {width == 600 ? <W000><LayoutRes  layout={layoutView} res="w000"  session={session} {...props} /></W000> : null}
+        {width == 750 ? <W600><LayoutRes   layout={layoutView} res="w600"  session={session} {...props} /></W600> : null}
+        {width == 900 ? <W900><LayoutRes    layout={layoutView} res="w900"  session={session}  {...props} /></W900> : null}
+        {width == 1200 ? <W1200><LayoutRes   layout={layoutView} res="w1200" session={session}  {...props} /></W1200> : null}
+        {width == 1800 ? <W1800><LayoutRes   layout={layoutView} res="w1800" session={session}  {...props} /></W1800> : null}
+        {width == 2100 ? <W2100><LayoutRes  layout={layoutView} res="w2100"  session={session}  {...props} /></W2100> : null}
     </OuterWrapper>
     // return <div>{JSON.stringify(layout, null, 4)}</div>
 }

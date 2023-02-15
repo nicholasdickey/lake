@@ -23,16 +23,16 @@ export interface CommonProps {
   session: Options,
   qparams: Qparams,
   fallback?: any,
-  meta?:{
-    description?:string,
-    title?:string,
-    site_name?:string,
-    image?:string,
-    publishedTime?:number;
-    url?:string;
-    canonic?:string;
-    
-}
+  meta?: {
+    description?: string,
+    title?: string,
+    site_name?: string,
+    image?: string,
+    publishedTime?: number;
+    url?: string;
+    canonic?: string;
+
+  }
 }
 const roboto = Roboto({ subsets: ['latin'], weight: ['300', '400', '700'], style: ['normal', 'italic'] })
 
@@ -100,8 +100,22 @@ const Loading = styled.div`
   font-weight:700;
 
 `
-
-export default function Home({ session: startSession, qparams,meta }: CommonProps) {
+const CardsContainer = styled.div`
+ //position:relative;
+ width:100%;
+ height:100%;
+`
+interface CardParams {
+  visible: boolean
+}
+const Card = styled.div<CardParams>`
+ position:absolute;
+ width:100%;
+ height:100%;
+ left:0;
+ visibility:${({ visible }) => visible ? 'visible' : 'hidden'};
+`
+export default function Home({ session: startSession, qparams, meta }: CommonProps) {
 
   const isFallback = qparams && qparams.newsline != 'fallback' ? false : true;
   const [qCache, setQCache] = useState({})
@@ -111,7 +125,7 @@ export default function Home({ session: startSession, qparams,meta }: CommonProp
   const [theme, setTheme] = useState(session.dark != -1 ? session.dark == 1 ? 'dark' : 'light' : "unknown")
   const [loading, setLoading] = useState("");
   const router = useRouter()
-
+ // console.log("d1b HOME", type);
   useEffect(() => {
     if (theme != 'unknown') {
       document.body.setAttribute("data-theme", theme);
@@ -171,34 +185,42 @@ export default function Home({ session: startSession, qparams,meta }: CommonProp
       setTimeout(() => resize(window.innerWidth), 1);
     }
   }
+
+  const layoutType = type == 'topic' || type == 'home' ? 'context' : type == 'solo' ? 'newsline' : 'newsline';
+  const newslinekey: fetchChannelLayoutKey = ['channelLayout', qparams.newsline, session.hasLayout, session.sessionid, session.userslug, 'newsline', session.dense, session.thick, layoutNumber || 'l1'];
+  const contextkey: fetchChannelLayoutKey = ['channelLayout', qparams.newsline, session.hasLayout, session.sessionid, session.userslug, 'context', session.dense, session.thick, layoutNumber || 'l1'];
   
-  const layoutType =  type == 'topic'||type == 'home'? 'context' : type == 'solo' ? 'newsline' : type;
-  const key: fetchChannelLayoutKey = ['channelLayout', qparams.newsline, session.hasLayout, session.sessionid, session.userslug, layoutType, session.dense, session.thick, layoutNumber || 'l1'];
   //console.log("RENDER LAYOUT, key=", key)
 
-  let { data: layout, error: layoutError } = useSWR(key, fetchChannelLayout)
-
-  if (!layout)
+  let { data: newslineLayout, error: newslineLayoutError } = useSWR(newslinekey, fetchChannelLayout)
+  
+  let { data: contextLayout, error: layoutError } = useSWR(contextkey, fetchChannelLayout)
+  const mainLayout=layoutType=='newsline'?newslineLayout:contextLayout;
+  if (!mainLayout)
     return <Loading className={roboto.className}>Loading...</Loading>
+  
+  if (layoutType == 'context') {
 
-  const hpads = layout?.hpads;
+  }
+
+  const hpads = mainLayout?.hpads;
 
   if (isFallback)
     return <Loading className={roboto.className}>Fallback Loading...</Loading>
 
 
 
-  
-  
 
+
+ // console.log(" d1b render common", type)
   return (
     <>
       <Head>
         <title>{meta?.title}</title>
-       
-        <link rel="canonical" href={meta?.canonic}/>
 
-        
+        <link rel="canonical" href={meta?.canonic} />
+
+
         <meta name="trademark" content='THE INTERNET OF US' />
         <meta name="description" content={meta?.description} />
         <meta property="og:description" content={meta?.description} />
@@ -208,19 +230,19 @@ export default function Home({ session: startSession, qparams,meta }: CommonProp
         <meta property="og:type" content="website" />
         <meta property="fb:appid" content="358234474670240" />
         <meta property="og:site_name" content={meta?.site_name} />
-        {meta?.url?<meta property="og:url" content={meta?.url} />:null}
+        {meta?.url ? <meta property="og:url" content={meta?.url} /> : null}
         <meta property="og:image" content={meta?.image} />
-        
+
         <link
-                        rel="shortcut icon"
-                        type="image/png"
-                        href={"/blue-bell.png"}
-                    />
+          rel="shortcut icon"
+          type="image/png"
+          href={"/blue-bell.png"}
+        />
 
 
-        
+
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        
+
 
       </Head>
       <main className={roboto.className} >
@@ -228,13 +250,19 @@ export default function Home({ session: startSession, qparams,meta }: CommonProp
           <GlobalStyle />
           <AppWrapper session={session} qparams={qparams} channelDetails={channelConfig.channelDetails} newsline={channelConfig.newsline} setLoading={setLoading}>
             {loading ? <Loading className={roboto.className}>{loading}</Loading> : null}<div>
-              <Topline updateTheme={updateTheme} session={session} layout={layout} updateSession={updateSession} channelDetails={channelConfig.channelDetails} />
+              <Topline updateTheme={updateTheme} session={session} layout={mainLayout} updateSession={updateSession} channelDetails={channelConfig.channelDetails} />
               <Grid hpads={hpads}>
                 <PageWrap>
-                  <Header session={session} channelSlug={channelConfig.channelSlug} channelDetails={channelConfig.channelDetails} newsline={channelConfig.newsline} layout={layout} qparams={qparams} updateSession={updateSession} />
-
-                  <LayoutView session={session} pageType={type} layout={layout} qparams={qparams} updateSession={updateSession} channelDetails={channelConfig.channelDetails} qCache={qCache} setQCache={setQCache} />
-
+                  <Header session={session} channelSlug={channelConfig.channelSlug} channelDetails={channelConfig.channelDetails} newsline={channelConfig.newsline} layout={mainLayout} qparams={qparams} updateSession={updateSession} />
+                  <CardsContainer>
+                  {layoutType == 'context'&&contextLayout ? <Card visible={true}>
+                      <LayoutView  visible={true} card={"drilldown"} session={session} pageType={'context'} layout={contextLayout} qparams={qparams} updateSession={updateSession} channelDetails={channelConfig.channelDetails} qCache={qCache} setQCache={setQCache} />
+                    </Card> : null}
+                    {newslineLayout?<Card visible={layoutType == 'newsline'}>
+                      <LayoutView  visible={layoutType=='newsline'? true : false} card={"top"} session={session} pageType={'newsline'} layout={newslineLayout} qparams={qparams} updateSession={updateSession} channelDetails={channelConfig.channelDetails} qCache={qCache} setQCache={setQCache} />
+                    </Card>:null}
+                   
+                  </CardsContainer>
                 </PageWrap>
               </Grid>
               <ScrollToTopButton />

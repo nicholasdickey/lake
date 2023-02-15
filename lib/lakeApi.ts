@@ -122,12 +122,13 @@ export const fetchTopic=async ([u,threadid, withBody,userslug,tag]:FetchTopicKey
    return res ? res.data : null;
 }
 export interface FetchQueueKey {
-   key:[u: string, qType: string, newsline: string, solo:number,forum?: string, tag?: string, page?: number, lastid?: string, sessionid?: string, userslug?: string, tail?: number, test?: string,breakCache?:string,size?:number]
+   key:[u: string, qType: string, newsline: string, solo:number,forum?: string, tag?: string, page?: number, lastid?: string, sessionid?: string, userslug?: string, tail?: number, test?: string,breakCache?:string,size?:number,card?:string]
 }
-export const fetchQueue = async ([u, qType, newsline, solo, forum, tag, page, lastid, sessionid, userslug, tail, test,breakCache,size]:FetchQueueKey["key"]
+export const fetchQueue = async ([u, qType, newsline, solo, forum, tag, page, lastid, sessionid, userslug, tail, test,breakCache,size,card]:FetchQueueKey["key"]
     ) => {
    let params;
-  // console.log("remder fetchQueue:", `['queue',qType:${qType},newsline:${newsline},forum:${forum},tag:${tag},page:${page},lastid:${lastid},sessionid:${sessionid},userslug:${userslug},tail:${tail}]`)
+   //console.log("fetchQueue d1b",JSON.stringify({u,qType,newsline,solo,forum,tag,page,lastid,sessionid,userslug,tail,test,breakCache,size,card}))
+   //console.log("d1b:  fetchQueue:", `['queue',card:${card},qType:${qType},newsline:${newsline},forum:${forum},tag:${tag},page:${page},lastid:${lastid},sessionid:${sessionid},userslug:${userslug},tail:${tail}]`)
    if(!page)
    page=0;
    if(!size)

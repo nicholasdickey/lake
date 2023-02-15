@@ -7,12 +7,14 @@ interface DisqusParams{
   fullPage:boolean
 }
 const Disqus = styled.div<DisqusParams>`
+    visibility:visible;
+    position:relative;
+    z-index:50;
     color:var(--text);
     background-color: var(--background);
     margin:${({fullPage})=>fullPage?4:16}px;
     #disqus_thread a{
-          color:var(--text);        
-				
+          color:var(--text);        				
     }
     #disqus_thread div{
         font-family:roboto;
@@ -50,7 +52,7 @@ const Local = ({ contextUrl, forum, realDisqThreadid, cc, slug, title,fullPage }
    fullPage=false;
     if(!title)
         title='';
-   // console.log('LOCAL RENDER %s', title,cc)
+   console.log('LOCAL RENDER %s', title,cc)
     //if (title) {
   
     var t = title.replace(/"/g, '\'');

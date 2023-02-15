@@ -249,21 +249,24 @@ const LeftSelector = ({ qType, updateSession, name, fullPage }: { qType: string,
     </>
 }
 
-export const Column = ({ spaces, column, qparams, session, updateSession, isLeft, qCache, setQCache, ...props }: { spaces: number, column: any, qparams: Qparams, session: Options, updateSession: any, isLeft: boolean, channelDetails: any, qCache: any, setQCache: any }) => {
+export const Column = ({pageType, visible,card,spaces, column, qparams, session, updateSession, isLeft, qCache, setQCache, ...props }: { pageType:string,visible:boolean,card:string, spaces: number, column: any, qparams: Qparams, session: Options, updateSession: any, isLeft: boolean, channelDetails: any, qCache: any, setQCache: any }) => {
 
     let width = column.percentWidth;
     let type = column.type;
     let selector = column.selector;
     let msc = column.msc;
     const [topicOverride, setTopicOverride] = useState({ leftColumnOverride: 'topic' });
+   // const [inited,setInited]=
     const fullPage = spaces < 3;
-    //console.log("COLUMN RENDER",selector,type)
+    var randomstring = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    const [guid, setGuid] = useState(randomstring())
+   // console.log("d1b: COLUMN RENDER",guid,visible,card, selector,type)
     //  console.log("**** FirstColumn:", JSON.stringify({qparamsType:qparams.type,isLeft,spaces, selector, type, msc, session}))
     if (selector == 'newsviews')
         selector = 'mix';
 
     if (fullPage) {
-        if (qparams.type == 'newsline' || qparams.type == 'solo') {
+        if (pageType=='newsline') {
             selector = session.leftColumnOverride || selector;
         }
         else {
@@ -273,6 +276,8 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
     else if (isLeft) {
         selector = session.leftColumnOverride || selector;
     }
+    //console.log("d1b: COLUMN RENDER",{guid,visible,card, selector,type,pageType})
+   
     const feedName = (qparams.tag == 'ld' ? 'basement' : qparams.tag == 'fq' ? 'americafirstnews' : qparams.tag) + ' feed';
     const name = selector == 'mix' ? 'news&views' : selector == 'tag' ? feedName : selector == 'topics' ? 'active topics' : selector == 'reacts' ? 'comments' : qparams.type == 'solo' ? `solo ${qparams.tag == 'ld' ? 'basement' : qparams.tag}` : selector;
 
@@ -295,16 +300,16 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
             case 'reacts':
             case 'topics':
 
-                let q;// = qCache[selector];
-                if (!q) {
+               // let q;// = qCache[selector];
+               // if (!q) {
                     // console.log('dbg q fresh not from cache',selector)
-                    q = <Queue isLeft={isLeft} extraWide={false} qType={selector}{...props} />
+                    const q = <Queue  visible={visible} card={card} isLeft={isLeft} extraWide={false} qType={selector}{...props} />
                     // qCache[selector] = q;
                     // setQCache(qCache)
-                }
-                else {
+                //}
+               // else {
                     // console.log(`dbg: q from cache`,selector)
-                }
+                //}
                 // console.log('dbg column:', selector, name)
                 return <StyledColumn width={width} data-id="styled-column" key={`${selector}-column`}>
                     <ColumnHeader> <InnerHeader>{isLeft ? <LeftSelector qType={selector} name={name} updateSession={updateSession} fullPage={fullPage} /> : name}</InnerHeader></ColumnHeader>
@@ -314,7 +319,7 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
                 console.log("COLUMN TAG", selector)
                 return <StyledColumn width={width} data-id="styled-column" key={`${selector}-column`}>
                     <ColumnHeader> <InnerHeader>{isLeft ? <LeftSelector qType={selector} name={name} updateSession={setTopicOverride} fullPage={fullPage} /> : name}</InnerHeader></ColumnHeader>
-                    <Queue isLeft={false} extraWide={false} qType={selector} {...props} />
+                    <Queue  visible={visible}  card={card}  isLeft={false} extraWide={false} qType={selector} {...props} />
                 </StyledColumn>
             case 'topic':
                 return <StyledColumn width={'100%'} key="main-topic" ><ColumnHeader><div /></ColumnHeader>
@@ -341,7 +346,7 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
                 //  console.log("width left:", leftWidth, rightWidth)
                 let q;// = qCache[`tag-mp`];
                 if (!q) {
-                    q = <Queue isLeft={false} extraWide={true} qType={'tag'} />
+                    q = <Queue   visible={visible} card={card}  isLeft={false} extraWide={true} qType={'tag'} />
                     //qCache['tag-mp'] = q;
                     //setQCache(qCache)
                 }
@@ -370,7 +375,7 @@ export const Column = ({ spaces, column, qparams, session, updateSession, isLeft
                 // const name = 'newsline'
                 // console.log("dbg q:",q)
                 if (!q) {
-                    q = <Queue key={`newsline-mp`} isLeft={false} extraWide={true} qType={selector} />
+                    q = <Queue  visible={visible}  card={card} key={`newsline-mp`} isLeft={false} extraWide={true} qType={selector} />
                     // qCache['newsline-mp'] = q;
                     // setQCache(qCache)
                 }

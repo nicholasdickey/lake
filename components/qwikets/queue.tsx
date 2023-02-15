@@ -70,7 +70,7 @@ const LeftHeader = styled.div`
         font-size:12px; 
     }
     margin-right:6px;
-    z-index:51;
+    z-index:151;
     padding-left:6px;
     padding-right:6px;
     background:var(--notificationButton);

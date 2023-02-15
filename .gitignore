@@ -34,3 +34,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+webapp/err-0.log
+
+*.log
+*.pid 

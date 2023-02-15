@@ -73,7 +73,7 @@ export const getServerSideProps = withSessionSsr(
             ssr = [`${process.env.DEFAULT_FORUM}`];
         let [forum] = ssr || [''];
 
-        console.log("FORUM:", forum)
+        console.log("FORUM:", forum,ssr)
         /* if (forum == 'context') {
              if (ssr[1] == 'channel') {
                  const threadid = ssr[3];
@@ -134,8 +134,9 @@ export const getServerSideProps = withSessionSsr(
 
 
         if (forum != process.env.DEFAULT_FORUM) {
-            context.res.statusCode = 404;
-            return { props: { error: 404 } }
+           return undefined;
+            //context.res.statusCode = 404;
+           // return { props: { error: 404 } }
         }
         let type = ssr[1];
         if (!type)
@@ -412,6 +413,6 @@ export const getServerSideProps = withSessionSsr(
             }
         };
 
-        console.log(" End propsWrap",JSON.stringify({ propsWrap }))
+        console.log(" End propsWrap",JSON.stringify({meta:propsWrap.props.meta}))
         return propsWrap;
     })

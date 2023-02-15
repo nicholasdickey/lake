@@ -412,6 +412,6 @@ export const getServerSideProps = withSessionSsr(
             }
         };
 
-        //  console.log("propsWrap",JSON.stringify({ propsWrap }))
+        console.log(" End propsWrap",JSON.stringify({ propsWrap }))
         return propsWrap;
     })

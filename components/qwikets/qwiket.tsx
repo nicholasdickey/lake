@@ -190,8 +190,10 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
     const { session, qparams } = useAppContext();
     const isReact = item && typeof item.qpostid !== 'undefined' && item.qpostid;
     let { description, title } = item ? item : { description: '', title: '' };
-    //   console.log("Qwiket", {loud:session.loud,extraWide})
+    //  console.log("Qwiket", {loud:session.loud,extraWide})
     const homeLink=`/${qparams.forum}/home/${qparams.tag}`;
+    const itemUrl=item.url?item.url:'';
+   // console.log("homeLink",homeLink,item.url,item)
     const blur='https://ucarecdn.com/d26e44d9-5ca8-4823-9450-47a60e3287c6/al90.png';
     if (isTopic) {
         let { catIcon, catName, tag, image, site_name, published_time, author, body }: { catIcon: string, catName: string, tag: string, image: string, site_name: string, published_time: number, author: string, slug: string, body: any } = item ? item : { catIcon: '', catName: '', tag: '', image: '', site_name: '', published_time: '', author: '', body: '' };
@@ -271,8 +273,8 @@ const Qwiket = ({ extraWide, item, isTopic, qType, singlePanel, fullPage }: { ex
            (max-width: 2200px) 50vw, 33vw"      src={catIcon} alt={catName} /></PubImageBox></a></Link>
              <Right><Link href={homeLink} legacyBehavior><a rel="nofollow"><SiteName isTopic={isTopic}>{site_name}</SiteName></a></Link><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right></Row>
          {author ? <Row>{author}</Row> : null}
-         <Row key="r2"><Link href={item.url} legacyBehavior><a rel="nofollow"><Title isTopic={isTopic}>{title}</Title></a></Link></Row>
-         <Row key="3.1"><Link href={item.url} legacyBehavior><a rel="nofollow">{item.url}</a></Link></Row>
+         <Row key="r2"><Link href={itemUrl} legacyBehavior><a rel="nofollow"><Title isTopic={isTopic}>{title}</Title></a></Link></Row>
+         <Row key="3.1"><Link href={itemUrl} legacyBehavior><a rel="nofollow">{item.url}</a></Link></Row>
          <Row key="r3"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage sizes="(max-width: 768px) 100vw,
            (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={blur} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
        

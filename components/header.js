@@ -221,7 +221,7 @@ const login = async (href) => {
 
 }
 const logout = async (updateSession) => {
-    console.log("logout:updateSession", updateSession)
+    //console.log("logout:updateSession", updateSession)
     setTimeout(async ()=>await updateSession({ userslug: '' }),1);
 }
 const DatelineBand = ({ channelSlug, channelDetails, user, updateSession }) => {
@@ -267,7 +267,7 @@ const DatelineBand = ({ channelSlug, channelDetails, user, updateSession }) => {
                     </SubTitle> :
                     <HorizWrap>
                         <SubTitle><Home><Link href={'/'}><UilNewspaper size="16" color="#888" /></Link></Home>
-                            <a onClick={() => {logout(updateSession);console.log("after logout")}}>
+                            <a onClick={() => logout(updateSession)}>
                                 Sign Out
                             </a>
                         </SubTitle>

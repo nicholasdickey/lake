@@ -11,10 +11,11 @@ export interface OnlineCountKey {
 }
 export const getOnlineCount = async (key: OnlineCountKey) => {
    const { sessionid, userslug } = key;
-   console.log("getOnlineCount:",sessionid,userslug,key)
+   //console.log("getOnlineCount:",sessionid,userslug,key)
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/user/onlineCount?sessionid=${encodeURIComponent(sessionid)}&userslug=${encodeURIComponent(userslug)}`;
-    console.log("calling lakeApi user/onlineCount ", url)
+   // console.log("calling lakeApi user/onlineCount ", url)
    const res = await axios.get(url);
+   //console.log("getOnlineCount return",res.data)
    if (res.data.success)
       return res.data.count;
    else

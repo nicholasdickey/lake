@@ -93,6 +93,8 @@ const PageWrap = styled.div`
   display:flex;
   flex-direction:column;
   align-items:center;
+  background-color:var(--background);
+  background:var(--background);
   `;
 
 const Loading = styled.div`

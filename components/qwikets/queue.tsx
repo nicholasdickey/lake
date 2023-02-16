@@ -20,7 +20,7 @@ const ColumnHeader = styled.div`
     justify-content: space-between;
     //height:28px;
     width:100%;
-    z-index:48;
+    z-index:151;
    
 `
 const InnerHeader = styled.div`

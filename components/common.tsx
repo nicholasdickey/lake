@@ -17,8 +17,10 @@ import { LayoutView } from './layout/layoutView';
 import { Roboto } from '@next/font/google';
 import { AppWrapper } from '../lib/context';
 import ScrollToTopButton from './scrollToTopButton';
+import Script from 'next/script'
+import {pageview}  from "../lib/gtag";
 
-
+//The props passed from SSR:
 export interface CommonProps {
   session: Options,
   qparams: Qparams,
@@ -31,12 +33,20 @@ export interface CommonProps {
     publishedTime?: number;
     url?: string;
     canonic?: string;
-
   }
 }
+
+//init fonts
 const roboto = Roboto({ subsets: ['latin'], weight: ['300', '400', '700'], style: ['normal', 'italic'] })
 
+
 const isBrowser = () => typeof window !== `undefined`
+
+/**
+ * Styles:
+ */
+
+//sets the page margins for various resolutions from layout
 interface GridProps {
   hpads: any;
 }
@@ -78,13 +88,14 @@ const Grid = styled.div<GridProps>`
           padding-right: ${({ hpads }) => hpads.w2400};
       }
   `;
+
 const PageWrap = styled.div`
   display:flex;
   flex-direction:column;
   align-items:center;
   `;
-const Loading = styled.div`
 
+const Loading = styled.div`
   position: fixed;
   z-index: 9999;
   top: 50%;
@@ -98,8 +109,8 @@ const Loading = styled.div`
   display: flex;
   opacity:0.8;
   font-weight:700;
-
 `
+
 const CardsContainer = styled.div`
  //position:relative;
  width:100%;
@@ -115,6 +126,12 @@ const Card = styled.div<CardParams>`
  left:0;
  visibility:${({ visible }) => visible ? 'visible' : 'hidden'};
 `
+
+/**
+ * Common SPA for all pages that have the multi-column "broadsheet" layout 
+ * @param param0 
+ * @returns 
+ */
 export default function Home({ session: startSession, qparams, meta }: CommonProps) {
 
   const isFallback = qparams && qparams.newsline != 'fallback' ? false : true;
@@ -125,41 +142,44 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
   const [theme, setTheme] = useState(session.dark != -1 ? session.dark == 1 ? 'dark' : 'light' : "unknown")
   const [loading, setLoading] = useState("");
   const router = useRouter()
- // console.log("d1b HOME", type);
+
+  //attach theme attribute to the document
   useEffect(() => {
     if (theme != 'unknown') {
       document.body.setAttribute("data-theme", theme);
     }
   }, [theme]);
 
-  const resize = useCallback((width: number) => {
-    if (custom) {
-      updateSession({ width })
-    }
-  }, [custom])
-  const updateSession = useCallback((updSession: object) => {
-    if (router.asPath.indexOf('/news/') >= 0) {
 
-      const newpath = router.asPath.replace('/news/', '/user/');
-      router.replace(newpath, undefined, { shallow: true });
-    }
+
+  //saves the changes to the session on the local web server. 
+  //Two flavors: the one that was supposed to kick static pages into SSR on session update, the other that doesn't
+  //Second version is not used today as we removed the static pages
+  const updateSession = useCallback((updSession: object) => {
+    /* if (router.asPath.indexOf('/news/') >= 0) {
+       const newpath = router.asPath.replace('/news/', '/user/');
+       router.replace(newpath, undefined, { shallow: true });
+     }*/
     const assigned = { ...Object.assign(session, updSession) }
     setSession(assigned);
     axios.post(`/api/session/save`, { session: updSession });
   }, [session, router]);
 
-  const updateSessionStealth = useCallback((updSession: object) => {
+  /*const updateSessionStealth = useCallback((updSession: object) => {
     const assigned = { ...Object.assign(session, updSession) }
     setSession(assigned);
 
     axios.post(`/api/session/save`, { session: updSession });
-  }, [session]);
+  }, [session]);*/
+
+  // updates both the them body attribute and session
   const updateTheme = useCallback((theme: string) => {
     setTheme(theme);
     document.body.setAttribute("data-theme", theme);
     updateSession({ dark: theme == 'dark' ? 1 : 0 })
   }, [, updateSession]);
 
+  // sets the default theme based on the browser setting
   useEffect(() => {
     const darkModeQuery = window.matchMedia("(prefers-color-scheme: dark)");
     if (theme == "unknown") {
@@ -167,9 +187,17 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
       document.body.setAttribute("data-theme", darkModeQuery.matches ? 'dark' : 'light');
     }
     if (session.dark == -1) {
-      updateSessionStealth({ dark: darkModeQuery.matches ? 1 : 0 })
+      updateSession({ dark: darkModeQuery.matches ? 1 : 0 })
     }
-  }, [theme, session.dark, updateSession, updateSessionStealth]);
+  }, [theme, session.dark, updateSession]);
+
+  // sets the watch over window resize event
+  // track resizes so that when the page is loaded om the server, it knows last size
+  const resize = useCallback((width: number) => {
+    if (custom) {
+      updateSession({ width })
+    }
+  }, [custom])
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth != session.width)
@@ -179,49 +207,55 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
     return () => window.removeEventListener('resize', handleResize);
   }, [resize]);
 
-
+  //also checks the resize on render in the browser
   if (isBrowser()) {
     if (window.innerWidth != session.width) {
       setTimeout(() => resize(window.innerWidth), 1);
     }
   }
 
+  // there are two types of layout - top - newsline, and drilldown - context. All pages are reduced to that:
   const layoutType = type == 'topic' || type == 'home' ? 'context' : type == 'solo' ? 'newsline' : 'newsline';
+  
+  // we load both layouts for the newsline, possibly with session and user customizations. This allows us to keep all components in memory and pop the navigation stack seamlessly
+  // while preserving the scroll position  
   const newslinekey: fetchChannelLayoutKey = ['channelLayout', qparams.newsline, session.hasLayout, session.sessionid, session.userslug, 'newsline', session.dense, session.thick, layoutNumber || 'l1'];
   const contextkey: fetchChannelLayoutKey = ['channelLayout', qparams.newsline, session.hasLayout, session.sessionid, session.userslug, 'context', session.dense, session.thick, layoutNumber || 'l1'];
-  
-  //console.log("RENDER LAYOUT, key=", key)
 
   let { data: newslineLayout, error: newslineLayoutError } = useSWR(newslinekey, fetchChannelLayout)
-  
   let { data: contextLayout, error: layoutError } = useSWR(contextkey, fetchChannelLayout)
-  const mainLayout=layoutType=='newsline'?newslineLayout:contextLayout;
+
+  const mainLayout = layoutType == 'newsline' ? newslineLayout : contextLayout;
+  
   if (!mainLayout)
     return <Loading className={roboto.className}>Loading...</Loading>
+
   
-  if (layoutType == 'context') {
-
-  }
-
   const hpads = mainLayout?.hpads;
 
   if (isFallback)
     return <Loading className={roboto.className}>Fallback Loading...</Loading>
 
+  //GA4 client-side navigation helper
+  useEffect(() => {
+    const handleRouteChange = (url: string) => {
+      pageview(url);
+    };
+    router.events.on("routeChangeComplete", handleRouteChange);
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, [router.events]);
 
-
-
-
- // console.log(" d1b render common", type)
+  //all the Head setup happens at this level
   return (
     <>
       <Head>
         <title>{meta?.title}</title>
 
         <link rel="canonical" href={meta?.canonic} />
-
-
         <meta name="trademark" content='THE INTERNET OF US' />
+        <meta name="slogan" content="Internet's Front Page" />
         <meta name="description" content={meta?.description} />
         <meta property="og:description" content={meta?.description} />
         <meta name="title" content={meta?.title} />
@@ -239,13 +273,23 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
           href={"/blue-bell.png"}
         />
 
-
-
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-
+      
       </Head>
       <main className={roboto.className} >
+      
+      <Script src="https://www.googletagmanager.com/gtag/js?id=G-PEZZHTN0M5" strategy="afterInteractive"></Script>
+        <Script id="google-analytics" strategy="afterInteractive" dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-XXXXXXX', {
+              page_path: window.location.pathname,
+            });
+          `,
+        }} />
+
         <ThemeProvider theme={palette}>
           <GlobalStyle />
           <AppWrapper session={session} qparams={qparams} channelDetails={channelConfig.channelDetails} newsline={channelConfig.newsline} setLoading={setLoading}>
@@ -255,13 +299,12 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
                 <PageWrap>
                   <Header session={session} channelSlug={channelConfig.channelSlug} channelDetails={channelConfig.channelDetails} newsline={channelConfig.newsline} layout={mainLayout} qparams={qparams} updateSession={updateSession} />
                   <CardsContainer>
-                  {layoutType == 'context'&&contextLayout ? <Card visible={true}>
-                      <LayoutView  visible={true} card={"drilldown"} session={session} pageType={'context'} layout={contextLayout} qparams={qparams} updateSession={updateSession} channelDetails={channelConfig.channelDetails} qCache={qCache} setQCache={setQCache} />
+                    {layoutType == 'context' && contextLayout ? <Card visible={true}>
+                      <LayoutView visible={true} card={"drilldown"} session={session} pageType={'context'} layout={contextLayout} qparams={qparams} updateSession={updateSession} channelDetails={channelConfig.channelDetails} qCache={qCache} setQCache={setQCache} />
                     </Card> : null}
-                    {newslineLayout?<Card visible={layoutType == 'newsline'}>
-                      <LayoutView  visible={layoutType=='newsline'? true : false} card={"top"} session={session} pageType={'newsline'} layout={newslineLayout} qparams={qparams} updateSession={updateSession} channelDetails={channelConfig.channelDetails} qCache={qCache} setQCache={setQCache} />
-                    </Card>:null}
-                   
+                    {newslineLayout ? <Card visible={layoutType == 'newsline'}>
+                      <LayoutView visible={layoutType == 'newsline' ? true : false} card={"top"} session={session} pageType={'newsline'} layout={newslineLayout} qparams={qparams} updateSession={updateSession} channelDetails={channelConfig.channelDetails} qCache={qCache} setQCache={setQCache} />
+                    </Card> : null}
                   </CardsContainer>
                 </PageWrap>
               </Grid>
@@ -271,17 +314,12 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
         </ThemeProvider>
       </main>
       <Head>
-        <script
-          dangerouslySetInnerHTML={{
+        <Script strategy="afterInteractive"
+          dangerouslySetInnerHTML={{ // the twitter script
             __html: `window.twttr = (function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0],t = window.twttr || {};if (d.getElementById(id)) return t;js = d.createElement(s);js.id = id;js.src = "https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js, fjs);t._e = [];t.ready = function(f) {t._e.push(f);};return t;}(document, "script", "twitter-wjs"));`,
-          }}></script>
+          }}/>
       </Head>
 
     </>
   )
 }
-
-// <LayoutView pageType={type} layout={layout} qparams={qparams} />
-
-
-

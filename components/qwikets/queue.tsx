@@ -144,7 +144,6 @@ const Notifications = ({ isLeft, qType, newsline, forum, lastid, tail, sessionid
 
     const itemName = notifications == 1 ? 'Item' : 'Items';
     const onClick = () => {
-        console.log("remder click");
         if (reset)
             setTimeout(() => { reset() }, 1);
     }

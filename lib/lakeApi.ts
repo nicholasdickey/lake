@@ -1,61 +1,76 @@
 
 import axios from 'axios'
 import { off } from 'process';
-import{Options} from '../lib/withSession';
+import { Options } from '../lib/withSession';
 const API_KEY = process.env.API_KEY;
 
+
+export interface OnlineCountKey {
+   sessionid: string,
+   userslug: string
+}
+export const getOnlineCount = async (key: OnlineCountKey) => {
+   const { sessionid, userslug } = key;
+   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/user/onlineCount?sessionid=${encodeURIComponent(sessionid)}&userslug=${encodeURIComponent(userslug)}}`;
+   // console.log("calling lakeApi user/fetchSession ", url)
+   const res = await axios.get(url);
+   if (res.data.success)
+      return res.data.count;
+   else
+      return undefined;
+}
 const lakeApi = (url: string) => {
    url = `${process.env.NEXT_PUBLIC_LAKEAPI}${url}`
    //console.log("calling lakeApi, ",url)
    return axios.get(url).then(res => res.data)
 }
-export const fetchAllSitemaps=async(newsline:string,forum:string)=>{
+export const fetchAllSitemaps = async (newsline: string, forum: string) => {
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/sitemap/fetchAll?newsline=${newsline}&forum=${forum}`;
    console.log("calling lakeApi fetchAllSitemaps ", url)
    const res = await axios.get(url);
    return res.data.sitemaps;
 }
-export const fetchSitemap=async(newsline:string,startDate:string)=>{
+export const fetchSitemap = async (newsline: string, startDate: string) => {
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/sitemap/fetch?newsline=${newsline}&startDate=${startDate}`;
    console.log("calling lakeApi fetchSitemap ", url)
    const res = await axios.get(url);
    return res.data.sitemap;
 }
-export const updateUserSession=async(userslug:string,options:Options)=>{
+export const updateUserSession = async (userslug: string, options: Options) => {
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/user/updateSession?`
    //console.log("calling lakeApi user/updateSession ", url)
-   const res = await axios.post(url,{
+   const res = await axios.post(url, {
       userslug,
       options
    });
    return res.data.userSession;
 }
-export const getUserSession=async(userslug:string)=>{
+export const getUserSession = async (userslug: string) => {
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/user/fetchSession?`
-  // console.log("calling lakeApi user/fetchSession ", url)
-   const res = await axios.post(url,{
-      userslug   
+   // console.log("calling lakeApi user/fetchSession ", url)
+   const res = await axios.post(url, {
+      userslug
    });
    return res.data.userSession;
 }
-export const initLoginSession=async(userslug:string,options:Options)=>{
+export const initLoginSession = async (userslug: string, options: Options) => {
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/user/initLogin?`
    //console.log("calling lakeApi user/initLogin ", url)
-   const res = await axios.post(url,{
+   const res = await axios.post(url, {
       userslug,
       options
    });
-   console.log("initLogin returned",res.data)
-   return JSON.parse(res.data.userSession)||null;
+   console.log("initLogin returned", res.data)
+   return JSON.parse(res.data.userSession) || null;
 }
 
-export const processLoginCode=async (code:string,host:string)=>{
+export const processLoginCode = async (code: string, host: string) => {
    const url = `${process.env.NEXT_PUBLIC_QWIKET_API}/api?task=disqus-login&code=${code}&host=${host}`;
-   
+
    const res = await axios.get(url);
    //console.log("processLoginCode returned from axios get ",url,res.data)
-   if(res.data.success){
-      const user=res.data.user;
+   if (res.data.success) {
+      const user = res.data.user;
       return user;
    }
    return false;
@@ -63,9 +78,9 @@ export const processLoginCode=async (code:string,host:string)=>{
 export const fetchChannelConfig = async (slug: string) => {
    try {
       const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/channel/fetch?slug=${slug}`
-    //  console.log("calling lakeApi fetchChannelConfig ", url)
+      //  console.log("calling lakeApi fetchChannelConfig ", url)
       const res = await axios.get(url);
-    //  console.log("returned from axios get ",url,res.data)
+      //  console.log("returned from axios get ",url,res.data)
       return res.data
    }
    catch (x) {
@@ -73,14 +88,14 @@ export const fetchChannelConfig = async (slug: string) => {
    }
    return null
 }
-export type fetchChannelLayoutKey= [u: string, slug: string, hasLayout: boolean, sessionid: string, userslug: string, type: string, dense: number, thick: number, layoutNumber: string];
-export const fetchChannelLayout = async ([u, slug, hasLayout, sessionid, userslug, type, dense, thick, layoutNumber]:fetchChannelLayoutKey) => {
+export type fetchChannelLayoutKey = [u: string, slug: string, hasLayout: boolean, sessionid: string, userslug: string, type: string, dense: number, thick: number, layoutNumber: string];
+export const fetchChannelLayout = async ([u, slug, hasLayout, sessionid, userslug, type, dense, thick, layoutNumber]: fetchChannelLayoutKey) => {
    try {
       const sessionParam = hasLayout ? userslug ? `&userslug=${userslug}` : `&sessionid=${sessionid}` : ``
       const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/layout/fetch?channel=${slug}${sessionParam}&pageType=${type}&dense=${dense}&thick=${thick}&layoutNumber=${layoutNumber}`
       // console.log("calling lakeApi fetchChannelLayout, ", url)
       const res = await axios.get(url);
-    //  console.log("return ",res.data)
+      //  console.log("return ",res.data)
       return res.data;
    }
    catch (x) {
@@ -105,10 +120,10 @@ export const fetchUser = async ([u, userslug]: [u: string, userslug: string]) =>
    }
    return null;
 }
-export type FetchTopicKey=[u:string,threadid:string,withBody:number,userslug:string,tag:string];
-export const fetchTopic=async ([u,threadid, withBody,userslug,tag]:FetchTopicKey)=>{
-   if(!userslug)
-   userslug='';
+export type FetchTopicKey = [u: string, threadid: string, withBody: number, userslug: string, tag: string];
+export const fetchTopic = async ([u, threadid, withBody, userslug, tag]: FetchTopicKey) => {
+   if (!userslug)
+      userslug = '';
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/topic/fetch?slug=${encodeURIComponent(threadid)}&withBody=${withBody}&userslug=${userslug}&tag=${tag}`;
    let res;
    try {
@@ -122,34 +137,34 @@ export const fetchTopic=async ([u,threadid, withBody,userslug,tag]:FetchTopicKey
    return res ? res.data : null;
 }
 export interface FetchQueueKey {
-   key:[u: string, qType: string, newsline: string, solo:number,forum?: string, tag?: string, page?: number, lastid?: string, sessionid?: string, userslug?: string, tail?: number, test?: string,breakCache?:string,size?:number,card?:string]
+   key: [u: string, qType: string, newsline: string, solo: number, forum?: string, tag?: string, page?: number, lastid?: string, sessionid?: string, userslug?: string, tail?: number, test?: string, breakCache?: string, size?: number, card?: string]
 }
-export const fetchQueue = async ([u, qType, newsline, solo, forum, tag, page, lastid, sessionid, userslug, tail, test,breakCache,size,card]:FetchQueueKey["key"]
-    ) => {
+export const fetchQueue = async ([u, qType, newsline, solo, forum, tag, page, lastid, sessionid, userslug, tail, test, breakCache, size, card]: FetchQueueKey["key"]
+) => {
    let params;
    //console.log("fetchQueue d1b",JSON.stringify({u,qType,newsline,solo,forum,tag,page,lastid,sessionid,userslug,tail,test,breakCache,size,card}))
    //console.log("d1b:  fetchQueue:", `['queue',card:${card},qType:${qType},newsline:${newsline},forum:${forum},tag:${tag},page:${page},lastid:${lastid},sessionid:${sessionid},userslug:${userslug},tail:${tail}]`)
-   if(!page)
-   page=0;
-   if(!size)
-   size=0;
-   if(!lastid)
-   lastid='0';
-   if(!forum)forum='';
-   if(!tag)
-   tag=''
-   if(!sessionid)
-   sessionid='';
-   if(!userslug)
-   userslug='';
-   if(!tail)
-   tail=0;
-   if(!test)
-   test='';
-   if(!breakCache)
-   breakCache='';
-   if(!solo)
-   solo=0;
+   if (!page)
+      page = 0;
+   if (!size)
+      size = 0;
+   if (!lastid)
+      lastid = '0';
+   if (!forum) forum = '';
+   if (!tag)
+      tag = ''
+   if (!sessionid)
+      sessionid = '';
+   if (!userslug)
+      userslug = '';
+   if (!tail)
+      tail = 0;
+   if (!test)
+      test = '';
+   if (!breakCache)
+      breakCache = '';
+   if (!solo)
+      solo = 0;
 
    const addParams = (params: string) => {
       //  console.log("addParams1",params)
@@ -157,9 +172,9 @@ export const fetchQueue = async ([u, qType, newsline, solo, forum, tag, page, la
          params += `&userslug=${userslug}`;
       else if (sessionid)
          params += `&sessionid=${sessionid}`;
-      if(solo==1){
-         params+=`&tag=${tag}&solo=1`
-      } 
+      if (solo == 1) {
+         params += `&tag=${tag}&solo=1`
+      }
       if (tail)
          params += `&tail=${tail}`;
       if (test)
@@ -186,7 +201,7 @@ export const fetchQueue = async ([u, qType, newsline, solo, forum, tag, page, la
       case 'hot':
          params = `newsline=${newsline}&type=hot&page=${page}&lastid=${lastid}`;
          params = addParams(params);
-        // console.log("fetchQueue params",params)
+         // console.log("fetchQueue params",params)
          break;
       case 'tag':
          params = `newsline=${newsline}&tag=${tag}&type=tag&page=${page}&lastid=${lastid}`;
@@ -198,8 +213,8 @@ export const fetchQueue = async ([u, qType, newsline, solo, forum, tag, page, la
          break;
    }
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/queue/fetch?${params}`
-   
-  // console.log("remder fetchQueue url",url)
+
+   // console.log("remder fetchQueue url",url)
    let res;
    try {
       res = await axios.get(url)
@@ -212,15 +227,15 @@ export const fetchQueue = async ([u, qType, newsline, solo, forum, tag, page, la
    //console.log("remder return ",res.data)
    return res ? res.data : null;
 }
-export type fetchMyNewslineKey= [u: string, newsline: string, sessionid: string, userslug: string, hasNewsline: boolean];
-export const fetchMyNewsline = async ([u, newsline, sessionid, userslug, hasNewsline]:fetchMyNewslineKey) => {
+export type fetchMyNewslineKey = [u: string, newsline: string, sessionid: string, userslug: string, hasNewsline: boolean];
+export const fetchMyNewsline = async ([u, newsline, sessionid, userslug, hasNewsline]: fetchMyNewslineKey) => {
    let params;
    //   console.log("fetchQueue:", `['queue',qType:${qType},newsline:${newsline},forum:${forum},tag:${tag},page:${page},lastid:${lastid},sessionid:${sessionid},userslug:${userslug},tail:${tail}]`)
    if (!hasNewsline)
       sessionid = "";
 
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/newsline/fetch?navigator=1`
- //  console.log("calling lakeApi fetchNAvigator, ", url)
+   //  console.log("calling lakeApi fetchNAvigator, ", url)
    let res;
    try {
       res = await axios.post(url, {
@@ -239,8 +254,8 @@ export const fetchMyNewsline = async ([u, newsline, sessionid, userslug, hasNews
       console.log("retried successfully")
    }
    const data = res ? res.data : null;
-  // console.log("inside fetchNavigator", data);
-  // console.log("newsline:", data.newsline)
+   // console.log("inside fetchNavigator", data);
+   // console.log("newsline:", data.newsline)
    if (data?.success) {
       return data.newsline;
    }
@@ -249,17 +264,17 @@ export const fetchMyNewsline = async ([u, newsline, sessionid, userslug, hasNews
 
    }
 }
-export type Filters= { [key: string]: boolean };
-export type fetchPublicationsKey = [u: string, newsline: string, sessionid: string, userslug: string, filters:Filters, q: string, hasNewsline: boolean];
+export type Filters = { [key: string]: boolean };
+export type fetchPublicationsKey = [u: string, newsline: string, sessionid: string, userslug: string, filters: Filters, q: string, hasNewsline: boolean];
 const filterValues = (filters: Filters) => {
-   const filterKeys:string[] = Object.keys(filters);
+   const filterKeys: string[] = Object.keys(filters);
    let out: string[] = [];
    for (let i = 0; i < filterKeys.length; i++) {
       //console.log("filterValues iter", i, filterKeys[i], filters[filterKeys[i]])
       if (filters[filterKeys[i]])
          out.push(filterKeys[i])
    }
- //  console.log("filterValues out:", out)
+   //  console.log("filterValues out:", out)
    return out;
 }
 export const fetchPublications = async ([u, newsline, sessionid, userslug, filters, q, hasNewsline]: fetchPublicationsKey) => {
@@ -270,7 +285,7 @@ export const fetchPublications = async ([u, newsline, sessionid, userslug, filte
    interface FiltersArray {
       [key: string]: string;
    }
- 
+
    let outFilters: string[] = []
    if (filters)
       outFilters = filterValues(filters)
@@ -278,7 +293,7 @@ export const fetchPublications = async ([u, newsline, sessionid, userslug, filte
    if (!q)
       q = "";
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/newsline/fetchAll`
- //  console.log("calling lakeApi fetchAll, ", url, outFilters, q)
+   //  console.log("calling lakeApi fetchAll, ", url, outFilters, q)
    let res;
    try {
       res = await axios.post(url, {
@@ -317,7 +332,7 @@ export const fetchPublicationCategories = async ([u, newsline,]: [u: string, new
 
 
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/newsline/fetchPublicationCategories`
- // console.log("calling lakeApi fetchPublicationCategories, ", url)
+   // console.log("calling lakeApi fetchPublicationCategories, ", url)
    let res;
    try {
       res = await axios.post(url, {
@@ -332,8 +347,8 @@ export const fetchPublicationCategories = async ([u, newsline,]: [u: string, new
       console.log("retried successfully")
    }
    const data = res ? res.data : null;
-  // console.log("inside fetchPublicationCategories", data);
-  // console.log("publicationCategories:", data.publicationCategories)
+   // console.log("inside fetchPublicationCategories", data);
+   // console.log("publicationCategories:", data.publicationCategories)
    if (data?.success) {
       return data.publicationCategories;
    }
@@ -348,7 +363,7 @@ export const updateMyNewsline = async ({ newsline, tag, switch: switchParam, ses
 
 
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/newsline/update`
-   console.log("calling lakeApi update, ", url,sessionid,userslug)
+   console.log("calling lakeApi update, ", url, sessionid, userslug)
    let res;
    try {
       res = await axios.post(url, {
@@ -364,8 +379,8 @@ export const updateMyNewsline = async ({ newsline, tag, switch: switchParam, ses
 
    }
    const data = res ? res.data : null;
-  // console.log("inside updateMyNewsline", data);
-  // console.log("newsline:", data.newsline)
+   // console.log("inside updateMyNewsline", data);
+   // console.log("newsline:", data.newsline)
    if (data?.success) {
       return data.newsline;
    }
@@ -383,7 +398,7 @@ export const updatePublications = async ({ newsline, tag, switch: switchParam, f
       outFilters = filterValues(filters);
 
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/newsline/updateAll`
-   console.log(" calling lakeApi updateAll, ", url,sessionid,)
+   console.log(" calling lakeApi updateAll, ", url, sessionid,)
    let res;
    try {
       res = await axios.post(url, {
@@ -393,7 +408,7 @@ export const updatePublications = async ({ newsline, tag, switch: switchParam, f
          userslug,
          q,
          switch: switchParam,
-         filters:outFilters,
+         filters: outFilters,
 
       })
    }
@@ -402,8 +417,8 @@ export const updatePublications = async ({ newsline, tag, switch: switchParam, f
 
    }
    const data = res ? res.data : null;
-  // console.log("inside updatePublications", data);
- //  console.log("publications:", data.publications)
+   // console.log("inside updatePublications", data);
+   //  console.log("publications:", data.publications)
    if (data?.success) {
       return data.publications;
    }

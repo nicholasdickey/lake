@@ -278,7 +278,7 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
       </Head>
       <main className={roboto.className} >
       
-      <Script src="https://www.googletagmanager.com/gtag/js?id=G-PEZZHTN0M5" strategy="afterInteractive"></Script>
+      <Script src={`https://www.googletagmanager.com/gtag/js?id=G-PEZZHTN0M5`} strategy="afterInteractive"></Script>
         <Script id="google-analytics" strategy="afterInteractive" dangerouslySetInnerHTML={{
           __html: `
             window.dataLayer = window.dataLayer || [];

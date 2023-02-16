@@ -5,11 +5,12 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import Image from 'next/image'
-import { fetchUser } from '../lib/lakeApi';
+import { fetchUser,getOnlineCount } from '../lib/lakeApi';
 import Lowline from './lowline';
-import { UilGlassMartiniAlt } from '@iconscout/react-unicons'
+import { UilGlassMartiniAlt,UilUsersAlt } from '@iconscout/react-unicons'
 import { Playfair_Display } from '@next/font/google';
 import { useAppContext } from "../lib/context";
+
 
 //import Menu from '@material-ui/core/Menu';
 //import MenuItem from '@material-ui/core/MenuItem';
@@ -199,6 +200,7 @@ const AvatarGroup = styled.div`
         align-items:flex-begin;
      `
 const Dateline = styled.div`
+display:flex;
     font-size:0.7rem;
     color:#808080;
     //margin-left:20px;
@@ -207,6 +209,17 @@ const Martini = styled.div`
     margin-left:30px;
     margin-top:2px;
 `
+const OnlineCount = styled.div`
+  
+    margin-top:-2px;
+    font-size:9px;
+`
+const OnlineCountIcon = styled.div`
+  
+    margin-left:0px;
+    margin-top:2px;
+`
+
 const Home = styled.div`
     margin-right:30px;
     margin-top:2px;
@@ -229,10 +242,13 @@ const DatelineBand = ({ channelSlug, channelDetails, user, updateSession }) => {
     let subscr_status = +user?.subscr_status;
     if (!subscr_status)
         subscr_status = 0;
+    const { session, qparams } = useAppContext();
+    const countKey={sessionid:session.sessionid,userslug:session.userslug};
+    const { data: count, error: countError } = useSWR(countKey, getOnlineCount,{refreshInterval:10000})
     //console.log({ subscr_status })
     const router = useRouter();
 
-    const { qparams } = useAppContext();
+   
 
     //console.log('DATELINE FFuser:', user, updateSession)
 
@@ -256,12 +272,17 @@ const DatelineBand = ({ channelSlug, channelDetails, user, updateSession }) => {
     //return<SubTitle>{`${dateStrging}  ${hometown}`}</SubTitle>
     return <StyledWrapper className={playfair.className}>
         <VerticalWrap>
-            <HorizWrap><Dateline>{`${dateStrging} | ${hometown}`}</Dateline></HorizWrap>
+            <HorizWrap><Dateline>{`${dateStrging} `} &nbsp;{`|`} &nbsp;
+                                    <OnlineCountIcon><UilUsersAlt size="11" color="#888" /></OnlineCountIcon>
+                                    <OnlineCount>{count} </OnlineCount>&nbsp;{`|`} {` ${hometown}`}</Dateline></HorizWrap>
             {false ? <HorizWrap><AvatarGroup><Image src={avatar} width={32} height={32} />{subscr_status > 0 ? <SubscriberStar /> : null}</AvatarGroup></HorizWrap> : null}
 
             {
                 !isLoggedIn ? <SubTitle><Home><Link href={'/'}><UilNewspaper size="16" color="#888" /></Link></Home>
-                    <Link onClick={() => setLoading("Logging-in via Disqus...")} href={`/api/session/login?href=${encodeURIComponent(router.asPath)}`}>Sign-in</Link>&nbsp;|&nbsp; 
+                    <Link onClick={() => setLoading("Logging-in via Disqus...")} href={`/api/session/login?href=${encodeURIComponent(router.asPath)}`}>Sign-in</Link>
+                    &nbsp;|&nbsp; 
+                   
+                    
                     <a>Subscribe</a> 
                     <Link onClick={()=>console.log("lacantina click")} href={lacantinaUrl}><Martini><UilGlassMartiniAlt size="16" color="#888" /></Martini></Link>
                     </SubTitle> :

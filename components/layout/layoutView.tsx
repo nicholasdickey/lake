@@ -5,7 +5,10 @@ import getLayoutWidth from '../../lib/layoutWidth'
 import { Options } from '../../lib/withSession';
 import { Qparams } from '../../lib/qparams';
 
-const OuterWrapper = styled.div`width:100%;`;
+const OuterWrapper = styled.div`
+width:100%;
+background-color:var(--background);
+`;
 const W000 = styled.div`
       //  display:none;
         width:100%;

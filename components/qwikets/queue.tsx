@@ -80,7 +80,8 @@ const LeftHeader = styled.div`
     width:auto;
     cursor:pointer;
     &:hover {
-        background:var(--background);  
+        background:var(--lowlight);  
+        color:var(--text);
   }
     
 `

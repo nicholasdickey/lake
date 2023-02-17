@@ -98,8 +98,8 @@ const LeftColumnHeader = styled.div`
 const InnerHeader = styled.div`
     display:flex;
     margin-top:-7px;
-    color:var(--highlight);
-    font-weight:700;
+    color:var(--qwiketBorderStale);
+    font-weight:300;
     font-size:12px;
     margin-right:6px;
     z-index:100;

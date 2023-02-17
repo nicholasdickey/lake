@@ -8,7 +8,7 @@ export const palette = {
             background: "#F5F5F5",// g[100]
             button: "#F5F5F5",
             notificationButton:"#01579B",
-            qwiketBorderStale:"rgb(168, 68, 68)",
+            qwiketBorderStale:"rgb(168, 168, 168)",
             qwiketBorderRecent:"rgb(255, 193, 7)",
             qwiketBorderNew:"rgb(76, 175, 80)",
             stars: [

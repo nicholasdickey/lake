@@ -39,6 +39,7 @@ const VerticalWrap = styled.div<IsTopic>`
         padding-left:16px;
         margin-left:6px;
     }
+   
 `
 const Row = styled.div`
     display:flex;
@@ -56,9 +57,7 @@ const Row = styled.div`
     a{
         text-overflow:ellipsis;
         overflow:hidden;
-     }
-    
-
+     }    
 `
 
 const SiteName = styled.div<IsTopic>`

@@ -30,6 +30,7 @@ const VerticalWrap = styled.div<IsTopic>`
     padding-bottom:6px;
     width:100%;
     margin-bottom:6px;
+   
     h1 {
         font-size:18px;
         font-weight:400;
@@ -47,6 +48,7 @@ const Row = styled.div`
     justify-content: space-between;
     margin-bottom:4px;
     font-size:1.0rem;
+    line-height:1.3;
     width:100%;
     text-overflow:ellipsis;
     overflow:hidden;

@@ -2017,6 +2017,11 @@ is-wsl@^2.2.0:
   dependencies:
     is-docker "^2.0.0"
 
+isbot-fast@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/isbot-fast/-/isbot-fast-1.2.0.tgz#ef0ef1d5db34eb60777250ae26fceb72b94153e2"
+  integrity sha512-twjuQzy2gKMDVfKGQyQqrx6Uy4opu/fiVUTTpdqtFsd7OQijIp5oXvb27n5EemYXaijh5fomndJt/SPRLsEdSg==
+
 isexe@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"

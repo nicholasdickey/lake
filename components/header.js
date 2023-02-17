@@ -244,7 +244,7 @@ const DatelineBand = ({ channelSlug, channelDetails, user, updateSession }) => {
         subscr_status = 0;
     const { session, qparams } = useAppContext();
     const countKey={sessionid:session.sessionid,userslug:session.userslug};
-    const { data: count, error: countError } = useSWR(countKey, getOnlineCount,{refreshInterval:10000})
+    const { data: count, error: countError } = useSWR(qparams.isbot?null:countKey, getOnlineCount,{refreshInterval:10000})
     //console.log({ subscr_status })
     const router = useRouter();
 
@@ -275,7 +275,7 @@ const DatelineBand = ({ channelSlug, channelDetails, user, updateSession }) => {
         <VerticalWrap>
             <HorizWrap><Dateline>{`${dateStrging} `} &nbsp;{`|`} &nbsp;
                                     <OnlineCountIcon><UilUsersAlt size="11" color="#888" /></OnlineCountIcon>
-                                    <OnlineCount>{count} </OnlineCount>&nbsp;{`|`} {` ${hometown}`}</Dateline></HorizWrap>
+                                    <OnlineCount>{count?count:0} </OnlineCount>&nbsp;{`|`} {` ${hometown}`}</Dateline></HorizWrap>
             {false ? <HorizWrap><AvatarGroup><Image src={avatar} width={32} height={32} />{subscr_status > 0 ? <SubscriberStar /> : null}</AvatarGroup></HorizWrap> : null}
 
             {

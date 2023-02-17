@@ -21,6 +21,7 @@
     "bowser": "^2.11.0",
     "disqus-react": "^1.1.5",
     "iron-session": "^6.3.1",
+    "isbot-fast": "^1.2.0",
     "markdown-to-jsx": "^7.1.8",
     "next": "13.1.0",
     "next-session": "^4.0.5",

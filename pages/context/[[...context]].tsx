@@ -35,7 +35,7 @@ export const getServerSideProps=async(context: GetServerSidePropsContext)=>{
     cc=commentCC.split('-')[1];
     const key: [u: string, threadid: string, withBody: number,userslug:string] = ['topic', threadid, 0,''];
     const {item} = await fetchTopic(key);
-    const {tag}=item;
+    const {tag}=item?item:{tag:''};
     console.log("TOPIC:",JSON.stringify(item))
     console.log("CONTEXT MIGRATION:",JSON.stringify({channel,tag,threadid,cc}));
     

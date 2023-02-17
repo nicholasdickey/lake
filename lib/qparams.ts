@@ -9,5 +9,7 @@ export interface Qparams {
     threadid?: string,
     layoutNumber?: string,
     timestamp:number,
-    cc:string   
+    cc:string,
+    isbot?:boolean,
+    isfb?:boolean   
 }

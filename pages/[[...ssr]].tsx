@@ -1,6 +1,7 @@
 import React from "react"
 import Error from 'next/error'
-import Common, { CommonProps } from "../components/common"
+
+import Common from "../components/common"
 import Bowser from "bowser";
 import { SWRConfig, unstable_serialize } from 'swr'
 import axios from 'axios';
@@ -26,6 +27,7 @@ import { networkInterfaces } from "os";
 import {
     fetchSitemap
 } from '../lib/lakeApi';
+import {isbot} from '../lib/isbot'
 
 interface HomeProps {
     session?: Options,
@@ -64,7 +66,8 @@ export const getServerSideProps = withSessionSsr(
     async function getServerSideProps(context: GetServerSidePropsContext): Promise<any> {
 
         const host = context.req.headers.host || "";
-
+       
+      
         console.log("HOST==>:", host)
         const { code, state }: { code: string, state: string } = context.query as any;
         // parse dynamic params:
@@ -162,7 +165,8 @@ export const getServerSideProps = withSessionSsr(
             defaultWidth = 900;
         else if (platformType == 'desktop')
             defaultWidth = 1200;
-
+        const botInfo=isbot({ua});
+        console.log("ISBOT==>",botInfo.bot);
         const sourceDomainsString = process.env.SOURCE_DOMAINS || '';
         const sourceDomains = sourceDomainsString.split(',');
 
@@ -245,7 +249,7 @@ export const getServerSideProps = withSessionSsr(
             options.userslug = '';
 
         // console.log("Options:", options)
-
+       
         // TBA pre-fetching data for SSR, for now all data fetched client-side   
         const newsline = 'qwiket';
 
@@ -260,7 +264,9 @@ export const getServerSideProps = withSessionSsr(
             threadid,
             layoutNumber,
             cc,
-            timestamp: Date.now() / 1000 | 0
+            timestamp: Date.now() / 1000 | 0,
+            isbot:botInfo.bot,
+            isfb:botInfo.fb
         }
         const isFirstServerCall = context.req?.url?.indexOf('/_next/data/') === -1
         console.log("IS FIRST SERVER CALL=",isFirstServerCall)

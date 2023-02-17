@@ -6,7 +6,7 @@ import {
 
 } from "next";
 import {
-    fetchTopic
+    fetchTopic,FetchTopicKey
 } from '../../lib/lakeApi';
 
 export default function Home({  }) {
@@ -33,7 +33,7 @@ export const getServerSideProps=async(context: GetServerSidePropsContext)=>{
     let cc='';
     if(commentCC)
     cc=commentCC.split('-')[1];
-    const key: [u: string, threadid: string, withBody: number,userslug:string] = ['topic', threadid, 0,''];
+    const key:FetchTopicKey = ['topic', threadid, 0,'',''];
     const {item} = await fetchTopic(key);
     const {tag}=item?item:{tag:''};
     console.log("TOPIC:",JSON.stringify(item))

@@ -51,7 +51,7 @@ const Twitter = () => {
 
     const url:string=newsline.twitter;
     const theme=session.dark;
-    console.log("render Twitter embed",url)
+    //console.log("render Twitter embed",url)
     
  
     return <>{loading?<Loading>Loading the @AM1_NEWS Tweeter timeline... Elon, fix this!</Loading>:null}<div  ref={ref}><TwitterTimelineEmbed   

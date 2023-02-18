@@ -4,7 +4,23 @@ import { off } from 'process';
 import { Options } from '../lib/withSession';
 const API_KEY = process.env.API_KEY;
 
+export const accept = async ({ sessionid, userslug, tag }: { sessionid: string, userslug: string, tag: string }) => {
+   if (!userslug)
+      userslug = '';
 
+
+   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/user/accept?sessionid=${encodeURIComponent(sessionid)}&userslug=${userslug}&tag=${tag}`;
+   let res;
+   try {
+      res = await axios.get(url)
+   }
+   catch (x) {
+      console.log("fetchQueue HANDLED EXCEPTION:", x)
+      res = await axios.get(url)
+      console.log("retried successfully")
+   }
+   return res ? res.data : null;
+}
 export interface OnlineCountKey {
    sessionid: string,
    userslug: string
@@ -122,11 +138,16 @@ export const fetchUser = async ([u, userslug]: [u: string, userslug: string]) =>
    }
    return null;
 }
-export type FetchTopicKey = [u: string, threadid: string, withBody: number, userslug: string, tag: string];
-export const fetchTopic = async ([u, threadid, withBody, userslug, tag]: FetchTopicKey) => {
+export type FetchTopicKey = { threadid: string, withBody: number, userslug?: string, sessionid: string, tag: string, ackOverride?: boolean };
+export const fetchTopic = async ({ threadid, withBody, userslug, sessionid, tag, ackOverride }: FetchTopicKey) => {
    if (!userslug)
       userslug = '';
-   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/topic/fetch?slug=${encodeURIComponent(threadid)}&withBody=${withBody}&userslug=${userslug}&tag=${tag}`;
+   if (!sessionid)
+      sessionid = ''
+   if (!ackOverride)
+      ackOverride = false;
+
+   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/topic/fetch?slug=${encodeURIComponent(threadid)}&withBody=${withBody}&userslug=${userslug}&sessionid=${sessionid}&tag=${tag}${ackOverride ? '&ack=1' : ''}`;
    let res;
    try {
       res = await axios.get(url)

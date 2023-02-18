@@ -42,7 +42,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     let cc = '';
     if (commentCC)
         cc = commentCC.split('-')[1];
-    const key: FetchTopicKey = ['topic', threadid, 0, '', ''];
+        const key:FetchTopicKey= {threadid,withBody:0,userslug:'',sessionid:'',tag:''};
     const topic = await fetchTopic(key);
     if (!topic.success) {
         console.log("COULDN't FETCH TOPIC", key)

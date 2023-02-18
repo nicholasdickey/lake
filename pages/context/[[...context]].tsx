@@ -33,7 +33,10 @@ export const getServerSideProps=async(context: GetServerSidePropsContext)=>{
     let cc='';
     if(commentCC)
     cc=commentCC.split('-')[1];
-    const key:FetchTopicKey = ['topic', threadid, 0,'',''];
+    const key:FetchTopicKey= {threadid,withBody:0,userslug:'',sessionid:'',tag:''};
+
+    
+    ['topic', threadid, 0,'',''];
     const {item} = await fetchTopic(key);
     const {tag}=item?item:{tag:''};
     console.log("TOPIC:",JSON.stringify(item))

@@ -266,7 +266,7 @@ const DatelineBand = ({ channelSlug, channelDetails, user, updateSession }) => {
     let avatar = user?.avatar;
 
     let isLoggedIn = user ? 1 : 0;
-    console.log("onlinecount=",count)
+    //console.log("onlinecount=",count)
     const { setLoading } = useAppContext();
     //console.log('dateline',{ isLoggedIn,dateStrging,hometown })
     // return <div/> 

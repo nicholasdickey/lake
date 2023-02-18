@@ -52,7 +52,7 @@ const Local = ({ contextUrl, forum, realDisqThreadid, cc, slug, title,fullPage }
    fullPage=false;
     if(!title)
         title='';
-   console.log('LOCAL RENDER %s', title,cc)
+   //console.log('LOCAL RENDER %s', title,cc)
     //if (title) {
   
     var t = title.replace(/"/g, '\'');

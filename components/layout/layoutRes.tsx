@@ -25,9 +25,9 @@ export const LayoutRes = ({ layout, res, qparams,session,...props }:{pageType:st
    //console.log("layoutview LAYRES",res, layres,session);
     let columns = layres.columns;
   //  console.log('layoutview:',{ columns })
-    let key=0;
- 
+    const rightAdjust=columns[columns.length-1].selector=='twitter'?1:0;
+   // console.log("rightAdjust",rightAdjust)
     return <VerticalWrap>
         {session.band&&res!="w000"?<HotlistWrap><Hotlist session={session} qparams={qparams} spaces={layres.spaces}/> </HotlistWrap>:null}
-        <ColumnsView data-id="LayoutVIew">{columns.map((c:any,index:number) =><Column key={`column-${index}`} isLeft={index==0} spaces={layres.spaces} column={c} qparams={qparams}  session={session} {...props} />)}</ColumnsView></VerticalWrap>
+        <ColumnsView data-id="LayoutVIew">{columns.map((c:any,index:number) =><Column key={`column-${index}`} isLeft={index==0} isRight={index==columns.length-1-rightAdjust||index==0&&columns[1].selector=='topic'} spaces={layres.spaces} column={c} qparams={qparams}  session={session} {...props} />)}</ColumnsView></VerticalWrap>
 }

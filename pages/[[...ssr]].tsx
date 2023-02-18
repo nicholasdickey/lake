@@ -376,7 +376,8 @@ export const getServerSideProps = withSessionSsr(
                 return { props: { error: 404 } }
 
             }
-            const key: FetchTopicKey = ['topic', threadid, 1, options.userslug, tag];
+            const key:FetchTopicKey= {threadid:qparams.threadid,withBody:1,userslug:options.userslug,sessionid:options.sessionid,tag:qparams.tag,ackOverride:qparams.isbot||qparams.isfb};
+
             try {
                 const topic = await fetchTopic(key);
                // console.log("GOT TOPIC:", JSON.stringify(topic))

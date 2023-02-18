@@ -23,43 +23,7 @@ const ColumnHeader = styled.div`
     z-index:151;
    
 `
-const InnerHeader = styled.div`
-    display:flex;
-    position:relative;
-    height:10px;
-   // width: 100%;
-    margin-top:-7px;
-    color:var(--highlight);
-    font-weight:700;
-    font-size:12px;
-    margin-right:6px;
-    z-index:49;
-    padding-left:6px;
-    padding-right:6px;
-    background:var(--background);
-    user-select: none;
-`
-const SelectButton = styled.div`
-    width: auto;
-    height: auto;
-    overflow: hidden;
-    min-height: 1.1875em;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    fill: currentColor;
-    width: 1em;
-    height: 1em;
-    display: inline-block;
-    font-size: 24px;
-    transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    user-select: none;
-    flex-shrink: 0;
-    margin-top:-5px;
-    &:hover {
-       // background:var(--lowlight);
-        color:var(--button); 
-  }
-`
+
 const LeftHeader = styled.div`
     margin-top:-7px;
     color:#eee;//var(--highlight);
@@ -85,48 +49,11 @@ const LeftHeader = styled.div`
   }
     
 `
-interface Opened {
-    opened: boolean;
-}
-const OpenedMenu = styled.div<Opened>`
-    position:absolute;
-    display:block;
-    margin-top:16px;
-    margin-left:-16px;
-    width:150%;
-    right:0px;
-    z-index:102;
-   // padding-left:6px;
-    border:1px solid;
-    background:var(--background);// ${({ opened }) => opened ? 'var(--highlight)' : 'var(--lowlight)'};
-
-`
-interface Selected {
-    selected: boolean;
-}
-const SelectItem = styled.div<Selected>`
-    z-index:102;
-    padding:10px;
-    margin:2px;
-    border:1px solid var(--grey);
-    background:var(--lowlight);
-    cursor:pointer;
-    &:hover {
-        background:var(--background);  
-  
-    }
-    
-`
 const QueueWrap = styled.div`
     user-select: none;
-`
-const RotateRight = styled.div`
-    transform:rotate(-90deg);
-    margin-top:-2px;
-`
-const RotateLeft = styled.div`
-    transform:rotate(90deg);
-    margin-top:-2px;
+    margin-left:0px;
+    margin-right:0px;
+   
 `
 //const Arrow = () => <svg className="jss37 jss168" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation"><path d="M7 10l5 5 5-5z"></path></svg>
 
@@ -157,13 +84,13 @@ const Notifications = ({ isLeft, qType, newsline, forum, lastid, tail, sessionid
  * @param param0 
  * @returns 
  */
-const Segment = ({ card, isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, setData }: {
-    card: string, isLeft: boolean,
-    extraWide: boolean, qType: string, lastid: string, tail: number, pageIndex: number, hasData: boolean, setData: any
+const Segment = ({ card,  extraWide, qType, lastid,isRight,  pageIndex,  setData }: {
+    card: string, isLeft?: boolean,
+    extraWide: boolean, qType: string, lastid: string, isRight:boolean,tail?: number, pageIndex: number, setData: any
 }) => {
     const { session, qparams } = useAppContext();
 
-    const [hd, setHd] = useState(hasData)
+   
 
     //    const key = ['queue', qType, qparams.newsline, qparams.type=='solo'?1:0,qparams.forum, (qType == 'tag'||qparams.type=='solo') ? qparams.tag : '', pageIndex, lastid, session.sessionid, session.userslug, tail, ''];
     const key: FetchQueueKey["key"] = ['queue', qType, qparams.newsline, qType == 'newsline' && qparams.type == 'solo' ? 1 : 0, qparams.forum, (qType == 'tag' || qType == 'newsline' && qparams.type == 'solo') ? qparams.tag : '', pageIndex, lastid, session.sessionid, session.userslug, 0, '', '', 0, card];
@@ -200,15 +127,15 @@ const Segment = ({ card, isLeft, extraWide, qType, lastid, tail, pageIndex, hasD
     }
     //  }, [isVisible, data, qType, pageIndex, setData]);
 
-    return (<div className="other-segments" ref={ref}>{data?.items?.map((item: any) => <Qwiket key={`queue-qwiket-${qType}-${item.slug}-${item.qpostid}`} extraWide={extraWide} item={item} isTopic={false} qType={qType}></Qwiket>)}</div>)
+    return (<div className="other-segments" ref={ref}>{data?.items?.map((item: any) => <Qwiket key={`queue-qwiket-${qType}-${item.slug}-${item.qpostid}`} extraWide={extraWide} isRight={isRight} item={item} isTopic={false} qType={qType}></Qwiket>)}</div>)
 }
 /**
  * A workaround the problems with swrInfinite
  * @param param0 
  * @returns 
  */
-const FirstSegment = ({ visible, guid, card, resetSegments, isLeft, extraWide, qType, lastid, tail, pageIndex, hasData, setData }: {
-    visible: boolean, guid: string, card: string, resetSegments: any, isLeft: boolean, extraWide: boolean, qType: string, lastid: string, tail: number, pageIndex: number, hasData: boolean, setData: any
+const FirstSegment = ({ visible, guid, card, resetSegments, isLeft, isRight, extraWide, qType, lastid, tail, pageIndex, hasData, setData }: {
+    visible: boolean, guid: string, card: string, resetSegments: any, isLeft: boolean, isRight:boolean ,extraWide: boolean, qType: string, lastid: string, tail: number, pageIndex: number, hasData: boolean, setData: any
 }) => {
     // console.log("d1b FirstSegment BEGIN RENDER",{visible})
     const { session, qparams } = useAppContext();
@@ -330,14 +257,14 @@ const FirstSegment = ({ visible, guid, card, resetSegments, isLeft, extraWide, q
             slug: 'loading'
 
         }
-        return <div ref={ref}><Qwiket key={`fallback-qwiket-${qType}-${item.slug}`} extraWide={extraWide} item={item} isTopic={false} qType={qType}></Qwiket></div>
+        return <div ref={ref}><Qwiket key={`fallback-qwiket-${qType}-${item.slug}`} extraWide={extraWide} item={item} isTopic={false} isRight={isRight} qType={qType}></Qwiket></div>
     }
     // console.log(`d1b: FFFirstSegment`, { fsGuid,lastid: returnedLastid, tail: returnedTail, card, qType, visible, guid, isVisible, blah: 'blah' })
     return (<div ref={ref}>{qType != 'topics' ? <Notifications isLeft={isLeft} qType={qType} newsline={qparams.newsline} forum={qparams.forum} lastid={returnedLastid} tail={returnedTail} sessionid={session.sessionid} userslug={session.userslug} reset={reset} tag={qType == 'tag' ? qparams.tag : ''} /> : null}
-        {items.map((item: any) => <Qwiket key={`queue-qwiket-${qType}-${item.slug}-${item.qpostid}`} extraWide={extraWide} item={item} isTopic={false} qType={qType}></Qwiket>)}</div>)
+        {items.map((item: any) => <Qwiket key={`queue-qwiket-${qType}-${item.slug}-${item.qpostid}`} isRight={isRight} extraWide={extraWide} item={item} isTopic={false} qType={qType}></Qwiket>)}</div>)
 }
 
-const Segments = ({ guid, visible, card, qType, isLeft, extraWide, ...props }: { guid: string, visible: boolean, card: string, qType: string, isLeft: boolean, extraWide: boolean }) => {
+const Segments = ({ guid, visible, card, qType, isLeft,isRight,extraWide, ...props }: { guid: string, visible: boolean, card: string, qType: string, isLeft: boolean, isRight:boolean,extraWide: boolean }) => {
     //  const SegmentsContext = createContext({visible});
     // const [isv,setIsv]=useState(visible)
     const [segments, setSegments] = useState([]);
@@ -373,8 +300,9 @@ const Segments = ({ guid, visible, card, qType, isLeft, extraWide, ...props }: {
             //  console.log(`dbgi: Segments adding a segment`,{qType,pageIndex,lastid:data.lastid,tail:data.tail});
 
             //  console.log("d1b: remder ---> adding segments for fetchData pageIndex:",isv, guid, card, visible, pageIndex, qType, 'segments:', segments)
+           
             segments.push(
-                <Segment card={card} isLeft={isLeft} key={`segment-${qType}-${segments.length}`} extraWide={extraWide} qType={qType} lastid={data.lastid} tail={data.tail} pageIndex={pageIndex + 1} hasData={false} setData={setData} /> 
+                <Segment card={card}  key={`segment-${qType}-${segments.length}`} extraWide={extraWide} isRight={isRight} qType={qType} lastid={data.lastid} pageIndex={pageIndex + 1}  setData={setData} /> 
             )
 
         }
@@ -395,12 +323,12 @@ const Segments = ({ guid, visible, card, qType, isLeft, extraWide, ...props }: {
 
     // console.log('d1b ========>REMDER Segments:', visible, card, JSON.stringify({ card, qType, isLeft, numSegments: segments.length }))
     return <QueueWrap>
-        <FirstSegment visible={visible} guid={guid} card={card} resetSegments={resetSegments} isLeft={isLeft} key={`first-segment-${qType}`} extraWide={extraWide} qType={qType} lastid={''} tail={0} pageIndex={0} hasData={false} setData={setData}  {...props} />
+        <FirstSegment visible={visible} guid={guid} card={card} resetSegments={resetSegments} isLeft={isLeft} isRight={isRight} key={`first-segment-${qType}`} extraWide={extraWide} qType={qType} lastid={''} tail={0} pageIndex={0} hasData={false} setData={setData}  {...props} />
         {segments}
     </QueueWrap>
 
 }
-const Queue = ({ qType, isLeft, ...props }: { visible: boolean, card: string, qType: string, isLeft: boolean, extraWide: boolean }) => {
+const Queue = ({ qType, isLeft, ...props }: { visible: boolean, card: string, qType: string, isLeft: boolean, isRight:boolean,extraWide: boolean }) => {
     const [guid, setGuid] = useState(randomstring())
     const { session } = useAppContext();
     // console.log("d1b: **********************************  dbg q: queue remder", guid, props.card, qType, 'visible:', props.visible)

@@ -38,6 +38,15 @@ export const getServerSideProps=async(context: GetServerSidePropsContext)=>{
     
     ['topic', threadid, 0,'',''];
     const {item} = await fetchTopic(key);
+    if(!item){
+        return {
+            redirect: {
+              permanent: true,
+              destination: '/',
+            },
+            props:{},
+          };
+    }
     const {tag}=item?item:{tag:''};
     console.log("TOPIC:",JSON.stringify(item))
     console.log("CONTEXT MIGRATION:",JSON.stringify({channel,tag,threadid,cc}));

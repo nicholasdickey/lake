@@ -216,6 +216,14 @@ background:green;
 cursor:pointer;
 text-align: center;
 `
+const DisclaimerTitle=styled.div`
+text-align:center;
+`
+const DisclaimerLogoContainer=styled.div`
+position:absolute;
+margin-top:-6px;
+margin-left:60px;
+`
 const Qwiket = ({ extraWide, isRight,item, isTopic, qType, singlePanel, fullPage,mutate,setAckOverride }: { extraWide: boolean, isRight:boolean,item: any, isTopic: boolean, qType?: string, singlePanel?: boolean, fullPage?: boolean,mutate?:any,setAckOverride?:any }) => {
 
 
@@ -225,7 +233,7 @@ const Qwiket = ({ extraWide, isRight,item, isTopic, qType, singlePanel, fullPage
     const isTag = qType == 'tag';
     //console.log("Qwiket render ", singlePanel, isTopic, qType, isTag)
     const router = useRouter();
-    const { session, qparams } = useAppContext();
+    const { session, qparams,newsline,channelDetails } = useAppContext();
     const isReact = item && typeof item.qpostid !== 'undefined' && item.qpostid;
     let { description, title } = item ? item : { description: '', title: '' };
     //  console.log("Qwiket", {loud:session.loud,extraWide})
@@ -319,7 +327,11 @@ const Qwiket = ({ extraWide, isRight,item, isTopic, qType, singlePanel, fullPage
             AckBlock=<div>
              {openDialog?<div >
                 <Disclaimer>
-                <p>To use the Body Snatcher (tm) tool to access the full body of the article, click the button below. The tool is provided solely for the convinience of our users. </p>
+                   <DisclaimerLogoContainer><NextImage src={channelDetails.logo} alt="logo" width={42} height={42}/> </DisclaimerLogoContainer>
+                   <DisclaimerTitle>{newsline.displayName}</DisclaimerTitle>
+                    <DisclaimerTitle>BODY SNATCHER</DisclaimerTitle>
+                    <p>Body Snatcher is an online tool designed to facilitate user's access to the content of the article for the purpose of commenting on it.</p>
+                <p>To use the Body Snatcher tool to access the full body of the article, click the button below. The tool is provided solely for the convinience of our users while commenting on the article they've already accessed on the target website. </p>
                 <p>By clicking this button, you certify that you have the legal right to view the content on the target website.
                 </p>
                 <p>

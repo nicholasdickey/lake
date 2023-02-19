@@ -45,7 +45,7 @@ const CommentsButtonWrap=styled.div`
   justify-content: space-around;
 
 `
-const Local = ({ contextUrl, forum, realDisqThreadid, cc, slug, title,fullPage }: {  contextUrl: string, forum: string, realDisqThreadid: string,  cc: string, slug: string, title: string,fullPage?:boolean }) => {
+const Local = ({ forum,  cc, slug, title,fullPage }: { forum: string,   cc: string, slug: string, title: string,fullPage?:boolean }) => {
     const { session, qparams } = useAppContext();
     const [draw,setDraw]=useState(cc&&cc.length>1?true:false)
 

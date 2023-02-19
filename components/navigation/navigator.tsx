@@ -1,17 +1,17 @@
 import { useRouter } from 'next/router'
 import { useCallback, useState } from "react";
 import styled from 'styled-components';
-import { Options } from '../lib/withSession';
-import { Qparams } from '../lib/qparams';
+import { Options } from '../../lib/withSession';
+import { Qparams } from '../../lib/qparams';
 import Link from 'next/link'
 import useSWR, { useSWRConfig } from 'swr';
 import useSWRImmutable from 'swr/immutable'
-import { fetchMyNewsline, fetchPublications, fetchPublicationCategories, updateMyNewsline, updatePublications, fetchPublicationsKey, fetchMyNewslineKey, Filters } from '../lib/lakeApi';
+import { fetchMyNewsline, fetchPublications, fetchPublicationCategories, updateMyNewsline, updatePublications, fetchPublicationsKey, fetchMyNewslineKey, Filters } from '../../lib/lakeApi';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import NextImage from 'next/image';
-import StyledCheckbox from './checkbox';
-import SearchField from './searchField';
+import StyledCheckbox from '../widgets/checkbox';
+import SearchField from '../widgets/searchField';
 import axios from 'axios';
 
 const Row = styled.div`
@@ -153,7 +153,7 @@ const PublicationWrap=styled.div`
 const Check = ({ label, checked, onChange, disabled }: { label?: string, checked: boolean, onChange: any, disabled: boolean }) => {
     return <StyledCheckbox
         onClick={() => onChange(!checked)}
-        label={null}
+        label={''}
     >
         <input
             type="checkbox"

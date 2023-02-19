@@ -2,7 +2,7 @@ import React, { useState,useEffect,useRef } from 'react'
 import styled from 'styled-components';
 import { DiscussionEmbed } from 'disqus-react';
 import {TwitterTimelineEmbed} from "react-twitter-embed";
-import { useAppContext } from '../lib/context'
+import { useAppContext } from '../../lib/context'
 
 interface DisqusParams{
   fullPage:boolean

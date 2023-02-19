@@ -5,12 +5,12 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import Image from 'next/image'
-import { fetchUser,getOnlineCount } from '../lib/lakeApi';
+import { fetchUser,getOnlineCount } from '../../lib/lakeApi';
 import Lowline from './lowline';
 import { UilGlassMartiniAlt,UilUsersAlt } from '@iconscout/react-unicons'
 import { Playfair_Display } from '@next/font/google';
-import { useAppContext } from "../lib/context";
-import {Star} from "./star"
+import { useAppContext } from "../../lib/context";
+import {Star} from "../widgets/star"
 
 
 //import Menu from '@material-ui/core/Menu';

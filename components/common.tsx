@@ -9,14 +9,14 @@ import axios from 'axios';
 import { fetchChannelConfig, fetchChannelLayout, fetchChannelLayoutKey } from '../lib/lakeApi';
 import { Options } from '../lib/withSession';
 import { Qparams } from '../lib/qparams';
-import { Topline } from './topline';
-import { Header } from './header';
+import { Topline } from './navigation/topline';
+import { Header } from './navigation/header';
 import GlobalStyle from '../components/globalstyles'
 import { palette } from '../lib/palette';
 import { LayoutView } from './layout/layoutView';
 import { Roboto } from '@next/font/google';
 import { AppWrapper } from '../lib/context';
-import ScrollToTopButton from './scrollToTopButton';
+import ScrollToTopButton from './widgets/scrollToTopButton';
 import Script from 'next/script'
 import { pageview } from "../lib/gtag";
 

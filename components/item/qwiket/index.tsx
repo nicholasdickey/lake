@@ -1,20 +1,20 @@
 import React, { useState, useEffect, useCallback, ReactFragment, ReactNode } from "react";
 import { useRouter } from 'next/router'
 import styled from 'styled-components';
-import { Qparams } from '../../lib/qparams'
+import { Qparams } from '../../../lib/qparams'
 import NextImage from 'next/image';
-import TimeDifference from '../../lib/timeDifference'
+import TimeDifference from '../../../lib/timeDifference'
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
-import { useAppContext } from "../../lib/context";
+import { useAppContext } from "../../../lib/context";
 import Link from 'next/link'
 import { TwitterTweetEmbed } from 'react-twitter-embed';
 import Markdown from 'markdown-to-jsx'
 import Swipe from "react-easy-swipe"
 import YouTube from 'react-youtube'
-import StyledCheckbox from '../checkbox';
-import { accept } from '../../lib/lakeApi'
-import {Star} from '../star'
+import StyledCheckbox from '../../widgets/checkbox';
+import { accept } from '../../../lib/lakeApi'
+import {Star} from '../../widgets/star'
 const StarContainer=styled.div`
     margin-top:-4px;
 `

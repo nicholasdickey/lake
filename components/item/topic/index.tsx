@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback, ReactFragment, ReactNode } from "react";
 import styled from 'styled-components';
 import useSWR from 'swr';
-import { Options } from '../lib/withSession';
-import Qwiket from './qwikets/qwiket';
-import { useAppContext } from '../lib/context';
-import { fetchTopic,FetchTopicKey } from '../lib/lakeApi'
+import { Options } from '../../../lib/withSession';
+import Qwiket from '../qwiket';
+import { useAppContext } from '../../../lib/context';
+import { fetchTopic,FetchTopicKey } from '../../../lib/lakeApi'
 import Disqus from './disqus'
 const Topic = ({singlePanel,fullPage}:{singlePanel?:boolean,fullPage?:boolean}) => {
   const { session, qparams } = useAppContext();

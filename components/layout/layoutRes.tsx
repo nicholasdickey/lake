@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {Column} from './column';
-import Hotlist from '../qwikets/hotlist';
+import Hotlist from '../stream/hotlist';
 import { Qparams } from '../../lib/qparams';
 import { Options } from '../../lib/withSession';
 let VerticalWrap=styled.div`

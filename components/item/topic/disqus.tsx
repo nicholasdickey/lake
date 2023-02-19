@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components';
 import { DiscussionEmbed } from 'disqus-react';
-import { useAppContext } from '../lib/context'
+import { useAppContext } from '../../../lib/context'
 
 interface DisqusParams{
   fullPage:boolean
@@ -90,14 +90,17 @@ const Local = ({ contextUrl, forum, realDisqThreadid, cc, slug, title,fullPage }
     // console.log('Disqus url=%s','/disqus/'+site+'/'+encodeURIComponent(identifier)+'/'+encodeURIComponent(title)+'/'+encodeURIComponent(url));
   // console.log("Disqus:",{fullPage,forum,slug,t,url,cc,draw})
     return <>{true?
-        <Disqus fullPage={fullPage}><DiscussionEmbed
+        <Disqus fullPage={fullPage}>
+          <DiscussionEmbed
             shortname={forum}
-            theme={session.dark}
+            // @ts-ignore
+            theme={session.dark}   // this is to force redraw, there is no theme property
             config={{
                 identifier: slug,
                 title: t,
                 url
-            }} /></Disqus>
+            }} />
+            </Disqus>
             :<CommentsButtonWrap><CommentsButton onClick={()=>setDraw(true)}><a>Show Comments</a></CommentsButton></CommentsButtonWrap>
             
           }</>

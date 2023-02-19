@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components';
 import { UilStar } from '@iconscout/react-unicons'
 //mport UilStar from '@iconscout/react-unicons/icons/uil-star';
-import {Options} from '../lib/withSession';
+import {Options} from '../../lib/withSession';
 
 interface LowlineWrapperParams {
     loud: number,

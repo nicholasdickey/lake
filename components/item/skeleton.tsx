@@ -132,7 +132,7 @@ header {
 `
 const Qwiket = ({ extraWide, isTopic, count }: { extraWide: boolean, isTopic: boolean, count: number }) => {
 
-  let rows = [];
+  let rows:any[] = [];
   for (let i = 0; i < count; i++) {
     rows.push(<li className="blog-post o-media">
       <div className="o-media__figure">

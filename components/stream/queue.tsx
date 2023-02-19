@@ -1,17 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { useRouter } from 'next/router'
-import { Qparams } from '../../lib/qparams'
-import { Options } from '../../lib/withSession';
 import useSWR from 'swr';
 import styled from 'styled-components';
-import { fetchAllSitemaps, fetchQueue, FetchQueueKey } from '../../lib/lakeApi';
-import Qwiket from './qwiket'
+import { fetchQueue, FetchQueueKey } from '../../lib/lakeApi';
+import Qwiket from '../item/qwiket'
 import useIntersectionObserver from '../../lib/useIntersectionObserver'
 import { useAppContext } from "../../lib/context";
-import { json } from "stream/consumers";
-import { createContext, useContext } from 'react';
-import { ReactElement } from "react-markdown/lib/react-markdown";
 
+//this is for ease of debugging, to provide guids to elements
 var randomstring = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
 const ColumnHeader = styled.div`
@@ -20,8 +15,7 @@ const ColumnHeader = styled.div`
     justify-content: space-between;
     //height:28px;
     width:100%;
-    z-index:151;
-   
+    z-index:151; 
 `
 
 const LeftHeader = styled.div`
@@ -267,7 +261,7 @@ const FirstSegment = ({ visible, guid, card, resetSegments, isLeft, isRight, ext
 const Segments = ({ guid, visible, card, qType, isLeft,isRight,extraWide, ...props }: { guid: string, visible: boolean, card: string, qType: string, isLeft: boolean, isRight:boolean,extraWide: boolean }) => {
     //  const SegmentsContext = createContext({visible});
     // const [isv,setIsv]=useState(visible)
-    const [segments, setSegments] = useState([]);
+    const [segments, setSegments] = useState<any[]>([]);
 
    /* const [isv, setIsv] = useState(visible)
     useEffect(() => {

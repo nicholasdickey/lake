@@ -1,13 +1,13 @@
 
 import styled from 'styled-components';
-import { Options } from '../lib/withSession';
+import { Options } from '../../lib/withSession';
 
 //import FormControlLabel from '@material-ui/core/FormControlLabel';
 //import Tooltip from '@material-ui/core/Tooltip';
 //import { updateSession } from '../qwiket-lib/actions/app'
 //import AlertWidget from './widgets/alert'
-import StyledCheckbox from './checkbox';
-import getLayoutWidth from '../lib/layoutWidth'
+import StyledCheckbox from '../widgets/checkbox';
+import getLayoutWidth from '../../lib/layoutWidth'
 
 /*const StyledCheckbox = styled(({ ...other }) => <div classes={{ checked: 'checked', disabled: 'disabled' }}{...other} />)`
   color: #eee !important;

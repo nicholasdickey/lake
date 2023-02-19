@@ -10,6 +10,7 @@ import Lowline from './lowline';
 import { UilGlassMartiniAlt,UilUsersAlt } from '@iconscout/react-unicons'
 import { Playfair_Display } from '@next/font/google';
 import { useAppContext } from "../lib/context";
+import {Star} from "./star"
 
 
 //import Menu from '@material-ui/core/Menu';
@@ -193,7 +194,8 @@ const SubTitle = styled.div`
         font-size:1.6rem;
     }
 `
-const SubscriberStar = styled((startColor, ...props) => <UisStar style={{ color: starColor, marginTop: -4, marginLeft: 4 }} {...props} />)
+const SubscriberStar = styled.div``
+
 
 const AvatarGroup = styled.div`
         display:flex;
@@ -233,6 +235,9 @@ const login = async (href) => {
     await axios.get(`/api/session/login?href=${encodeURIComponent(href)}`)
 
 }
+const StarContainer=styled.div`
+    margin-top:-4px;
+`
 const logout = async (updateSession) => {
     //console.log("logout:updateSession", updateSession)
     setTimeout(async ()=>await updateSession({ userslug: '' }),1);
@@ -264,7 +269,7 @@ const DatelineBand = ({ channelSlug, channelDetails, user, updateSession }) => {
     let name = user?.user_name;
     let approver = user?.approver;
     let avatar = user?.avatar;
-
+    //console.log("subscr_status",subscr_status)
     let isLoggedIn = user ? 1 : 0;
     //console.log("onlinecount=",count)
     const { setLoading } = useAppContext();
@@ -276,7 +281,8 @@ const DatelineBand = ({ channelSlug, channelDetails, user, updateSession }) => {
             <HorizWrap><Dateline>{`${dateStrging} `} &nbsp;{`|`} &nbsp;
                                     <OnlineCountIcon><UilUsersAlt size="11" color="#888" /></OnlineCountIcon>
                                     <OnlineCount>{count?count:0} </OnlineCount>&nbsp;{`|`} {` ${hometown}`}</Dateline></HorizWrap>
-            {false ? <HorizWrap><AvatarGroup><Image src={avatar} width={32} height={32} />{subscr_status > 0 ? <SubscriberStar /> : null}</AvatarGroup></HorizWrap> : null}
+             {false?<HorizWrap><AvatarGroup><Image src={avatar} width={32} height={32} />
+             </AvatarGroup></HorizWrap> :null}
 
             {
                 !isLoggedIn ? <SubTitle><Home><Link href={'/'}><UilNewspaper size="16" color="#888" /></Link></Home>
@@ -296,7 +302,8 @@ const DatelineBand = ({ channelSlug, channelDetails, user, updateSession }) => {
                         {!approver ? <SubTitle>
                             |
                         </SubTitle> : null}
-                        <SubTitle> {`${isLoggedIn ? approver ? '[' + name + ']' : name : 'Subscribe'}`}
+                        <SubTitle>  <div> </div> {`${isLoggedIn ? approver ? '[' + name + ']' : name : 'Subscribe'}`}<StarContainer><Star level={subscr_status} size={16}/></StarContainer>  
+                       
                             <Link onClick={()=>console.log("lacantina click")} href={lacantinaUrl}>
                                 <Martini>
                                     <UilGlassMartiniAlt size="16" color="#888" />

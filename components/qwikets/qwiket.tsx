@@ -14,7 +14,10 @@ import Swipe from "react-easy-swipe"
 import YouTube from 'react-youtube'
 import StyledCheckbox from '../checkbox';
 import { accept } from '../../lib/lakeApi'
-
+import {Star} from '../star'
+const StarContainer=styled.div`
+    margin-top:-4px;
+`
 interface IsTopic {
     isTopic: boolean,
     isTag?: boolean,
@@ -391,7 +394,7 @@ const Qwiket = ({ extraWide, isRight,item, isTopic, qType, singlePanel, fullPage
     }
     else if (isReact) {
         let { id, author_avatar, tag, catName, catIcon, author_name, postBody, subscr_status, createdat, thread_author, thread_title, thread_description, thread_url, slug } = item;
-
+        //console.log("React: subscr_status",subscr_status)
         // if (id)
         //     console.log("disqus id:", id)
         const { diff, timeString } = TimeDifference(createdat, qparams.timestamp)
@@ -413,8 +416,10 @@ const Qwiket = ({ extraWide, isRight,item, isTopic, qType, singlePanel, fullPage
                 {qType == 'mix' ? <Comment>comment</Comment> : null}<Author>{thread_author ? thread_author : catName}</Author></Row>
             <Row key="r2"><Title isTopic={isTopic}>{thread_title}</Title></Row>
             <Row key="r3"><Description><Markdown>{description}</Markdown></Description></Row>
-            <Row key="r4"><AvatarBox><Avatar placeholder={"blur"} src={author_avatar.indexOf('http') < 0 ? `https:${author_avatar}` : author_avatar} alt={author_name} /></AvatarBox><AuthorPoster>{author_name}</AuthorPoster>
-                <TimeSince isTopic={isTopic}>{timeString}</TimeSince></Row>
+            <Row key="r4"><AvatarBox><Avatar placeholder={"blur"} src={author_avatar.indexOf('http') < 0 ? `https:${author_avatar}` : author_avatar} alt={author_name} /></AvatarBox>
+            <AuthorPoster>{author_name}</AuthorPoster>
+            <StarContainer><Star level={subscr_status} size={16}/></StarContainer> 
+            <TimeSince isTopic={isTopic}>{timeString}</TimeSince></Row>
             <Row key="r5"><Markdown>{`<div style="width:100%;">${postBody}</div>`}</Markdown></Row>
 
         </VerticalWrap></a></Link>

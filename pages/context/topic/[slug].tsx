@@ -46,7 +46,8 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     const topic = await fetchTopic(key);
     if (!topic.success) {
         console.log("COULDN't FETCH TOPIC", key)
-        return undefined;
+        context.res.statusCode = 404;
+        return { props: { error: 404 } }
     }
     const {item}=topic;
     const { tag } = item;

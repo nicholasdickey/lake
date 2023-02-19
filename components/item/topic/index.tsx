@@ -24,6 +24,6 @@ const Topic = ({singlePanel,fullPage}:{singlePanel?:boolean,fullPage?:boolean}) 
   }
  // console.log("passing to Disqus:",data)
 return <><Qwiket extraWide={false} item={data?.item} isTopic={true} singlePanel={singlePanel} mutate={mutate} setAckOverride={setAckOverride} isRight={true}></Qwiket>
-  <Disqus contextUrl={'/context/channel/qwiket'} forum={qparams.forum} title={data?.title} realDisqThreadid={qparams.threadid} cc={qparams.cc} slug={qparams.threadid} fullPage={fullPage}/></>
+  <Disqus contextUrl={'/context/channel/qwiket'} forum={qparams.forum} title={data?.item.title} realDisqThreadid={qparams.threadid} cc={qparams.cc} slug={qparams.threadid} fullPage={fullPage}/></>
 }
 export default Topic;

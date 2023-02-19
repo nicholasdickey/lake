@@ -48,47 +48,18 @@ const CommentsButtonWrap=styled.div`
 const Local = ({ contextUrl, forum, realDisqThreadid, cc, slug, title,fullPage }: {  contextUrl: string, forum: string, realDisqThreadid: string,  cc: string, slug: string, title: string,fullPage?:boolean }) => {
     const { session, qparams } = useAppContext();
     const [draw,setDraw]=useState(cc&&cc.length>1?true:false)
+
+    
    if(!fullPage)
    fullPage=false;
     if(!title)
         title='';
-   //console.log('LOCAL RENDER %s', title,cc)
-    //if (title) {
-  
+
     var t = title.replace(/"/g, '\'');
     t = t.replace(':', '-');
-    //t=channel?('['+channel+'] '+t):t
     cc = cc ? '#comment-' + cc : '';
-    let url = "https://qwiket.com" + contextUrl + "/topic/" + realDisqThreadid + cc;
-    // console.log('title=%s',t)
-    //console.log('channel=%s',channel)
-    //console.log('Local identifier=%s',this.props.threadid)  
-    //console.log('Local url=%s',url)
-    //
-    //let identifier = threadid
-    // console.log('LOCAL render: site:%s,channel:%s,contextUrl:%s,title:%s,url:%s,identifier:%s',site,channel,contextUrl,t,url,identifier)
-    /* if(site!=window.lastDisqusForum){
-       window.lastDisqusForum=site;
-       this.redraw=true;
-       console.log("RESETTING DISQUS")
-       //this.setState({redraw:true})
-       return   <div id="local">
-               <ReactDisqusThread
-                   shortname={null}
-                   identifier={null}
-                   title={null}
-                   url={null}                
-                   onNewComment={null}/>
- )                   </div> 
-     }*/
-    /*if(threadid!=topic.get("threadid")){
- 
-      console.log("NOT MACHING - INVALIDATE")
-        return <span/>
-      }*/
-    //  console.log("local: identifier:%s",identifier,url)
-    // console.log('Disqus url=%s','/disqus/'+site+'/'+encodeURIComponent(identifier)+'/'+encodeURIComponent(title)+'/'+encodeURIComponent(url));
-  // console.log("Disqus:",{fullPage,forum,slug,t,url,cc,draw})
+    let url = `http://am1.news/${qparams.forum}/topic/${qparams.tag}/${slug}`;//"https://qwiket.com" + contextUrl + "/topic/" + realDisqThreadid + cc;
+   // console.log("Disqus",{title,t,url,slug}) 
     return <>{true?
         <Disqus fullPage={fullPage}>
           <DiscussionEmbed

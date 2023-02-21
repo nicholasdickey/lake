@@ -59,7 +59,7 @@ const Notifications = ({ isLeft, qType, newsline, forum, lastid, tail, sessionid
     const { session, qparams } = useAppContext();
     const key = ['notif', qType, newsline, qparams.type == 'solo' ? 1 : 0, forum, (qType == 'tag' || qparams.type == 'solo') ? qparams.tag : '', 0, lastid, sessionid, userslug, tail];
     const { data, error } = useSWR(key, fetchQueue, {
-        refreshInterval: qType == 'topics' ? 24 * 3600 * 1000 : 60000
+        refreshInterval: qType == 'topics' ? 24 * 3600 * 1000 : 5000
     });
     const notifications = data?.newItems;
     // console.log("REMDER QUEUE notif:", qType, key, data);

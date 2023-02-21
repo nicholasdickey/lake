@@ -22,7 +22,7 @@ const LeftHeader = styled.div`
     margin-top:-7px;
     color:#eee;//var(--highlight);
     font-weight:700;
-    font-size:12px;
+    font-size:11px;
     @media (max-width:1200px){
         font-weight:400;
         font-size:12px; 
@@ -168,9 +168,8 @@ const FirstSegment = ({ visible, guid, card, resetSegments, isLeft, isRight, ext
         onSuccess: onData,
         revalidateIfStale: false,
         revalidateOnFocus: false
-
-
     });
+
     const items = data?.items;
     const ref = useRef<HTMLDivElement | null>(null)
     const entry = useIntersectionObserver(ref, {})
@@ -186,8 +185,8 @@ const FirstSegment = ({ visible, guid, card, resetSegments, isLeft, isRight, ext
 
         const { scrollY } = window;
         if (scrollY == 0) {
-            if (!visible)
-                return;
+           // if (!visible)
+          //      return;
 
             // console.log("d1b: calling mutate",visible)
             mutate();

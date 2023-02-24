@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo, ReactComponentElement, ReactElement } from "react";
 import useSWR from 'swr';
 import styled from 'styled-components';
 import { fetchQueue, FetchQueueKey } from '../../lib/lakeApi';
@@ -49,7 +49,6 @@ const QueueWrap = styled.div`
     margin-right:0px;
    
 `
-//const Arrow = () => <svg className="jss37 jss168" focusable="false" viewBox="0 0 24 24" aria-hidden="true" role="presentation"><path d="M7 10l5 5 5-5z"></path></svg>
 
 const Notifications = ({ isLeft, qType, newsline, forum, lastid, tail, sessionid, userslug, reset, tag, ...props }:
     {
@@ -78,25 +77,19 @@ const Notifications = ({ isLeft, qType, newsline, forum, lastid, tail, sessionid
  * @param param0 
  * @returns 
  */
-const Segment = ({ card,  extraWide, qType, lastid,isRight,  pageIndex,  setData }: {
+const Segment = ({ card,  extraWide, qType, lastid,isRight,  pageIndex}: {
     card: string, isLeft?: boolean,
-    extraWide: boolean, qType: string, lastid: string, isRight:boolean,tail?: number, pageIndex: number, setData: any
+    extraWide: boolean, qType: string, lastid: string, 
+    isRight:boolean,tail?: number, pageIndex: number
 }) => {
     const { session, qparams } = useAppContext();
-
-   
-
-    //    const key = ['queue', qType, qparams.newsline, qparams.type=='solo'?1:0,qparams.forum, (qType == 'tag'||qparams.type=='solo') ? qparams.tag : '', pageIndex, lastid, session.sessionid, session.userslug, tail, ''];
     const key: FetchQueueKey["key"] = ['queue', qType, qparams.newsline, qType == 'newsline' && qparams.type == 'solo' ? 1 : 0, qparams.forum, (qType == 'tag' || qType == 'newsline' && qparams.type == 'solo') ? qparams.tag : '', pageIndex, lastid, session.sessionid, session.userslug, 0, '', '', 0, card];
-
-    // console.log("Segment before fetchQueue", { qType, pageIndex})
+    if(qType=='newsline')
+    console.log("Segment before fetchQueue", { qType, pageIndex,lastid})
     const { data, error: queueError, mutate } = useSWR(key, fetchQueue, {
         revalidateIfStale: false,
         revalidateOnFocus: false
-        //revalidateOnMount:false
     });
-    // if(qType=='reacts'&& !data)
-    //     console.log(`SEGMENT ${pageIndex} nodata`)
     const ref = useRef<HTMLDivElement | null>(null)
     const entry = useIntersectionObserver(ref, {})
     if (entry && entry.boundingClientRect.top > 0) {
@@ -105,71 +98,43 @@ const Segment = ({ card,  extraWide, qType, lastid,isRight,  pageIndex,  setData
         // console.log("dbgi: entry ABOVE", qType) // do things if above
     }
     const isVisible = !!entry?.isIntersecting || entry && entry.boundingClientRect.top < 0
-    // console.log("d1b: remder segment:",isVisible, card, qType, pageIndex)
-
-    //  useEffect(() => {
-    /**
-     * Once roll into view, and has data - call setData to possibly append a new sibming segment
-     */
-    // console.log(`dbgi: secondary segment, test for setData`,{qType,pageIndex,hd,data,isVisible})
+  
+    let segment=null;
     if (data && isVisible) {
-        // if(qType=='reacts')
-        // console.log("segment call setdata",pageIndex);
-        setData(data, pageIndex, true, data.tail ? data.tail : '');
-        // setTimeout(()=>setData(data, pageIndex, true, data.tail ? data.tail : ''),1);
-        // setHd(true)
+        segment=<Segment card={card} extraWide={extraWide} qType={qType} lastid={lastid} isRight={isRight} pageIndex={pageIndex+1}/>
     }
-    //  }, [isVisible, data, qType, pageIndex, setData]);
-
-    return (<div className="other-segments" ref={ref}>{data?.items?.map((item: any) => <Qwiket key={`queue-qwiket-${qType}-${item.slug}-${item.qpostid}`} extraWide={extraWide} isRight={isRight} item={item} isTopic={false} qType={qType}></Qwiket>)}</div>)
+  
+    return <div className="other-segments" ref={ref}>
+        {data?.items?.map((item: any) => <Qwiket key={`queue-qwiket-${qType}-${item.slug}-${item.qpostid}`} extraWide={extraWide} isRight={isRight} item={item} isTopic={false} qType={qType}></Qwiket>)}
+        {segment}
+        </div>
 }
-/**
- * A workaround the problems with swrInfinite
- * @param param0 
- * @returns 
- */
-const FirstSegment = ({ visible, guid, card, resetSegments, isLeft, isRight, extraWide, qType, lastid, tail, pageIndex, hasData, setData }: {
-    visible: boolean, guid: string, card: string, resetSegments: any, isLeft: boolean, isRight:boolean ,extraWide: boolean, qType: string, lastid: string, tail: number, pageIndex: number, hasData: boolean, setData: any
-}) => {
-    // console.log("d1b FirstSegment BEGIN RENDER",{visible})
-    const { session, qparams } = useAppContext();
-    const [returnedLastid, setReturnedLastid] = useState(lastid);
-    const [returnedTail, setReturnedTail] = useState(tail);
-    const [processed, setProcessed] = useState(false);
-    const [fsGuid, setFSGuid] = useState(randomstring());
 
-    // const {visible}=useContext(segmentsContext);
-    /* const [isv,setIsv]=useState(visible)
-     useEffect(()=>{
-         console.log(`d1b: FirstSegment useEffect`,visible,isv)
-         //if(visible!=isv)
-         setIsv(visible)
-     },[visible,isv])
-     const getVisible=useCallback((r:string)=>{
-         console.log("d1b: getVisible",{r,visible,isv,guid,fsGuid});
-         return visible;
-     },[isv,visible]);*/
+const Queue = ({ qType, isLeft, card,visible,isRight,extraWide }: { visible: boolean, card: string, qType: string, isLeft: boolean, isRight:boolean,extraWide: boolean }) => {
+    const [guid, setGuid] = useState(randomstring())
+    const { session,qparams } = useAppContext();
+    const [lastid,setLastid]=useState('');
+    const [tail,setTail]=useState(0)
+    // console.log("d1b: **********************************  dbg q: queue remder", guid, props.card, qType, 'visible:', props.visible)
+    qType = isLeft ? session.leftColumnOverride || qType : qType;
+    const pageIndex=0;
+    const key: FetchQueueKey["key"] = ['queue', qType, qparams.newsline, qType == 'newsline' && qparams.type == 'solo' ? 1 : 0, qparams.forum, (qType == 'tag' || qType == 'newsline' && qparams.type == 'solo') ? qparams.tag : '', pageIndex, '0', session.sessionid, session.userslug, 0, '', '', 0, card];
+
+    // console.log("d1b remder FirstSegment:", { fsGuid,guid,visible, card, type: qparams.type, key, qType, pageIndex, returnedLastid, returnedTail, isLeft })
     const onData = useCallback((data: any, key: string, config: any) => {
         // console.log("dbg onData FirstSegment segments onData fetchQueue remder", { isLeft, qType, newLastid: data.lastid, lastid, returnedLastid, newTail: data.tail, key, items: data?.items })
         if (data) {
             // console.log(`d1b: OnData FirstSegment`, data);
-            setReturnedLastid(data.lastid);
-            setReturnedTail(+data.tail);
+            setLastid(data.lastid);
+            setTail(+data.tail);
             //  console.log("remder first segment. got new lastid", qType, data.lastid, lastid)
         }
     }, []);
-    // const visible = isRistVisible(randomstring());
-    const key: FetchQueueKey["key"] = ['queue', qType, qparams.newsline, qType == 'newsline' && qparams.type == 'solo' ? 1 : 0, qparams.forum, (qType == 'tag' || qType == 'newsline' && qparams.type == 'solo') ? qparams.tag : '', pageIndex, '0', session.sessionid, session.userslug, 0, '', '', 0, card];
-
-
-    // console.log("d1b remder FirstSegment:", { fsGuid,guid,visible, card, type: qparams.type, key, qType, pageIndex, returnedLastid, returnedTail, isLeft })
-
     const { data, error: queueError, mutate } = useSWR(key, fetchQueue, {
         onSuccess: onData,
         revalidateIfStale: false,
         revalidateOnFocus: false
     });
-
     const items = data?.items;
     const ref = useRef<HTMLDivElement | null>(null)
     const entry = useIntersectionObserver(ref, {})
@@ -180,34 +145,20 @@ const FirstSegment = ({ visible, guid, card, resetSegments, isLeft, isRight, ext
     }
     const isVisible = !!entry?.isIntersecting || entry && entry.boundingClientRect.top < 0
 
-
     const onScroll = useCallback(() => {
-
         const { scrollY } = window;
         if (scrollY == 0) {
-           // if (!visible)
-          //      return;
-
-            // console.log("d1b: calling mutate",visible)
+            if(qType=='newsline') 
+            console.log("d1b: calling mutate")
             mutate();
-            // console.log(`d1b: FirstSegment calling resetSegments`, { guid, visible, card, qType })
-            resetSegments();
-            setProcessed(false);
-
         }
     }, [visible])
 
     const reset = useCallback(() => {
-        if (!visible)
-            return;
-        // setReturnedTail(0);
-        // setReturnedTail(0)
-        //   console.log("d1b FirstSegment reset", { guid, visible })
         setTimeout(() => {
             mutate()
-            resetSegments();
         }, 1);
-    }, [mutate,visible]);
+    }, [mutate]);
 
     useEffect(() => {
         if (visible) {
@@ -225,132 +176,26 @@ const FirstSegment = ({ visible, guid, card, resetSegments, isLeft, isRight, ext
         }
     }, [visible]);
 
-    //useEffect(() => {
-    //console.log("dbgi: remder to test a call setData", { hd, isVisible, qType, pageIndex, data })
-    if (visible && data && isVisible && !processed) {
-        setTimeout(() => setProcessed(true), 1)
-        // console.log(" d1b: &&&&&&&&&&&&&&&&&&&&&&&& remder to a call setData", { isVisible, qType, pageIndex, data })
-        // if(qType=='reacts')
-        // console.log("first segment call setdata",pageIndex,data.lastid);
-        setData(data, pageIndex, true, data.tail ? data.tail : '')
-        // setHd(true)
-    }
-    //}, [isVisible, data, qType, pageIndex, setData]);
-
-
-    //if (!pageIndex)
-    //    console.log("REMDER SEGMENT page=", pageIndex, "isVisible:", isVisible, 'returnedLastid:', returnedLastid, data?.items);
+    let segment:ReactElement|null=null
+    if ( data && isVisible && lastid) {
+        segment=<Segment card={card} extraWide={extraWide} qType={qType} lastid={lastid} isRight={isRight} pageIndex={pageIndex+1}/>
+  }
     if (!items) {
-        // console.log("d1b NO ITEMS", { guid, card, qType })
         const item = {
             image: 'https://media.istockphoto.com/id/1280015859/photo/blue-lake-with-treeline-in-autumn-color-on-a-sunny-afternoon-in-northern-minnesota.jpg?s=612x612&w=0&k=20&c=smtj8bw1BW3gUI9rrxRnAzQKGWmTyMQYcODgbuWNMbc=',
             title: 'Loading...',
-            site_name: 'America First News',
+            site_name: 'Minnesota Lake',
             description: "Loading...",
             slug: 'loading'
-
-        }
+       }
         return <div ref={ref}><Qwiket key={`fallback-qwiket-${qType}-${item.slug}`} extraWide={extraWide} item={item} isTopic={false} isRight={isRight} qType={qType}></Qwiket></div>
     }
     // console.log(`d1b: FFFirstSegment`, { fsGuid,lastid: returnedLastid, tail: returnedTail, card, qType, visible, guid, isVisible, blah: 'blah' })
-    return (<div ref={ref}>{qType != 'topics' ? <Notifications isLeft={isLeft} qType={qType} newsline={qparams.newsline} forum={qparams.forum} lastid={returnedLastid} tail={returnedTail} sessionid={session.sessionid} userslug={session.userslug} reset={reset} tag={qType == 'tag' ? qparams.tag : ''} /> : null}
-        {items.map((item: any) => <Qwiket key={`queue-qwiket-${qType}-${item.slug}-${item.qpostid}`} isRight={isRight} extraWide={extraWide} item={item} isTopic={false} qType={qType}></Qwiket>)}</div>)
+    return (<div ref={ref}>
+        {qType != 'topics' ? <Notifications isLeft={isLeft} qType={qType} newsline={qparams.newsline} forum={qparams.forum} lastid={lastid} tail={tail} sessionid={session.sessionid} userslug={session.userslug} reset={reset} tag={qType == 'tag' ? qparams.tag : ''} /> : null}
+        {items.map((item: any) => <Qwiket key={`queue-qwiket-${qType}-${item.slug}-${item.qpostid}`} isRight={isRight} extraWide={extraWide} item={item} isTopic={false} qType={qType}></Qwiket>)}
+        {segment}
+    </div>)
 }
 
-const Segments = ({ guid, visible, card, qType, isLeft,isRight,extraWide, ...props }: { guid: string, visible: boolean, card: string, qType: string, isLeft: boolean, isRight:boolean,extraWide: boolean }) => {
-    //  const SegmentsContext = createContext({visible});
-    // const [isv,setIsv]=useState(visible)
-    const [segments, setSegments] = useState<any[]>([]);
-
-   /* const [isv, setIsv] = useState(visible)
-    useEffect(() => {
-        //console.log(`d1b: SEGMENTS useEffect`,visible,isv)
-        if (visible != isv)
-            setIsv(visible)
-    }, [visible])
-    // console.log("d1b Sewgmanets:",{visible,isv})
-    const getVisible = () => isv;*/
-    /**
-     * setData called by the segment when receiving data, so that for the last segment a new segment can be appended to the segments array
-     * 
-     * @param data 
-     * @param pageIndex 
-     * @param hasData 
-     * @param tail 
-     * @returns 
-     */
-    const setData = useCallback((data: any, pageIndex: number, hasData: boolean, tail: number) => {
-        if (!visible)
-            return;
-        // console.log('dbgi: Segments, testing segments',{qType,pageIndex,segments})
-        /* if (!segments || !segments.length) {
-             // console.log("remder no segments in setData")
-             
-         }*/
-        // console.log('d1b: Segments, testing length', {isv, visible,guid, card, pageIndex, length: segments.length })
-        if (pageIndex >= segments.length - 1) {
-            // if(qType=='reacts')
-            //  console.log(`dbgi: Segments adding a segment`,{qType,pageIndex,lastid:data.lastid,tail:data.tail});
-
-            //  console.log("d1b: remder ---> adding segments for fetchData pageIndex:",isv, guid, card, visible, pageIndex, qType, 'segments:', segments)
-           
-            segments.push(
-                <Segment card={card}  key={`segment-${qType}-${segments.length}`} extraWide={extraWide} isRight={isRight} qType={qType} lastid={data.lastid} pageIndex={pageIndex + 1}  setData={setData} /> 
-            )
-
-        }
-        setTimeout(() => setSegments([...segments]), 1); //immutable state
-
-    }, [extraWide, isLeft, qType, visible]);
-
-    const resetSegments = useCallback(() => {
-        if (!visible)
-            return;
-        const oldSegments = [...segments];
-        segments.splice(1); // I need instant response
-
-        //  console.log(`d1b: resetSegments ${qType}`, {isv:getVisible(), guid, visible, segments, oldSegments })
-        setSegments(segments)
-    }, [visible]);
-
-
-    // console.log('d1b ========>REMDER Segments:', visible, card, JSON.stringify({ card, qType, isLeft, numSegments: segments.length }))
-    return <QueueWrap>
-        <FirstSegment visible={visible} guid={guid} card={card} resetSegments={resetSegments} isLeft={isLeft} isRight={isRight} key={`first-segment-${qType}`} extraWide={extraWide} qType={qType} lastid={''} tail={0} pageIndex={0} hasData={false} setData={setData}  {...props} />
-        {segments}
-    </QueueWrap>
-
-}
-const Queue = ({ qType, isLeft, ...props }: { visible: boolean, card: string, qType: string, isLeft: boolean, isRight:boolean,extraWide: boolean }) => {
-    const [guid, setGuid] = useState(randomstring())
-    const { session } = useAppContext();
-    // console.log("d1b: **********************************  dbg q: queue remder", guid, props.card, qType, 'visible:', props.visible)
-    qType = isLeft ? session.leftColumnOverride || qType : qType;
-    let queue;
-
-    switch (qType) {
-        case 'newsline':
-            queue = <NewslineQueue isLeft={isLeft} session={session} {...props} />;
-            break;
-        case 'mix':
-            queue = <MixQueue isLeft={isLeft} session={session} {...props} />;
-            break;
-        case 'topics':
-            queue = <TopicsQueue isLeft={isLeft} session={session} {...props} />;
-            break;
-        case 'tag':
-            queue = <TagQueue isLeft={isLeft} session={session} {...props} />;
-            break;
-        default:
-            queue = <ReactsQueue isLeft={isLeft} session={session} {...props} />;
-
-    }
-    return <Segments isLeft={isLeft} guid={guid} qType={qType} {...props} />//<QueueWrap>{queue}</QueueWrap>
-}
-const ReactsQueue = (props: any) => <Segments qType='reacts' {...props} />
-const NewslineQueue = (props: any) => <Segments qType='newsline' {...props} />
-const TagQueue = (props: any) => <Segments qType='tag' {...props} />
-const TopicsQueue = (props: any) => <Segments qType='topics' {...props} />
-const MixQueue = (props: any) => <Segments qType='mix' {...props} />
 export default Queue;
-//<Segments isLeft={isLeft}  guid={guid} qType={qType} {...props} />/

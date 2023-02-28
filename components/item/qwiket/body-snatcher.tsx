@@ -36,9 +36,10 @@ text-align:center;
 const DisclaimerLogoContainer=styled.div`
 position:absolute;
 margin-top:-6px;
-margin-left:60px;
+//margin-left:-60px;
 @media(max-width:900px){
-  margin-left:0px;
+margin-left:-15px;
+margin-tiop:-5px;
 }
 `
 export const BodySnatcher= ({mutate,setAckOverride,setOpenDialog,tag,slug}:{mutate:any,setAckOverride:any,setOpenDialog:any,tag:string,slug:string})=>{

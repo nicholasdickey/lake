@@ -11,7 +11,7 @@ import { TwitterTweetEmbed } from 'react-twitter-embed';
 import Markdown from 'markdown-to-jsx'
 import {BodySnatcher} from './body-snatcher';
 import {Star} from '../../widgets/star'
-
+import { RWebShare } from "react-web-share";
 
 /**
  * CSS
@@ -178,6 +178,13 @@ const TweetEmbed = styled.div`
     margin-right:auto;
     max-width:540px;
 `
+
+const Share=styled.div`
+    margin-top:20px;
+`
+
+const Button=styled.button`
+`
 //--------------------
 
 const Qwiket = ({ extraWide, isRight,item, isTopic, qType, singlePanel, fullPage,mutate,setAckOverride }: { extraWide: boolean, isRight:boolean,item: any, isTopic: boolean, qType?: string, singlePanel?: boolean, fullPage?: boolean,mutate?:any,setAckOverride?:any }) => {
@@ -265,7 +272,17 @@ const Qwiket = ({ extraWide, isRight,item, isTopic, qType, singlePanel, fullPage
             <Row key="3.1"><Link href={itemUrl} legacyBehavior><a rel="nofollow">{item.url}</a></Link></Row>
             <Row key="r3"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage sizes="(max-width: 768px) 100vw,
            (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={blur} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
-
+            <Share><RWebShare
+                data={{
+                    text:description,
+                    url: `/${qparams.forum}/topic/${tag}/${slug}`,
+                    title,
+                }}
+                onClick={() => console.log("shared successfully!")}
+            >
+                <Button> Share </Button>
+            </RWebShare>
+            </Share>
             <Row key="r4"><Body>{bodyBlocks ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml : description}</ReactMarkdown>}</Body></Row>
             {AckBlock}           
         </VerticalWrap>

@@ -33,6 +33,7 @@
     "react-search-field": "^2.0.1",
     "react-tabs": "^6.0.0",
     "react-twitter-embed": "^4.0.4",
+    "react-web-share": "^2.0.2",
     "react-youtube": "^10.1.0",
     "rehype-raw": "^6.1.1",
     "sharp": "^0.31.3",

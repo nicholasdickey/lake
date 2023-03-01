@@ -185,6 +185,9 @@ const Share=styled.div`
 
 const Button=styled.button`
 `
+const PleaseRead=styled.p`
+color:var(--highlight);
+`
 //--------------------
 
 const Qwiket = ({ extraWide, isRight,item, isTopic, qType, singlePanel, fullPage,mutate,setAckOverride }: { extraWide: boolean, isRight:boolean,item: any, isTopic: boolean, qType?: string, singlePanel?: boolean, fullPage?: boolean,mutate?:any,setAckOverride?:any }) => {
@@ -269,7 +272,10 @@ const Qwiket = ({ extraWide, isRight,item, isTopic, qType, singlePanel, fullPage
                 <Right><Link href={homeLink} legacyBehavior><a rel="nofollow"><SiteName isTopic={isTopic}>{site_name}</SiteName></a></Link><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right></Row>
             {author ? <Row>{author}</Row> : null}
             <Row key="r2"><Link href={itemUrl} legacyBehavior><a rel="nofollow"><Title isTopic={isTopic}>{title}</Title></a></Link></Row>
+           <PleaseRead>Please click below to read the article on the original site before commenting:</PleaseRead> 
+            <hr/>
             <Row key="3.1"><Link href={itemUrl} legacyBehavior><a rel="nofollow">{item.url}</a></Link></Row>
+            <hr/>
             <Row key="r3"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage sizes="(max-width: 768px) 100vw,
            (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={blur} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
             <Share><RWebShare

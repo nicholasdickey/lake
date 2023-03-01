@@ -77,42 +77,6 @@ export const getServerSideProps = withSessionSsr(
         let [forum] = ssr || [''];
 
         console.log("FORUM:", forum)
-        /* if (forum == 'context') {
-             if (ssr[1] == 'channel') {
-                 const threadid = ssr[3];
-                 const commentCC = ssr[5];
-                 console.log("CONTEXT MIGRATION:", JSON.stringify({ channel, topicDummy, threadid, ccDummy, commentCC }));
-                 let cc = '';
-                 if (commentCC)
-                     cc = commentCC.split('-')[1];
-                 const key: [u: string, threadid: string, withBody: number, userslug: string] = ['topic', threadid, 0, ''];
-                 const { item } = await fetchTopic(key);
-                 const { tag } = item;
-                 console.log("TOPIC:", JSON.stringify(item))
-                 console.log("CONTEXT MIGRATION:", JSON.stringify({ channel, tag, threadid, cc }));
- 
-                 const url = `https://${process.env.CANONIC_DOMAIN}/usconservative/topic/${tag}/${threadid}/l1${cc ? `/${cc}#${cc}` : ''}`;
-                 console.log("CONTEXT REDIRECT", url)
- 
-             }
-             else {
-                 const threadid = ssr[2];
-                 const key: [u: string, threadid: string, withBody: number, userslug: string] = ['topic', threadid, 0, ''];
-                 const { item } = await fetchTopic(key);
-                 const { tag } = item;
-                 console.log("TOPIC:", JSON.stringify(item))
-                 console.log("CONTEXT MIGRATION:", JSON.stringify({ tag, threadid }));
-                 const url = `https://${process.env.CANONIC_DOMAIN}/${process.env.DEFAULT_FORUM}/topic/${tag}/${threadid}`;
-                 console.log("CONTEXT REDIRECT", url)
-                 return {
-                     redirect: {
-                         permanent: true,
-                         destination: url,
-                     },
-                     props: {},
-                 };
-             }
-         }*/
         if (forum.indexOf("sitemap") == 0 && forum.indexOf(".txt") >= 0) {
             // console.log("params:",context.params)
             const filename = forum.split(".")[0];
@@ -143,7 +107,7 @@ export const getServerSideProps = withSessionSsr(
         let type = ssr[1];
         if (!type)
             type = 'newsline';
-        //  console.log("TYPE:", type)
+        console.log("TYPE:", type)
         const tag = (type == 'topic' || type == 'home' || type == 'solo') ? ssr[2] : "";
         let threadid = (type == 'topic' || type == 'home') ? ssr[3] : "";
         if (!threadid)
@@ -251,7 +215,7 @@ export const getServerSideProps = withSessionSsr(
         // console.log("Options:", options)
        
         // TBA pre-fetching data for SSR, for now all data fetched client-side   
-        const newsline = 'qwiket';
+        const newsline = process.env.DEFAULT_NEWSLINE||'qwiket';
 
         // console.log("SSR SESSION",options)
         const qparams = {
@@ -319,15 +283,15 @@ export const getServerSideProps = withSessionSsr(
 
         const channelConfig = await fetchChannelConfig(newsline);
 
-        // console.log("GOT channelConfig", channelConfig)
+        console.log("GOT channelConfig",newsline, channelConfig)
         const layoutType = type == 'topic' || type == 'home' ? 'context' : type == 'solo' ? 'newsline' : type;
         const newslineKey: fetchChannelLayoutKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, 'newsline', options.dense, options.thick, layoutNumber];
         const contextKey: fetchChannelLayoutKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, 'context', options.dense, options.thick, layoutNumber];
         
-        //console.log("CALLING fetchChannelLayout:",key);
+        console.log("CALLING fetchChannelLayout:",newslineKey);
         const newslineLayout = await fetchChannelLayout(newslineKey);
-        // console.log("GOT CHANNEL LAYOUT", JSON.stringify(channelLayout))
-        // console.log("=================")
+         console.log("GOT CHANNEL LAYOUT", JSON.stringify(newslineLayout))
+        console.log("=================")
         const newslineStaleLKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug,'newsline', 0, 1, layoutNumber];
         const newslineStaleLKey1 = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, 'newsline', 0, 0, layoutNumber];
         const newslineStaleLKey2 = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, 'newsline', 1, 0, layoutNumber];

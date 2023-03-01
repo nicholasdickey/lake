@@ -79,6 +79,7 @@ const Logo = styled((props) => {
     display:none;
     margin-left:10px;
     margin-right:10px;
+    
     @media(min-width:600px){
         display:block;
          width:70px;
@@ -107,6 +108,7 @@ const Logo = styled((props) => {
         height:140px;
     }
 `
+
 const Title = styled.div`
     font-size:1.6rem;
     text-align:center;
@@ -116,29 +118,32 @@ const Title = styled.div`
         font-size:1.4rem;
     }
     @media(min-width:900px){
-        font-size:2.2rem;
+        font-size:${(params)=>{console.log("len=",params.len);return +params.len>20?'1.9':'2.2'}}rem;
     }
     @media(min-width:1000px){
-        font-size:2.7rem;
+        font-size:${(params)=>{console.log("len=",params.len);return +params.len>20?'2.4':'2.7'}}rem;
     }
     @media(min-width:1200px){
-        font-size:3.7rem;
+        font-size:${(params)=>{console.log("len=",params.len);return +params.len>20?'2.9':'3.7'}}rem;
     }
     @media(min-width:1400px){
-        font-size:4.5rem;
+        font-size:${(params)=>{console.log("len=",params.len);return +params.len>20?'3.5':'4.5'}}rem;
     }
     @media(min-width:1800px){
-        font-size:4.8rem;
+        font-size:${(params)=>{console.log("len=",params.len);return +params.len>20?'3.9':'4.8'}}rem;
     }
     @media(min-width:2100px){
         font-size:4.0rem;
     }
 `
+
 const TitleBand = ({ title, leftLogo, rightLogo }) => {
 
-
+    if(!rightLogo)
+    rightLogo=leftLogo;
+    console.log("rightLogo:",rightLogo)
     return <Link href="/"><TitleStyledWrapper>
-        <Logo src={leftLogo} /><Title className={playfair.className}>{title.toUpperCase()}</Title>{rightLogo ? <Logo src={rightLogo} /> : null}
+        <Logo src={leftLogo} /><Title len={title.length} className={playfair.className}>{title.toUpperCase()}</Title>{rightLogo ? <Logo src={rightLogo||leftLogo} /> : null}
     </TitleStyledWrapper></Link>
 }
 

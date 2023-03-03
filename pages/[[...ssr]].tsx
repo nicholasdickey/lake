@@ -65,9 +65,10 @@ export default function Home({ session, qparams, fallback, meta, error }: HomePr
 export const getServerSideProps = withSessionSsr(
     async function getServerSideProps(context: GetServerSidePropsContext): Promise<any> {
 
-        const host = context.req.headers.host || "";
+        let host = context.req.headers.host || "";
        
-      
+        if(host=='cloud.digitalocean.com')
+            host='american-outdoorsman.news';
         console.log("HOST==>:", host)
         const { code, state }: { code: string, state: string } = context.query as any;
         // parse dynamic params:

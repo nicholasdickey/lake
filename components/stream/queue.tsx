@@ -100,8 +100,13 @@ const Segment = ({ card,  extraWide, qType, lastid,isRight,  pageIndex}: {
     const isVisible = !!entry?.isIntersecting || entry && entry.boundingClientRect.top < 0
   
     let segment=null;
-    if (data && isVisible&&data.success=='true'&&data.items.length>0) {
+    if (data && isVisible&&data.success==true&&data.items.length>0) {
+        if(qType=='topics')
+        console.log("Creating a new segment ",pageIndex)
         segment=<Segment card={card} extraWide={extraWide} qType={qType} lastid={lastid} isRight={isRight} pageIndex={pageIndex+1}/>
+    }
+    else {
+        console.log("No data or not visible segment yet",{data,isVisible})
     }
    // console.log("*** Segment data:",data);
     return <div className="other-segments" ref={ref}>

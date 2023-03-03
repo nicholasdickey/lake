@@ -192,7 +192,8 @@ color:var(--highlight);
 
 const Qwiket = ({ extraWide, isRight,item, isTopic, qType, singlePanel, fullPage,mutate,setAckOverride }: { extraWide: boolean, isRight:boolean,item: any, isTopic: boolean, qType?: string, singlePanel?: boolean, fullPage?: boolean,mutate?:any,setAckOverride?:any }) => {
 
-
+   // console.log("reqwiket1:",qType,item)
+       
     const [openDialog,setOpenDialog]=useState(false);
     
     const isTag = qType == 'tag';
@@ -296,7 +297,7 @@ const Qwiket = ({ extraWide, isRight,item, isTopic, qType, singlePanel, fullPage
     else if (isReact) {
         let { id, author_avatar, tag, catName, catIcon, author_name, postBody, subscr_status, createdat, thread_author, thread_title, thread_description, thread_url, slug } = item;
         const { diff, timeString } = TimeDifference(createdat, qparams.timestamp)
-
+      //  console.log("reqwiket:",{ id, author_avatar, tag, catName, catIcon, author_name, postBody, subscr_status, createdat, thread_author, thread_title, thread_description, thread_url, slug})
         return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/${id}/#comment-${id}`} legacyBehavior><a rel="nofollow">
             <VerticalWrap isTopic={isTopic} isRight={isRight}>
             <Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
@@ -308,7 +309,9 @@ const Qwiket = ({ extraWide, isRight,item, isTopic, qType, singlePanel, fullPage
             <AuthorPoster>{author_name}</AuthorPoster>
             <StarContainer><Star level={subscr_status} size={16}/></StarContainer> 
             <TimeSince isTopic={isTopic}>{timeString}</TimeSince></Row>
-            <Row key="r5"><Markdown>{`<div style="width:100%;">${postBody}</div>`}</Markdown></Row>
+            <Row key="r5">
+                <Markdown>{`<div style="width:100%;">${postBody}</div>`}</Markdown>
+                </Row>
 
         </VerticalWrap></a></Link>
     }

@@ -84,8 +84,8 @@ const Segment = ({ card,  extraWide, qType, lastid,isRight,  pageIndex}: {
 }) => {
     const { session, qparams } = useAppContext();
     const key: FetchQueueKey["key"] = ['queue', qType, qparams.newsline, qType == 'newsline' && qparams.type == 'solo' ? 1 : 0, qparams.forum, (qType == 'tag' || qType == 'newsline' && qparams.type == 'solo') ? qparams.tag : '', pageIndex, lastid, session.sessionid, session.userslug, 0, '', '', 0, card];
-    if(qType=='newsline')
-    console.log("Segment before fetchQueue", { qType, pageIndex,lastid})
+   // if(qType=='topics')
+   //     console.log("Segment before fetchQueue", { qType, pageIndex,lastid})
     const { data, error: queueError, mutate } = useSWR(key, fetchQueue, {
         revalidateIfStale: false,
         revalidateOnFocus: false
@@ -100,10 +100,10 @@ const Segment = ({ card,  extraWide, qType, lastid,isRight,  pageIndex}: {
     const isVisible = !!entry?.isIntersecting || entry && entry.boundingClientRect.top < 0
   
     let segment=null;
-    if (data && isVisible) {
+    if (data && isVisible&&data.success=='true'&&data.items.length>0) {
         segment=<Segment card={card} extraWide={extraWide} qType={qType} lastid={lastid} isRight={isRight} pageIndex={pageIndex+1}/>
     }
-  
+   // console.log("*** Segment data:",data);
     return <div className="other-segments" ref={ref}>
         {data?.items?.map((item: any) => <Qwiket key={`queue-qwiket-${qType}-${item.slug}-${item.qpostid}`} extraWide={extraWide} isRight={isRight} item={item} isTopic={false} qType={qType}></Qwiket>)}
         {segment}

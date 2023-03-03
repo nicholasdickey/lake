@@ -55,7 +55,7 @@ const Local = ({ forum,  cc, slug, title,fullPage }: { forum: string,   cc: stri
     if(!title)
         title='';
 
-    var t = title.replace(/"/g, '\'');
+    var t = title?.replace(/"/g, '\'');
     t = t.replace(':', '-');
     cc = cc ? '#comment-' + cc : '';
     let url = `http://am1.news/${qparams.forum}/topic/${qparams.tag}/${slug}`;//"https://qwiket.com" + contextUrl + "/topic/" + realDisqThreadid + cc;

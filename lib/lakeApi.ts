@@ -237,7 +237,7 @@ export const fetchQueue = async ([u, qType, newsline, solo, forum, tag, page, la
    }
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/queue/fetch?${params}`
 
-   // console.log("remder fetchQueue url",url)
+    console.log("remder fetchQueue url",url)
    let res;
    try {
       res = await axios.get(url)

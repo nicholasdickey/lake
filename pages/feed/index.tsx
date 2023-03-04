@@ -6,7 +6,7 @@ import {
 
 } from "next";
 import {
-    fetchQueue, fetchChannelConfig, FetchQueueKey
+    fetchQueue, fetchChannelConfig, FetchQueueKey,
 } from '../../lib/lakeApi';
 
 export default function Home({ items, channelDetails, host, forum }: { channelDetails: any, items: any[], host: string, forum: string }) {
@@ -71,7 +71,8 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
     }
 
-    const key = ['queue', type, newsline, 0, forum, '', 0, '0', '', '', 0, '', '', 12] as FetchQueueKey["key"];
+    const key: FetchQueueKey["key"] = ['queue', type, newsline, 0, forum, '', 0, '0', '', '', 0, '', '', 12];
+    console.log("rss key==",key)
     const { items } = await fetchQueue(key);
     if (context.res) {
         const header = `<?xml version="1.0" encoding="UTF-8" ?>  

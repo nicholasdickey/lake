@@ -22,11 +22,15 @@ const LowlineWrapper = styled.div<LowlineWrapperParams>`
     font-family: Roboto;
     justify-content: center;
     font-size: 0.9rem;
-   /* @media(max-width: 749px) {
-        display: none;
-    } */`
+    @media(max-width: 500px) {
+       
+        font-size: 9px;
+    } `
 const Phone = styled.div`
     display: none;
+    width:100%;
+    justify-content: center;
+    min-width:110px;
     @media(min-width: 50px) {
         display: flex;
     }

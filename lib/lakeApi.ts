@@ -165,7 +165,7 @@ export interface FetchQueueKey {
 export const fetchQueue = async ([u, qType, newsline, solo, forum, tag, page, lastid, sessionid, userslug, tail, test, breakCache, size, card]: FetchQueueKey["key"]
 ) => {
    let params;
-   //console.log("fetchQueue d1b",JSON.stringify({u,qType,newsline,solo,forum,tag,page,lastid,sessionid,userslug,tail,test,breakCache,size,card}))
+   console.log("fetchQueue d1b",JSON.stringify({u,qType,newsline,solo,forum,tag,page,lastid,sessionid,userslug,tail,test,breakCache,size,card}))
    //console.log("d1b:  fetchQueue:", `['queue',card:${card},qType:${qType},newsline:${newsline},forum:${forum},tag:${tag},page:${page},lastid:${lastid},sessionid:${sessionid},userslug:${userslug},tail:${tail}]`)
    if (!page)
       page = 0;
@@ -210,28 +210,28 @@ export const fetchQueue = async ([u, qType, newsline, solo, forum, tag, page, la
    //  console.log("addParams2",qType==QueueType.mix)
    switch (qType) {
       case 'newsline':
-         params = `newsline=${newsline}&type=newsline&page=${page}&lastid=${lastid}`;
+         params = `newsline=${newsline}&type=newsline&page=${page}&lastid=${lastid}&size=${size}`;
          params = addParams(params);
          break;
       case 'reacts':
-         params = `forum=${forum}&type=reacts&page=${page}&lastid=${lastid}`;
+         params = `forum=${forum}&type=reacts&page=${page}&lastid=${lastid}&size=${size}`;
          params = addParams(params);
          break;
       case 'mix':
-         params = `newsline=${newsline}&forum=${forum}&type=mix&page=${page}&lastid=${lastid}`;
+         params = `newsline=${newsline}&forum=${forum}&type=mix&page=${page}&lastid=${lastid}&size=${size}`;
          params = addParams(params);
          break;
       case 'hot':
-         params = `newsline=${newsline}&type=hot&page=${page}&lastid=${lastid}`;
+         params = `newsline=${newsline}&type=hot&page=${page}&lastid=${lastid}&size=${size}`;
          params = addParams(params);
          // console.log("fetchQueue params",params)
          break;
       case 'tag':
-         params = `newsline=${newsline}&tag=${tag}&type=tag&page=${page}&lastid=${lastid}`;
+         params = `newsline=${newsline}&tag=${tag}&type=tag&page=${page}&lastid=${lastid}&size=${size}`;
          params = addParams(params);
          break;
       case 'topics':
-         params = `forum=${forum}&type=topics&page=${page}&lastid=${lastid}`;
+         params = `forum=${forum}&type=topics&page=${page}&lastid=${lastid}&size=${size}`;
          params = addParams(params);
          break;
    }

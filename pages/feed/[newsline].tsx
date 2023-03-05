@@ -58,10 +58,17 @@ export default function Home({ items, channelDetails, host, forum }: { channelDe
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
 
-    const newsline = `rss-${process.env.DEFAULT_NEWSLINE}`;
+    let newsline = context.params?.newsline||process.env.DEFAULT_NEWSLINE ;
+    if(!newsline)
+    process.env.DEFAULT_NEWSLINE
+    console.log("FEED:",{newsline,context:context.params})
+    newsline = `rss-${newsline||process.env.DEFAULT_NEWSLINE}`;
+
     const forum = process.env.DEFAULT_FORUM || '';
     const type = 'newsline';
-    const host = context.req.headers.host || "";
+    let host = context.req.headers.host || "";
+    if(host=='cloud.digitalocean.com')
+            host='american-outdoorsman.news';
     const channelConfig = await fetchChannelConfig(process.env.DEFAULT_NEWSLINE || '');
     console.log("ChannelConfig", host)
     const { displayName, description } = channelConfig.channelDetails

@@ -5,14 +5,14 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import Image from 'next/image'
-import { fetchUser,getOnlineCount } from '../../lib/lakeApi';
+import { fetchUser,getOnlineCount,unpublish } from '../../lib/lakeApi';
 import Lowline from './lowline';
 import { UilGlassMartiniAlt,UilUsersAlt } from '@iconscout/react-unicons'
 import { Playfair_Display } from '@next/font/google';
 import { useAppContext } from "../../lib/context";
 import {Star} from "../widgets/star"
 
-
+const isBrowser = () => typeof window !== `undefined`
 //import Menu from '@material-ui/core/Menu';
 //import MenuItem from '@material-ui/core/MenuItem';
 
@@ -236,10 +236,14 @@ const VerticalWrap = styled.div`
     flex-direction: column;
     align-items: center;
 `
+const Unpublish=styled.span`
+margin-left:40px;
+`
 const login = async (href) => {
     await axios.get(`/api/session/login?href=${encodeURIComponent(href)}`)
 
 }
+
 const StarContainer=styled.div`
     margin-top:-4px;
 `
@@ -253,6 +257,7 @@ const DatelineBand = ({ channelSlug, channelDetails, user, updateSession }) => {
     if (!subscr_status)
         subscr_status = 0;
     const { session, qparams } = useAppContext();
+    console.log('qparams',qparams)
     const countKey={sessionid:session.sessionid,userslug:session.userslug};
     const { data: count, error: countError } = useSWR(qparams.isbot?null:countKey, getOnlineCount,{refreshInterval:10000})
     //console.log({ subscr_status })
@@ -274,7 +279,7 @@ const DatelineBand = ({ channelSlug, channelDetails, user, updateSession }) => {
     let name = user?.user_name;
     let approver = user?.approver;
     let avatar = user?.avatar;
-    //console.log("subscr_status",subscr_status)
+    console.log("subscr_status",subscr_status,approver)
     let isLoggedIn = user ? 1 : 0;
     //console.log("onlinecount=",count)
     const { setLoading } = useAppContext();
@@ -304,15 +309,19 @@ const DatelineBand = ({ channelSlug, channelDetails, user, updateSession }) => {
                                 Sign Out
                             </a>
                         </SubTitle>
-                        {!approver ? <SubTitle>
-                            |
-                        </SubTitle> : null}
+                        {!(subscr_status!=5) ? <SubTitle>
+                            | 
+                        </SubTitle> :  
+                 null  }
                         <SubTitle>  <div> </div> {`${isLoggedIn ? approver ? '[' + name + ']' : name : 'Subscribe'}`}<StarContainer><Star level={subscr_status} size={16}/></StarContainer>  
                        
                             <Link onClick={()=>console.log("lacantina click")} href={lacantinaUrl}>
                                 <Martini>
                                     <UilGlassMartiniAlt size="16" color="#888" />
+                                    <Unpublish><Link onClick={async ()=>{await unpublish(qparams.threadid,qparams.tag);console.log("unpublish");}} href={'#'}><UilNewspaper size="16" color="red" /></Link></Unpublish>
+                 
                                 </Martini>
+                                
                             </Link>
                         </SubTitle>
 
@@ -331,7 +340,7 @@ width:100%;
 export const Header = ({ session, layout, channelSlug, channelDetails, newsline, qparams, updateSession }) => {
 
     const { data: user, error: userError } = useSWR(['user', session.userslug], fetchUser)
-
+    console.log('user:',user)
     // console.log("dark header render",session)
     // console.log("channelDetails",channelDetails)
     //  console.log({ newsline: newsline.toJS(), session: session.toJS() })

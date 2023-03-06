@@ -3,7 +3,12 @@ import axios from 'axios'
 import { off } from 'process';
 import { Options } from '../lib/withSession';
 const API_KEY = process.env.API_KEY;
-
+export const unpublish = async (slug: string, tag: string) => {
+   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/topic/unpublish?slug=${slug}&tag=${tag}`;
+   console.log("calling lakeApi unpublish ", slug,tag,url)
+   const res = await axios.get(url);
+   return res.data;
+}
 export const accept = async ({ sessionid, userslug, tag }: { sessionid: string, userslug: string, tag: string }) => {
    if (!userslug)
       userslug = '';

@@ -5,7 +5,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import useSWR from 'swr'
 import useSWRImmutable from 'swr/immutable'
 import styled from 'styled-components';
-import { ThemeProvider, DefaultTheme } from 'styled-components'
+import { ThemeProvider} from 'styled-components'
 import axios from 'axios';
 import { fetchChannelConfig, fetchChannelLayout, fetchChannelLayoutKey } from '../lib/lake-api';
 import { Options } from '../lib/with-session';
@@ -282,7 +282,7 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
               <Topline updateTheme={updateTheme} session={session} layout={mainLayout} updateSession={updateSession} channelDetails={channelConfig.channelDetails} />
               <Grid hpads={hpads}>
                 <PageWrap>
-                  <Header session={session} channelSlug={channelConfig.channelSlug} channelDetails={channelConfig.channelDetails} newsline={channelConfig.newsline} layout={mainLayout} qparams={qparams} updateSession={updateSession} />
+                  <Header channelSlug={channelConfig.channelSlug} channelDetails={channelConfig.channelDetails} newsline={channelConfig.newsline} updateSession={updateSession} />
                   <CardsContainer>
                     {layoutType == 'context' && contextLayout ?
                       <Card visible={true}>

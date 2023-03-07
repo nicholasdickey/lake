@@ -92,11 +92,9 @@ const Star = styled(UilStar)`
     margin-left: 10px;
     width:1-p;overflow-x;
     height:10px;
-    //color: red;
     `
 
 const Lowline = ({ session, lowline }:{session:Options,lowline:any}) => {
-    let hasBand = +session.band;
     return <LowlineWrapper loud={session.loud} band={session.band}>
         <Stars>
             <Star />

@@ -157,13 +157,9 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
   //Two flavors: the one that was supposed to kick static pages into SSR on session update, the other that doesn't
   //Second version is not used today as we removed the static pages
   const updateSession = useCallback((updSession: object) => {
-    /* if (router.asPath.indexOf('/news/') >= 0) {
-       const newpath = router.asPath.replace('/news/', '/user/');
-       router.replace(newpath, undefined, { shallow: true });
-     }*/
     const assigned = { ...Object.assign(session, updSession) }
     setSession(assigned);
-    axios.post(`/api/session/save`, { session: updSession });
+     axios.post(`/api/session/save`, { session: updSession });
   }, [session, router]);
 
   /*const updateSessionStealth = useCallback((updSession: object) => {
@@ -213,8 +209,16 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
     if (window.innerWidth != session.width) {
       setTimeout(() => resize(window.innerWidth), 1);
     }
-  }
-
+  } 
+  useEffect(() => {
+    const handleRouteChange = (url: string) => {
+      pageview(url);
+    };
+    router.events.on("routeChangeComplete", handleRouteChange);
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, [router.events]);
   // there are two types of layout - top - newsline, and drilldown - context. All pages are reduced to that:
   const layoutType = type == 'topic' || type == 'home' ? 'context' : type == 'solo' ? 'newsline' : 'newsline';
 
@@ -238,15 +242,7 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
     return <Loading className={roboto.className}>Fallback Loading...</Loading>
 
   //GA4 client-side navigation helper
-  useEffect(() => {
-    const handleRouteChange = (url: string) => {
-      pageview(url);
-    };
-    router.events.on("routeChangeComplete", handleRouteChange);
-    return () => {
-      router.events.off("routeChangeComplete", handleRouteChange);
-    };
-  }, [router.events]);
+ 
 
   //all the Head setup happens at this level
   return (

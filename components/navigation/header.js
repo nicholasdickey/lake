@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import styled from 'styled-components';
 import useSWR from 'swr'
 import Link from 'next/link'
@@ -247,15 +247,17 @@ const login = async (href) => {
 const StarContainer=styled.div`
     margin-top:-4px;
 `
-const logout = async (updateSession) => {
-    //console.log("logout:updateSession", updateSession)
-    setTimeout(async ()=>await updateSession({ userslug: '' }),1);
-}
+const logout =  (updateSession) =>  updateSession({ userslug: '' })
 const DatelineBand = ({ channelSlug, channelDetails, user, updateSession }) => {
-
-    let subscr_status = +user?.subscr_status;
-    if (!subscr_status)
-        subscr_status = 0;
+    const [hasUnpublish,setHasUnpublish]=useState(false)
+    let subscr_status = +user?.subscr_status||0;
+    useEffect(() => {
+       if(subscr_status==5){
+            console.log("subscr_status==5")
+            setHasUnpublish(true);
+       }
+      }, [subscr_status]);
+    
     const { session, qparams } = useAppContext();
     console.log('qparams',qparams)
     const countKey={sessionid:session.sessionid,userslug:session.userslug};
@@ -305,7 +307,7 @@ const DatelineBand = ({ channelSlug, channelDetails, user, updateSession }) => {
                     </SubTitle> :
                     <HorizWrap>
                         <SubTitle><Home><Link href={'/'}><UilNewspaper size="16" color="#888" /></Link></Home>
-                            <a onClick={async () => await logout(updateSession)}>
+                            <a onClick={() => logout(updateSession)}>
                                 Sign Out
                             </a>
                         </SubTitle>
@@ -317,7 +319,7 @@ const DatelineBand = ({ channelSlug, channelDetails, user, updateSession }) => {
                             <Link onClick={()=>console.log("lacantina click")} href={lacantinaUrl}>
                                 <Martini>
                                     <UilGlassMartiniAlt size="16" color="#888" />
-                                    {subscr_status==5?<Unpublish><Link onClick={async ()=>{await unpublish(qparams.threadid,qparams.tag);console.log("unpublish");}} href={'#'}><UilNewspaper size="16" color="red" /></Link></Unpublish>:null}
+                                    {hasUnpublish?<Unpublish><Link onClick={async ()=>{await unpublish(qparams.threadid,qparams.tag);console.log("unpublish");}} href={'#'}><UilNewspaper size="16" color="red" /></Link></Unpublish>:null}
                  
                                 </Martini>
                                 

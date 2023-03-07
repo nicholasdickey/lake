@@ -1,21 +1,14 @@
 
 import React from "react"
 import {
-    GetServerSidePropsContext,
-    GetServerSidePropsResult,
-
+    GetServerSidePropsContext
 } from "next";
-import {
-    fetchChannelConfig, fetchChannelLayout, fetchUser, fetchMyNewsline, fetchPublications,
-    fetchPublicationCategories, fetchPublicationsKey, fetchMyNewslineKey, Filters,
-    fetchChannelLayoutKey, fetchTopic, FetchTopicKey, processLoginCode, initLoginSession, getUserSession
-} from '../../../lib/lakeApi';
+import { fetchTopic, FetchTopicKey } from '../../../lib/lakeApi';
 
+//legacy disqus links redirect page
 export default function Home({ }) {
-
     return <div />;
 }
-
 /**
  * 
  * URL Schema:
@@ -23,12 +16,8 @@ export default function Home({ }) {
 
  * 
  */
-
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-    // let params = context.params?.slug as string[];
     let slug: string = context.params?.slug as string || '';
-
-    console.log("DISQUS MIGRATION1:", JSON.stringify({ slug }));
     const s = slug.split('#');
     let commentCC = '';
     let channel = process.env.DEFAULT_CHANNEL;
@@ -38,24 +27,17 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         slug = s[0];
     }
     const threadid = slug;
-    console.log("DISQUS MIGRATION:", JSON.stringify({ slug, commentCC }));
-    let cc = '';
-    if (commentCC)
-        cc = commentCC.split('-')[1];
-        const key:FetchTopicKey= {threadid,withBody:0,userslug:'',sessionid:'',tag:''};
+    const cc = commentCC?.split('-')[1] || '';
+    const key: FetchTopicKey = { threadid, withBody: 0, userslug: '', sessionid: '', tag: '' };
     const topic = await fetchTopic(key);
+    //this should take care of removing dead pages from google index
     if (!topic.success) {
-        console.log("COULDN't FETCH TOPIC", key)
         context.res.statusCode = 404;
         return { props: { error: 404 } }
     }
-    const {item}=topic;
+    const { item } = topic;
     const { tag } = item;
-    console.log("TOPIC:", JSON.stringify(item))
-    console.log("CONTEXT MIGRATION:", JSON.stringify({ channel, tag, threadid, cc }));
-
-    const url = `https://${process.env.CANONIC_DOMAIN}/usconservative/topic/${tag}/${threadid}/l1${cc ? `/${cc}#${cc}` : ''}`;
-    console.log("CONTEXT REDIRECT", url)
+    const url = `https://${process.env.CANONIC_DOMAIN}/${process.env.DEFAULT_FORUM}/topic/${tag}/${threadid}/l1${cc ? `/${cc}#${cc}` : ''}`;
     return {
         redirect: {
             permanent: true,

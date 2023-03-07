@@ -5,17 +5,12 @@ import {
     GetServerSidePropsResult,
 
 } from "next";
-import {
-    fetchChannelConfig, fetchChannelLayout, fetchUser, fetchMyNewsline, fetchPublications,
-    fetchPublicationCategories, fetchPublicationsKey, fetchMyNewslineKey, Filters,
-    fetchChannelLayoutKey, fetchTopic,FetchTopicKey, processLoginCode, initLoginSession, getUserSession
-} from '../../../lib/lakeApi';
+import {fetchTopic,FetchTopicKey} from '../../../lib/lakeApi';
 
+//migrate and redirect legacy topic pages
 export default function Home({  }) {
-
     return <div/>;
 }
-
 /**
  * 
  * URL Schema:
@@ -28,9 +23,7 @@ export const getServerSideProps=async(context: GetServerSidePropsContext)=>{
     let params = context.params?.context as string[];
     const [channel,topicDummy,threadid,ccDummy,commentCC]=params;
     console.log("CONTEXT MIGRATION:",JSON.stringify({channel,topicDummy,threadid,ccDummy,commentCC}));
-    let cc='';
-    if(commentCC)
-    cc=commentCC.split('-')[1];
+    const cc=commentCC?.split('-')[1]||'';
 
     const key:FetchTopicKey= {threadid,withBody:0,userslug:'',sessionid:'',tag:''};
     const {item} = await fetchTopic(key);
@@ -44,11 +37,7 @@ export const getServerSideProps=async(context: GetServerSidePropsContext)=>{
           };
     }
     const {tag}=item?item:{tag:''};
-    console.log("TOPIC:",JSON.stringify(item))
-    console.log("CONTEXT MIGRATION:",JSON.stringify({channel,tag,threadid,cc}));
-    
-    const url=`https://${process.env.CANONIC_DOMAIN}/usconservative/topic/${tag}/${threadid}/l1${cc?`/${cc}#${cc}`:''}`;
-    console.log("CONTEXT REDIRECT",url)
+    const url=`https://${process.env.CANONIC_DOMAIN}/${process.env.DEFAULT_FORUM}/topic/${tag}/${threadid}/l1${cc?`/${cc}#${cc}`:''}`;
     return {
         redirect: {
           permanent: true,

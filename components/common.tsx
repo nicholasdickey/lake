@@ -1,3 +1,4 @@
+// ./components/navigation/common.tsx
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useState, useEffect, useCallback } from "react";
@@ -16,7 +17,7 @@ import { palette } from '../lib/palette';
 import { LayoutView } from './layout/layoutView';
 import { Roboto } from '@next/font/google';
 import { AppWrapper } from '../lib/context';
-import ScrollToTopButton from './widgets/scrollToTopButton';
+import ScrollToTopButton from './widgets/scroll-to-top-button';
 import Script from 'next/script'
 import { pageview } from "../lib/gtag";
 
@@ -113,7 +114,6 @@ const Loading = styled.div`
 `
 
 const CardsContainer = styled.div`
- 
  width:100%;
  height:100%;
 `
@@ -127,6 +127,7 @@ const Card = styled.div<CardParams>`
  left:0;
  visibility:${({ visible }) => visible ? 'visible' : 'hidden'};
 `
+//-------------------------------------------------------------------------
 
 /**
  * Common SPA for all pages that have the multi-column "broadsheet" layout 
@@ -151,23 +152,12 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
     }
   }, [theme]);
 
-
-
   //saves the changes to the session on the local web server. 
-  //Two flavors: the one that was supposed to kick static pages into SSR on session update, the other that doesn't
-  //Second version is not used today as we removed the static pages
   const updateSession = useCallback((updSession: object) => {
     const assigned = { ...Object.assign(session, updSession) }
     setSession(assigned);
-     axios.post(`/api/session/save`, { session: updSession });
-  }, [session, router]);
-
-  /*const updateSessionStealth = useCallback((updSession: object) => {
-    const assigned = { ...Object.assign(session, updSession) }
-    setSession(assigned);
-
     axios.post(`/api/session/save`, { session: updSession });
-  }, [session]);*/
+  }, [session, router]);
 
   // updates both the them body attribute and session
   const updateTheme = useCallback((theme: string) => {
@@ -195,9 +185,10 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
       updateSession({ width })
     }
   }, [custom])
+
   useEffect(() => {
     const handleResize = () => {
-      if (session&& window.innerWidth != session.width)
+      if (session && window.innerWidth != session.width)
         resize(window.innerWidth)
     }
     window.addEventListener('resize', handleResize);
@@ -209,7 +200,7 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
     if (window.innerWidth != session.width) {
       setTimeout(() => resize(window.innerWidth), 1);
     }
-  } 
+  }
   useEffect(() => {
     const handleRouteChange = (url: string) => {
       pageview(url);
@@ -241,9 +232,6 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
   if (isFallback)
     return <Loading className={roboto.className}>Fallback Loading...</Loading>
 
-  //GA4 client-side navigation helper
- 
-
   //all the Head setup happens at this level
   return (
     <>
@@ -271,7 +259,6 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
         />
 
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-
       </Head>
       <main className={roboto.className} >
 
@@ -293,14 +280,14 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
             {loading ? <Loading className={roboto.className}>{loading}</Loading> : null}
             <div>
               <Topline updateTheme={updateTheme} session={session} layout={mainLayout} updateSession={updateSession} channelDetails={channelConfig.channelDetails} />
-             <Grid hpads={hpads}>
+              <Grid hpads={hpads}>
                 <PageWrap>
                   <Header session={session} channelSlug={channelConfig.channelSlug} channelDetails={channelConfig.channelDetails} newsline={channelConfig.newsline} layout={mainLayout} qparams={qparams} updateSession={updateSession} />
                   <CardsContainer>
-                    {layoutType == 'context' && contextLayout ? 
-                    <Card visible={true}>
-                      <LayoutView visible={true} card={"drilldown"} session={session} pageType={'context'} layout={contextLayout} qparams={qparams} updateSession={updateSession} channelDetails={channelConfig.channelDetails} qCache={qCache} setQCache={setQCache} />
-                    </Card> : null}
+                    {layoutType == 'context' && contextLayout ?
+                      <Card visible={true}>
+                        <LayoutView visible={true} card={"drilldown"} session={session} pageType={'context'} layout={contextLayout} qparams={qparams} updateSession={updateSession} channelDetails={channelConfig.channelDetails} qCache={qCache} setQCache={setQCache} />
+                      </Card> : null}
                     {newslineLayout ? <Card visible={layoutType == 'newsline'}>
                       <LayoutView visible={layoutType == 'newsline' ? true : false} card={"top"} session={session} pageType={'newsline'} layout={newslineLayout} qparams={qparams} updateSession={updateSession} channelDetails={channelConfig.channelDetails} qCache={qCache} setQCache={setQCache} />
                     </Card> : null}
@@ -318,7 +305,6 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
             __html: `window.twttr = (function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0],t = window.twttr || {};if (d.getElementById(id)) return t;js = d.createElement(s);js.id = id;js.src = "https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js, fjs);t._e = [];t.ready = function(f) {t._e.push(f);};return t;}(document, "script", "twitter-wjs"));`,
           }} />
       </Head>
-
     </>
   )
 }

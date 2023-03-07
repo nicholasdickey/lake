@@ -5,6 +5,9 @@ declare module 'styled-components' {
     export interface DefaultTheme {
         light: {
             colors: {
+                qwiketBorderStale: Interpolation<ThemeProps<DefaultTheme>>
+                qwiketBorderRecent: Interpolation<ThemeProps<DefaultTheme>>
+                qwiketBorderNew: Interpolation<ThemeProps<DefaultTheme>>
                 notificationButton: Interpolation<ThemeProps<DefaultTheme>>
                 highlight:string
                 lowlight: string
@@ -17,6 +20,9 @@ declare module 'styled-components' {
         },
         dark: {
             colors: {
+                qwiketBorderStale: Interpolation<ThemeProps<DefaultTheme>>
+                qwiketBorderRecent: Interpolation<ThemeProps<DefaultTheme>>
+                qwiketBorderNew: Interpolation<ThemeProps<DefaultTheme>>
                 notificationButton: Interpolation<ThemeProps<DefaultTheme>>
                 lowlight: string
                 highlight: string

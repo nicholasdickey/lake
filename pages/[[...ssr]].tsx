@@ -99,7 +99,7 @@ export const getServerSideProps = withSessionSsr(
        
         const navTab = ((type == 'newsline') ? ssr[3] : type == "solo" ? ssr[4] : 0) || 1;
        
-        const cc = (type == 'topic' || type == 'home') ? ssr[5] : ''||'';
+        const cc = (type == 'topic' || type == 'home') ? ssr[5]||'' :'';
         
         const ua = context.req.headers['user-agent'];
         

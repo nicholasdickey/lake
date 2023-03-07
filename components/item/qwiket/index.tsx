@@ -341,7 +341,7 @@ const Qwiket = ({ extraWide, isRight,item, isTopic, qType, singlePanel, fullPage
                 <Right><SiteName isTopic={isTopic}>©{site_name}</SiteName><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right> </Row>
             {author ? <Row>{author}</Row> : null}
             <Row key="r2"><Title isTopic={isTopic}>{title}</Title></Row>
-            <Row key="r3"><ReactMarkdown  >{description}</ReactMarkdown></Row>
+            <Row key="r3"><Markdown  >{description}</Markdown></Row>
             <Row key="r4"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage placeholder={"blur"} blurDataURL={blur} style={{ maxWidth: "100%", height: "100%", objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
 
         </VerticalWrap></a></Link>

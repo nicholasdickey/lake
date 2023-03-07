@@ -1,7 +1,7 @@
+// ./components/navigation/lowline.tsx
 import React from 'react'
 import styled from 'styled-components';
 import { UilStar } from '@iconscout/react-unicons'
-//mport UilStar from '@iconscout/react-unicons/icons/uil-star';
 import {Options} from '../../lib/with-session';
 
 interface LowlineWrapperParams {
@@ -22,8 +22,7 @@ const LowlineWrapper = styled.div<LowlineWrapperParams>`
     font-family: Roboto;
     justify-content: center;
     font-size: 0.9rem;
-    @media(max-width: 500px) {
-       
+    @media(max-width: 500px) {      
         font-size: 9px;
     } `
 const Phone = styled.div`
@@ -49,63 +48,55 @@ const HorizontalPhone = styled.div`
     }
     `
 const VerticalTablet = styled.div`
-            display: none;
-            @media(min-width: 600px) {
-                display: flex;
-            }
-            @media(min-width: 900px) {
-                display: none;
-            }
-            `
+    display: none;
+    @media(min-width: 600px) {
+        display: flex;
+    }
+    @media(min-width: 900px) {
+        display: none;
+    }
+    `
 const HorizontalTablet = styled.div`
-            display: none;
-            @media(min-width: 900px) {
-                display: flex;
-            }
-            @media(min-width: 1199px) {
-                display: none;
-            }
-            `
+    display: none;
+    @media(min-width: 900px) {
+        display: flex;
+    }
+    @media(min-width: 1199px) {
+        display: none;
+    }
+    `
 const SmallDesktop = styled.div`
-            display: none;
-            @media(min-width: 1200px) {
-                display: flex;
-            }
-            @media(min-width: 1799px) {
-                display: none;
-            }
-            `
+    display: none;
+    @media(min-width: 1200px) {
+        display: flex;
+    }
+    @media(min-width: 1799px) {
+        display: none;
+    }
+    `
 const LargeDesktop = styled.div`
-            display: none;
-            @media(min-width: 1800px) {
-                display: flex;
-            }
-            `
+    display: none;
+    @media(min-width: 1800px) {
+        display: flex;
+    }
+    `
 const Stars = styled.div`
-            flex-shrink: 0;
-            width: 60px;
-            margin-right: 30px;
-            margin-left: 30px;
-            display:flex;
-            `
+    flex-shrink: 0;
+    width: 60px;
+    margin-right: 30px;
+    margin-left: 30px;
+    display:flex;
+    `
 const Star = styled(UilStar)`
-            font-size: 10px;
-            margin-left: 10px;
-            width:1-p;overflow-x;
-            height:10px;
-            //color: red;
-            `
+    font-size: 10px;
+    margin-left: 10px;
+    width:1-p;overflow-x;
+    height:10px;
+    //color: red;
+    `
 
-    /*           
-    const Star = styled((...props) => <UilStar style={{ marginLeft: 10, fontSize: 10, width: 10, hegith: 10 }} />)`
-                font-size: 10px;
-                margin-left: 10px;
-                color: red; 
-    `*/
 const Lowline = ({ session, lowline }:{session:Options,lowline:any}) => {
-
     let hasBand = +session.band;
-
     return <LowlineWrapper loud={session.loud} band={session.band}>
         <Stars>
             <Star />
@@ -124,6 +115,5 @@ const Lowline = ({ session, lowline }:{session:Options,lowline:any}) => {
             <Star />
         </Stars>
     </LowlineWrapper>
-
 }
 export default Lowline;

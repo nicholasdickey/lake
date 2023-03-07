@@ -1,6 +1,6 @@
 //./lib/palette.ts
 export const palette = {
-    light: {
+    light: { 
         colors: {
             text: "#222222",//color:"#607D8B",
             link: "#607D8B",

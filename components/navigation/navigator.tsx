@@ -1,3 +1,4 @@
+// ./components/naviga5tion/navigator.tsx
 import { useRouter } from 'next/router'
 import { useCallback, useState } from "react";
 import styled from 'styled-components';
@@ -11,8 +12,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import NextImage from 'next/image';
 import StyledCheckbox from '../widgets/checkbox';
-import SearchField from '../widgets/searchField';
-import axios from 'axios';
+import SearchField from '../widgets/search-field';
 
 const Row = styled.div`
     display:flex;
@@ -22,33 +22,24 @@ const Row = styled.div`
     justify-content: space-between;
     flex-wrap: wrap;
     width: 100%;
-   // padding: 0px;
-    position:relative;
-    
+    position:relative;    
 `
 const FilterRow = styled.div`
     display:flex;
     padding-left:16px;
-    //padding-right:4px;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
     width: 100%;
-    //padding: 0px;
     height:26px;
-   // position:relative;
 `
 const PublicationRow = styled.div`
     display:flex;
-    //padding-left:16px;
     padding-right:6px;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
     width: 100%;
-    //padding: 0px;
-    //height:48px;
-   // position:relative;
 `
 const Description = styled.div`
     display:flex;
@@ -56,9 +47,7 @@ const Description = styled.div`
     font-size: 11px;
     align-items: center;
     justify-content: space-between;
-    //flex-wrap: wrap;
     color:var(--highlight);
-    //height:34px;
     margin-top:4px;
     padding-right:16px;
 `
@@ -77,7 +66,6 @@ const PubImageBox = styled.div`
     padding-top: 0px;
     margin-right: 16px;
     margin-left:16px;
-   
     margin-bottom: 10px;
     height:28px;
     width:28px;  
@@ -108,31 +96,22 @@ const TabsWrap = styled.div`
         border-width:1px;
         border-color:var(--text);
     }
-      
 `
 const Hr = styled.hr`
-    
     margin:16px ;
     font-size:14px;
-  
 `
 const VerticalSpacer = styled.div`
-    
     margin:16px ;
     font-size:14px;
-  
 `
 const FilterWrap = styled.div`
-    //margin-left:16px;
-`
+`  
 const SearchBox = styled.div`
     display:flex;
-    //padding-left:6px;
-    //padding-right:16px;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    //width: 100%;
     margin-top: 16px;
     position:relative;
     background:var(--background);
@@ -169,10 +148,8 @@ const Check = ({ label, checked, onChange, disabled }: { label?: string, checked
 
 const Navigator = ({ session, qparams, updateSession }: { session: Options, qparams: Qparams, updateSession: any }) => {
     const router = useRouter();
-    let { newsline, navTab } = qparams;
+    let { navTab } = qparams;
 
-
-    //console.log("Navigator, navTab=", navTab, router.query)
     if (router.query) {
         const ssr = router.query.ssr;
         if (ssr) {
@@ -181,10 +158,7 @@ const Navigator = ({ session, qparams, updateSession }: { session: Options, qpar
         }
     }
 
-    //console.log("Navigator2, navTab=", navTab)
-
     return <TabsWrap><Tabs focusTabOnClick={false} defaultFocus={false} selectedTabClassName="selected-tab" defaultIndex={+(navTab || 1)} onSelect={(i) => {
-        console.log("select ", i)
         router.push(`/${qparams.forum}/${qparams.type}/${qparams.layoutNumber}/${i}`, `/${qparams.forum}/${qparams.type}/${qparams.layoutNumber}/${i}`, { shallow: true })
     }}>
         <TabList>
@@ -194,13 +168,11 @@ const Navigator = ({ session, qparams, updateSession }: { session: Options, qpar
         <TabPanel key="sdsdlkj1">
             <Publications session={session} qparams={qparams} updateSession={updateSession} />
         </TabPanel>
-
         <TabPanel key="sdsdlkj2">
             <MyNewsline session={session} qparams={qparams} updateSession={updateSession} />
         </TabPanel>
     </Tabs></TabsWrap>
 };
-
 
 interface Publication {
     name: string;
@@ -213,10 +185,8 @@ interface Publication {
 const MyNewsline = ({ session, qparams, updateSession }: { session: Options, qparams: Qparams, updateSession: any }) => {
     const { newsline } = qparams;
     let { sessionid, userslug, hasNewslines } = session;
-    //sessionid=hasNewslines?sessionid:'';
     const key: fetchMyNewslineKey = ['navigator', newsline, sessionid, userslug, hasNewslines];
     const { data: myNewsline, error: myNewslineError, mutate } = useSWR(key, fetchMyNewsline);
-    //console.log("MyNewsline", myNewsline);
 
     return <><VerticalSpacer />{myNewsline ? myNewsline.map((n: Publication) => <>
         <PublicationRow key={`afkkqkqqqq-${n.tag}`}>
@@ -227,13 +197,11 @@ const MyNewsline = ({ session, qparams, updateSession }: { session: Options, qpa
                 <Name dense={session.dense==1}>{!n.default ? <Highlight>{n.name}</Highlight> : <>{n.name}</>}</Name>
             </Left></Link>
             <Check checked={n.switch == 'on'} onChange={async (s: boolean) => {
-               // console.log("onChange check")
                 updateSession({ hasNewslines: true });
                 mutate(updateMyNewsline({ tag: n.tag, switch: s ? 'on' : 'off', newsline, sessionid, userslug: session.userslug }),
                     {
                         optimisticData: myNewsline.map((p: Publication) => {
                             if (p.tag == n.tag) {
-                               // console.log("check Optimistic update ", p.tag, s ? 'on' : 'off')
                                 return {
                                     ...p,
                                     switch: s ? 'on' : 'off'
@@ -247,62 +215,41 @@ const MyNewsline = ({ session, qparams, updateSession }: { session: Options, qpa
                     })
             }} disabled={false} />
         </PublicationRow>
-
     </>) : "Loading..."}</>
 }
 
 const Publications = ({ session, qparams, updateSession }: { session: Options, qparams: Qparams, updateSession: any }) => {
-
     const { mutate } = useSWRConfig()
     const { newsline } = qparams;
     let { sessionid, userslug, hasNewslines } = session;
-    //sessionid//=hasNewslines?sessionid:'';
+
     const [q, setQ] = useState("");
-
     const { data: publicationCategories, error: publicationCategoriesError }: { data: FilterDatum[], error: string | undefined } = useSWRImmutable(['publicationCategories', newsline], fetchPublicationCategories);
-
-
     const [filters, setFilters]: [filters: Filters, setFilters: any] = useState(() => publicationCategories ? publicationCategories.reduce((accum: Filters, currentVal) => {
-
         accum[currentVal.tag] = true;
-        console.log("reduce:", currentVal, accum)
         return accum;
     }, {}) : {});
- //   console.log("RENDER PUBLICATIONS", session)
-    // const out = filterValues(filters);
-    //console.log("out", out)
-  //  console.log("filters", filters)
+
     const key: fetchPublicationsKey = ['publications', newsline, sessionid, userslug, filters, q, hasNewslines];
     const { data: publications, error: publicationsError, mutate: mutatePublications } = useSWR(key, fetchPublications, {
         revalidateOnFocus: false,
         revalidateOnReconnect: false
     });
-   // console.log("Publications render, key=", key, publications)
+
     const setF = useCallback((tag: string, action: boolean, doFetch: boolean) => {
-        //console.log("Publications callback", tag, action)
-        //if (action) {
         let newFilters = { ...filters }
         if (filters[tag] != action) {
-
             newFilters[tag] = action;
 
             if (doFetch) {
-                //  setTimeout(() => {
-                //const out = filterValues(filters);
-                // console.log("call mutate=>", filters);
                 const key: fetchPublicationsKey = ['publications', newsline, sessionid, userslug, filters, q, hasNewslines];
                 mutate(key, undefined, { revalidate: true });
-                // console.log("after mutate")
-                // }, 1);
             }
             setFilters(newFilters);
         }
         //}
     }, [filters, mutate, sessionid, userslug, newsline, q, hasNewslines])
-    //  const { data:publicationCategories, error: publicationCategoriesError } = useSWR(['publicationCategories', newsline], fetchPublicationCategories);
-    //  console.log("publicationCategories",publicationCategories)
-
- //   console.log("render publications", publications)
+  
     return <><SearchBox ><SearchField
         placeholder="Search..."
         onSearchClick={(t: string) => { setQ(t); }}
@@ -318,7 +265,7 @@ const Publications = ({ session, qparams, updateSession }: { session: Options, q
                 <Name dense={session.dense==1}><Highlight>{n.name}</Highlight></Name>
             </Left></Link>
             <Check checked={n.switch == 'on'} onChange={async (s: boolean) => {
-              //  console.log("PUBLICATION ON CLICK callling mutate")
+
                 //need to mutate session.hasNewslines
                 updateSession({ hasNewslines: true });
 
@@ -348,7 +295,6 @@ interface FilterDatum {
 
 }
 const FiltersContainer = ({ newsline, callback, publicationCategories }: { newsline: string, callback: any, publicationCategories: any }) => {
-   // console.log("publicationCategories-->", publicationCategories)
     return <Left>{publicationCategories ? publicationCategories.map((f: FilterDatum) => <Filter key={`wwfvpvh-${f.name}`} name={f.name} tag={f.tag} callback={callback}></Filter>) : 'Loading...'}</Left>
 }
 const Filter = ({ name, tag, callback }: { name: string, tag: string, callback: any }) => {

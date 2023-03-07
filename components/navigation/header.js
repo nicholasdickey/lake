@@ -11,19 +11,10 @@ import { UilGlassMartiniAlt,UilUsersAlt } from '@iconscout/react-unicons'
 import { Playfair_Display } from '@next/font/google';
 import { useAppContext } from "../../lib/context";
 import {Star} from "../widgets/star"
-
-//import Menu from '@material-ui/core/Menu';
-//import MenuItem from '@material-ui/core/MenuItem';
-
-//import navMenu from '../qwiket-lib/lib/navMenu'
-//import { ClickWalledGarden } from '../qwiket-lib/components/walledGarden';
-//import { logout } from '../qwiket-lib/actions/user';
-
-
 import { UilStar } from '@iconscout/react-unicons'
 import { UilNewspaper } from '@iconscout/react-unicons'
 import axios from 'axios';
-//import { UisStar } from '@iconscout/react-unicons'
+
 const UisStar = UilStar;
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400',], style: ['normal'] })
 const TitleStyledWrapper = styled.div`
@@ -117,19 +108,19 @@ const Title = styled.div`
         font-size:1.4rem;
     }
     @media(min-width:900px){
-        font-size:${(params)=>{console.log("len=",params.len);return +params.len>20?'1.9':'2.2'}}rem;
+        font-size:${(params)=> +params.len>20?'1.9':'2.2'}rem;
     }
     @media(min-width:1000px){
-        font-size:${(params)=>{console.log("len=",params.len);return +params.len>20?'2.4':'2.7'}}rem;
+        font-size:${(params)=> +params.len>20?'2.4':'2.7'}rem;
     }
     @media(min-width:1200px){
-        font-size:${(params)=>{console.log("len=",params.len);return +params.len>20?'2.9':'3.7'}}rem;
+        font-size:${(params)=> +params.len>20?'2.9':'3.7'}rem;
     }
     @media(min-width:1400px){
-        font-size:${(params)=>{console.log("len=",params.len);return +params.len>20?'3.5':'4.5'}}rem;
+        font-size:${(params)=> +params.len>20?'3.5':'4.5'}rem;
     }
     @media(min-width:1800px){
-        font-size:${(params)=>{console.log("len=",params.len);return +params.len>20?'3.9':'4.8'}}rem;
+        font-size:${(params)=> +params.len>20?'3.9':'4.8'}rem;
     }
     @media(min-width:2100px){
         font-size:4.0rem;
@@ -140,7 +131,7 @@ const TitleBand = ({ title, leftLogo, rightLogo }) => {
 
     if(!rightLogo)
     rightLogo=leftLogo;
-    console.log("rightLogo:",rightLogo)
+   
     return <Link href="/"><TitleStyledWrapper>
         <Logo src={leftLogo} /><Title len={title.length} className={playfair.className}>{title.toUpperCase()}</Title>{rightLogo ? <Logo src={rightLogo||leftLogo} /> : null}
     </TitleStyledWrapper></Link>
@@ -335,21 +326,12 @@ const DatelineBand = ({ channelSlug, channelDetails, user, updateSession }) => {
 const StyledHeader = styled.div`
 width:100%;
 `
-
-
 export const Header = ({ session, layout, channelSlug, channelDetails, newsline, qparams, updateSession }) => {
 
     const { data: user, error: userError } = useSWR(['user', session.userslug], fetchUser)
-    console.log('user:',user)
-    // console.log("dark header render",session)
-    // console.log("channelDetails",channelDetails)
-    //  console.log({ newsline: newsline.toJS(), session: session.toJS() })
-
     return <StyledHeader className={playfair.classname}>
         <TitleBand title={`${newsline.slug != channelSlug ? `${channelDetails.shortname}:` : ''}${newsline.displayName}`} leftLogo={channelDetails.logo} rightLogo={newsline.logo} />
         <DatelineBand channelSlug={channelSlug} session={session} user={user} channelDetails={channelDetails} updateSession={updateSession} />
         <Lowline session={session} lowline={channelDetails.lowline} />
     </StyledHeader>
 };
-
-// <DesktopNavigation session={session} channelDetails={channelDetails} />

@@ -1,3 +1,4 @@
+// ./components/item/qwiket/index.tsx
 import React, { useState, useEffect, useCallback, ReactFragment, ReactNode } from "react";
 import { useRouter } from 'next/router'
 import styled from 'styled-components';
@@ -7,16 +8,16 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { useAppContext } from "../../../lib/context";
 import Link from 'next/link'
-import { TwitterTweetEmbed } from 'react-twitter-embed'; 
+import { TwitterTweetEmbed } from 'react-twitter-embed';
 import Markdown from 'markdown-to-jsx'
-import {BodySnatcher} from './body-snatcher';
-import {Star} from '../../widgets/star'
+import { BodySnatcher } from './body-snatcher';
+import { Star } from '../../widgets/star'
 import { RWebShare } from "react-web-share";
 
 /**
  * CSS
  */
-const StarContainer=styled.div`
+const StarContainer = styled.div`
     margin-top:-4px;
 `
 interface IsTopic {
@@ -24,7 +25,7 @@ interface IsTopic {
     isTag?: boolean,
     diff?: number,
     singlePanel?: boolean,
-    isRight?:boolean
+    isRight?: boolean
 }
 const VerticalWrap = styled.div<IsTopic>`
     background:var(--background);
@@ -46,7 +47,7 @@ const VerticalWrap = styled.div<IsTopic>`
         padding-left:16px;
         margin-left:6px;
     }
-    border-right:${({isRight})=>isRight?'solid 1px':'none'};
+    border-right:${({ isRight }) => isRight ? 'solid 1px' : 'none'};
 `
 const Row = styled.div`
     display:flex;
@@ -179,40 +180,37 @@ const TweetEmbed = styled.div`
     max-width:540px;
 `
 
-const Share=styled.div`
+const Share = styled.div`
     margin-top:20px;
 `
 
-const Button=styled.button`
+const Button = styled.button`
 `
-const PleaseRead=styled.p`
-color:var(--highlight);
+const PleaseRead = styled.p`
+    color:var(--highlight);
 `
 //--------------------
 
-const Qwiket = ({ extraWide, isRight,item, isTopic, qType, singlePanel, fullPage,mutate,setAckOverride }: { extraWide: boolean, isRight:boolean,item: any, isTopic: boolean, qType?: string, singlePanel?: boolean, fullPage?: boolean,mutate?:any,setAckOverride?:any }) => {
+const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPage, mutate, setAckOverride }: { extraWide: boolean, isRight: boolean, item: any, isTopic: boolean, qType?: string, singlePanel?: boolean, fullPage?: boolean, mutate?: any, setAckOverride?: any }) => {
 
-   // console.log("reqwiket1:",qType,item)
-       
-    const [openDialog,setOpenDialog]=useState(false);
-    
+    const [openDialog, setOpenDialog] = useState(false);
+
     const isTag = qType == 'tag';
-    //console.log("Qwiket render ", singlePanel, isTopic, qType, isTag)
+
     const router = useRouter();
-    const { session, qparams,newsline,channelDetails } = useAppContext();
+    const { session, qparams, newsline, channelDetails } = useAppContext();
     const isReact = item && typeof item.qpostid !== 'undefined' && item.qpostid;
     let { description, title } = item ? item : { description: '', title: '' };
 
     const homeLink = `/${qparams.forum}/home/${qparams.tag}`;
     const itemUrl = item.url ? item.url : '';
-   
-    // console.log("homeLink",homeLink,item.url,item)
+
     const blur = 'https://ucarecdn.com/d26e44d9-5ca8-4823-9450-47a60e3287c6/al90.png';
     if (isTopic) {
-        let { catIcon, catName, tag, image, site_name, published_time, author, body,hasBody,slug }:
+        let { catIcon, catName, tag, image, site_name, published_time, author, body, hasBody, slug }:
             { catIcon: string, catName: string, tag: string, image: string, site_name: string, published_time: number, author: string, slug: string, body: any, hasBody?: boolean, ack?: boolean } =
             item ? item : { catIcon: '', catName: '', tag: '', image: '', site_name: '', published_time: '', author: '', body: '' };
-        // console.log("QWIKET:", { catIcon, catName, tag, image, site_name, published_time, author, body })
+
         if (!image)
             image = blur;
         if (!catIcon)
@@ -230,58 +228,32 @@ const Qwiket = ({ extraWide, isRight,item, isTopic, qType, singlePanel, fullPage
             id?: string;
         }
         let bodyBlocks: Array<ReactNode> | null = null;
-        let AckBlock:ReactNode=null;
+        let AckBlock: ReactNode = null;
         if (body) {
             bodyBlocks = body.map((b: BodyBlock) => {
                 return (b.type == "twitter" && b.id) ? <TweetEmbedContainer><TweetEmbed><TwitterTweetEmbed tweetId={b.id} placeholder="Loading a Tweet..." /*options={{theme:session.dark?'dark':'light'}}*/ /></TweetEmbed></TweetEmbedContainer> : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{b.content}</ReactMarkdown>
             })
         }
-        if(!body&&hasBody){
-            
-            AckBlock=<>{openDialog?<BodySnatcher mutate={mutate} setAckOverride={setAckOverride} setOpenDialog={setOpenDialog} tag={tag} slug={slug}/>:<a onClick={()=>setOpenDialog(true)}>See more....</a>}</>
+        if (!body && hasBody) {
+
+            AckBlock = <>{openDialog ? <BodySnatcher mutate={mutate} setAckOverride={setAckOverride} setOpenDialog={setOpenDialog} tag={tag} slug={slug} /> : <a onClick={() => setOpenDialog(true)}>See more....</a>}</>
         }
- 
-/*
-        const swipe = (position: any, event: any, type: string) => {
-            console.log("swipe", position, event, type);
-            if (position.x > 15 && position.y < 5 && position.y > -5) {
-                console.log("RIGHT SWIPE")
-                router.push(item.url);
-                //rotate(type, 1)
-            }
-            if (position.x < -15 && position.y < 5 && position.y > -5) {
-                console.log("LEFT SWIPE")
-                router.back();
-            }
-        }
-         return <Swipe onSwipeMove={(position, event) => swipe(position, event, qparams.type)}><VerticalWrap isTopic={isTopic} singlePanel={singlePanel} >
-             <Row key="r1"><Link href={homeLink} legacyBehavior><a rel="nofollow"><PubImageBox><PubImage loud={session.loud} isTopic={isTopic} placeholder={"blur"} sizes="(max-width: 768px) 100vw,
-               (max-width: 2200px) 50vw, 33vw"      src={catIcon} alt={catName} /></PubImageBox></a></Link>
-                 <Right><Link href={homeLink} legacyBehavior><a rel="nofollow"><SiteName isTopic={isTopic}>{site_name}</SiteName></a></Link><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right></Row>
-             {author ? <Row>{author}</Row> : null}
-             <Row key="r2"><Link href={item.url} legacyBehavior><a rel="nofollow"><Title isTopic={isTopic}>{title}</Title></a></Link></Row>
-             <Row key="3.1"><Link href={item.url} legacyBehavior><a rel="nofollow">{item.url}</a></Link></Row>
-             <Row key="r3"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage sizes="(max-width: 768px) 100vw,
-               (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={blur} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
-           
-             <Row key="r4"><Body>{bodyBlocks ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml : description}</ReactMarkdown>}</Body></Row>
- 
-         </VerticalWrap></Swipe>*/
+
         return <VerticalWrap isTopic={isTopic} singlePanel={singlePanel} >
             <Row key="r1"><Link href={homeLink} legacyBehavior><a rel="nofollow"><PubImageBox><PubImage loud={session.loud} isTopic={isTopic} placeholder={"blur"} sizes="(max-width: 768px) 100vw,
            (max-width: 2200px) 50vw, 33vw"      src={catIcon} alt={catName} /></PubImageBox></a></Link>
                 <Right><Link href={homeLink} legacyBehavior><a rel="nofollow"><SiteName isTopic={isTopic}>{site_name}</SiteName></a></Link><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right></Row>
             {author ? <Row>{author}</Row> : null}
             <Row key="r2"><Link href={itemUrl} legacyBehavior><a rel="nofollow"><Title isTopic={isTopic}>{title}</Title></a></Link></Row>
-           <PleaseRead>Please click below to read the article on the original site before commenting:</PleaseRead> 
-            <hr/>
+            <PleaseRead>Please click below to read the article on the original site before commenting:</PleaseRead>
+            <hr />
             <Row key="3.1"><Link href={itemUrl} legacyBehavior><a rel="nofollow">{item.url}</a></Link></Row>
-            <hr/>
+            <hr />
             <Row key="r3"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage sizes="(max-width: 768px) 100vw,
            (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={blur} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
             <Share><RWebShare
                 data={{
-                    text:description,
+                    text: description,
                     url: `/${qparams.forum}/topic/${tag}/${slug}`,
                     title,
                 }}
@@ -291,29 +263,29 @@ const Qwiket = ({ extraWide, isRight,item, isTopic, qType, singlePanel, fullPage
             </RWebShare>
             </Share>
             <Row key="r4"><Body>{bodyBlocks ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml : description}</ReactMarkdown>}</Body></Row>
-            {AckBlock}           
+            {AckBlock}
         </VerticalWrap>
     }
     else if (isReact) {
         let { id, author_avatar, tag, catName, catIcon, author_name, postBody, subscr_status, createdat, thread_author, thread_title, thread_description, thread_url, slug } = item;
         const { diff, timeString } = TimeDifference(createdat, qparams.timestamp)
-      //  console.log("reqwiket:",{ id, author_avatar, tag, catName, catIcon, author_name, postBody, subscr_status, createdat, thread_author, thread_title, thread_description, thread_url, slug})
+
         return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/${id}/#comment-${id}`} legacyBehavior><a rel="nofollow">
             <VerticalWrap isTopic={isTopic} isRight={isRight}>
-            <Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
+                <Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
           (max-width: 2200px) 50vw, 33vw"      placeholder={"blur"} src={catIcon} alt={catName} width={28} height={28} /></PubImageBox>
-                {qType == 'mix' ? <Comment>comment</Comment> : null}<Author>{thread_author ? thread_author : catName}</Author></Row>
-            <Row key="r2"><Title isTopic={isTopic}>{thread_title}</Title></Row>
-            <Row key="r3"><Description><Markdown>{description}</Markdown></Description></Row>
-            <Row key="r4"><AvatarBox><Avatar placeholder={"blur"} src={author_avatar.indexOf('http') < 0 ? `https:${author_avatar}` : author_avatar} alt={author_name} /></AvatarBox>
-            <AuthorPoster>{author_name}</AuthorPoster>
-            <StarContainer><Star level={subscr_status} size={16}/></StarContainer> 
-            <TimeSince isTopic={isTopic}>{timeString}</TimeSince></Row>
-            <Row key="r5">
-                <Markdown>{`<div style="width:100%;">${postBody}</div>`}</Markdown>
+                    {qType == 'mix' ? <Comment>comment</Comment> : null}<Author>{thread_author ? thread_author : catName}</Author></Row>
+                <Row key="r2"><Title isTopic={isTopic}>{thread_title}</Title></Row>
+                <Row key="r3"><Description><Markdown>{description}</Markdown></Description></Row>
+                <Row key="r4"><AvatarBox><Avatar placeholder={"blur"} src={author_avatar.indexOf('http') < 0 ? `https:${author_avatar}` : author_avatar} alt={author_name} /></AvatarBox>
+                    <AuthorPoster>{author_name}</AuthorPoster>
+                    <StarContainer><Star level={subscr_status} size={16} /></StarContainer>
+                    <TimeSince isTopic={isTopic}>{timeString}</TimeSince></Row>
+                <Row key="r5">
+                    <Markdown>{`<div style="width:100%;">${postBody}</div>`}</Markdown>
                 </Row>
 
-        </VerticalWrap></a></Link>
+            </VerticalWrap></a></Link>
     }
     else {
         let { catIcon, catName, tag, image, site_name, published_time, author, slug }: { catIcon: string, catName: string, tag: string, image: string, site_name: string, published_time: number, author: string, slug: string } = item;
@@ -321,7 +293,6 @@ const Qwiket = ({ extraWide, isRight,item, isTopic, qType, singlePanel, fullPage
             catIcon = blur;
         }
         const { diff, timeString } = TimeDifference(published_time, qparams.timestamp);
- 
         if (slug == 'loading') {
             return <Link href={`/${qparams.forum}/topic/${tag}/${slug}${qparams.layoutNumber != 'l1' ? '/' + qparams.layoutNumber : ''}`} legacyBehavior><a rel="nofollow"><VerticalWrap isTopic={isTopic}>
                 <Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
@@ -331,20 +302,18 @@ const Qwiket = ({ extraWide, isRight,item, isTopic, qType, singlePanel, fullPage
                 <Row key="r2"><Title isTopic={isTopic}>{title}</Title></Row>
                 <Row key="r3"><Markdown  >{'The Internet of Us'}</Markdown></Row>
                 <Row key="r4" ><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage placeholder={"blur"} blurDataURL={blur} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
-
             </VerticalWrap></a></Link>
         }
         return <Link href={`/${qparams.forum}/topic/${tag}/${slug}${qparams.layoutNumber != 'l1' ? '/' + qparams.layoutNumber : ''}`} legacyBehavior><a rel="nofollow">
             <VerticalWrap isTopic={isTopic} isTag={isTag} diff={diff} isRight={isRight}>
-            <Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} style={{ height: '38', width: 'auto' }} sizes="(max-width: 768px) 100vw,
+                <Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} style={{ height: '38', width: 'auto' }} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"       placeholder={"blur"} src={catIcon} alt={catName} /></PubImageBox>
-                <Right><SiteName isTopic={isTopic}>©{site_name}</SiteName><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right> </Row>
-            {author ? <Row>{author}</Row> : null}
-            <Row key="r2"><Title isTopic={isTopic}>{title}</Title></Row>
-            <Row key="r3"><Markdown  >{description}</Markdown></Row>
-            <Row key="r4"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage placeholder={"blur"} blurDataURL={blur} style={{ maxWidth: "100%", height: "100%", objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
-
-        </VerticalWrap></a></Link>
+                    <Right><SiteName isTopic={isTopic}>©{site_name}</SiteName><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right> </Row>
+                {author ? <Row>{author}</Row> : null}
+                <Row key="r2"><Title isTopic={isTopic}>{title}</Title></Row>
+                <Row key="r3"><Markdown  >{description}</Markdown></Row>
+                <Row key="r4"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage placeholder={"blur"} blurDataURL={blur} style={{ maxWidth: "100%", height: "100%", objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
+            </VerticalWrap></a></Link>
     }
 }
 export default Qwiket;

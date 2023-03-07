@@ -1,3 +1,4 @@
+// ./components/globalstyles.ts
 import { createGlobalStyle, css } from 'styled-components'
 
 const lightValues = css`
@@ -39,13 +40,11 @@ const darkValues = css`
 
 `;
 
-
 const GlobalStyle = createGlobalStyle`
   html,
   body {
     ${lightValues}
     
-   
     @media (prefers-color-scheme: dark) {
         ${darkValues}
     }
@@ -61,8 +60,6 @@ const GlobalStyle = createGlobalStyle`
     color:var(--text);
     padding: 0;
     margin: 0;
-  
- 
   }
   a {
     color: inherit;
@@ -70,7 +67,6 @@ const GlobalStyle = createGlobalStyle`
   }
   * {
     box-sizing: border-box;
-
   }
   figure {
     display: block;
@@ -80,35 +76,5 @@ const GlobalStyle = createGlobalStyle`
     margin-inline-end: 0px;
 }
   
-  
 `
-/*
-:root{
-    ${lightValues}
-    
-    @media (prefers-color-scheme: dark) {
-        ${darkValues}
-    }
-    [data-theme="light"] {
-        ${lightValues}
-    }
-    [data-theme="dark"] {
-        ${darkValues}
-    }  
-    background-color:var(--background);
-  }
-  */
 export default GlobalStyle
-/*
-:root {
-    ${lightValues}
-    [data-theme="dark"] {
-      ${darkValues}
-    }
-    &.no-js {
-      @media (prefers-color-scheme: dark) {
-        ${darkValues}
-      }
-    }
-  }
-  */

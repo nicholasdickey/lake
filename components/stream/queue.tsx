@@ -1,3 +1,4 @@
+// ./components/stream/queue.tsx
 import React, { useState, useEffect, useRef, useCallback, useMemo, ReactComponentElement, ReactElement } from "react";
 import useSWR from 'swr';
 import styled from 'styled-components';
@@ -17,7 +18,6 @@ const ColumnHeader = styled.div`
     width:100%;
     z-index:151; 
 `
-
 const LeftHeader = styled.div`
     margin-top:-7px;
     color:#eee;//var(--highlight);
@@ -40,14 +40,13 @@ const LeftHeader = styled.div`
     &:hover {
         background:var(--lowlight);  
         color:var(--text);
-  }
-    
+  }  
 `
+
 const QueueWrap = styled.div`
     user-select: none;
     margin-left:0px;
-    margin-right:0px;
-   
+    margin-right:0px;   
 `
 
 const Notifications = ({ isLeft, qType, newsline, forum, lastid, tail, sessionid, userslug, reset, tag, ...props }:
@@ -68,7 +67,7 @@ const Notifications = ({ isLeft, qType, newsline, forum, lastid, tail, sessionid
         if (reset)
             setTimeout(() => { reset() }, 1);
     }
-    // console.log("Notifications Remder",qType,name,isLeft,data)
+
     return <ColumnHeader>{qType != 'topics' && +notifications > 0 ? <LeftHeader onClick={onClick}>Show {notifications} New {itemName}</LeftHeader> : <div />}</ColumnHeader>
 }
 
@@ -84,31 +83,23 @@ const Segment = ({ card,  extraWide, qType, lastid,isRight,  pageIndex}: {
 }) => {
     const { session, qparams } = useAppContext();
     const key: FetchQueueKey["key"] = ['queue', qType, qparams.newsline, qType == 'newsline' && qparams.type == 'solo' ? 1 : 0, qparams.forum, (qType == 'tag' || qType == 'newsline' && qparams.type == 'solo') ? qparams.tag : '', pageIndex, lastid, session.sessionid, session.userslug, 0, '', '', 0, card];
-   // if(qType=='topics')
-   //     console.log("Segment before fetchQueue", { qType, pageIndex,lastid})
+
     const { data, error: queueError, mutate } = useSWR(key, fetchQueue, {
         revalidateIfStale: false,
         revalidateOnFocus: false
     });
     const ref = useRef<HTMLDivElement | null>(null)
     const entry = useIntersectionObserver(ref, {})
-    if (entry && entry.boundingClientRect.top > 0) {
-        //console.log("entry BELOW", qType) // do things if below
-    } else {
-        // console.log("dbgi: entry ABOVE", qType) // do things if above
-    }
+    
     const isVisible = !!entry?.isIntersecting || entry && entry.boundingClientRect.top < 0
   
     let segment=null;
     if (data && isVisible&&data.success==true&&data.items.length>0) {
-        if(qType=='topics')
-        console.log("Creating a new segment ",pageIndex)
         segment=<Segment card={card} extraWide={extraWide} qType={qType} lastid={lastid} isRight={isRight} pageIndex={pageIndex+1}/>
     }
     else {
         console.log("No data or not visible segment yet",{data,isVisible})
     }
-   // console.log("*** Segment data:",data);
     return <div className="other-segments" ref={ref}>
         {data?.items?.map((item: any) => <Qwiket key={`queue-qwiket-${qType}-${item.slug}-${item.qpostid}`} extraWide={extraWide} isRight={isRight} item={item} isTopic={false} qType={qType}></Qwiket>)}
         {segment}
@@ -120,19 +111,15 @@ const Queue = ({ qType, isLeft, card,visible,isRight,extraWide }: { visible: boo
     const { session,qparams } = useAppContext();
     const [lastid,setLastid]=useState('');
     const [tail,setTail]=useState(0)
-    // console.log("d1b: **********************************  dbg q: queue remder", guid, props.card, qType, 'visible:', props.visible)
+
     qType = isLeft ? session.leftColumnOverride || qType : qType;
     const pageIndex=0;
     const key: FetchQueueKey["key"] = ['queue', qType, qparams.newsline, qType == 'newsline' && qparams.type == 'solo' ? 1 : 0, qparams.forum, (qType == 'tag' || qType == 'newsline' && qparams.type == 'solo') ? qparams.tag : '', pageIndex, '0', session.sessionid, session.userslug, 0, '', '', 0, card];
 
-    // console.log("d1b remder FirstSegment:", { fsGuid,guid,visible, card, type: qparams.type, key, qType, pageIndex, returnedLastid, returnedTail, isLeft })
     const onData = useCallback((data: any, key: string, config: any) => {
-        // console.log("dbg onData FirstSegment segments onData fetchQueue remder", { isLeft, qType, newLastid: data.lastid, lastid, returnedLastid, newTail: data.tail, key, items: data?.items })
         if (data) {
-            // console.log(`d1b: OnData FirstSegment`, data);
             setLastid(data.lastid);
             setTail(+data.tail);
-            //  console.log("remder first segment. got new lastid", qType, data.lastid, lastid)
         }
     }, []);
     const { data, error: queueError, mutate } = useSWR(key, fetchQueue, {
@@ -143,11 +130,6 @@ const Queue = ({ qType, isLeft, card,visible,isRight,extraWide }: { visible: boo
     const items = data?.items;
     const ref = useRef<HTMLDivElement | null>(null)
     const entry = useIntersectionObserver(ref, {})
-    if (entry && entry.boundingClientRect.top > 0) {
-        // console.log("entry BELOW",qType) // do things if below
-    } else {
-        //console.log("dbgi: entry ABOVE",qType) // do things if above
-    }
     const isVisible = !!entry?.isIntersecting || entry && entry.boundingClientRect.top < 0
 
     const onScroll = useCallback(() => {
@@ -167,11 +149,9 @@ const Queue = ({ qType, isLeft, card,visible,isRight,extraWide }: { visible: boo
 
     useEffect(() => {
         if (visible) {
-            // console.log("d1b: Add onScroll listener",visible)
             window.addEventListener("scroll", onScroll, { passive: true });
         }
         else {
-            //console.log("d1b: Remove onScroll listener",visible)
             window.removeEventListener("scroll", onScroll);
         }
 
@@ -195,8 +175,7 @@ const Queue = ({ qType, isLeft, card,visible,isRight,extraWide }: { visible: boo
        }
         return <div ref={ref}><Qwiket key={`fallback-qwiket-${qType}-${item.slug}`} extraWide={extraWide} item={item} isTopic={false} isRight={isRight} qType={qType}></Qwiket></div>
     }
-    // console.log(`d1b: FFFirstSegment`, { fsGuid,lastid: returnedLastid, tail: returnedTail, card, qType, visible, guid, isVisible, blah: 'blah' })
-    return (<div ref={ref}>
+   return (<div ref={ref}>
         {qType != 'topics' ? <Notifications isLeft={isLeft} qType={qType} newsline={qparams.newsline} forum={qparams.forum} lastid={lastid} tail={tail} sessionid={session.sessionid} userslug={session.userslug} reset={reset} tag={qType == 'tag' ? qparams.tag : ''} /> : null}
         {items.map((item: any) => <Qwiket key={`queue-qwiket-${qType}-${item.slug}-${item.qpostid}`} isRight={isRight} extraWide={extraWide} item={item} isTopic={false} qType={qType}></Qwiket>)}
         {segment}

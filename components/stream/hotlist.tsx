@@ -1,3 +1,4 @@
+// ./components/stream/hotlist.tsx
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import styled from 'styled-components';
 import useSWR from 'swr';

@@ -201,7 +201,7 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
   }, [custom])
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth != session.width)
+      if (session&& window.innerWidth != session.width)
         resize(window.innerWidth)
     }
     window.addEventListener('resize', handleResize);

@@ -2,31 +2,17 @@ import React from "react"
 import Error from 'next/error'
 
 import Common from "../components/common"
-import Bowser from "bowser";
+import {GetServerSidePropsContext} from "next";
 import { SWRConfig, unstable_serialize } from 'swr'
-import axios from 'axios';
+import Bowser from "bowser";
+
 import {
-    fetchChannelConfig, fetchChannelLayout, fetchUser, fetchMyNewsline, fetchPublications,
-    fetchPublicationCategories, fetchPublicationsKey, fetchMyNewslineKey, Filters,
+    fetchChannelConfig, fetchChannelLayout, fetchUser,fetchSitemap,
     fetchAllSitemaps,fetchChannelLayoutKey, fetchTopic, FetchTopicKey, processLoginCode, initLoginSession, getUserSession
 } from '../lib/lakeApi';
-import { withSessionSsr } from '../lib/withSession';
-import { fetchQueues } from '../lib/ssrQueueFetches';
-import { Options } from '../lib/withSession';
-import Config from '../lib/config';
+import { withSessionSsr, Options } from '../lib/withSession';
 import shallowEqual from '../lib/shallowEqual';
 import { Qparams } from '../lib/qparams'
-import {
-    GetServerSidePropsContext,
-    GetServerSidePropsResult,
-    NextApiHandler,
-    GetServerSideProps
-} from "next";
-import { stringify } from "querystring";
-import { networkInterfaces } from "os";
-import {
-    fetchSitemap
-} from '../lib/lakeApi';
 import {isbot} from '../lib/isbot'
 
 interface HomeProps {
@@ -40,7 +26,6 @@ interface HomeProps {
         image?: string,
         publishedTime?: number;
         url?: string;
-
     },
     error?: number
 }
@@ -64,25 +49,24 @@ export default function Home({ session, qparams, fallback, meta, error }: HomePr
 
 export const getServerSideProps = withSessionSsr(
     async function getServerSideProps(context: GetServerSidePropsContext): Promise<any> {
-
         let host = context.req.headers.host || "";
-       
+        
+        //TODO: add a header to the load balancer to pass correct host
         if(host=='cloud.digitalocean.com')
             host='american-outdoorsman.news';
-        console.log("HOST==>:", host)
+        
+        //Disqus OAuth callback params:
         const { code, state }: { code: string, state: string } = context.query as any;
-        // parse dynamic params:
+        
         let ssr = context.params?.ssr as string[];
         if (!ssr)
             ssr = [`${process.env.DEFAULT_FORUM}`];
-        let [forum] = ssr || [''];
-
-        console.log("FORUM:", forum)
+        let [forum] = ssr;
+        
+        // Sitemap handling:
         if (forum.indexOf("sitemap") == 0 && forum.indexOf(".txt") >= 0) {
-            // console.log("params:",context.params)
             const filename = forum.split(".")[0];
             const parts = filename.split('_');
-            console.log('parts:', JSON.stringify(parts))
             const host = context.req.headers.host || "";
             let [dummy, newsline, forumR, startDate] = parts;// context.params?.startDate as string[];
             const topics = await fetchSitemap(newsline, startDate);
@@ -91,8 +75,8 @@ export const getServerSideProps = withSessionSsr(
             context.res.end();
             return { props: {} }
         }
+        //robots.txt handling:
         if (forum.indexOf("robots.txt") == 0) {
-            // console.log("params:",context.params)
             const sitemaps = await fetchAllSitemaps(process.env.DEFAULT_NEWSLINE||'', process.env.DEFAULT_FORUM||'');
             const robots = sitemaps.map((t: any) => `Sitemap:  ${t}`).join('\n')
             context.res.write(robots);//.split(',').map(t=>`${t}\n`));
@@ -100,15 +84,13 @@ export const getServerSideProps = withSessionSsr(
             return { props: {} }
         }
 
-
+        // everything else needs to be given 404 to satisfy Google Search
         if (forum != process.env.DEFAULT_FORUM) {
             context.res.statusCode = 404;
             return { props: { error: 404 } }
         }
-        let type = ssr[1];
-        if (!type)
-            type = 'newsline';
-        console.log("TYPE:", type)
+        let type = ssr[1]||'newsline';
+        
         const tag = (type == 'topic' || type == 'home' || type == 'solo') ? ssr[2] : "";
         let threadid = (type == 'topic' || type == 'home') ? ssr[3] : "";
         if (!threadid)

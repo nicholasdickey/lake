@@ -305,20 +305,19 @@ const DatelineBand = ({ channelSlug, channelDetails, user, updateSession }) => {
                     </SubTitle> :
                     <HorizWrap>
                         <SubTitle><Home><Link href={'/'}><UilNewspaper size="16" color="#888" /></Link></Home>
-                            <a onClick={() => logout(updateSession)}>
+                            <a onClick={async () => await logout(updateSession)}>
                                 Sign Out
                             </a>
                         </SubTitle>
-                        {!(subscr_status!=5) ? <SubTitle>
+                        {+subscr_status==5 ?null: <SubTitle>
                             | 
-                        </SubTitle> :  
-                 null  }
-                        <SubTitle>  <div> </div> {`${isLoggedIn ? approver ? '[' + name + ']' : name : 'Subscribe'}`}<StarContainer><Star level={subscr_status} size={16}/></StarContainer>  
+                        </SubTitle>}
+                        <SubTitle>  {`${isLoggedIn ? approver ? '[' + name + ']' : name : 'Subscribe'}`}<StarContainer><Star level={subscr_status} size={16}/></StarContainer>  
                        
                             <Link onClick={()=>console.log("lacantina click")} href={lacantinaUrl}>
                                 <Martini>
                                     <UilGlassMartiniAlt size="16" color="#888" />
-                                    <Unpublish><Link onClick={async ()=>{await unpublish(qparams.threadid,qparams.tag);console.log("unpublish");}} href={'#'}><UilNewspaper size="16" color="red" /></Link></Unpublish>
+                                    {subscr_status==5?<Unpublish><Link onClick={async ()=>{await unpublish(qparams.threadid,qparams.tag);console.log("unpublish");}} href={'#'}><UilNewspaper size="16" color="red" /></Link></Unpublish>:null}
                  
                                 </Martini>
                                 

@@ -5,7 +5,7 @@ import {
 } from "next";
 import {
   fetchTopic, FetchTopicKey
-} from '../../lib/lakeApi';
+} from '../../lib/lake-api';
 
 //this is legacy migration and redirect page
 export default function Home({ }) {

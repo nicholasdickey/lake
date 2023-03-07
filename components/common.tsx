@@ -6,8 +6,8 @@ import useSWRImmutable from 'swr/immutable'
 import styled from 'styled-components';
 import { ThemeProvider, DefaultTheme } from 'styled-components'
 import axios from 'axios';
-import { fetchChannelConfig, fetchChannelLayout, fetchChannelLayoutKey } from '../lib/lakeApi';
-import { Options } from '../lib/withSession';
+import { fetchChannelConfig, fetchChannelLayout, fetchChannelLayoutKey } from '../lib/lake-api';
+import { Options } from '../lib/with-session';
 import { Qparams } from '../lib/qparams';
 import { Topline } from './navigation/topline';
 import { Header } from './navigation/header';

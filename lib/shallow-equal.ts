@@ -1,4 +1,4 @@
-
+//./lib/shallow-equal.ts
 function shallowEqual(object1:any, object2:any) {
     const keys1 = Object.keys(object1);
     const keys2 = Object.keys(object2);

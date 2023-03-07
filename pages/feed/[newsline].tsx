@@ -7,7 +7,7 @@ import {
 } from "next";
 import {
     fetchQueue, fetchChannelConfig, FetchQueueKey,
-} from '../../lib/lakeApi';
+} from '../../lib/lake-api';
 
 export default function Home({ items, channelDetails, host, forum }: { channelDetails: any, items: any[], host: string, forum: string }) {
     const header = `<?xml version="1.0" encoding="UTF-8" ?>  

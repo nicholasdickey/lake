@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import styled from 'styled-components';
 import useSWR from 'swr';
 import { Qparams } from '../../lib/qparams'
-import { Options } from '../../lib/withSession';
-import { fetchQueue } from '../../lib/lakeApi';
+import { Options } from '../../lib/with-session';
+import { fetchQueue } from '../../lib/lake-api';
 import NextImage from 'next/image';
 import Link from 'next/link';
 

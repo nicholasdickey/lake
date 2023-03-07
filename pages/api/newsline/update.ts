@@ -1,7 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { withSessionRoute, Options } from "../../../lib/withSession";
-
+import { withSessionRoute, Options } from "../../../lib/with-session";
 import axios from 'axios'
 
 const API_KEY = process.env.API_KEY;
@@ -25,20 +24,19 @@ async function handler(
         return;
     }
     let options: Options = req.session.options ? req.session.options : ({ width: 0} as Options);
-    console.log("inside newsline update handler",req.body)
   
     const {newsline,tag,switch:switchParam}:{newsline:string,tag:string,switch:string} = req.body;
     if(!options.sessionid)
-        options.sessionid=randomstring();  //means there is server footprint for this session
+        options.sessionid=randomstring(); 
     const userslug=options.userslug||"";
     const sessionid=options.sessionid;
     
-    req.session.options = options;//Object.assign(options, );
+    req.session.options = options;
 
     await req.session.save();
 
     const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/newsline/update?navigator=1`
-   // console.log("calling lakeApi fetchNAvigator, ", url)
+   
     let result;
     try {
         result = await axios.post(url, {
@@ -46,12 +44,13 @@ async function handler(
           sessionid,
           userslug,
           tag,
-          switch:switchParam
+          switch:switchParam,
+          api_key:API_KEY
        })
     }
     catch(x){
         console.log(x)
     }
-    console.log("API got result from lake-api:",result?.data)
+ 
     res.status(200).json(result?.data)
 }

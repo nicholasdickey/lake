@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { LayoutRes } from './layoutRes'
-import getLayoutWidth from '../../lib/layoutWidth'
-import { Options } from '../../lib/withSession';
+import getLayoutWidth from '../../lib/layout-width'
+import { Options } from '../../lib/with-session';
 import { Qparams } from '../../lib/qparams';
 
 const OuterWrapper = styled.div`

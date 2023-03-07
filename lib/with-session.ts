@@ -1,3 +1,4 @@
+//./lib/with-session.ts
 import { withIronSessionApiRoute, withIronSessionSsr } from "iron-session/next";
 import {
     GetServerSidePropsContext,
@@ -14,7 +15,6 @@ declare module "iron-session" {
         };
     }
 }
-
 const sessionOptions = {
     password: process.env.IRON_PASSWORD as string,
     cookieName: "lake",

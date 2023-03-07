@@ -1,3 +1,4 @@
+//./lib/stripe-helpers.ts
 export function formatAmountForDisplay(
     amount: number,
     currency: string

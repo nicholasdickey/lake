@@ -7,9 +7,9 @@ import Bowser from "bowser";
 import {
     fetchChannelConfig, fetchChannelLayout, fetchUser,fetchSitemap,
     fetchAllSitemaps,fetchChannelLayoutKey, fetchTopic, FetchTopicKey, processLoginCode, initLoginSession, getUserSession
-} from '../lib/lakeApi';
-import { withSessionSsr, Options } from '../lib/withSession';
-import shallowEqual from '../lib/shallowEqual';
+} from '../lib/lake-api';
+import { withSessionSsr, Options } from '../lib/with-session';
+import shallowEqual from '../lib/shallow-equal';
 import { Qparams } from '../lib/qparams'
 import {isbot} from '../lib/isbot'
 

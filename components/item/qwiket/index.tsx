@@ -2,12 +2,12 @@ import React, { useState, useEffect, useCallback, ReactFragment, ReactNode } fro
 import { useRouter } from 'next/router'
 import styled from 'styled-components';
 import NextImage from 'next/image';
-import TimeDifference from '../../../lib/timeDifference'
+import TimeDifference from '../../../lib/time-difference'
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { useAppContext } from "../../../lib/context";
 import Link from 'next/link'
-import { TwitterTweetEmbed } from 'react-twitter-embed';
+import { TwitterTweetEmbed } from 'react-twitter-embed'; 
 import Markdown from 'markdown-to-jsx'
 import {BodySnatcher} from './body-snatcher';
 import {Star} from '../../widgets/star'

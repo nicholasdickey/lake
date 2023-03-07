@@ -1,12 +1,12 @@
 import { useRouter } from 'next/router'
 import { useCallback, useState } from "react";
 import styled from 'styled-components';
-import { Options } from '../../lib/withSession';
+import { Options } from '../../lib/with-session';
 import { Qparams } from '../../lib/qparams';
 import Link from 'next/link'
 import useSWR, { useSWRConfig } from 'swr';
 import useSWRImmutable from 'swr/immutable'
-import { fetchMyNewsline, fetchPublications, fetchPublicationCategories, updateMyNewsline, updatePublications, fetchPublicationsKey, fetchMyNewslineKey, Filters } from '../../lib/lakeApi';
+import { fetchMyNewsline, fetchPublications, fetchPublicationCategories, updateMyNewsline, updatePublications, fetchPublicationsKey, fetchMyNewslineKey, Filters } from '../../lib/lake-api';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import NextImage from 'next/image';

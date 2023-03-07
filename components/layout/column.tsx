@@ -3,7 +3,7 @@ import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import Swipe from "react-easy-swipe";
 import { Qparams } from '../../lib/qparams';
-import { Options } from '../../lib/withSession'
+import { Options } from '../../lib/with-session'
 import Queue from '../stream/queue';
 import Navigator from '../navigation/navigator';
 import Topic from '../item/topic';

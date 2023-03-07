@@ -3,7 +3,7 @@ import React from "react"
 import {
     GetServerSidePropsContext
 } from "next";
-import { fetchTopic, FetchTopicKey } from '../../../lib/lakeApi';
+import { fetchTopic, FetchTopicKey } from '../../../lib/lake-api';
 
 //legacy disqus links redirect page
 export default function Home({ }) {

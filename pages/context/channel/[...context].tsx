@@ -5,7 +5,7 @@ import {
     GetServerSidePropsResult,
 
 } from "next";
-import {fetchTopic,FetchTopicKey} from '../../../lib/lakeApi';
+import {fetchTopic,FetchTopicKey} from '../../../lib/lake-api';
 
 //migrate and redirect legacy topic pages
 export default function Home({  }) {

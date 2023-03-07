@@ -1,4 +1,4 @@
-
+//./lib/layout-width.ts
 const getLayoutWidth = (width: number) => {
     if(width<600)
     width=600

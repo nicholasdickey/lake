@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo, ReactComponentElement, ReactElement } from "react";
 import useSWR from 'swr';
 import styled from 'styled-components';
-import { fetchQueue, FetchQueueKey } from '../../lib/lakeApi';
+import { fetchQueue, FetchQueueKey } from '../../lib/lake-api';
 import Qwiket from '../item/qwiket'
-import useIntersectionObserver from '../../lib/useIntersectionObserver'
+import useIntersectionObserver from '../../lib/use-intersection-observer'
 import { useAppContext } from "../../lib/context";
 
 //this is for ease of debugging, to provide guids to elements

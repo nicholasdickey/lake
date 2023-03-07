@@ -1,3 +1,4 @@
+//./lib/qparams.ts
 export interface Qparams {
     custom: boolean,
     channel?: string,

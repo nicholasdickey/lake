@@ -1,3 +1,4 @@
+//./lib/palette.ts
 export const palette = {
     light: {
         colors: {
@@ -18,7 +19,6 @@ export const palette = {
                 "#B0BEC5", //bluegrey[200]
                 "#FF6F00", //amber[900]
                 "#B71C1C"  //red[900]
-
             ]
         }
     },
@@ -41,9 +41,7 @@ export const palette = {
                 "#B0BEC5", //bluegrey[200]
                 "#FF6F00", //amber[900]
                 "#B71C1C"  //red[900]
-
             ]
         }
     },
-
 }

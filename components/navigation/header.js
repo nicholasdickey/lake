@@ -5,14 +5,13 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import Image from 'next/image'
-import { fetchUser,getOnlineCount,unpublish } from '../../lib/lakeApi';
+import { fetchUser,getOnlineCount,unpublish } from '../../lib/lake-api';
 import Lowline from './lowline';
 import { UilGlassMartiniAlt,UilUsersAlt } from '@iconscout/react-unicons'
 import { Playfair_Display } from '@next/font/google';
 import { useAppContext } from "../../lib/context";
 import {Star} from "../widgets/star"
 
-const isBrowser = () => typeof window !== `undefined`
 //import Menu from '@material-ui/core/Menu';
 //import MenuItem from '@material-ui/core/MenuItem';
 

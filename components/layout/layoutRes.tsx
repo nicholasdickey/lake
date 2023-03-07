@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import {Column} from './column';
 import Hotlist from '../stream/hotlist';
 import { Qparams } from '../../lib/qparams';
-import { Options } from '../../lib/withSession';
+import { Options } from '../../lib/with-session';
 let VerticalWrap=styled.div`
 width:100%;
 `

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, ReactFragment, ReactNode } from "react";
 import styled from 'styled-components';
 import StyledCheckbox from '../../widgets/checkbox';
-import { accept } from '../../../lib/lakeApi'
+import { accept } from '../../../lib/lake-api'
 import { useAppContext } from "../../../lib/context";
 import NextImage from 'next/image';
 

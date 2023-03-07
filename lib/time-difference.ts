@@ -1,13 +1,11 @@
+//./lib/time-difference.ts
 function timeConverter(time:number, timestamp:number) {
 
     let currentStamp = Date.now() / 1000 | 0;
     if (currentStamp <= timestamp + 10){
-      // console.log("using SSR timestamp")
         currentStamp = timestamp;
-    }
-        
+    }        
     let diff = currentStamp - time
-   // console.log({diff})
     if (diff < 0)
         diff = 0;
     let res;
@@ -16,24 +14,18 @@ function timeConverter(time:number, timestamp:number) {
             if (diff < 0)
                 diff = 0;
             res = `${diff}s`;
-
         }
         else if (diff < 3600) {
-           // console.log("less than hour")
             let d = Math.floor(diff / (60));
            
                 res = `${d}m`;
         }
         else if (diff < 3600 * 24) {
-           // console.log("less than day")
             let d = Math.floor(diff / (3600));
-           // console.log("d:",d)
-           
                 res = `${d}h`
         }
         else {
-            let d = Math.floor(diff / (3600 * 24));
-           
+            let d = Math.floor(diff / (3600 * 24));         
                 res = `${d}d`
         }
     }
@@ -48,7 +40,6 @@ function timeConverter(time:number, timestamp:number) {
         var sec = a.getSeconds();
         res = date + ' ' + month + ' ' + year + ' ' //+ hour + ':' + min + ':' + sec ;
     }
-   // console.log("returning",res)
     return {timeString:res,diff};
 }
 export default timeConverter;

@@ -91,13 +91,13 @@ export const getServerSideProps = withSessionSsr(
         
         let type = ssr[1]||'newsline';
         
-        const tag = (type == 'topic' || type == 'home' || type == 'solo') ? ssr[2] : "";
+        const tag = (type == 'topic' || type == 'home' || type == 'solo') ? ssr[2]||"" : "";
         
-        const threadid = (type == 'topic' || type == 'home') ? ssr[3] : ""||"";
+        const threadid = (type == 'topic' || type == 'home') ? ssr[3]||"" : ""||"";
        
-        const layoutNumber = ((type == 'topic' || type == 'home') ? ssr[4] : type == 'solo' ? ssr[3] : ssr[2]) || "l1";
+        const layoutNumber = ((type == 'topic' || type == 'home') ? ssr[4] : type == 'solo' ? ssr[3]||"l1" : ssr[2]) || "l1";
        
-        const navTab = ((type == 'newsline') ? ssr[3] : type == "solo" ? ssr[4] : 0) || 1;
+        const navTab = ((type == 'newsline') ? ssr[3] : type == "solo" ? ssr[4]||0 : 0) || 1;
        
         const cc = (type == 'topic' || type == 'home') ? ssr[5]||'' :'';
         
@@ -269,12 +269,12 @@ export const getServerSideProps = withSessionSsr(
        
         if (type == 'topic' || type == 'home') {
              //handle invalid topic slugs with 404 - google search requirement
-            const check=threadid.split('-slug-');
+            const check=threadid?.split('-slug-')||[];
             if(type=='topic'&&check.length<2&&threadid!='nro-is-moving-to-facebook-comments'){
                 context.res.statusCode = 404;
                 return { props: { error: 404 } }
             }
-            const key:FetchTopicKey= {threadid:qparams.threadid,withBody:1,userslug:options.userslug,sessionid:options.sessionid,tag:qparams.tag,ackOverride:qparams.isbot||qparams.isfb};
+            const key:FetchTopicKey= {threadid:qparams.threadid?qparams.threadid:'',withBody:1,userslug:options.userslug,sessionid:options.sessionid,tag:qparams.tag,ackOverride:qparams.isbot||qparams.isfb};
             try {
                 const topic = await fetchTopic(key);
                 //handle invalid slugs with 404:

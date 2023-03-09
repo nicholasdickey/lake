@@ -7,6 +7,7 @@ import { Options } from '../../lib/with-session';
 import { fetchQueue } from '../../lib/lake-api';
 import NextImage from 'next/image';
 import Link from 'next/link';
+import { Lexend_Tera } from "@next/font/google";
 
 
 const HotlistBox=styled.div<Loud>`
@@ -87,14 +88,17 @@ const SitenameBox=styled.div`
 `
 
 const HotlistItem=({ session, qparams,item,spaces }: { session: Options, qparams: Qparams,item:any,spaces:number}) => {
-   // console.log("Hotlist item",item)
+   let site_name=item.site_name.slice(0,64);
+   site_name=site_name.split(' - ')[0];
+   site_name=site_name.split('|')[0];
+
     return <ImageBox spaces={spaces} loud={session.loud} >
         <OpacityBox loud={session.loud}>
             <NextImage style={{objectFit:'cover'}} placeholder={"blur"} blurDataURL={'https://ucarecdn.com/d26e44d9-5ca8-4823-9450-47a60e3287c6/al90.png'} src={item.image} alt={item.title} fill={true} /></OpacityBox>
             <Link href={`/${qparams.forum}/topic/${item.tag}/${item.slug}${qparams.layoutNumber!='l1'?'/'+qparams.layoutNumber:''}`} legacyBehavior><a rel="nofollow"><OverlayBox loud={session.loud}>
             <TitleBox>{item.title.slice(0,64)}</TitleBox>
             <Hr/>
-            <SitenameBox>{item.site_name.slice(0,64)}</SitenameBox>
+            <SitenameBox>{site_name}</SitenameBox>
         </OverlayBox></a></Link></ImageBox>
 }
 const Hotlist = ({ session, qparams,spaces }: { session: Options, qparams: Qparams,spaces:number }) => {

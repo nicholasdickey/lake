@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"name": "nextjs13",
+			"path": ".."
+		},
+		{
+			"name": "qwiket-api",
+			"path": "../../../../var/www/qwiket-api"
+		},
+		{
+			"path": "../../q3server/spider"
+		}
+	],
+	"settings": {}
+}

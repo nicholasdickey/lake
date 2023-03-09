@@ -75,6 +75,7 @@ const Row = styled.div`
 const SiteName = styled.div<IsTopic>`
     font-size:${({ isTopic }) => isTopic ? 22 : 12}px;   
     margin-right:20px;
+    margin-left:20px;
 `
 
 const Author = styled.div`
@@ -138,7 +139,12 @@ const PubImage = styled.img<PubImageProps>`
     width:auto;
     opacity:${({ loud, isTopic }) => (loud || isTopic) ? 1.0 : .8};
     margin-bottom: 4px;
+    max-width:${({ isTopic }) => isTopic ? 240 : 120}px;   
+    @media(max-width:600px){
+        max-width:${({ isTopic }) => isTopic ? 180 : 90}px; 
+    }
 `
+
 const PubImageBox = styled.div`
     padding-top: 0px;
     margin-right: 16px;
@@ -238,6 +244,8 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
         }
         if (!title)
             title = 'Loading...';
+        if (site_name)
+            site_name = site_name.split('|')[0];
         const { diff, timeString } = TimeDifference(published_time, qparams.timestamp)
         let bodyHtml: string = '';
         interface BodyBlock {
@@ -248,7 +256,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
         let bodyBlocks: Array<ReactNode> | null = null;
         let AckBlock: ReactNode = null;
         if (body) {
-            bodyBlocks = body.map((b: BodyBlock,i:number) => {
+            bodyBlocks = body.map((b: BodyBlock, i: number) => {
                 return (b.type == "twitter" && b.id) ? <TweetEmbedContainer key={`twt-${i}`}><TweetEmbed><TwitterTweetEmbed tweetId={b.id} placeholder="Loading a Tweet..." /*options={{theme:session.dark?'dark':'light'}}*/ /></TweetEmbed></TweetEmbedContainer> : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{b.content}</ReactMarkdown>
             })
         }
@@ -310,12 +318,14 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
         if (catName?.indexOf('Liberty Daily') >= 0) {
             catIcon = blur;
         }
+        if (site_name)
+        site_name = site_name.split('|')[0];
         const { diff, timeString } = TimeDifference(published_time, qparams.timestamp);
         if (slug == 'loading') {
             return <Link href={`/${qparams.forum}/topic/${tag}/${slug}${qparams.layoutNumber != 'l1' ? '/' + qparams.layoutNumber : ''}`} legacyBehavior><a rel="nofollow"><VerticalWrap isTopic={isTopic}>
                 <Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"     placeholder={"blur"} src={blur} alt={'America First News'} /></PubImageBox>
-                    <Right><SiteName isTopic={isTopic}>©{'am1.news'}</SiteName><TimeSince isTopic={isTopic}>{0}</TimeSince></Right></Row>
+                    <Right><SiteName isTopic={isTopic}>{'am1.news'}</SiteName><TimeSince isTopic={isTopic}>{0}</TimeSince></Right></Row>
                 {author ? <Row>{author}</Row> : null}
                 <Row key="r2"><Title isTopic={isTopic}>{title}</Title></Row>
                 <Row key="r3"><Markdown  >{'The Internet of Us'}</Markdown></Row>
@@ -326,7 +336,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
             <VerticalWrap isTopic={isTopic} isTag={isTag} diff={diff} isRight={isRight}>
                 <Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} style={{ height: '38', width: 'auto' }} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"       placeholder={"blur"} src={catIcon} alt={catName} /></PubImageBox>
-                    <Right><SiteName isTopic={isTopic}>©{site_name}</SiteName><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right> </Row>
+                    <Right><SiteName isTopic={isTopic}>{site_name}</SiteName><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right> </Row>
                 {author ? <Row>{author}</Row> : null}
                 <Row key="r2"><Title isTopic={isTopic}>{title}</Title></Row>
                 <Row key="r3"><Markdown  >{description}</Markdown></Row>

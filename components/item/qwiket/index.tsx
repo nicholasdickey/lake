@@ -20,6 +20,7 @@ import { RWebShare } from "react-web-share";
 const StarContainer = styled.div`
     margin-top:-4px;
 `
+
 interface IsTopic {
     isTopic: boolean,
     isTag?: boolean,
@@ -27,6 +28,7 @@ interface IsTopic {
     singlePanel?: boolean,
     isRight?: boolean
 }
+
 const VerticalWrap = styled.div<IsTopic>`
     background:var(--background);
     border-color:${({ isTag, diff }) => (isTag && diff && (diff < 3600)) ? 'var(--qwiket-border-new) var(--qwiket-border-stale) var(--qwiket-border-new) var(--qwiket-border-new)' : isTag && diff && diff < 4 * 3600 ? 'var(--qwiket-border-recent) var(--qwiket-border-stale) var(--qwiket-border-recent) var(--qwiket-border-recent)' : 'var(--qwiket-border-stale)'};
@@ -49,6 +51,7 @@ const VerticalWrap = styled.div<IsTopic>`
     }
     border-right:${({ isRight }) => isRight ? 'solid 1px' : 'none'};
 `
+
 const Row = styled.div`
     display:flex;
     align-items: center;
@@ -68,22 +71,27 @@ const Row = styled.div`
         overflow:hidden;
      }    
 `
+
 const SiteName = styled.div<IsTopic>`
     font-size:${({ isTopic }) => isTopic ? 22 : 12}px;   
     margin-right:20px;
 `
+
 const Author = styled.div`
     margin-top:8px;
     font-size: 12px;   
     margin-right:4px;
 `
+
 const AuthorPoster = styled.div`
     font-size: 14px;   
 `
+
 const TimeSince = styled.div<IsTopic>`
     font-size:${({ isTopic }) => isTopic ? 14 : 10}px;
     margin-right:${({ isTopic }) => isTopic ? 0 : 4}px;   
 `
+
 const Title = styled.div<IsTopic>`
     line-height: 1.2;
     font-size: ${({ isTopic }) => isTopic ? 1.6 : 1.1}rem;  
@@ -93,9 +101,11 @@ const Title = styled.div<IsTopic>`
     width:100%;
     overflow-wrap:break-word;
 `
+
 const Description = styled.div`
     margin-bottom:2px;
 `
+
 interface ImageBoxProps {
     extraWide: boolean,
     loud: number,
@@ -114,6 +124,7 @@ const ImageBox = styled.div<ImageBoxProps>`
     background:#000;
     opacity:${({ loud }) => (loud == 1) ? 1.0 : 0.8};
 `
+
 interface PubImageProps {
     loud: number,
     isTopic: boolean
@@ -140,6 +151,7 @@ const Avatar = styled.img`
     padding-top: 0px;
     margin-right: 16px;  
 `
+
 const AvatarBox = styled.div`
     position: relative;
     max-width: 38px;
@@ -151,15 +163,18 @@ const AvatarBox = styled.div`
     width:48px;
     height:48px;
 `
+
 const Body = styled.div`
     width:100%; 
 `
+
 const Right = styled.div`
     padding-top:4px;
     height:auot;
     display:flex;
     justify-content:space-between;
 `
+
 const Comment = styled.div`
     font-size:10px;
     font-weight: 700;
@@ -168,12 +183,14 @@ const Comment = styled.div`
     margin:1px 16px 1px 3px;
    
 `
+
 const TweetEmbedContainer = styled.div`
     width:100%;
     position:relative;
     margin-top:20px;
     margin-bottom:20px;
-    `
+`
+
 const TweetEmbed = styled.div`
     margin-left:auto;
     margin-right:auto;
@@ -186,6 +203,7 @@ const Share = styled.div`
 
 const Button = styled.button`
 `
+
 const PleaseRead = styled.p`
     color:var(--highlight);
 `
@@ -230,8 +248,8 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
         let bodyBlocks: Array<ReactNode> | null = null;
         let AckBlock: ReactNode = null;
         if (body) {
-            bodyBlocks = body.map((b: BodyBlock) => {
-                return (b.type == "twitter" && b.id) ? <TweetEmbedContainer><TweetEmbed><TwitterTweetEmbed tweetId={b.id} placeholder="Loading a Tweet..." /*options={{theme:session.dark?'dark':'light'}}*/ /></TweetEmbed></TweetEmbedContainer> : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{b.content}</ReactMarkdown>
+            bodyBlocks = body.map((b: BodyBlock,i:number) => {
+                return (b.type == "twitter" && b.id) ? <TweetEmbedContainer key={`twt-${i}`}><TweetEmbed><TwitterTweetEmbed tweetId={b.id} placeholder="Loading a Tweet..." /*options={{theme:session.dark?'dark':'light'}}*/ /></TweetEmbed></TweetEmbedContainer> : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{b.content}</ReactMarkdown>
             })
         }
         if (!body && hasBody) {

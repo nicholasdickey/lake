@@ -50,7 +50,6 @@ const Local = ({ forum, cc, slug, title='', fullPage=false }: { forum: string, c
   t = t.replace(':', '-');
   cc = cc ? '#comment-' + cc : '';
   let url = `https://${process.env.NEXT_PUBLIC_MYDOMAIN || 'am1.news'}/${qparams.forum}/topic/${qparams.tag}/${slug}`;//"https://qwiket.com" + contextUrl + "/topic/" + realDisqThreadid + cc;
-  console.log("Disqus", { title, t, url, slug })
   return <>{true ?
     <Disqus fullPage={fullPage}>
       <DiscussionEmbed

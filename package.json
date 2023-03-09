@@ -6,6 +6,7 @@
     "dev": "next dev -p 3400",
     "build": "next build",
     "start": "next start -p 3400",
+    "test": "jest --watch",
     "lint": "next lint",
     "pm2": "pm2"
   },
@@ -43,6 +44,8 @@
     "typescript": "4.9.4"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
     "@types/styled-components": "^5.1.26",
     "eslint": "8.30.0",
     "eslint-config-next": "13.1.0"

@@ -107,7 +107,6 @@ const DatelineBand = ({channelDetails, user, updateSession }:DatelineBandParams)
     let subscr_status = +user?.subscr_status || 0;
     useEffect(() => {
         if (subscr_status == 5) {
-            console.log("subscr_status==5")
             setHasUnpublish(true);
         }
     }, [subscr_status]);

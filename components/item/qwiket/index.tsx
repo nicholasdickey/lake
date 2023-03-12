@@ -176,6 +176,11 @@ const AvatarBox = styled.div`
 
 const Body = styled.div`
     width:100%; 
+    & .caption, .e-caption{
+        font-style:italic;
+    }
+   
+
 `
 
 const Right = styled.div`

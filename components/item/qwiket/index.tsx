@@ -287,7 +287,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
            {(headless==1&&(bodyHtml||bodyBlocks))?null: <Row key="r3"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage sizes="(max-width: 768px) 100vw,
            (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={blur} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>}
             
-            {(headless==1&&(bodyHtml||bodyBlocks))?null:<Share><RWebShare
+            {(bodyHtml||bodyBlocks)?null:<Share><RWebShare
                 data={{
                     text: description,
                     url: `/${qparams.forum}/topic/${tag}/${slug}`,
@@ -301,7 +301,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
             
             <Row key="r4"><Body>{bodyBlocks ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml : description}</ReactMarkdown>}</Body></Row>
             {AckBlock}
-            {(headless==1&&(bodyHtml||bodyBlocks))?<Share><RWebShare
+            {(bodyHtml||bodyBlocks)?<Share><RWebShare
                 data={{
                     text: description,
                     url: `/${qparams.forum}/topic/${tag}/${slug}`,

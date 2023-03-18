@@ -69,7 +69,7 @@ export const getServerSideProps = withSessionSsr(
             const host = context.req.headers.host || "";
             let [dummy, newsline, forumR, startDate] = parts;// context.params?.startDate as string[];
             const topics = await fetchSitemap(newsline, startDate);
-            const sitemap = topics.map((t: any) => `https://${host}/${forumR}/topic/${t}`).join('\n')
+            const sitemap = topics.map((t: any) => `https://${host}/${forumR}/topic/${t}`).join('\r\n')
             context.res.write(sitemap);//.split(',').map(t=>`${t}\n`));
             context.res.end();
             return { props: {} }

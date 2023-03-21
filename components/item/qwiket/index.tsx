@@ -176,7 +176,7 @@ const AvatarBox = styled.div`
 
 const Body = styled.div`
     width:100%; 
-    & .caption, .e-caption{
+    & .caption, .e-caption, .wp-caption-text{
         font-style:italic;
     }
    

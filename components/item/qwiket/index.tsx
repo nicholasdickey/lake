@@ -179,6 +179,9 @@ const Body = styled.div`
     & .caption, .e-caption, .wp-caption-text{
         font-style:italic;
     }
+    & iframe{
+        min-height:450px;
+    }
    
 
 `

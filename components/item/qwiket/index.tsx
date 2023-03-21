@@ -182,10 +182,12 @@ const Body = styled.div`
    
 
 `
-
-const Right = styled.div`
-    padding-top:4px;
-    height:auot;
+interface RightParams{
+    length:number
+}
+const Right = styled.div<RightParams>`
+    padding-top:${({length})=>length>14?10:2}px;
+    height:auto;
     display:flex;
     justify-content:space-between;
 `
@@ -281,7 +283,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
         return <VerticalWrap isTopic={isTopic} singlePanel={singlePanel} >
             <TopRow><Row key="r1"><Link href={homeLink} legacyBehavior><a rel="nofollow"><PubImageBox><PubImage loud={session.loud} isTopic={isTopic} placeholder={"blur"} sizes="(max-width: 768px) 100vw,
            (max-width: 2200px) 50vw, 33vw"      src={catIcon} alt={catName} /></PubImageBox></a></Link>
-                <Right><Link href={homeLink} legacyBehavior><a rel="nofollow"><SiteName isTopic={isTopic}>{site_name}</SiteName></a></Link><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right></Row></TopRow>
+                <Right length={0}><Link href={homeLink} legacyBehavior><a rel="nofollow"><SiteName isTopic={isTopic}>{site_name}</SiteName></a></Link><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right></Row></TopRow>
             {author ? <Row>{author}</Row> : null}
             <Row key="r2"><Link href={itemUrl} legacyBehavior><a rel="nofollow"><Title isTopic={isTopic}>{title}</Title></a></Link></Row>
             <PleaseRead>Please click below to read the article on the original site before commenting:</PleaseRead>
@@ -354,7 +356,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
             return <Link href={`/${qparams.forum}/topic/${tag}/${slug}${qparams.layoutNumber != 'l1' ? '/' + qparams.layoutNumber : ''}`} legacyBehavior><a rel="nofollow"><VerticalWrap isTopic={isTopic}>
                 <Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"     placeholder={"blur"} src={blur} alt={'America First News'} /></PubImageBox>
-                    <Right><SiteName isTopic={isTopic}>{'am1.news'}</SiteName><TimeSince isTopic={isTopic}>{0}</TimeSince></Right></Row>
+                    <Right length={'am1.news'.length}><SiteName isTopic={isTopic}>{'am1.news'}</SiteName><TimeSince isTopic={isTopic}>{0}</TimeSince></Right></Row>
                 {author ? <Row>{author}</Row> : null}
                 <Row key="r2"><Title isTopic={isTopic}>{title}</Title></Row>
                 <Row key="r3"><Markdown  >{'The Internet of Us'}</Markdown></Row>
@@ -365,7 +367,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
             <VerticalWrap isTopic={isTopic} isTag={isTag} diff={diff} isRight={isRight}>
                 <TopRow><Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} style={{ height: '38', width: 'auto' }} sizes="(max-width: 768px) 100vw,
               (max-width: 2200px) 50vw, 33vw"       placeholder={"blur"} src={catIcon} alt={catName} /></PubImageBox>
-                    <Right><SiteName isTopic={isTopic}>{site_name}</SiteName><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right></Row></TopRow>
+                    <Right length={site_name.length}><SiteName isTopic={isTopic}>{site_name}</SiteName><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right></Row></TopRow>
                 {author ? <Row>{author}</Row> : null}
                 <Row key="r2"><Title isTopic={isTopic}>{title}</Title></Row>
                 <Row key="r3"><Markdown  >{description}</Markdown></Row>

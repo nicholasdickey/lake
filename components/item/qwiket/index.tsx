@@ -185,11 +185,11 @@ const Body = styled.div`
    
 
 `
-interface RightParams{
-    length:number
+interface RightParams {
+    length: number
 }
 const Right = styled.div<RightParams>`
-    padding-top:${({length})=>length>14?10:2}px;
+    padding-top:${({ length }) => length > 14 ? 10 : 2}px;
     height:auto;
     display:flex;
     justify-content:space-between;
@@ -228,6 +228,17 @@ const Button = styled.button`
 const PleaseRead = styled.p`
     color:var(--highlight);
 `
+interface ModerateParams {
+    flag: string;
+}
+const Moderate = styled.div<ModerateParams>`
+    & img{
+        display:${({ flag }) => flag == 'nopic' ? 'none' : 'block'};
+    }
+    & iframe{
+        display:${({ flag }) => flag == 'nopic' ? 'none' : 'block'};
+    }
+`
 //--------------------
 
 const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPage, mutate, setAckOverride }: { extraWide: boolean, isRight: boolean, item: any, isTopic: boolean, qType?: string, singlePanel?: boolean, fullPage?: boolean, mutate?: any, setAckOverride?: any }) => {
@@ -246,10 +257,10 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
 
     const blur = 'https://ucarecdn.com/d26e44d9-5ca8-4823-9450-47a60e3287c6/al90.png';
     if (isTopic) {
-        let { catIcon, catName, tag, image, site_name, published_time, author, body, hasBody, slug,headless }:
-            { catIcon: string, catName: string, tag: string, image: string, site_name: string, published_time: number, author: string, slug: string, body: any, hasBody?: boolean, ack?: boolean,headless?:number } =
+        let { catIcon, catName, tag, image, site_name, published_time, author, body, hasBody, slug, headless }:
+            { catIcon: string, catName: string, tag: string, image: string, site_name: string, published_time: number, author: string, slug: string, body: any, hasBody?: boolean, ack?: boolean, headless?: number } =
             item ? item : { catIcon: '', catName: '', tag: '', image: '', site_name: '', published_time: '', author: '', body: '' };
-        console.log("headless:",headless)
+        console.log("headless:", headless)
         if (!image)
             image = blur;
         if (!catIcon)
@@ -293,11 +304,11 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
             <hr />
             <Row key="3.1"><Link href={itemUrl} legacyBehavior><a rel="nofollow">{item.url}</a></Link></Row>
             <hr />
-           
-           {(headless==1&&(bodyHtml||bodyBlocks))?null: <Row key="r3"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage sizes="(max-width: 768px) 100vw,
+
+            {(headless == 1 && (bodyHtml || bodyBlocks)) ? null : <Row key="r3"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage sizes="(max-width: 768px) 100vw,
            (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={blur} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>}
-            
-            {(bodyHtml||bodyBlocks)?null:<Share><RWebShare
+
+            {(bodyHtml || bodyBlocks) ? null : <Share><RWebShare
                 data={{
                     text: description,
                     url: `/${qparams.forum}/topic/${tag}/${slug}`,
@@ -308,10 +319,10 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                 <Button> Share </Button>
             </RWebShare>
             </Share>}
-            
+
             <Row key="r4"><Body>{bodyBlocks ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml : description}</ReactMarkdown>}</Body></Row>
             {AckBlock}
-            {(bodyHtml||bodyBlocks)?<Share><RWebShare
+            {(bodyHtml || bodyBlocks) ? <Share><RWebShare
                 data={{
                     text: description,
                     url: `/${qparams.forum}/topic/${tag}/${slug}`,
@@ -321,11 +332,11 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
             >
                 <Button> Share </Button>
             </RWebShare>
-            </Share>:null}
+            </Share> : null}
         </VerticalWrap>
     }
     else if (isReact) {
-        let { id, author_avatar, tag, catName, catIcon, author_name, postBody, subscr_status, createdat, thread_author, thread_title, thread_description, thread_url, slug } = item;
+        let { id, author_avatar, tag, catName, catIcon, author_name, postBody, subscr_status, createdat, thread_author, thread_title, thread_description, thread_url, slug, moderate_flag } = item;
         const { diff, timeString } = TimeDifference(createdat, qparams.timestamp)
 
         return <Link href={`/${qparams.forum}/topic/${tag}/${slug}/${qparams.layoutNumber}/${id}/#comment-${id}`} legacyBehavior><a rel="nofollow">
@@ -340,7 +351,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                     <StarContainer><Star level={subscr_status} size={16} /></StarContainer>
                     <TimeSince isTopic={isTopic}>{timeString}</TimeSince></Row>
                 <Row key="r5">
-                    <Markdown>{`<div style="width:100%;">${postBody}</div>`}</Markdown>
+                    <Moderate flag={moderate_flag}><Markdown>{`<div style="width:100%;">${postBody}</div>`}</Markdown></Moderate>
                 </Row>
 
             </VerticalWrap></a></Link>

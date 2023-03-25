@@ -13,7 +13,7 @@ import Markdown from 'markdown-to-jsx'
 import { BodySnatcher } from './body-snatcher';
 import { Star } from '../../widgets/star'
 import { RWebShare } from "react-web-share";
-
+import {entityToHtml} from '../../../lib/entity-to-html';
 /**
  * CSS
  */
@@ -247,7 +247,6 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
 
     const isTag = qType == 'tag';
 
-    const router = useRouter();
     const { session, qparams, newsline, channelDetails } = useAppContext();
     const isReact = item && typeof item.qpostid !== 'undefined' && item.qpostid;
     let { description, title } = item ? item : { description: '', title: '' };
@@ -345,15 +344,14 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
           (max-width: 2200px) 50vw, 33vw"      placeholder={"blur"} src={catIcon} alt={catName} width={28} height={28} /></PubImageBox>
                     {qType == 'mix' ? <Comment>comment</Comment> : null}<Author>{thread_author ? thread_author : catName}</Author></Row></TopRow>
                 <Row key="r2"><Title isTopic={isTopic}>{thread_title}</Title></Row>
-                <Row key="r3"><Description><Markdown>{description}</Markdown></Description></Row>
+                <Row key="r3"><Description><Markdown>{entityToHtml(description)}</Markdown></Description></Row>
                 <Row key="r4"><AvatarBox><Avatar placeholder={"blur"} src={author_avatar.indexOf('http') < 0 ? `https:${author_avatar}` : author_avatar} alt={author_name} /></AvatarBox>
                     <AuthorPoster>{author_name}</AuthorPoster>
                     <StarContainer><Star level={subscr_status} size={16} /></StarContainer>
                     <TimeSince isTopic={isTopic}>{timeString}</TimeSince></Row>
                 <Row key="r5">
-                    <Moderate flag={moderate_flag}><Markdown>{`<div style="width:100%;">${postBody}</div>`}</Markdown></Moderate>
+                    <Moderate flag={moderate_flag}><Markdown>{`<div style="width:100%;">${entityToHtml(postBody)}</div>`}</Markdown></Moderate>
                 </Row>
-
             </VerticalWrap></a></Link>
     }
     else {
@@ -384,7 +382,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                     <Right length={site_name.length}><SiteName isTopic={isTopic}>{site_name}</SiteName><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right></Row></TopRow>
                 {author ? <Row>{author}</Row> : null}
                 <Row key="r2"><Title isTopic={isTopic}>{title}</Title></Row>
-                <Row key="r3"><Markdown  >{description}</Markdown></Row>
+                <Row key="r3"><Markdown  >{entityToHtml(description)}</Markdown></Row>
                 <Row key="r4"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage placeholder={"blur"} blurDataURL={blur} style={{ maxWidth: "100%", height: "100%", objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
             </VerticalWrap></a></Link>
     }

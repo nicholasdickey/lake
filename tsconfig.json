@@ -15,7 +15,7 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/[[...ssr]].tsx-exp", "lib/context.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/[[...ssr]].tsx-exp", "lib/context.js", "lib/entity-to-html.js"],
   "exclude": ["node_modules"],
   "rules": {
     "react/prop-types": "off",

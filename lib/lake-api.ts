@@ -68,13 +68,17 @@ export const getOnlineCount = async (key: OnlineCountKey) => {
 /**
  * Server-only sitemap calls
  */
-export const fetchAllSitemaps = async (newsline: string, forum: string) => {
-   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/sitemap/fetchAll?newsline=${newsline}&forum=${forum}`;
+export const fetchAllSitemaps = async (newsline: string, forum: string,domain:string,format?:string) => {
+   if(!format)
+   format='txt';
+   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/sitemap/fetchAll?newsline=${newsline}&forum=${forum}&domain=${domain}&format=${format}`;
    const res = await axios.get(url);
    return res.data.sitemaps;
 }
-export const fetchSitemap = async (newsline: string, startDate: string) => {
-   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/sitemap/fetch?newsline=${newsline}&startDate=${startDate}`;
+export const fetchSitemap = async (newsline: string, startDate: string,format:string,domain:string,forum:string) => {
+   if(!format)
+   format="txt";
+   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/sitemap/fetch?newsline=${newsline}&startDate=${startDate}&format=${format}&domain=${domain}&forum=${forum}`;
    const res = await axios.get(url);
    return res.data.sitemap;
 }

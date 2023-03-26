@@ -63,20 +63,24 @@ export const getServerSideProps = withSessionSsr(
         let [forum] = ssr;
         
         // Sitemap handling:
-        if (forum.indexOf("sitemap") == 0 && forum.indexOf(".txt") >= 0) {
+        const format='xml';
+        if (forum.indexOf("sitemap") == 0 && (forum.indexOf(".xml") >= 0||forum.indexOf(".txt") >= 0)) {
+            const format=forum.indexOf(".xml") >= 0?'xml':'txt';
             const filename = forum.split(".")[0];
             const parts = filename.split('_');
             const host = context.req.headers.host || "";
             let [dummy, newsline, forumR, startDate] = parts;// context.params?.startDate as string[];
-            const topics = await fetchSitemap(newsline, startDate);
-            const sitemap = topics.map((t: any) => `https://${host}/${forumR}/topic/${t}`).join('\r\n')
+            const topics = await fetchSitemap(newsline, startDate,format,host,forumR);
+            console.log("topics,",topics)
+            const sitemap =topics//.join('\r\n');// topics.map((t: any) => `${t}`).join('\r\n')
             context.res.write(sitemap);//.split(',').map(t=>`${t}\n`));
             context.res.end();
             return { props: {} }
         }
+       
         //robots.txt handling:
         if (forum.indexOf("robots.txt") == 0) {
-            const sitemaps = await fetchAllSitemaps(process.env.DEFAULT_NEWSLINE||'', process.env.DEFAULT_FORUM||'');
+            const sitemaps = await fetchAllSitemaps(process.env.DEFAULT_NEWSLINE||'', process.env.DEFAULT_FORUM||'',host,format);
             const robots = sitemaps.map((t: any) => `Sitemap:  ${t}`).join('\n')
             context.res.write(robots);//.split(',').map(t=>`${t}\n`));
             context.res.end();

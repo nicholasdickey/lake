@@ -97,7 +97,7 @@ const TimeSince = styled.div<IsTopic>`
     margin-right:${({ isTopic }) => isTopic ? 0 : 4}px;   
 `
 
-const Title = styled.div<IsTopic>`
+const Title = styled.h1<IsTopic>`
     line-height: 1.2;
     font-size: ${({ isTopic }) => isTopic ? 1.6 : 1.1}rem;  
     text-align: left; 

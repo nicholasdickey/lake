@@ -140,7 +140,7 @@ const DatelineBand = ({channelDetails, user, updateSession }:DatelineBandParams)
             </AvatarGroup></HorizWrap> : null}
             {
                 !isLoggedIn ? <SubTitle><Home><Link href={'/'}><UilNewspaper size="16" color="#888" /></Link></Home>
-                    <Link href={`/api/session/login?href=${encodeURIComponent(router.asPath)}`} legacyBehavior><a onClick={() => setLoading("Logging-in via Disqus...")} rel="nofollow">Sign-in</a></Link>
+                    <Link href={`/api/session/login?href=${encodeURIComponent(router.asPath)}`} legacyBehavior><a onClick={() => {try{setLoading("Logging-in via Disqus...")}catch(x){console.log("caught",x)}}} rel="nofollow">Sign-in</a></Link>
                     &nbsp;|&nbsp;
 
 

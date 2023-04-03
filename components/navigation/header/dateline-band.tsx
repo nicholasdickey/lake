@@ -141,10 +141,10 @@ const DatelineBand = ({channelDetails, user, updateSession }:DatelineBandParams)
             {
                 !isLoggedIn ? <SubTitle><Home><Link href={'/'}><UilNewspaper size="16" color="#888" /></Link></Home>
                     <Link href={`/api/session/login?href=${encodeURIComponent(router.asPath)}`} legacyBehavior><a onClick={() => {try{setLoading("Logging-in via Disqus...")}catch(x){console.log("caught",x)}}} rel="nofollow">Sign-in</a></Link>
-                    &nbsp;|&nbsp;
+                    {false?<span>&nbsp;|&nbsp;
 
 
-                    <a>Subscribe</a>
+                    <a>Subscribe</a></span>:null}
                     <Link  href={lacantinaUrl}><Martini><UilGlassMartiniAlt size="16" color="#888" /></Martini></Link>
                 </SubTitle> :
                     <HorizWrap>

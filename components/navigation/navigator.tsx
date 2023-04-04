@@ -257,7 +257,7 @@ const Publications = ({ session, qparams, updateSession }: { session: Options, q
         theme={undefined} /></SearchBox><Hr /><Row>
             <FilterWrap> <FiltersContainer newsline={newsline} callback={setF} publicationCategories={publicationCategories} /></FilterWrap>
         </Row><Hr />
-        {publications ? publications.map((n: Publication) => <PublicationWrap><PublicationRow key={`afpqhqpd-${n.name}`}>
+        {publications ? publications.map((n: Publication) => <PublicationWrap  key={`afpqhqpd-${n.name}`}><PublicationRow>
         <Link href={`/${qparams.forum}/solo/${n.tag}/${qparams.layoutNumber}/${qparams.navTab}`}><Left>
                 <PubImageBox>
                     <NextImage placeholder={"blur"} blurDataURL={'https://ucarecdn.com/d26e44d9-5ca8-4823-9450-47a60e3287c6/al90.png'} src={n.icon} alt={n.name} fill={true} />

@@ -98,7 +98,7 @@ const Segment = ({ card,  extraWide, qType, lastid,isRight,  pageIndex}: {
         segment=<Segment card={card} extraWide={extraWide} qType={qType} lastid={lastid} isRight={isRight} pageIndex={pageIndex+1}/>
     }
     else {
-        console.log("No data or not visible segment yet",{data,isVisible})
+        //console.log("No data or not visible segment yet",{data,isVisible})
     }
     return <div className="other-segments" ref={ref}>
         {data?.items?.map((item: any) => <Qwiket key={`queue-qwiket-${qType}-${item.slug}-${item.qpostid}`} extraWide={extraWide} isRight={isRight} item={item} isTopic={false} qType={qType}></Qwiket>)}

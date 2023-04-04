@@ -1,12 +1,18 @@
 /** @type {import('next').NextConfig} */
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+}
+)
+const nextConfig = withPWA({
 
-const nextConfig = {
   reactStrictMode: true,
-  typescript: {
-    ignoreBuildErrors: true
-  },
+   typescript: {
+     ignoreBuildErrors: true
+   },
   compiler: {
-     styledComponents: true, 
+    styledComponents: true,
   },
   eslint: {
     // Warning: This allows production builds to successfully complete even if
@@ -23,8 +29,8 @@ const nextConfig = {
         protocol: 'http',
         hostname: '**',
       },
-    ], 
+    ],
   },
-}
+})
 
-module.exports =nextConfig
+module.exports = nextConfig;

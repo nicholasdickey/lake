@@ -5,7 +5,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import useSWR from 'swr'
 import useSWRImmutable from 'swr/immutable'
 import styled from 'styled-components';
-import { ThemeProvider} from 'styled-components'
+import { ThemeProvider } from 'styled-components'
 import axios from 'axios';
 import { fetchChannelConfig, fetchChannelLayout, fetchChannelLayoutKey } from '../lib/lake-api';
 import { Options } from '../lib/with-session';
@@ -20,6 +20,7 @@ import { AppWrapper } from '../lib/context';
 import ScrollToTopButton from './widgets/scroll-to-top-button';
 import Script from 'next/script'
 import { pageview } from "../lib/gtag";
+
 
 //The props passed from SSR:
 export interface CommonProps {
@@ -197,7 +198,9 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
 
   //also checks the resize on render in the browser
   if (isBrowser()) {
+    console.log("DDD");
     if (window.innerWidth != session.width) {
+
       setTimeout(() => resize(window.innerWidth), 1);
     }
   }
@@ -252,6 +255,19 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
         {meta?.url ? <meta property="og:url" content={meta?.url} /> : null}
         <meta property="og:image" content={meta?.image} />
 
+        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <meta name='viewport' content='width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no' />
+        <meta name='description' content='Description' />
+        <meta name='keywords' content='Keywords' />
+       
+
+        <link rel="manifest" href="/manifest.json" />
+        <link href='/favicon-16x16.png' rel='icon' type='image/png' sizes='16x16' />
+        <link href='/favicon-32x32.png' rel='icon' type='image/png' sizes='32x32' />
+        <link rel="apple-touch-icon" href="/apple-icon.png"></link>
+        <meta name="theme-color" content="#317EFB" />
+
+
         <link
           rel="shortcut icon"
           type="image/png"
@@ -259,10 +275,10 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
         />
 
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
       </Head>
-      <main className={roboto.className} >
 
-        <Script src={`https://www.googletagmanager.com/gtag/js?id=G-PEZZHTN0M5`} strategy="afterInteractive"></Script>
+      <Script src={`https://www.googletagmanager.com/gtag/js?id=G-PEZZHTN0M5`} strategy="afterInteractive"></Script>
         <Script id="google-analytics" strategy="afterInteractive" dangerouslySetInnerHTML={{
           __html: `
             window.dataLayer = window.dataLayer || [];
@@ -273,6 +289,9 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
             });
           `,
         }} />
+      <main className={roboto.className} >
+
+ 
 
         <ThemeProvider theme={palette}>
           <GlobalStyle />
@@ -299,11 +318,13 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
           </AppWrapper>
         </ThemeProvider>
       </main>
-      <Head>
-        <Script strategy="afterInteractive"
+      <Script strategy="afterInteractive"
+          id="after-interactive"
           dangerouslySetInnerHTML={{ // the twitter script
             __html: `window.twttr = (function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0],t = window.twttr || {};if (d.getElementById(id)) return t;js = d.createElement(s);js.id = id;js.src = "https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js, fjs);t._e = [];t.ready = function(f) {t._e.push(f);};return t;}(document, "script", "twitter-wjs"));`,
           }} />
+      <Head>
+      
       </Head>
     </>
   )

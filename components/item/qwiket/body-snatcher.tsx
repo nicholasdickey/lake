@@ -91,8 +91,8 @@ export const BodySnatcher = ({ mutate, setAckOverride, setOpenDialog, tag, slug 
       <DisclaimerLogoContainer><NextImage src={channelDetails.logo} alt="logo" width={42} height={42} /> </DisclaimerLogoContainer>
       <DisclaimerTitle>{newsline.displayName}</DisclaimerTitle>
       <DisclaimerTitle>BODY SNATCHER</DisclaimerTitle>
-      <p>Body Snatcher is an online tool designed to facilitate user's access to the content of the article for the purpose of commenting on it.</p>
-      <p>To use the Body Snatcher tool to access the full body of the article, click the button below. The tool is provided solely for the convinience of our users while commenting on the article they've already accessed on the target website. </p>
+      <p>Body Snatcher is an online tool designed to facilitate user&apos;s access to the content of the article for the purpose of commenting on it.</p>
+      <p>To use the Body Snatcher tool to access the full body of the article, click the button below. The tool is provided solely for the convinience of our users while commenting on the article they&apos;ve already accessed on the target website. </p>
       <p>By clicking this button, you certify that you have the legal right to view the content on the target website.
       </p>
       <p>

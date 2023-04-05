@@ -266,7 +266,7 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
         <link href='/favicon-32x32.png' rel='icon' type='image/png' sizes='32x32' />
         <link rel="apple-touch-icon" href="/apple-icon.png"></link>
         <meta name="theme-color" content="#317EFB" /></>:null}
-
+        <meta name="theme-color" content={theme=='dark'?palette.dark.colors.background:palette.light.colors.background} />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
         <link

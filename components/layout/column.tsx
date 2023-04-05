@@ -91,10 +91,12 @@ const ColumnHeader = styled.div`
 const LeftColumnHeader = styled.div`
     position:absolute;
     display:flex;
-    left:0px;
+    left:-30px;
+
     justify-content: flex-start;
     //height:28px;
     width:auto;
+
     z-index:190;
     background:var(--background);
     
@@ -107,7 +109,8 @@ const InnerHeader = styled.div`
     color:var(--qwiketBorderStale);
     font-weight:300;
     font-size:12px;
-    margin-right:6px;
+    margin-right:16px;
+    margin-left:16px;
     z-index:190;
     padding-left:6px;
     padding-right:6px;
@@ -332,13 +335,15 @@ export const Column = ({pageType, visible,card,spaces, column, qparams, session,
                 </StyledColumn>;
             case 'tag':
                 console.log("COLUMN TAG", selector)
-                return <StyledColumn width={width} data-id="styled-column" key={`${selector}-column`}>
+                return <StyledColumn width={width} data-id="styled-column" key={`${selector}-column`}>{fullPage?<LeftColumnHeader> <InnerHeader onClick={()=>{window.history.back()}}><SelectButton fullPage={fullPage}  > <RotateLeft><Arrow /></RotateLeft></SelectButton>back&nbsp;&nbsp;  </InnerHeader></LeftColumnHeader>:null}
                     <ColumnHeader> <InnerHeader>{isLeft ? <LeftSelector qType={selector} name={name} updateSession={setTopicOverride} fullPage={fullPage} /> : name}</InnerHeader></ColumnHeader>
                     <Queue  visible={visible}  card={card}  isLeft={false} isRight={isRight}  extraWide={false} qType={selector} {...props} />
                 </StyledColumn>
             case 'topic':
-                return <StyledColumn width={'100%'} key="main-topic" ><ColumnHeader><div /></ColumnHeader>
+                return <StyledColumn width={'100%'} key="main-topic" >{fullPage?<LeftColumnHeader> <InnerHeader onClick={()=>{window.history.back()}} ><SelectButton fullPage={fullPage} > <RotateLeft><Arrow /></RotateLeft></SelectButton>back&nbsp;&nbsp;  </InnerHeader></LeftColumnHeader>:null}
+                    
                     <ColumnHeader> <InnerHeader>{isLeft ? <LeftSelector qType={selector} name={selector} updateSession={setTopicOverride} fullPage={fullPage} /> : selector}</InnerHeader></ColumnHeader>
+                  
                     <Topic singlePanel={spaces > 2} fullPage={true} />
                 </StyledColumn>
             case 'navigator': // for now not caching

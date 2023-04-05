@@ -23,7 +23,7 @@ const Topic = ({ singlePanel, fullPage }: { singlePanel?: boolean, fullPage?: bo
     return <Qwiket extraWide={false} item={item} isTopic={true} singlePanel={singlePanel} isRight={true}></Qwiket>
   }
   const { title, slug } = data.item;
-  return <><Qwiket extraWide={false} item={data?.item} isTopic={true} singlePanel={singlePanel} mutate={mutate} setAckOverride={setAckOverride} isRight={true}></Qwiket>
+  return <><Qwiket extraWide={false} item={data?.item} isTopic={true} singlePanel={singlePanel} mutate={mutate} setAckOverride={setAckOverride} isRight={true} fullPage={fullPage}></Qwiket>
     <Disqus forum={qparams.forum} title={title} cc={qparams.cc} slug={slug} fullPage={fullPage} /></>
 }
 export default Topic;

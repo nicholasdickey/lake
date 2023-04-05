@@ -13,7 +13,7 @@ import Markdown from 'markdown-to-jsx'
 import { BodySnatcher } from './body-snatcher';
 import { Star } from '../../widgets/star'
 import { RWebShare } from "react-web-share";
-import {entityToHtml} from '../../../lib/entity-to-html';
+import { entityToHtml } from '../../../lib/entity-to-html';
 /**
  * CSS
  */
@@ -26,7 +26,8 @@ interface IsTopic {
     isTag?: boolean,
     diff?: number,
     singlePanel?: boolean,
-    isRight?: boolean
+    isRight?: boolean,
+    fullPage?: boolean
 }
 
 const VerticalWrap = styled.div<IsTopic>`
@@ -37,8 +38,9 @@ const VerticalWrap = styled.div<IsTopic>`
     cursor:pointer;
     padding-left:${({ isTopic }) => isTopic ? 8 : 8}px;
     padding-right:${({ isTopic }) => isTopic ? 8 : 6}px;
-    padding-bottom:6px;
+    padding-top:${({ fullPage }) => fullPage ? 16 : 6}px;
     width:100%;
+   // padding-top:6px;
     margin-bottom:6px;
     h1 {
         font-size:18px;
@@ -136,7 +138,7 @@ interface PubImageProps {
 }
 const PubImage = styled.img<PubImageProps>`
     position: relative;
-    margin-top: ${({ isTopic }) => isTopic ? 16 : 16}px;
+    margin-top: ${({ isTopic }) => isTopic ? 6 : 16}px;
     padding-top: 0px;
     margin-right: 2px;
     height:${({ isTopic }) => isTopic ? 64 : 28}px;
@@ -292,7 +294,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
             AckBlock = <>{openDialog ? <BodySnatcher mutate={mutate} setAckOverride={setAckOverride} setOpenDialog={setOpenDialog} tag={tag} slug={slug} /> : <a onClick={() => setOpenDialog(true)}>See more....</a>}</>
         }
 
-        return <VerticalWrap isTopic={isTopic} singlePanel={singlePanel} >
+        return <VerticalWrap isTopic={isTopic} singlePanel={singlePanel} fullPage={fullPage} >
             <TopRow><Row key="r1"><Link href={homeLink} legacyBehavior><a rel="nofollow"><PubImageBox><PubImage loud={session.loud} isTopic={isTopic} placeholder={"blur"} sizes="(max-width: 768px) 100vw,
            (max-width: 2200px) 50vw, 33vw"      src={catIcon} alt={catName} /></PubImageBox></a></Link>
                 <Right length={0}><Link href={homeLink} legacyBehavior><a rel="nofollow"><SiteName isTopic={isTopic}>{site_name}</SiteName></a></Link><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right></Row></TopRow>

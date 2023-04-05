@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { LayoutRes } from './layoutRes'
+import { LayoutRes } from './layout-res'
 import getLayoutWidth from '../../lib/layout-width'
 import { Options } from '../../lib/with-session';
 import { Qparams } from '../../lib/qparams';

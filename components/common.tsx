@@ -262,11 +262,12 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
        
 
         <link rel="manifest" href="/manifest.json" />
-        <link href='/favicon-16x16.png' rel='icon' type='image/png' sizes='16x16' />
+        {false?<><link href='/favicon-16x16.png' rel='icon' type='image/png' sizes='16x16' />
         <link href='/favicon-32x32.png' rel='icon' type='image/png' sizes='32x32' />
         <link rel="apple-touch-icon" href="/apple-icon.png"></link>
-        <meta name="theme-color" content="#317EFB" />
+        <meta name="theme-color" content="#317EFB" /></>:null}
 
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
         <link
           rel="shortcut icon"

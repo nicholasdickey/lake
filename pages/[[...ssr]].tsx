@@ -187,8 +187,10 @@ export const getServerSideProps = withSessionSsr(
         
         //Disqus OAuth callback:
         if (code) {
+            console.log("ssr processLoginCode",code,state)
             const jsonState = JSON.parse(state);
             const { href } = jsonState;
+          
             const user = await processLoginCode(code, host);
             if (user) {
                 const { slug } = user;

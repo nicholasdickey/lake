@@ -259,7 +259,6 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
         let { catIcon, catName, tag, image, site_name, published_time, author, body, hasBody, slug, headless }:
             { catIcon: string, catName: string, tag: string, image: string, site_name: string, published_time: number, author: string, slug: string, body: any, hasBody?: boolean, ack?: boolean, headless?: number } =
             item ? item : { catIcon: '', catName: '', tag: '', image: '', site_name: '', published_time: '', author: '', body: '' };
-        console.log("headless:", headless)
         if (!image)
             image = blur;
         if (!catIcon)

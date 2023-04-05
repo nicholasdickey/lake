@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import useSWR from 'swr'
 import Link from 'next/link'
+import axios from 'axios';
 import { useRouter } from 'next/router'
 import styled from 'styled-components';
 import { useAppContext } from "../../../lib/context";
@@ -93,16 +94,16 @@ const VerticalWrap = styled.div`
 const Unpublish = styled.span`
     margin-left:40px;
 `
-const StarContainer=styled.div`
+const StarContainer = styled.div`
     margin-top:-4px;
 `
-const logout = (updateSession:any) => updateSession({ userslug: '' })
-interface DatelineBandParams{
-    channelDetails:any,
-    user:any,
-    updateSession:any
+const logout = (updateSession: any) => updateSession({ userslug: '' })
+interface DatelineBandParams {
+    channelDetails: any,
+    user: any,
+    updateSession: any
 }
-const DatelineBand = ({channelDetails, user, updateSession }:DatelineBandParams) => {
+const DatelineBand = ({ channelDetails, user, updateSession }: DatelineBandParams) => {
     const [hasUnpublish, setHasUnpublish] = useState(false)
     let subscr_status = +user?.subscr_status || 0;
     useEffect(() => {
@@ -126,7 +127,7 @@ const DatelineBand = ({channelDetails, user, updateSession }:DatelineBandParams)
     let name = user?.user_name;
     let approver = user?.approver;
     let avatar = user?.avatar;
- 
+
     let isLoggedIn = user ? 1 : 0;
 
     const { setLoading } = useAppContext();
@@ -140,12 +141,32 @@ const DatelineBand = ({channelDetails, user, updateSession }:DatelineBandParams)
             </AvatarGroup></HorizWrap> : null}
             {
                 !isLoggedIn ? <SubTitle><Home><Link href={'/'}><UilNewspaper size="16" color="#888" /></Link></Home>
-                    <Link href={`/api/session/login?href=${encodeURIComponent(router.asPath)}`} legacyBehavior><a onClick={() => {try{setLoading("Logging-in via Disqus...")}catch(x){console.log("caught",x)}}} rel="nofollow">Sign-in</a></Link>
-                    {false?<span>&nbsp;|&nbsp;
+                    <Link href={`/api/session/login?href=${encodeURIComponent(router.asPath)}`} legacyBehavior><a onClick={
+                        async () => {
+                            try {
+                                setLoading("Logging-in via Disqus...")
+                                window.location.href=`/api/session/login?href=${encodeURIComponent(router.asPath)}`;
+                              //  await axios.get(`/api/session/login?href=${encodeURIComponent(router.asPath)}`);
+
+                            }
+                            catch (x) {
+                                console.log("caught", x)
+                                try {
+                                    await axios.get(`/api/session/login?href=${encodeURIComponent(router.asPath)}`);
+
+                                }
+                                catch (x) {
+                                    console.log("retry caught", x)
+                                }
+                            }
+                            //alert("after login");
+                        }
+                    } rel="nofollow">Sign-in</a></Link>
+                    {false ? <span>&nbsp;|&nbsp;
 
 
-                    <a>Subscribe</a></span>:null}
-                    <Link  href={lacantinaUrl}><Martini><UilGlassMartiniAlt size="16" color="#888" /></Martini></Link>
+                        <a>Subscribe</a></span> : null}
+                    <Link href={lacantinaUrl}><Martini><UilGlassMartiniAlt size="16" color="#888" /></Martini></Link>
                 </SubTitle> :
                     <HorizWrap>
                         <SubTitle><Home><Link href={'/'}><UilNewspaper size="16" color="#888" /></Link></Home>
@@ -157,7 +178,7 @@ const DatelineBand = ({channelDetails, user, updateSession }:DatelineBandParams)
                             |
                         </SubTitle>}
                         <SubTitle>  {`${isLoggedIn ? approver ? '[' + name + ']' : name : 'Subscribe'}`}<StarContainer><Star level={subscr_status} size={16} /></StarContainer>
-                            <Link  href={lacantinaUrl}>
+                            <Link href={lacantinaUrl}>
                                 <Martini>
                                     <UilGlassMartiniAlt size="16" color="#888" />
                                     {hasUnpublish ? <Unpublish><Link onClick={async () => { await unpublish(qparams.threadid, qparams.tag); console.log("unpublish"); }} href={'#'}><UilNewspaper size="16" color="red" /></Link></Unpublish> : null}
@@ -169,4 +190,4 @@ const DatelineBand = ({channelDetails, user, updateSession }:DatelineBandParams)
             }</VerticalWrap>
     </StyledWrapper >
 }
- export default DatelineBand
+export default DatelineBand

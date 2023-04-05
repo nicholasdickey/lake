@@ -62,17 +62,15 @@ const Notifications = ({ isLeft, qType, newsline, forum, lastid, tail, sessionid
         refreshInterval: qType == 'topics' ? 24 * 3600 * 1000 : 5000
     });
     const notifications = data?.newItems;
-    console.log("REMDER QUEUE notif:", qType, key, data);
-    console.log("typeof window",typeof window)
+    //console.log("REMDER QUEUE notif:", qType, key, data);
     const nav:any=navigator;
     if(isLeft&&nav.setAppBadge){
-        console.log("typeof window",typeof window)
          nav.setAppBadge(+notifications||0);
     }
     const itemName = notifications == 1 ? 'Item' : 'Items';
     const onClick = () => {
         if (reset)
-            setTimeout(() => { if(isLeft&&nav.setAppBadge){
+            setTimeout(() => { if(isLeft&&nav.clearAppBadge){
                 nav.clearAppBadge();
             }
             reset(); }, 1);

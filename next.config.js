@@ -6,7 +6,7 @@ const withPWA = require('next-pwa')({
 }
 )
 const nextConfig = withPWA({
-
+  crossOrigin: 'anonymous', 
   reactStrictMode: true,
    typescript: {
      ignoreBuildErrors: true

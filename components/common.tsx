@@ -198,9 +198,7 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
 
   //also checks the resize on render in the browser
   if (isBrowser()) {
-    console.log("DDD");
     if (window.innerWidth != session.width) {
-
       setTimeout(() => resize(window.innerWidth), 1);
     }
   }

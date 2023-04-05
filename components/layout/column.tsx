@@ -267,9 +267,9 @@ export const Column = ({pageType, visible,card,spaces, column, qparams, session,
     const fullPage = spaces < 3;
     var randomstring = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     const [guid, setGuid] = useState(randomstring())
-   // console.log("d1b: COLUMN RENDER",guid,visible,card, selector,type)
+    // console.log("d1b: COLUMN RENDER",guid,visible,card, selector,type)
     //  console.log("**** FirstColumn:", JSON.stringify({qparamsType:qparams.type,isLeft,spaces, selector, type, msc, session}))
-    console.log("Column:",{override:session.leftColumnOverride,qParamsType:qparams.type,type,selector,fullPage,pageType,qparams})
+    // console.log("Column:",{override:session.leftColumnOverride,qParamsType:qparams.type,type,selector,fullPage,pageType,qparams})
     if(session.leftColumnOverride=='navigator'&&qparams.type=='solo'&&fullPage){
         session.leftColumnOverride='newsline';
     }

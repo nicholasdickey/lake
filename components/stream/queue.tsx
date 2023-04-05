@@ -48,6 +48,8 @@ const QueueWrap = styled.div`
     margin-left:0px;
     margin-right:0px;   
 `
+declare var window: Window;
+declare var navigator: Navigator;
 
 const Notifications = ({ isLeft, qType, newsline, forum, lastid, tail, sessionid, userslug, reset, tag, ...props }:
     {
@@ -60,12 +62,20 @@ const Notifications = ({ isLeft, qType, newsline, forum, lastid, tail, sessionid
         refreshInterval: qType == 'topics' ? 24 * 3600 * 1000 : 5000
     });
     const notifications = data?.newItems;
-    // console.log("REMDER QUEUE notif:", qType, key, data);
-
+    console.log("REMDER QUEUE notif:", qType, key, data);
+    console.log("typeof window",typeof window)
+    const nav:any=navigator;
+    if(isLeft&&nav.setAppBadge){
+        console.log("typeof window",typeof window)
+         nav.setAppBadge(+notifications||0);
+    }
     const itemName = notifications == 1 ? 'Item' : 'Items';
     const onClick = () => {
         if (reset)
-            setTimeout(() => { reset() }, 1);
+            setTimeout(() => { if(isLeft&&nav.setAppBadge){
+                nav.clearAppBadge();
+            }
+            reset(); }, 1);
     }
 
     return <ColumnHeader>{qType != 'topics' && +notifications > 0 ? <LeftHeader onClick={onClick}>Show {notifications} New {itemName}</LeftHeader> : <div />}</ColumnHeader>

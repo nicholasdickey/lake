@@ -38,3 +38,10 @@ webapp/err-0.log
 
 *.log
 *.pid 
+public/manifest.json
+public/sw.js
+public/sw.js.map
+public/workbox-327c579b.js
+public/workbox-327c579b.js.map
+public/workbox-588899ac.js
+public/sw.js

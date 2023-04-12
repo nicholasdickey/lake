@@ -144,6 +144,24 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
   const [session, setSession] = useState(startSession);
   const [theme, setTheme] = useState(session.dark != -1 ? session.dark == 1 ? 'dark' : 'light' : "unknown")
   const [loading, setLoading] = useState("");
+  const [deferredPrompt, setDeferredPrompt]:[deferredPrompt:any,setDeferredPrompt:any] = useState(null);
+
+  useEffect(() => {
+    if(isBrowser()){
+      window.addEventListener('beforeinstallprompt', (e) => {
+          // Prevent the mini-infobar from appearing on mobile
+          e.preventDefault();
+          // Stash the event so it can be triggered later.
+          setDeferredPrompt(e);
+          // Update UI notify the user they can install the PWA
+          //showInstallPromotion();
+          // Optionally, send analytics event that PWA install promo was shown.
+          console.log(`'beforeinstallprompt' event was fired.`);
+      });
+    }
+  }, []);
+
+
   const router = useRouter()
 
   //attach theme attribute to the document
@@ -294,7 +312,7 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
 
         <ThemeProvider theme={palette}>
           <GlobalStyle />
-          <AppWrapper session={session} qparams={qparams} channelDetails={channelConfig.channelDetails} newsline={channelConfig.newsline} setLoading={setLoading}>
+          <AppWrapper session={session} qparams={qparams} channelDetails={channelConfig.channelDetails} newsline={channelConfig.newsline} setLoading={setLoading} installPrompt={deferredPrompt}>
             {loading ? <Loading className={roboto.className}>{loading}</Loading> : null}
             <div>
               <Topline updateTheme={updateTheme} session={session} layout={mainLayout} updateSession={updateSession} channelDetails={channelConfig.channelDetails} />

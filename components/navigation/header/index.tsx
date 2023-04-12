@@ -21,11 +21,12 @@ export interface HeaderProps{
     updateSession:any
 }
 export const Header = ({ channelSlug, channelDetails, newsline, updateSession }:HeaderProps) => {
-    const { session } = useAppContext();
+    const { session,qparams } = useAppContext();
+    const {notif}=qparams;
     const { data: user, error: userError } = useSWR(['user', session.userslug], fetchUser)
     return <StyledHeader className={playfair.className}>
         <TitleBand title={`${newsline.slug != channelSlug ? `${channelDetails.shortname}:` : ''}${newsline.displayName}`} leftLogo={channelDetails.logo} rightLogo={newsline.logo} />
-        <DatelineBand  user={user} channelDetails={channelDetails} updateSession={updateSession} />
+        <DatelineBand  user={user} channelDetails={channelDetails} updateSession={updateSession} notif={notif}/>
         <Lowline session={session} lowline={channelDetails.lowline} />
     </StyledHeader>
 };

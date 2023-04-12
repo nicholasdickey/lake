@@ -55,8 +55,9 @@ export const getServerSideProps = withSessionSsr(
             host='american-outdoorsman.news';
         
         //Disqus OAuth callback params:
-        const { code, state }: { code: string, state: string } = context.query as any;
-        
+        let { code, state,notif }: { code: string, state: string,notif:string } = context.query as any;
+        if(!notif)
+        notif='';
         let ssr = context.params?.ssr as string[];
         if (!ssr)
             ssr = [`${process.env.DEFAULT_FORUM}`];
@@ -179,7 +180,8 @@ export const getServerSideProps = withSessionSsr(
             cc,
             timestamp: Date.now() / 1000 | 0,
             isbot:botInfo.bot,
-            isfb:botInfo.fb
+            isfb:botInfo.fb,
+            notif
         }
         
         // useful for debugging:

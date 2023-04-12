@@ -437,4 +437,26 @@ export const updatePublications = async ({ newsline, tag, switch: switchParam, f
       console.log("ERROR in getchMyNewsline:", data.msg)
    }
 }
+export const fetchNotificationsStatus = async ({sessionid}: {sessionid: string}) => {
+   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/user/fetchNotificationsStatus`
+
+   let res;
+   try {
+      res = await axios.post(url, {
+         sessionid
+      })
+   }
+   catch (x) {
+      console.log("fetchPublicationCategories HANDLED EXCEPTION:", x)
+   }
+   const data = res ? res.data : null;
+
+   if (data?.success) {
+      return data.statis;
+   }
+   else {
+      console.log("ERROR in getchMyNewsline:", data.msg)
+
+   }
+}
 //--------------------------------------------------

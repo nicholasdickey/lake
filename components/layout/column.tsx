@@ -91,7 +91,7 @@ const ColumnHeader = styled.div`
 const LeftColumnHeader = styled.div`
     position:absolute;
     display:flex;
-    left:-30px;
+    left:-20px;
 
     justify-content: flex-start;
     //height:28px;
@@ -109,11 +109,11 @@ const InnerHeader = styled.div`
     color:var(--qwiketBorderStale);
     font-weight:300;
     font-size:12px;
-    margin-right:16px;
-    margin-left:16px;
+    margin-right:6px;
+    margin-left:0px;
     z-index:190;
-    padding-left:6px;
-    padding-right:6px;
+    padding-left:0px;
+    padding-right:2px;
     background:var(--background);
     height:1.5em;
 

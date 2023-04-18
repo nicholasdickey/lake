@@ -4,6 +4,21 @@ import { NetworkOnly, NetworkFirst, CacheFirst, StaleWhileRevalidate } from 'wor
 import { registerRoute, setDefaultHandler, setCatchHandler } from 'workbox-routing';
 import { matchPrecache, precacheAndRoute, cleanupOutdatedCaches } from 'workbox-precaching';
 
+const publicVapidKey = 'BDLR35t7pZ7O5i3aGmLQA3_R54jofS9yvQl7JhyRVCTKE4cj0D_ixOSxxFAz6YC52jFEaI7bgxFfOg15Ub-nfUw';
+function urlBase64ToUint8Array(base64String) {
+  const padding = "=".repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding)
+    .replace(/\-/g, "+")
+    .replace(/_/g, "/");
+
+  const rawData = atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
 skipWaiting();
 clientsClaim();
 
@@ -153,7 +168,83 @@ registerRoute(
 
 // Use a stale-while-revalidate strategy for all other requests.
 setDefaultHandler(new StaleWhileRevalidate());
+self.addEventListener(
+  "pushsubscriptionchange",
+  (event) => {
+    const subscription = self.registration.pushManager
+      .subscribe(event.oldSubscription.options)
+      .then((subscription) =>
+        fetch(`/api/session/update-subscription`, {
+          method: "post",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            endpoint: subscription.endpoint,
+          }),
+        })
+      );
+    event.waitUntil(subscription);
+  },
+  false
+);
+self.addEventListener("push", async e => {
+  const data = e.data.json();
+  let x = '';
+  let y = '';
+  let lnewItems;
+  try {
+    const subscription = await self.registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      //public vapid key
+      applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
+    });
+    await fetch(`/api/session/update-subscription`, {
+      method: "post",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        //endpoint: subscription.endpoint,
+        payload: data
+      }),
+    })
+    const { type } = data;
+    // if (type == 'appBadgeNotif') {
+    const { newItems } = data;
+    lnewItems = newItems;
+    try {
+      await self.navigator.setAppBadge(19/*newItems*/);
+      await fetch(`/api/session/update-subscription`, {
+        method: "post",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          payload: `After setAppBadge `
+        }),
+      })
+    }
+    catch (x) {
 
+    }
+    //  }
+  }
+  catch (ex) {
+    x = ex;
+  }
+  //if (type != 'appBadgeNotif') {
+    await self.registration.showNotification(
+      "NOTIF",//data.title, // title of the notification
+      {
+        body: `${x ? 'Exception:' + x.toString() : ''}${JSON.stringify(data)}BLAH:${y}NewItems:${lnewItems}`,
+        image: "https://pixabay.com/vectors/bell-notification-communication-1096280/",
+        icon: "https://pixabay.com/vectors/bell-notification-communication-1096280/" // icon
+      }
+    );
+  //}
+  // self.registration.setAppBadge()
+});
 // This "catch" handler is triggered when any of the other routes fail to
 // generate a response.
 setCatchHandler(({ event }) => {
@@ -175,7 +266,7 @@ setCatchHandler(({ event }) => {
       // If using precached URLs:
       return matchPrecache('/afnLogoLarge.png');
       // return caches.match('/static/images/fallback.png')
-      break;serviceWorker.register
+      break; serviceWorker.register
     case 'font':
     // If using precached URLs:
     // return matchPrecache(FALLBACK_FONT_URL);

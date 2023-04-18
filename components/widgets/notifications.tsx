@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import useSWR from 'swr';
 import styled from 'styled-components';
-import { fetchNotificationsStatus } from '../../lib/lake-api';
+import { fetchNotificationsStatus, subscribe } from '../../lib/lake-api';
 import { useAppContext } from '../../lib/context';
 import StyledCheckbox from './checkbox';
 import { useEscapeKey } from '../../lib/use-esc-key'
@@ -9,6 +9,7 @@ import { Roboto } from '@next/font/google';
 import Link from 'next/link'
 
 import { useRouter } from 'next/router'
+import { isRegularExpressionLiteral } from 'typescript';
 const roboto = Roboto({ subsets: ['latin'], weight: ['300', '400', '700'], style: ['normal', 'italic'] })
 const publicVapidKey = 'BDLR35t7pZ7O5i3aGmLQA3_R54jofS9yvQl7JhyRVCTKE4cj0D_ixOSxxFAz6YC52jFEaI7bgxFfOg15Ub-nfUw';
 
@@ -83,12 +84,9 @@ const Title = styled.div`
 `
 interface NotificationsStatus {
     subscribed: boolean;
-    appBadge: {
-        update: boolean;
-        updateType: 'newsviews' | 'newsline' | 'comments';
-    };
+    appBadgeUpdate: boolean;
     threadResponses: boolean;
-    commentResponses: boolean;
+    username?: string;
 }
 const Check = ({ label, checked, onChange, disabled }: { label: string, checked: boolean, disabled?: boolean, onChange: any }) => {
     return <StyledCheckbox className={roboto.className}
@@ -111,10 +109,7 @@ export const NotificationsDialog = ({ user, closeDialog }: { user: any, closeDia
     const [appBadgeUpdate, setAppBadgeUpdate] = useState(true);
     const [isApp, setIsApp] = useState(false);
     const [installClicked, setInstallClicked] = useState(false);
-    const [appBadgeUpdateType, setappBadgeUpdateType] = useState('newsviews');
-    const [threadResponse, setThreadResponse] = useState(true);
-    const [commentResponses, setCommentResponses] = useState(true)
-
+    const [threadResponses, setThreadResponses] = useState(true);
     const sessionid = session.sessionid;
     const { data: notificationsStatus, error: notificationsStatusError }: { data: NotificationsStatus, error: string | undefined } = useSWR({ sessionid }, fetchNotificationsStatus);
     const status = notificationsStatus || { subscribed: false, appBadge: { update: true, updateType: 'newsviews' }, threadResponses: true, commentResponses: true }
@@ -132,28 +127,31 @@ export const NotificationsDialog = ({ user, closeDialog }: { user: any, closeDia
         }
     }, []);
     useEscapeKey(() => close());
-    console.log("isApp", isApp);
+    let sw="noSW:";
+    if(!subscribed)
+        sw='SW:'; 
+    console.log("isApp", isApp, session.userslug, user);
     return <Loading className={roboto.className}><Inner className={roboto.className}>
-        <Title className={roboto.className}>{subscribed?'MANAGE':'ENABLE'} NOTIFICATIONS</Title>
-        <Explain className={roboto.className}>Enable notifications for best experience. You will be able to fine tune the settings later.</Explain>
-        {!isApp && !installClicked ? <div><Explain className={roboto.className}>Start by installing the page as a web application:</Explain>
+        <Title className={roboto.className}>{subscribed ? 'MANAGE' : 'ENABLE'} NOTIFICATIONS</Title>
+        <Explain className={roboto.className}>Enable off-line notifications for the best experience. You will be able to fine tune the settings later.</Explain>
+        {!isApp && !installClicked && installPrompt && installPrompt.prompt ? <div><Explain className={roboto.className}>Start by installing the page as a web application:</Explain>
             <HomeButton className={roboto.className} onClick={() => {
                 setInstallClicked(true);
                 installPrompt.prompt();
                 /** Record click, set bugging state */
             }}>Add to Home Screen</HomeButton></div> : null}
 
-        <Checkboxes><div><Check label='Place new notifications badge over app icon'
+        <Checkboxes><div><Check label='Place notifications badge over the app icon.'
 
             checked={appBadgeUpdate}
             onChange={(checked: boolean) => {
                 setAppBadgeUpdate(checked);
             }} /></div>
-            <div><Check disabled={isLoggedIn ? false : true} label='Notify on replies to your comments'
+            <div><Check disabled={isLoggedIn ? false : true} label='Notify on replies to your comments.'
 
-                checked={threadResponse && isLoggedIn}
+                checked={threadResponses && isLoggedIn}
                 onChange={(checked: boolean) => {
-                    setThreadResponse(checked);
+                    setThreadResponses(checked);
                 }} /></div>
             <div>{isLoggedIn ? null : <Explain className={roboto.className}>
                 <Link href={`/api/session/login?href=${encodeURIComponent(router.asPath)}`} legacyBehavior><a onClick={
@@ -176,21 +174,57 @@ export const NotificationsDialog = ({ user, closeDialog }: { user: any, closeDia
             <div><a className={roboto.className} onClick={() => { console.log("click close"); closeDialog() }}>Cancel</a></div>
             {!subscribed ? <div><a className={roboto.className} onClick={async () => {
                 console.log("click enable");
-                if ("serviceWorker" in navigator) {
+                
+               // if ("serviceWorker" in navigator) {
                     // Supported!
+                    sw="->SW";
                     const register = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
-                    console.log('Service worker successfully registered');
+                    if (register && register.pushManager) {
+                        alert("PushManager");
+                        sw="swPM"
+                        console.log('Service worker successfully registered');
 
-                    const subscription = await register.pushManager.subscribe({
-                        userVisibleOnly: true,
-                        //public vapid key
-                        applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
-                    });
-                }
+                        const subscription = await register.pushManager.subscribe({
+                            userVisibleOnly: true,
+                            //public vapid key
+                            applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
+                        });
+                        const subscription_options: NotificationsStatus = {
+                            subscribed: true,
+                            appBadgeUpdate,
+                            threadResponses: user ? threadResponses : false,
+                            username: session.userslug
+                        }
+                        await subscribe({ sessionid, subscription, subscription_options });
+                    }
+                    /*else {
+                        alert('no PM');
+                    }*/
+
+                //}
                 closeDialog()
-            }}>Enable</a></div> :
-                <div><a className={roboto.className} onClick={() => {
-                    console.log("click disable");
+            }}>{sw}BEnable</a></div> :
+                <div><a className={roboto.className} onClick={async () => {
+                    console.log("click update");
+                    if ("serviceWorker" in navigator) {
+                        // Supported!
+                        const register = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+                        console.log('Service worker successfully registered');
+
+                        const subscription = await register.pushManager.subscribe({
+                            userVisibleOnly: true,
+                            //public vapid key
+                            applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
+                        });
+                        const subscription_options: NotificationsStatus = {
+                            subscribed: true,
+                            appBadgeUpdate,
+                            threadResponses: user ? threadResponses : false,
+                            username: session.userslug
+                        }
+                        await subscribe({ sessionid, subscription, subscription_options });
+
+                    }
                     closeDialog()
                 }}>Update</a></div>
             }

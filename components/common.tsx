@@ -152,6 +152,7 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
           // Prevent the mini-infobar from appearing on mobile
           e.preventDefault();
           // Stash the event so it can be triggered later.
+          console.log("beforeinstallprompt",e)
           setDeferredPrompt(e);
           // Update UI notify the user they can install the PWA
           //showInstallPromotion();

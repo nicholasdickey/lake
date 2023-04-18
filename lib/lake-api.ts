@@ -213,20 +213,22 @@ export const fetchTopic = async ({ threadid, withBody, userslug, sessionid, tag,
  * 
  */
 export interface FetchQueueKey {
-   key: [u: string, qType: string, newsline: string, solo: number, forum?: string, tag?: string, page?: number, lastid?: string, sessionid?: string, userslug?: string, tail?: number, test?: string, breakCache?: string, size?: number, card?: string]
+   key: [u: string, qType: string, newsline: string, solo: number, forum?: string, tag?: string, page?: number, lastid?: string, sessionid?: string, userslug?: string, tail?: number, test?: string, breakCache?: string, size?: number, card?: string,isleft?:boolean]
 }
-export const fetchQueue = async ([u, qType, newsline, solo=0, forum='', tag='', page=0, lastid='0', sessionid='', userslug='', tail=0, test='', breakCache='', size=0, card]: FetchQueueKey["key"]
+export const fetchQueue = async ([u, qType, newsline, solo=0, forum='', tag='', page=0, lastid='0', sessionid='', userslug='', tail=0, test='', breakCache='', size=0, card,isleft=false]: FetchQueueKey["key"]
 ) => {
    const addParams = (params: string) => {
       if (userslug)
          params += `&userslug=${userslug}`;
-      else if (sessionid)
+      if (sessionid)
          params += `&sessionid=${sessionid}`;
       if (solo == 1) {
          params += `&tag=${tag}&solo=1`
       }
       if (tail)
          params += `&tail=${tail}`;
+      if (isleft)
+         params += `&isleft=${isleft}`;   
       if (test)
          params += '&test=1';   //silo 4 
       if (u == 'notif')
@@ -266,6 +268,11 @@ export const fetchQueue = async ([u, qType, newsline, solo=0, forum='', tag='', 
    let res;
    try {
       res = await axios.get(url);
+      if(u=='notif'&&isleft&&lastid&&lastid!='0'){
+         const argUrl=url;
+         const urlSave=`${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/user/setSubscriptionUrl`;
+         axios.post(urlSave,{sessionid,url:argUrl});
+      }
    }
    catch (x) {
       res = await axios.get(url);
@@ -452,10 +459,36 @@ export const fetchNotificationsStatus = async ({sessionid}: {sessionid: string})
    const data = res ? res.data : null;
 
    if (data?.success) {
-      return data.statis;
+      return data.status;
    }
    else {
-      console.log("ERROR in getchMyNewsline:", data.msg)
+      console.log("ERROR in fetchNotificationsStatus:", data?.msg)
+
+   }
+}
+export const subscribe = async ({sessionid,subscription,subscription_options}: {sessionid: string,subscription:any,subscription_options:any}) => {
+   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/user/subscribe`
+
+   let res;
+   console.log("subscribe url:",url,sessionid,subscription,subscription_options)
+   try {
+      res = await axios.post(url, {
+         sessionid,
+         subscription,
+         subscription_options
+
+      })
+   }
+   catch (x) {
+      console.log("subscribe HANDLED EXCEPTION:", x)
+   }
+   const data = res ? res.data : null;
+
+   if (data?.success) {
+      return data.status;
+   }
+   else {
+      console.log("ERROR in subscribe:", data?.msg)
 
    }
 }

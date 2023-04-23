@@ -91,7 +91,7 @@ const ColumnHeader = styled.div`
 const LeftColumnHeader = styled.div`
     position:absolute;
     display:flex;
-    left:-20px;
+    left:-6px;
 
     justify-content: flex-start;
     //height:28px;

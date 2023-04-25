@@ -21,8 +21,9 @@ const Title = styled.div<TitleParams>`
     text-align:center;
     margin-left:30px;
     margin-right:30px;
+  
     @media(min-width:600px){
-        font-size:1.4rem;
+        font-size:1.4rem;   
     }
     @media(min-width:900px){
         font-size:${({ len }) => +len > 20 ? '1.9' : '2.2'}rem;
@@ -50,7 +51,7 @@ const Logo = styled.img`
     
     @media(min-width:600px){
         display:block;
-         width:70px;
+        width:70px;
         height:70px;
     }
     @media(min-width:900px){

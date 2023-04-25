@@ -18,10 +18,14 @@ const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400',], style:
 const StyledWrapper = styled.div`
     display:flex;
     width:100%;
+    //margin-top:-10px;
     align-items:center;
     justify-content:space-around;
     font-size:1.8rem;
-
+    @media(min-width:600px){
+        font-size:1.4rem;
+        margin-top:-20px;
+    }
     & a{
         cursor:pointer;
         text-decoration:none;

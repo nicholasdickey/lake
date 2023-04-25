@@ -55,7 +55,7 @@ export const getServerSideProps = withSessionSsr(
             host='american-outdoorsman.news';
         
         //Disqus OAuth callback params:
-        const { code, state }: { code: string, state: string } = context.query as any;
+        const { code, state,utm_medium }: { code: string, state: string,utm_medium:string } = context.query as any;
         
         let ssr = context.params?.ssr as string[];
         if (!ssr)
@@ -179,7 +179,7 @@ export const getServerSideProps = withSessionSsr(
             cc,
             timestamp: Date.now() / 1000 | 0,
             isbot:botInfo.bot,
-            isfb:botInfo.fb
+            isfb:botInfo.fb||utm_medium?1:0
         }
         
         // useful for debugging:

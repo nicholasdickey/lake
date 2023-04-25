@@ -228,7 +228,9 @@ const Button = styled.button`
 `
 
 const PleaseRead = styled.p`
-    color:var(--highlight);
+    color:var(--text);
+    font-style: italic;
+    opacity:0.8;
 `
 interface ModerateParams {
     flag: string;

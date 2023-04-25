@@ -9,13 +9,13 @@ interface LowlineWrapperParams {
     band: number,
 }
 const LowlineWrapper = styled.div<LowlineWrapperParams>`
-    display: flex;
+    display:  ${({loud})=>loud?'flex':'hidden'};
     margin-top: 10px;
     margin-bottom:16px;
     ${({loud})=>loud?'border-top: thin solid var(--text);':
      '@media (min-width:600px) {border-top: thin solid var(--text);}'}
     
-    height: 30px;
+    height:  ${({loud})=>loud?'30':'0'}px;
     border-bottom: ${({loud,band}) => !loud && band==1 ? null : 'thin solid var(--text)'};
     width: 100%;
     align-items: center;
@@ -96,22 +96,23 @@ const Star = styled(UilStar)`
 
 const Lowline = ({ session, lowline }:{session:Options,lowline:any}) => {
     return <LowlineWrapper loud={session.loud} band={session.band}>
-        <Stars>
+        {session.loud?<Stars>
             <Star />
             <Star />
             <Star />
-        </Stars>
-        <Phone>{lowline.phone}</Phone>
+        </Stars>:null}
+        {session.loud?<div><Phone>{lowline.phone}</Phone>
         <HorizontalPhone>{lowline.horizontalPhone}</HorizontalPhone>
         <VerticalTablet>{lowline.verticalTablet}</VerticalTablet>
         <HorizontalTablet>{lowline.horizontalTablet}</HorizontalTablet>
         <SmallDesktop>{lowline.smallDesktop}</SmallDesktop>
         <LargeDesktop>{lowline.largeDestop}</LargeDesktop>
-        <Stars>
+        </div>:null}
+        {session.loud?<Stars>
             <Star />
             <Star />
             <Star />
-        </Stars>
+        </Stars>:null}
     </LowlineWrapper>
 }
 export default Lowline;

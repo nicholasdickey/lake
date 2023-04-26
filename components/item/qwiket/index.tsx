@@ -229,6 +229,7 @@ const Button = styled.button`
     padding:4px;
     background:green;
     color:white;
+    cursor:pointer;
 `
 
 const PleaseRead = styled.p`
@@ -250,11 +251,15 @@ const Moderate = styled.div<ModerateParams>`
 const CallToShare = styled.div`
 font-style: italic;
 color:red;
+cursor:initial;
 `
 const SeeMore=styled.div`
 margin-bottom:60px;
 //text-decoration: underline dotted ;
-
+cursor:pointer;
+`
+const CallImage=styled.div`
+top:2-px;
 `
 //--------------------
 
@@ -328,7 +333,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
             <Row key="r4"><Body>{bodyBlocks ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml : description}</ReactMarkdown>}</Body></Row>
             {AckBlock}
             <Share><CallToShare>
-            <img width="48" src={channelDetails.logo}/>
+            <CallImage><img width="48" src={channelDetails.logo}/></CallImage>
                 Please help us grow by sharing the links to this thread via email, social networks and forums. {channelName == 'America First News' ? `Facebook and Google are both shadow-banning America First News, we can't survive without your help!` : `Your help is greatly appreciated!`}
             </CallToShare><RWebShare
                 data={{

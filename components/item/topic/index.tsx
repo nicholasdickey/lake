@@ -7,7 +7,7 @@ import { fetchTopic, FetchTopicKey } from '../../../lib/lake-api'
 import Disqus from './disqus'
 
 const Topic = ({ singlePanel, fullPage }: { singlePanel?: boolean, fullPage?: boolean }) => {
-  const { session, qparams } = useAppContext();
+  const { session, qparams,channelDetails } = useAppContext();
   const [ackOverride, setAckOverride] = useState('');
   const key: FetchTopicKey = { threadid: qparams.threadid, withBody: 1, userslug: session.userslug, sessionid: session.sessionid, tag: qparams.tag, ackOverride: qparams.isbot || qparams.isfb || ackOverride == qparams.threadid };
   const { data, error, mutate } = useSWR(key, fetchTopic);
@@ -22,8 +22,9 @@ const Topic = ({ singlePanel, fullPage }: { singlePanel?: boolean, fullPage?: bo
     }
     return <Qwiket extraWide={false} item={item} isTopic={true} singlePanel={singlePanel} isRight={true}></Qwiket>
   }
+  console.log("CHannelL",channelDetails.displayName)
   const { title, slug } = data.item;
-  return <><Qwiket extraWide={false} item={data?.item} isTopic={true} singlePanel={singlePanel} mutate={mutate} setAckOverride={setAckOverride} isRight={true} fullPage={fullPage}></Qwiket>
+  return <><Qwiket extraWide={false} item={data?.item} isTopic={true} singlePanel={singlePanel} mutate={mutate} setAckOverride={setAckOverride} isRight={true} fullPage={fullPage} channelName={channelDetails.displayName}></Qwiket>
     <Disqus forum={qparams.forum} title={title} cc={qparams.cc} slug={slug} fullPage={fullPage} /></>
 }
 export default Topic;

@@ -225,6 +225,10 @@ const Share = styled.div`
 `
 
 const Button = styled.button`
+    margin-top:10px;
+    padding:4px;
+    background:green;
+    color:white;
 `
 
 const PleaseRead = styled.p`
@@ -243,9 +247,13 @@ const Moderate = styled.div<ModerateParams>`
         display:${({ flag }) => flag == 'nopic' ? 'none' : 'block'};
     }
 `
+const CallToShare = styled.div`
+font-style: italic;
+color:red;
+`
 //--------------------
 
-const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPage, mutate, setAckOverride }: { extraWide: boolean, isRight: boolean, item: any, isTopic: boolean, qType?: string, singlePanel?: boolean, fullPage?: boolean, mutate?: any, setAckOverride?: any }) => {
+const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPage, mutate, setAckOverride, channelName }: { extraWide: boolean, isRight: boolean, item: any, isTopic: boolean, qType?: string, singlePanel?: boolean, fullPage?: boolean, mutate?: any, setAckOverride?: any, channelName?: string }) => {
 
     const [openDialog, setOpenDialog] = useState(false);
 
@@ -310,21 +318,13 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
             {(headless == 1 && (bodyHtml || bodyBlocks)) ? null : <Row key="r3"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage sizes="(max-width: 768px) 100vw,
            (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={blur} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>}
 
-            {(bodyHtml || bodyBlocks) ? null : <Share><RWebShare
-                data={{
-                    text: description,
-                    url: `/${qparams.forum}/topic/${tag}/${slug}`,
-                    title,
-                }}
-                onClick={() => console.log("shared successfully!")}
-            >
-                <Button> Share </Button>
-            </RWebShare>
-            </Share>}
+        
 
             <Row key="r4"><Body>{bodyBlocks ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml : description}</ReactMarkdown>}</Body></Row>
             {AckBlock}
-            {(bodyHtml || bodyBlocks) ? <Share><RWebShare
+            <Share><CallToShare>
+                Please help us grow by sharing the links to this thread via email, social networks and forums. {channelName == 'America First News' ? `Facebook and Google are both shadow-banning America First News, we can't survive without your help!` : `Your help is greatly appreciated!`}
+            </CallToShare><RWebShare
                 data={{
                     text: description,
                     url: `/${qparams.forum}/topic/${tag}/${slug}`,
@@ -332,9 +332,10 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                 }}
                 onClick={() => console.log("shared successfully!")}
             >
-                <Button> Share </Button>
-            </RWebShare>
-            </Share> : null}
+                    <Button> Share! </Button>
+                </RWebShare>
+            </Share>
+       
         </VerticalWrap>
     }
     else if (isReact) {

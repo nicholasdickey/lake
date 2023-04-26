@@ -220,7 +220,7 @@ const TweetEmbed = styled.div`
 `
 
 const Share = styled.div`
-   // margin-top:20px;
+    margin-top:4px;
     margin-bottom:20px;
 `
 

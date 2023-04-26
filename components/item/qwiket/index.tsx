@@ -251,6 +251,11 @@ const CallToShare = styled.div`
 font-style: italic;
 color:red;
 `
+const SeeMore=styled.div`
+margin-bottom:60px;
+//text-decoration: underline dotted ;
+
+`
 //--------------------
 
 const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPage, mutate, setAckOverride, channelName }: { extraWide: boolean, isRight: boolean, item: any, isTopic: boolean, qType?: string, singlePanel?: boolean, fullPage?: boolean, mutate?: any, setAckOverride?: any, channelName?: string }) => {
@@ -301,7 +306,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
         }
         if (!body && hasBody) {
 
-            AckBlock = <>{openDialog ? <BodySnatcher mutate={mutate} setAckOverride={setAckOverride} setOpenDialog={setOpenDialog} tag={tag} slug={slug} /> : <a onClick={() => setOpenDialog(true)}>See more....</a>}</>
+            AckBlock = <>{openDialog ? <BodySnatcher mutate={mutate} setAckOverride={setAckOverride} setOpenDialog={setOpenDialog} tag={tag} slug={slug} /> :<SeeMore><a onClick={() => setOpenDialog(true)}>See more....</a></SeeMore> }</>
         }
 
         return <VerticalWrap isTopic={isTopic} singlePanel={singlePanel} fullPage={fullPage} >

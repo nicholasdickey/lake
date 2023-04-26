@@ -340,8 +340,9 @@ export const Column = ({ pageType, visible, card, spaces, column, qparams, sessi
             case 'topic':
                 return <StyledColumn width={'100%'} key="main-topic" >{fullPage ? <LeftColumnHeader>
                     <InnerHeader onClick={() => {
-                        if (qparams.isfb)
-                            window.location.href = '';
+                        if (qparams.isfb){
+                            window.location.href = '/';
+                        }
                         else
                             window.history.back()
                     }} >

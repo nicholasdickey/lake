@@ -13,7 +13,7 @@ const LowlineWrapper = styled.div<LowlineWrapperParams>`
     margin-top: 10px;
     margin-bottom:16px;
     ${({loud})=>loud?'border-top: thin solid var(--text);':
-     '@media (min-width:600px) {border-top: thin solid var(--text);}'}
+     '@media (min-width:600px) {opacity:0.5; border-top: thin solid var(--text);}'}
     
     height:  ${({loud})=>loud?'30':'0'}px;
     border-bottom: ${({loud,band}) => !loud && band==1 ? null : 'thin solid var(--text)'};

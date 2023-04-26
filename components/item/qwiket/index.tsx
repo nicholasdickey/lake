@@ -220,7 +220,7 @@ const TweetEmbed = styled.div`
 `
 
 const Share = styled.div`
-    margin-top:20px;
+   // margin-top:20px;
     margin-bottom:20px;
 `
 
@@ -323,6 +323,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
             <Row key="r4"><Body>{bodyBlocks ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml : description}</ReactMarkdown>}</Body></Row>
             {AckBlock}
             <Share><CallToShare>
+            <img width="48" src={channelDetails.logo}/>
                 Please help us grow by sharing the links to this thread via email, social networks and forums. {channelName == 'America First News' ? `Facebook and Google are both shadow-banning America First News, we can't survive without your help!` : `Your help is greatly appreciated!`}
             </CallToShare><RWebShare
                 data={{

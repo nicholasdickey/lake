@@ -114,7 +114,7 @@ export const getServerSideProps = withSessionSsr(
         const defaultWidth = platformType == 'tablet'?900:platformType == 'desktop'?1200:600;
        
         const botInfo=isbot({ua});
-        console.log("DEBIG 3")
+        console.log("DEBIG 3",host,process.env.CANONIC_DOMAIN)
         //redirect from legacy domains:
         if (host != process.env.CANONIC_DOMAIN) {
             if (type == 'topic' || type == 'home') {

@@ -116,7 +116,7 @@ export const getServerSideProps = withSessionSsr(
         const botInfo=isbot({ua});
         console.log("DEBIG 3",host,process.env.CANONIC_DOMAIN)
         //redirect from legacy domains:
-        if (host != process.env.CANONIC_DOMAIN) {
+        if (host != process.env.CANONIC_DOMAIN&& host.indexOf('vercel.app')<0) {
             if (type == 'topic' || type == 'home') {
                 return {
                     redirect: {

@@ -226,7 +226,7 @@ export const getServerSideProps = withSessionSsr(
         console.log("DEBIG 7")
         // get channel meta data and layout:
         const channelConfig = await fetchChannelConfig(newsline);
-        console.log("DEBIG 7",channelConfig)
+        console.log("DEBIG 8",channelConfig)
         const newslineKey: fetchChannelLayoutKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, 'newsline', options.dense, options.thick, layoutNumber];
         
         const contextKey: fetchChannelLayoutKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, 'context', options.dense, options.thick, layoutNumber];

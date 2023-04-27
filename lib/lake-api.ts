@@ -135,6 +135,7 @@ export const processLoginCode = async (code: string, host: string) => {
 export const fetchChannelConfig = async (slug: string) => {
    try {
       const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/channel/fetch?slug=${slug}`
+      console.log("DEBIG fetchChannelConfig",url)
       const res = await axios.get(url);
       return res.data;
    }

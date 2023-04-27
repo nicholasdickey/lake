@@ -166,7 +166,7 @@ export const getServerSideProps = withSessionSsr(
             options.userslug = '';
 
         const newsline = process.env.DEFAULT_NEWSLINE||'qwiket';
-        
+        console.log("DEBIG 5")
         const qparams = {
             custom: true,
             forum,
@@ -184,7 +184,7 @@ export const getServerSideProps = withSessionSsr(
         
         // useful for debugging:
         //const isFirstServerCall = context.req?.url?.indexOf('/_next/data/') === -1
-        
+        console.log("DEBIG 6")
         //Disqus OAuth callback:
         if (code) {
             console.log("ssr processLoginCode",code,state)
@@ -223,10 +223,10 @@ export const getServerSideProps = withSessionSsr(
                 await context.req.session.save();
             }
         }
-
+        console.log("DEBIG 7")
         // get channel meta data and layout:
         const channelConfig = await fetchChannelConfig(newsline);
-        
+        console.log("DEBIG 7",channelConfig)
         const newslineKey: fetchChannelLayoutKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, 'newsline', options.dense, options.thick, layoutNumber];
         
         const contextKey: fetchChannelLayoutKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, 'context', options.dense, options.thick, layoutNumber];

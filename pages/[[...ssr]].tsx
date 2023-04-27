@@ -49,7 +49,7 @@ export default function Home({ session, qparams, fallback, meta, error }: HomePr
 export const getServerSideProps = withSessionSsr(
     async function getServerSideProps(context: GetServerSidePropsContext): Promise<any> {
         let host = context.req.headers.host || "";
-        
+        console.log("DEBIG 1");
         //TODO: add a header to the load balancer to pass the correct host
         if(host=='cloud.digitalocean.com')
             host='american-outdoorsman.news';
@@ -77,7 +77,7 @@ export const getServerSideProps = withSessionSsr(
             context.res.end();
             return { props: {} }
         }
-       
+        console.log("DEBIG 2")
         //robots.txt handling:
         if (forum.indexOf("robots.txt") == 0) {
             const sitemaps = await fetchAllSitemaps(process.env.DEFAULT_NEWSLINE||'', process.env.DEFAULT_FORUM||'',host,format);
@@ -114,7 +114,7 @@ export const getServerSideProps = withSessionSsr(
         const defaultWidth = platformType == 'tablet'?900:platformType == 'desktop'?1200:600;
        
         const botInfo=isbot({ua});
-        
+        console.log("DEBIG 3")
         //redirect from legacy domains:
         if (host != process.env.CANONIC_DOMAIN) {
             if (type == 'topic' || type == 'home') {
@@ -136,7 +136,7 @@ export const getServerSideProps = withSessionSsr(
                 };
             }
         }
-
+        console.log("DEBIG 4")
         // get encrypted session from the cookie or initialize the default   
         let startoptions = context.req.session?.options || null;
       

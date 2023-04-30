@@ -29,8 +29,8 @@ const LeftHeader = styled.div`
     }
     margin-right:6px;
     z-index:151;
-    padding-left:6px;
-    padding-right:6px;
+    padding-left:4px;
+    padding-right:4px;
     background:var(--notificationButton);
     border:1px solid;
     margin-left:6px;

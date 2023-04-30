@@ -49,13 +49,13 @@ export default function Home({ session, qparams, fallback, meta, error }: HomePr
 export const getServerSideProps = withSessionSsr(
     async function getServerSideProps(context: GetServerSidePropsContext): Promise<any> {
         let host = context.req.headers.host || "";
-        console.log("DEBIG 1");
+      
         //TODO: add a header to the load balancer to pass the correct host
         if(host=='cloud.digitalocean.com')
             host='american-outdoorsman.news';
         
         //Disqus OAuth callback params:
-        const { code, state,utm_medium }: { code: string, state: string,utm_medium:string } = context.query as any;
+        const { code, state,utm_medium,appid }: { code: string, state: string,utm_medium:string,appid:string } = context.query as any;
         
         let ssr = context.params?.ssr as string[];
         if (!ssr)
@@ -77,7 +77,6 @@ export const getServerSideProps = withSessionSsr(
             context.res.end();
             return { props: {} }
         }
-        console.log("DEBIG 2")
         //robots.txt handling:
         if (forum.indexOf("robots.txt") == 0) {
             const sitemaps = await fetchAllSitemaps(process.env.DEFAULT_NEWSLINE||'', process.env.DEFAULT_FORUM||'',host,format);
@@ -114,7 +113,7 @@ export const getServerSideProps = withSessionSsr(
         const defaultWidth = platformType == 'tablet'?900:platformType == 'desktop'?1200:600;
        
         const botInfo=isbot({ua});
-        console.log("DEBIG 3",host,process.env.CANONIC_DOMAIN)
+
         //redirect from legacy domains:
         if (host != process.env.CANONIC_DOMAIN&& host.indexOf('vercel.app')<0) {
             if (type == 'topic' || type == 'home') {
@@ -136,7 +135,7 @@ export const getServerSideProps = withSessionSsr(
                 };
             }
         }
-        console.log("DEBIG 4")
+
         // get encrypted session from the cookie or initialize the default   
         let startoptions = context.req.session?.options || null;
       
@@ -166,7 +165,7 @@ export const getServerSideProps = withSessionSsr(
             options.userslug = '';
 
         const newsline = process.env.DEFAULT_NEWSLINE||'qwiket';
-        console.log("DEBIG 5")
+
         const qparams = {
             custom: true,
             forum,
@@ -184,14 +183,14 @@ export const getServerSideProps = withSessionSsr(
         
         // useful for debugging:
         //const isFirstServerCall = context.req?.url?.indexOf('/_next/data/') === -1
-        console.log("DEBIG 6")
+
         //Disqus OAuth callback:
         if (code) {
-            console.log("ssr processLoginCode",code,state)
+            console.log("ssr processLoginCode",code,state,appid)
             const jsonState = JSON.parse(state);
             const { href } = jsonState;
-          
-            const user = await processLoginCode(code, host);
+            console.log("jsonState",jsonState)
+            const user = await processLoginCode(code, host,appid);
             if (user) {
                 const { slug } = user;
                 if (context.req.session.options) {
@@ -223,10 +222,9 @@ export const getServerSideProps = withSessionSsr(
                 await context.req.session.save();
             }
         }
-        console.log("DEBIG 7")
         // get channel meta data and layout:
         const channelConfig = await fetchChannelConfig(newsline);
-        console.log("DEBIG 8",channelConfig)
+
         const newslineKey: fetchChannelLayoutKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, 'newsline', options.dense, options.thick, layoutNumber];
         
         const contextKey: fetchChannelLayoutKey = ['channelLayout', newsline, options.hasLayout, options.sessionid, options.userslug, 'context', options.dense, options.thick, layoutNumber];

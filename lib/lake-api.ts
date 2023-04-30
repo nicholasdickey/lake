@@ -119,8 +119,8 @@ export const initLoginSession = async (userslug: string, options: Options) => {
 /**
  *  Second step of two-step OAuth login
  */
-export const processLoginCode = async (code: string, host: string) => {
-   const url = `${process.env.NEXT_PUBLIC_QWIKET_API}/api?task=disqus-login&code=${code}&host=${host}`;
+export const processLoginCode = async (code: string, host: string, appid:string) => {
+   const url = `${process.env.NEXT_PUBLIC_QWIKET_API}/api?task=disqus-login&code=${code}&host=${host}&appid=${appid}`;
    const res = await axios.get(url);
    return res.data.success?res.data.user:false;
 }
@@ -135,7 +135,6 @@ export const processLoginCode = async (code: string, host: string) => {
 export const fetchChannelConfig = async (slug: string) => {
    try {
       const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/channel/fetch?slug=${slug}`
-      console.log("DEBIG fetchChannelConfig",url)
       const res = await axios.get(url);
       return res.data;
    }

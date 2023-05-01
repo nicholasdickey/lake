@@ -1,36 +1,37 @@
 {
-    "name": "American Outdoorsman News",
-    "short_name": "American Outdoorsman News",
-    "icons": [
-      {
-        "src": "/american-outdoorsman-192.png",
-        "sizes": "192x192",
-        "type": "image/png"
-      },
-      {
-        "src": "/american-outdoorsman-512.png",
-        "sizes": "512x512",
-        "type": "image/png"
-      },
-      {
-        "src": "/american-outdoorsman-180.png",
-        "sizes": "180x180",
-        "type": "image/png"
-      },
-      {
-        "src": "/american-outdoorsman-144.png",
-        "sizes": "144x144",
-        "type": "image/png"
-      },
-      {
-        "src": "/american-outdoorsman-120.png",
-        "sizes": "120x120",
-        "type": "image/png"
-      }
-    ],
-    "theme_color": "#444444",
-    "background_color": "#444444",
-    "start_url": "/",
-    "display": "standalone",
-    "orientation": "portrait"
-  }
+  "name": "America First News",
+  "short_name": "America First News",
+  "icons": [
+    {
+      "src": "/am1-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/am1-412.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/am1-180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/am1-144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/am1-120.png",
+      "sizes": "120x120",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#444444",
+  "background_color": "#444444",
+
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait"
+}

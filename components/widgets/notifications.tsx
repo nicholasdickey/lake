@@ -179,8 +179,11 @@ export const NotificationsDialog = ({ user, closeDialog }: { user: any, closeDia
                     // Supported!
                     sw="->SW";
                     const register = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+                    const strNavigator=JSON.stringify(navigator);
+                  
+                    console.log("PushManager:",navigator.serviceWorker)
                     if (register && register.pushManager) {
-                        alert("PushManager");
+                       
                         sw="swPM"
                         console.log('Service worker successfully registered');
 

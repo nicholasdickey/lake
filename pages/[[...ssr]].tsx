@@ -115,7 +115,7 @@ export const getServerSideProps = withSessionSsr(
         const botInfo=isbot({ua});
 
         //redirect from legacy domains:
-        if (host != process.env.CANONIC_DOMAIN&& host.indexOf('vercel.app')<0) {
+        /*if (host != process.env.CANONIC_DOMAIN&& host.indexOf('vercel.app')<0) {
             if (type == 'topic' || type == 'home') {
                 return {
                     redirect: {
@@ -134,7 +134,7 @@ export const getServerSideProps = withSessionSsr(
                     props: {},
                 };
             }
-        }
+        }*/
 
         // get encrypted session from the cookie or initialize the default   
         let startoptions = context.req.session?.options || null;

@@ -273,13 +273,13 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
     const isReact = item && typeof item.qpostid !== 'undefined' && item.qpostid;
     let { description, title } = item ? item : { description: '', title: '' };
     const descrParts = description.split("{ai:summary}");
-    description = descrParts[0];
+    description - descrParts[0];
     let summary = descrParts.length > 1 ? descrParts[1] : '';
     if (summary.trim() == '[object Object]')
         summary = null;
     const homeLink = `/${qparams.forum}/home/${qparams.tag}`;
     const itemUrl = item.url ? item.url : '';
-    console.log("description:"  + description);
+
     const blur = 'https://ucarecdn.com/d26e44d9-5ca8-4823-9450-47a60e3287c6/al90.png';
     if (isTopic) {
         let { catIcon, catName, tag, image, site_name, published_time, author, body, hasBody, slug, headless }:
@@ -334,7 +334,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
            (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={blur} style={{ objectFit: "cover" }} data-id={"NextImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>}
 
 
-            {summary ? <div><hr/><Row>Summary by Q:</Row><Row key="r14"><Body> <ReactMarkdown rehypePlugins={[rehypeRaw]} >{summary}</ReactMarkdown></Body></Row><hr/></div> : null}
+            {summary ? <div><hr/><Row>Summary by q.ai:</Row><Row key="r14"><Body>{summary}</Body></Row><hr/></div> : null}
             <Row key="r4"><Body>{bodyBlocks ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml :summary?null: description}</ReactMarkdown>}</Body></Row>
             {AckBlock}
             <Share>{session.userslug ? null : <CallToShare>
@@ -402,7 +402,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                     <Right length={site_name.length}><SiteName isTopic={isTopic}>{site_name}</SiteName><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right></Row></TopRow>
                 {author ? <Row>{author}</Row> : null}
                 <Row key="r2"><Title isTopic={isTopic}>{title}</Title></Row>
-                <Row key="r3" className="q-description"><Markdown  >{entityToHtml(description)}</Markdown></Row>
+                <Row key="r3"><Markdown  >{entityToHtml(description)}</Markdown></Row>
                 <Row key="r4"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage placeholder={"blur"} blurDataURL={blur} style={{ maxWidth: "100%", height: "100%", objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
             </VerticalWrap></a></Link>
     }

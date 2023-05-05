@@ -253,7 +253,7 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
         {meta?.url ? <meta property="og:url" content={meta?.url} /> : null}
         <meta property="og:image" content={meta?.image} />
 
-        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+        <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
         <meta name='viewport' content='width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no' />
         <meta name='description' content='Description' />
         <meta name='keywords' content='Keywords' />

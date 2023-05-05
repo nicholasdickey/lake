@@ -253,12 +253,12 @@ font-style: italic;
 color:red;
 cursor:initial;
 `
-const SeeMore=styled.div`
+const SeeMore = styled.div`
 margin-bottom:60px;
 //text-decoration: underline dotted ;
 cursor:pointer;
 `
-const CallImage=styled.div`
+const CallImage = styled.div`
 top:2-px;
 `
 //--------------------
@@ -272,7 +272,9 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
     const { session, qparams, newsline, channelDetails } = useAppContext();
     const isReact = item && typeof item.qpostid !== 'undefined' && item.qpostid;
     let { description, title } = item ? item : { description: '', title: '' };
-
+    const descrParts = description.split("{ai:summary}");
+    description - descrParts[0];
+    const summary = descrParts.length > 1 ? descrParts[1] : '';
     const homeLink = `/${qparams.forum}/home/${qparams.tag}`;
     const itemUrl = item.url ? item.url : '';
 
@@ -311,29 +313,30 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
         }
         if (!body && hasBody) {
 
-            AckBlock = <>{openDialog ? <BodySnatcher mutate={mutate} setAckOverride={setAckOverride} setOpenDialog={setOpenDialog} tag={tag} slug={slug} /> :<SeeMore><a onClick={() => setOpenDialog(true)}>See more....</a></SeeMore> }</>
+            AckBlock = <>{openDialog ? <BodySnatcher mutate={mutate} setAckOverride={setAckOverride} setOpenDialog={setOpenDialog} tag={tag} slug={slug} /> : <SeeMore><a onClick={() => setOpenDialog(true)}>See more....</a></SeeMore>}</>
         }
-
+// <PleaseRead>Please click below to read the article on the original site before commenting:</PleaseRead>
+           
         return <VerticalWrap isTopic={isTopic} singlePanel={singlePanel} fullPage={fullPage} >
             <TopRow><Row key="r1"><Link href={homeLink} legacyBehavior><a rel="nofollow"><PubImageBox><PubImage loud={session.loud} isTopic={isTopic} placeholder={"blur"} sizes="(max-width: 768px) 100vw,
            (max-width: 2200px) 50vw, 33vw"      src={catIcon} alt={catName} /></PubImageBox></a></Link>
                 <Right length={0}><Link href={homeLink} legacyBehavior><a rel="nofollow"><SiteName isTopic={isTopic}>{site_name}</SiteName></a></Link><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right></Row></TopRow>
             {author ? <Row>{author}</Row> : null}
             <Row key="r2"><Link href={itemUrl} legacyBehavior><a rel="nofollow"><Title isTopic={isTopic}>{title}</Title></a></Link></Row>
-            <PleaseRead>Please click below to read the article on the original site before commenting:</PleaseRead>
             <hr />
             <Row key="3.1"><Link href={itemUrl} legacyBehavior><a rel="nofollow">{item.url}</a></Link></Row>
             <hr />
 
-            {(headless == 1 && (bodyHtml || bodyBlocks)) ? null : <Row key="r3"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage sizes="(max-width: 768px) 100vw,
-           (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={blur} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>}
+            {(headless == 1 && (bodyHtml || bodyBlocks)) ? null : <Row key="r3"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}>
+                <NextImage sizes="(max-width: 768px) 100vw,
+           (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={blur} style={{ objectFit: "cover" }} data-id={"NextImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>}
 
-        
 
-            <Row key="r4"><Body>{bodyBlocks ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml : description}</ReactMarkdown>}</Body></Row>
+            {summary ? <div><hr/><Row>Summary by Q:</Row><Row key="r14"><Body>{summary}</Body></Row><hr/></div> : null}
+            <Row key="r4"><Body>{bodyBlocks ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml :summary?null: description}</ReactMarkdown>}</Body></Row>
             {AckBlock}
-            <Share>{session.userslug?null:<CallToShare>
-            <CallImage><img width="48" src={channelDetails.logo}/></CallImage>
+            <Share>{session.userslug ? null : <CallToShare>
+                <CallImage><img width="48" src={channelDetails.logo} /></CallImage>
                 Please help us grow by sharing the links to this thread via email, social networks and forums. {channelName == 'America First News' ? `Facebook and Google are both shadow-banning America First News, we can't survive without your help!` : `Your help is greatly appreciated!`}
             </CallToShare>}<RWebShare
                 data={{
@@ -346,7 +349,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                     <Button> Share! </Button>
                 </RWebShare>
             </Share>
-       
+
         </VerticalWrap>
     }
     else if (isReact) {

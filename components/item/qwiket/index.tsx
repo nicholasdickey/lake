@@ -274,7 +274,9 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
     let { description, title } = item ? item : { description: '', title: '' };
     const descrParts = description.split("{ai:summary}");
     description - descrParts[0];
-    const summary = descrParts.length > 1 ? descrParts[1] : '';
+    let summary = descrParts.length > 1 ? descrParts[1] : '';
+    if (summary.trim() == '[object Object]')
+        summary = null;
     const homeLink = `/${qparams.forum}/home/${qparams.tag}`;
     const itemUrl = item.url ? item.url : '';
 

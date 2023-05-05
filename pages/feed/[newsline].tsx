@@ -129,10 +129,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                 description - descrParts[0];
                 let summary = descrParts.length > 1 ? descrParts[1] : '';
                // summary=    summary.replaceAll('<p>', '').replaceAll('</p>', '\n');
-               //description=description.replaceAll('"', '&#34;').replaceAll("'", '&#39;');
-               //summary=summary.replaceAll('"', '&#34;').replaceAll("'", '&#39;');
-               //console.log("description:",description)
-               // console.log("summary:",summary);
+                console.log("summary:",summary);
                 if (summary.trim() == '[object Object]')
                     summary = null;
     

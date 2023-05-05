@@ -274,7 +274,9 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
     let { description, title } = item ? item : { description: '', title: '' };
     const descrParts = description.split("{ai:summary}");
     description - descrParts[0];
-    const summary = descrParts.length > 1 ? descrParts[1] : '';
+    let summary = descrParts.length > 1 ? descrParts[1] : '';
+    if (summary.trim() == '[object Object]')
+        summary = null;
     const homeLink = `/${qparams.forum}/home/${qparams.tag}`;
     const itemUrl = item.url ? item.url : '';
 
@@ -315,8 +317,8 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
 
             AckBlock = <>{openDialog ? <BodySnatcher mutate={mutate} setAckOverride={setAckOverride} setOpenDialog={setOpenDialog} tag={tag} slug={slug} /> : <SeeMore><a onClick={() => setOpenDialog(true)}>See more....</a></SeeMore>}</>
         }
-// <PleaseRead>Please click below to read the article on the original site before commenting:</PleaseRead>
-           
+        // <PleaseRead>Please click below to read the article on the original site before commenting:</PleaseRead>
+
         return <VerticalWrap isTopic={isTopic} singlePanel={singlePanel} fullPage={fullPage} >
             <TopRow><Row key="r1"><Link href={homeLink} legacyBehavior><a rel="nofollow"><PubImageBox><PubImage loud={session.loud} isTopic={isTopic} placeholder={"blur"} sizes="(max-width: 768px) 100vw,
            (max-width: 2200px) 50vw, 33vw"      src={catIcon} alt={catName} /></PubImageBox></a></Link>
@@ -332,8 +334,8 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
            (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={blur} style={{ objectFit: "cover" }} data-id={"NextImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>}
 
 
-            {summary ? <div><hr/><Row>Summary by Q:</Row><Row key="r14"><Body>{summary}</Body></Row><hr/></div> : null}
-            <Row key="r4"><Body>{bodyBlocks ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml :summary?null: description}</ReactMarkdown>}</Body></Row>
+            {summary ? <div><hr /><Row>Summary by Q:</Row><Row key="r14"><Body>{summary}</Body></Row><hr /></div> : null}
+            <Row key="r4"><Body>{bodyBlocks ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml : summary ? null : description}</ReactMarkdown>}</Body></Row>
             {AckBlock}
             <Share>{session.userslug ? null : <CallToShare>
                 <CallImage><img width="48" src={channelDetails.logo} /></CallImage>

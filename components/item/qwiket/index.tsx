@@ -334,11 +334,9 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
            (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={blur} style={{ objectFit: "cover" }} data-id={"NextImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>}
 
 
-<<<<<<< HEAD
-            {summary ? <div><Row><p>Summary by Q.ai:</p></Row><Row key="r14"><Body><Markdown>{entityToHtml(summary)}</Markdown></Body></Row><hr/></div> : null}
-=======
+
             {summary ? <div><Row><br/>Summary by Q.ai:</Row><Row key="r14"><Body><Markdown>{entityToHtml(summary)}</Markdown></Body></Row><hr/></div> : null}
->>>>>>> main
+
             <Row key="r4"><Body>{bodyBlocks ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml :summary?null: description}</ReactMarkdown>}</Body></Row>
             {AckBlock}
             <Share>{session.userslug ? null : <CallToShare>

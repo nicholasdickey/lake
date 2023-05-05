@@ -242,7 +242,7 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
         <link rel="canonical" href={meta?.canonic} />
         <meta name="trademark" content='THE INTERNET OF US' />
         <meta name="slogan" content="Internet's Front Page" />
-        <meta name="description" content={meta?.description} />
+        
         <meta property="og:description" content={meta?.description} />
         <meta name="title" content={meta?.title} />
         <meta property="og:title" content={meta?.title} />
@@ -255,8 +255,7 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
 
         <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
         <meta name='viewport' content='width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no' />
-        <meta name='description' content='Description' />
-        <meta name='keywords' content='Keywords' />
+  
        
 
         <link rel="manifest" href="/manifest.json" />

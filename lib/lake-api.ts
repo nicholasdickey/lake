@@ -264,7 +264,7 @@ export const fetchQueue = async ([u, qType, newsline, solo=0, forum='', tag='', 
          break;
    }
    const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/queue/fetch?${params}`;
-    console.log("FETCH QUEUEL",url);
+   // console.log("FETCH QUEUEL",url);
    let res;
    try {
       res = await axios.get(url);
@@ -272,7 +272,7 @@ export const fetchQueue = async ([u, qType, newsline, solo=0, forum='', tag='', 
    catch (x) {
       res = await axios.get(url);
    }
-   console.log("FETCH QUEUE RES:",res.data)
+  // console.log("FETCH QUEUE RES:",res.data)
    return res ? res.data : null;
 }
 //--------------------------------------------------

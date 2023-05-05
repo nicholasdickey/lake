@@ -37,10 +37,23 @@ export default function Home({ items, channelDetails, host, forum }: { channelDe
                 date * 1000
             ).toISOString();
             const flink = `https://${host}/${forum}/topic/${p.tag}/${p.slug}`;
+
+            let description=p.description;
+            const descrParts = description.split("{ai:summary}");
+            description - descrParts[0];
+            let summary = descrParts.length > 1 ? descrParts[1] : '';
+            console.log("summary:",summary)
+            summary=    summary.replaceAll('<p>', '').replaceAll('</p>', '\n');
+            if (summary.trim() == '[object Object]')
+                summary = null;
+
+
+            description = summary?summary:description;
+            console.log('rss description',description)
             return `<item>
             <link>${flink}</link>
             <title>${title}</title>
-            <description>${p.description}</description
+            <description>${description}</description
             <pubDate>${isoDate}</pubDate>  
         </item>`
         }
@@ -50,7 +63,7 @@ export default function Home({ items, channelDetails, host, forum }: { channelDe
     })
     const all = `${header}${rssItems.join('\n')} </channel>
     </rss>`
-    console.log("RSS",all)
+   // console.log("RSS",all)
     return <div><div>{all}</div></div>;
 }
 
@@ -110,12 +123,24 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     date * 1000
                 ).toISOString();
                 const flink = `https://${host}/${forum}/topic/${p.tag}/${p.slug}`;
+                let description=p.description;
+                const descrParts = description.split("{ai:summary}");
+                description - descrParts[0];
+                let summary = descrParts.length > 1 ? descrParts[1] : '';
+                summary=    summary.replaceAll('<p>', '').replaceAll('</p>', '\n');
+                console.log("summary:",summary);
+                if (summary.trim() == '[object Object]')
+                    summary = null;
+    
+    
+                description = summary?summary:description;
+                console.log('rss description',description)
                 return `
         <item>
             <link>${flink}</link>
             <title>${title}</title>
             <pubDate>${isoDate}</pubDate>  
-            <description>${p.description}</description>
+            <description>${description}</description>
         </item>
         `
             }

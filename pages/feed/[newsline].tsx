@@ -115,9 +115,9 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     new Date().getTime() / 1000
                 );
 
-                if (date > cdate - 600)
+               /* if (date > cdate - 600)
                     // delay by 10 minutes
-                    return;
+                    return;*/
                 if (itemCount++ > 10) return;
                 const isoDate = new Date(
                     date * 1000

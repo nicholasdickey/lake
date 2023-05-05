@@ -288,7 +288,16 @@ export const getServerSideProps = withSessionSsr(
                 } 
                 fallback[unstable_serialize(key)] = topic;
                 const { item } = topic;
-                meta.description = item.description;
+                let description=item.description;
+                const descrParts = description.split("{ai:summary}");
+                description - descrParts[0];
+                let summary = descrParts.length > 1 ? descrParts[1] : '';
+                summary=    summary.replaceAll('<p>', '').replaceAll('</p>', '\n');
+                if (summary.trim() == '[object Object]')
+                    summary = null;
+
+
+                meta.description = summary?summary:description;
                 meta.site_name = item.site_name;
                 meta.title = `${item.catName}: ${item.title}`;
                 meta.image = item.image;

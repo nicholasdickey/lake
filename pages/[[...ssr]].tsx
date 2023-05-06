@@ -328,6 +328,7 @@ export const getServerSideProps = withSessionSsr(
                     meta
                 }
             };
+            console.log("RETURN SSR PROPS",propsWrap)
             return propsWrap;
         } catch (x) {
             console.log("FETCH STATIC PROPS ERROR", x);

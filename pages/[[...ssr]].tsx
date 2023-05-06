@@ -58,10 +58,15 @@ export const getServerSideProps = withSessionSsr(
             const { code, state, utm_medium, appid }: { code: string, state: string, utm_medium: string, appid: string } = context.query as any;
 
             let ssr = context.params?.ssr as string[];
+            
             if (!ssr)
                 ssr = [`${process.env.DEFAULT_FORUM}`];
             let [forum] = ssr;
-            console.log("getServerSideProps",ssr)
+            if(forum=='index'){
+                ssr = [`${process.env.DEFAULT_FORUM}`];
+                forum=process.env.DEFAULT_FORUM||'';
+            }
+            console.log("getServerSideProps",ssr,forum)
 
             // Sitemap handling:
             const format = 'xml';

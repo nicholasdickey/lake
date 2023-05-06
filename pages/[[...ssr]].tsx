@@ -50,7 +50,7 @@ export const getServerSideProps = withSessionSsr(
     async function getServerSideProps(context: GetServerSidePropsContext): Promise<any> {
         try {
             let host = context.req.headers.host || "";
-            console.log("SSR host:", host);
+
             //TODO: add a header to the load balancer to pass the correct host
             if (host == 'cloud.digitalocean.com')
                 host = 'american-outdoorsman.news';
@@ -59,14 +59,10 @@ export const getServerSideProps = withSessionSsr(
             const { code, state, utm_medium, appid }: { code: string, state: string, utm_medium: string, appid: string } = context.query as any;
 
             let ssr = context.params?.ssr as string[];
-            
             if (!ssr)
                 ssr = [`${process.env.DEFAULT_FORUM}`];
             let [forum] = ssr;
-            if(forum=='index'){
-                ssr = [`${process.env.DEFAULT_FORUM}`];
-                forum=process.env.DEFAULT_FORUM||'';
-            }        
+
             // Sitemap handling:
             const format = 'xml';
             if (forum.indexOf("sitemap") == 0 && (forum.indexOf(".xml") >= 0 || forum.indexOf(".txt") >= 0)) {
@@ -263,43 +259,43 @@ export const getServerSideProps = withSessionSsr(
                 [unstable_serialize(contextStaleLKey2)]: contextLayout,
                 [unstable_serialize(contextStaleLKey3)]: contextLayout,
 
-            [unstable_serialize(['user', options ? options.userslug : ''])]: user
-        }        
-        //setup metadata for og: tags
-        let meta: {
-            description?: string,
-            title?: string,
-            site_name?: string,
-            image?: string,
-            publishedTime?: number,
-            url?: string,
-            canonic?: string
-        } = {};
-       
-        if (type == 'topic' || type == 'home') {
-             //handle invalid topic slugs with 404 - google search requirement
-            const check=threadid?.split('-slug-')||[];
-            if(type=='topic'&&check.length<2&&threadid!='nro-is-moving-to-facebook-comments'){
-                context.res.statusCode = 404;
-                return { props: { error: 404 } }
+                [unstable_serialize(['user', options ? options.userslug : ''])]: user
             }
-            const key:FetchTopicKey= {threadid:qparams.threadid?qparams.threadid:'',withBody:1,userslug:options.userslug,sessionid:options.sessionid,tag:qparams.tag,ackOverride:qparams.isbot||qparams.isfb};
-            try {
-                const topic = await fetchTopic(key);
-                //handle invalid slugs with 404:
-                if(!topic.success){
+            //setup metadata for og: tags
+            let meta: {
+                description?: string,
+                title?: string,
+                site_name?: string,
+                image?: string,
+                publishedTime?: number,
+                url?: string,
+                canonic?: string
+            } = {};
+
+            if (type == 'topic' || type == 'home') {
+                //handle invalid topic slugs with 404 - google search requirement
+                const check = threadid?.split('-slug-') || [];
+                if (type == 'topic' && check.length < 2 && threadid != 'nro-is-moving-to-facebook-comments') {
                     context.res.statusCode = 404;
                     return { props: { error: 404 } }
-                } 
-                fallback[unstable_serialize(key)] = topic;
-                const { item } = topic;
-                let description=item.description;
-                const descrParts = description.split("{ai:summary}");
-                description - descrParts[0];
-                let summary = descrParts.length > 1 ? descrParts[1] : '';
-                summary=    summary.replaceAll('<p>', '').replaceAll('</p>', '\n\n');
-                if (summary.trim() == '[object Object]')
-                    summary = null;
+                }
+                const key: FetchTopicKey = { threadid: qparams.threadid ? qparams.threadid : '', withBody: 1, userslug: options.userslug, sessionid: options.sessionid, tag: qparams.tag, ackOverride: qparams.isbot || qparams.isfb };
+                try {
+                    const topic = await fetchTopic(key);
+                    //handle invalid slugs with 404:
+                    if (!topic.success) {
+                        context.res.statusCode = 404;
+                        return { props: { error: 404 } }
+                    }
+                    fallback[unstable_serialize(key)] = topic;
+                    const { item } = topic;
+                    let description = item.description;
+                    const descrParts = description.split("{ai:summary}");
+                    description - descrParts[0];
+                    let summary = descrParts.length > 1 ? descrParts[1] : '';
+                    summary = summary.replaceAll('<p>', '').replaceAll('</p>', '\n\n');
+                    if (summary.trim() == '[object Object]')
+                        summary = null;
 
 
                     meta.description = summary ? summary : description;

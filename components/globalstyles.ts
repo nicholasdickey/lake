@@ -4,6 +4,7 @@ import { createGlobalStyle, css } from 'styled-components'
 const lightValues = css`
   --text: ${({ theme }) => theme.light.colors.text};
   --background: ${({ theme }) => theme.light.colors.background};
+  --highBackground: ${({ theme }) => theme.light.colors.highBackground};
   --link: ${({ theme }) => theme.light.colors.link};
   --highlight: ${({ theme }) => theme.light.colors.highlight};
   --lowlight: ${({ theme }) => theme.light.colors.lowlight};
@@ -22,6 +23,7 @@ const lightValues = css`
 const darkValues = css`
   --text: ${({ theme }) => theme.dark.colors.text};
   --background: ${({ theme }) => theme.dark.colors.background};
+  --highBackground: ${({ theme }) => theme.dark.colors.highBackground};
   --link: ${({ theme }) => theme.dark.colors.link};
   --highlight: ${({ theme }) => theme.dark.colors.highlight};
   --lowlight: ${({ theme }) => theme.dark.colors.lowlight};

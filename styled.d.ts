@@ -13,6 +13,7 @@ declare module 'styled-components' {
                 lowlight: string
                 text: string
                 background: string
+                highBackground: string
                 link: string
                 button: string
                 stars: string[]
@@ -28,6 +29,7 @@ declare module 'styled-components' {
                 highlight: string
                 text: string
                 background: string
+                highBackground: string
                 link: string
                 button: string
                 stars: string[]

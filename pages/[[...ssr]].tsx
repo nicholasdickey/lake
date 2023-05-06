@@ -50,7 +50,6 @@ export const getServerSideProps = withSessionSsr(
     async function getServerSideProps(context: GetServerSidePropsContext): Promise<any> {
         try {
             let host = context.req.headers.host || "";
-
             //TODO: add a header to the load balancer to pass the correct host
             if (host == 'cloud.digitalocean.com')
                 host = 'american-outdoorsman.news';
@@ -62,6 +61,7 @@ export const getServerSideProps = withSessionSsr(
             if (!ssr)
                 ssr = [`${process.env.DEFAULT_FORUM}`];
             let [forum] = ssr;
+            console.log("getServerSideProps",ssr)
 
             // Sitemap handling:
             const format = 'xml';

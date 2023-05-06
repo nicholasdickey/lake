@@ -50,11 +50,7 @@ export const getServerSideProps = withSessionSsr(
     async function getServerSideProps(context: GetServerSidePropsContext): Promise<any> {
         try {
             let host = context.req.headers.host || "";
-            console.log("SSR host:", host);
-            //TODO: add a header to the load balancer to pass the correct host
-            if (host == 'cloud.digitalocean.com')
-                host = 'american-outdoorsman.news';
-
+            
             //Disqus OAuth callback params:
             const { code, state, utm_medium, appid }: { code: string, state: string, utm_medium: string, appid: string } = context.query as any;
 
@@ -170,7 +166,6 @@ export const getServerSideProps = withSessionSsr(
                 options.userslug = '';
 
             const newsline = process.env.DEFAULT_NEWSLINE || 'qwiket';
-
             const qparams = {
                 custom: true,
                 forum,
@@ -191,10 +186,8 @@ export const getServerSideProps = withSessionSsr(
 
             //Disqus OAuth callback:
             if (code) {
-                console.log("ssr processLoginCode", code, state, appid)
                 const jsonState = JSON.parse(state);
                 const { href } = jsonState;
-                console.log("jsonState", jsonState)
                 const user = await processLoginCode(code, host, appid);
                 if (user) {
                     const { slug } = user;

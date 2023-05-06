@@ -124,11 +124,15 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                 ).toISOString();
                 const flink = `https://${host}/${forum}/topic/${p.tag}/${p.slug}`;
                 let description=p.description;
+
                 const descrParts = description.split("{ai:summary}");
                 description - descrParts[0];
                 let summary = descrParts.length > 1 ? descrParts[1] : '';
                // summary=    summary.replaceAll('<p>', '').replaceAll('</p>', '\n');
-                console.log("summary:",summary);
+               //description=description.replaceAll('"', '&#34;').replaceAll("'", '&#39;');
+               //summary=summary.replaceAll('"', '&#34;').replaceAll("'", '&#39;');
+               //console.log("description:",description)
+               // console.log("summary:",summary);
                 if (summary.trim() == '[object Object]')
                     summary = null;
     

@@ -50,6 +50,7 @@ export const getServerSideProps = withSessionSsr(
     async function getServerSideProps(context: GetServerSidePropsContext): Promise<any> {
         try {
             let host = context.req.headers.host || "";
+            console.log("SSR host:", host);
             //TODO: add a header to the load balancer to pass the correct host
             if (host == 'cloud.digitalocean.com')
                 host = 'american-outdoorsman.news';
@@ -65,9 +66,7 @@ export const getServerSideProps = withSessionSsr(
             if(forum=='index'){
                 ssr = [`${process.env.DEFAULT_FORUM}`];
                 forum=process.env.DEFAULT_FORUM||'';
-            }
-            console.log("getServerSideProps",ssr,forum)
-
+            }        
             // Sitemap handling:
             const format = 'xml';
             if (forum.indexOf("sitemap") == 0 && (forum.indexOf(".xml") >= 0 || forum.indexOf(".txt") >= 0)) {
@@ -333,7 +332,6 @@ export const getServerSideProps = withSessionSsr(
                     meta
                 }
             };
-            console.log("RETURN SSR PROPS",propsWrap)
             return propsWrap;
         } catch (x) {
             console.log("FETCH STATIC PROPS ERROR", x);

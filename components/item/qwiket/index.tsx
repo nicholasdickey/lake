@@ -184,7 +184,8 @@ const Body = styled.div`
     & iframe{
         min-height:450px;
     }
-   
+    cursor:auto;
+    
 
 `
 interface RightParams {
@@ -264,6 +265,19 @@ top:2-px;
 const Summary=styled.div`
 background: var(--highBackground);
 padding:8px;
+cursor:auto;
+
+`
+const SummaryTitle=styled.div`
+display:flex;
+justify-content:space-between;
+align-items:text-top;
+width:100%;
+cursor:auto;
+`
+const Subtext=styled.div`
+font-size:10px;
+color:grey;
 `
 //--------------------
 
@@ -338,7 +352,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
            (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={blur} style={{ objectFit: "cover" }} data-id={"NextImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>}
 
 
-            {summary ? <div><Summary><Row><br/>Summary by ai.Q [ChatGPT]:</Row><Row key="r14"><Body><Markdown>{entityToHtml(summary)}</Markdown></Body></Row></Summary><hr/></div> : null}
+            {summary ? <div><Summary><Row><br/><SummaryTitle>Summary by ai.Q: <Subtext>[ChatGPT]</Subtext></SummaryTitle></Row><Row key="r14"><Body><Markdown>{entityToHtml(summary)}</Markdown></Body></Row></Summary><hr/></div> : null}
             <Row key="r4"><Body>{bodyBlocks ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml :summary?null: description}</ReactMarkdown>}</Body></Row>
             {AckBlock}
             <Share>{session.userslug ? null : <CallToShare>

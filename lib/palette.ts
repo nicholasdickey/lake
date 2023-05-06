@@ -6,7 +6,8 @@ export const palette = {
             link: "#607D8B",
             highlight:"#388e3c",
             lowlight: "#f8f8f8",     
-            background: "#F5F5F5",// g[100]
+            background: "#F5F5F5",
+            highBackground: "#E5E5E5",// g[100]
             button: "#F5F5F5",
             notificationButton:"#01579B",
             qwiketBorderStale:"rgb(168, 168, 168)",
@@ -29,6 +30,7 @@ export const palette = {
             highlight:"#B0BEC5",
             lowlight:"#444",
             background: "#303030",//"#607D8B", //bg[500]
+            highBackground: "#383838",
             button:"#607D8B",
             notificationButton:"#0277BD",
             qwiketBorderStale:"rgb(168, 168, 168)",

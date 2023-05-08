@@ -133,6 +133,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     //summary=summary.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
                     summary = encodeEntities(summary);
                     summary = `${summary}- summary © am1.news -<p>Click or tap below to read the original story and more like it on our website. We can only share about 20% of our full news feed on Facebook</p>`;
+                    
                     description = encodeEntities(description);
                     console.log("description:", description)
                     console.log("summary:", summary);

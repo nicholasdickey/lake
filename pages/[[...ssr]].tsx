@@ -288,7 +288,7 @@ export const getServerSideProps = withSessionSsr(
                     const { item } = topic;
                     let description = item.description;
                     const descrParts = description.split("{ai:summary}");
-                    description - descrParts[0];
+                    description = descrParts[0];
                     let summary = descrParts.length > 1 ? descrParts[1] : '';
                     summary = summary.replaceAll('<p>', '').replaceAll('</p>', '\n\n');
                     if (summary.trim() == '[object Object]')

@@ -16,6 +16,9 @@
 		},
 		{
 			"path": "../../prod2-lake"
+		},
+		{
+			"path": "../../prod-landing"
 		}
 	],
 	"settings": {}

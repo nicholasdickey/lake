@@ -8,7 +8,7 @@ import {
 import {
     fetchQueue, fetchChannelConfig, FetchQueueKey,
 } from '../../lib/lake-api';
-
+import encodeEntities from '../../lib/encode-entities';
 export default function Home({ items, channelDetails, host, forum }: { channelDetails: any, items: any[], host: string, forum: string }) {
     const header = `<?xml version="1.0" encoding="UTF-8" ?>  
     <rss version="2.0"> 
@@ -128,9 +128,12 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                 const descrParts = description.split("{ai:summary}");
                 description - descrParts[0];
                 let summary = descrParts.length > 1 ? descrParts[1] : '';
-                summary=    summary.replaceAll('<p>', '').replaceAll('</p>', '\n');
-                description=description.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
-                summary=summary.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
+                summary=    summary.replaceAll('<p>', '<p>').replaceAll('</p>', '</p>\n\n');
+                //description=description.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
+                //summary=summary.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
+                summary=encodeEntities(summary);
+                summary+=`<p>Click <a href="${flink}">here</a> to read the story on our site.</p>`;
+                description=encodeEntities(description); 
                 console.log("description:",description)
                 console.log("summary:",summary);
                 if (summary.trim() == '[object Object]')

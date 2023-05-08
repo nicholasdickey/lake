@@ -132,7 +132,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     //description=description.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
                     //summary=summary.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
                     summary = encodeEntities(summary);
-                    summary = `<p>Article summary:</p> ${summary}<p>Click  below to read the story on our site.</p>`;
+                    summary = `${summary}<p>Click  below to read the story on our site.</p>`;
                     description = encodeEntities(description);
                     console.log("description:", description)
                     console.log("summary:", summary);

@@ -138,8 +138,6 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     console.log("summary:", summary);
                     if (summary.trim() == '[object Object]')
                         summary = null;
-
-
                     description = summary ? summary : description;
                     console.log('rss description', description)
                     return `

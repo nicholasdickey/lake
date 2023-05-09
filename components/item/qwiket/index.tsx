@@ -373,7 +373,8 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
             >
                     <Button> Share! </Button>
                 </RWebShare>
-               <Chatbot> Note: You can use @chatbot mention tag to interact with ChatGPT language model in comments. Neither your comment thus tagged, not the generated responses will appear in "Comments" or "News & Views" streams.</Chatbot>
+               <Chatbot> Note: You can use @chatbot mention tag to interact with ChatGPT language model in comments. Neither your comment, not the generated responses will appear in "Comments" or "News & Views" streams.</Chatbot>
+            
             </Share>
 
         </VerticalWrap>

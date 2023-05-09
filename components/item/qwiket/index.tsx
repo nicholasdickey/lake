@@ -279,6 +279,11 @@ const Subtext=styled.div`
 font-size:10px;
 color:grey;
 `
+const Chatbot=styled.div`
+margin-top:20px;
+font-size:13px;
+font-style:italic;
+`
 //--------------------
 
 const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPage, mutate, setAckOverride, channelName }: { extraWide: boolean, isRight: boolean, item: any, isTopic: boolean, qType?: string, singlePanel?: boolean, fullPage?: boolean, mutate?: any, setAckOverride?: any, channelName?: string }) => {
@@ -368,6 +373,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
             >
                     <Button> Share! </Button>
                 </RWebShare>
+               <Chatbot> Note: You can use @chatbot mention tag to interact with ChatGPT language model in comments. Neither your comment thus tagged, not the generated responses will appear in "Comments" or "News & Views" streams.</Chatbot>
             </Share>
 
         </VerticalWrap>

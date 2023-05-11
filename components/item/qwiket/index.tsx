@@ -262,24 +262,24 @@ cursor:pointer;
 const CallImage = styled.div`
 top:2-px;
 `
-const Summary=styled.div`
+const Summary = styled.div`
 background: var(--highBackground);
 padding:8px;
 cursor:auto;
 
 `
-const SummaryTitle=styled.div`
+const SummaryTitle = styled.div`
 display:flex;
 justify-content:space-between;
 align-items:text-top;
 width:100%;
 cursor:auto;
 `
-const Subtext=styled.div`
+const Subtext = styled.div`
 font-size:10px;
 color:grey;
 `
-const Chatbot=styled.div`
+const Chatbot = styled.div`
 margin-top:20px;
 font-size:13px;
 font-style:italic;
@@ -302,7 +302,9 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
         summary = null;
     const homeLink = `/${qparams.forum}/home/${qparams.tag}`;
     const itemUrl = item.url ? item.url : '';
-
+    description = description.substring(0, 280);
+    if (description.length == 280)
+        description += '...';
     const blur = 'https://ucarecdn.com/d26e44d9-5ca8-4823-9450-47a60e3287c6/al90.png';
     if (isTopic) {
         let { catIcon, catName, tag, image, site_name, published_time, author, body, hasBody, slug, headless }:
@@ -340,8 +342,8 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
 
             AckBlock = <>{openDialog ? <BodySnatcher mutate={mutate} setAckOverride={setAckOverride} setOpenDialog={setOpenDialog} tag={tag} slug={slug} /> : <SeeMore><a onClick={() => setOpenDialog(true)}>See more....</a></SeeMore>}</>
         }
-// <PleaseRead>Please click below to read the article on the original site before commenting:</PleaseRead>
-           
+        // <PleaseRead>Please click below to read the article on the original site before commenting:</PleaseRead>
+
         return <VerticalWrap isTopic={isTopic} singlePanel={singlePanel} fullPage={fullPage} >
             <TopRow><Row key="r1"><Link href={homeLink} legacyBehavior><a rel="nofollow"><PubImageBox><PubImage loud={session.loud} isTopic={isTopic} placeholder={"blur"} sizes="(max-width: 768px) 100vw,
            (max-width: 2200px) 50vw, 33vw"      src={catIcon} alt={catName} /></PubImageBox></a></Link>
@@ -357,8 +359,8 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
            (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={blur} style={{ objectFit: "cover" }} data-id={"NextImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>}
 
 
-            {summary&&!bodyHtml &&!bodyBlocks ? <div><Summary><Row><br/><SummaryTitle>Summary by ai.Q: <Subtext>[ChatGPT]</Subtext></SummaryTitle></Row><Row key="r14"><Body><Markdown>{entityToHtml(summary)}</Markdown></Body></Row></Summary><hr/></div> : null}
-            <Row key="r4"><Body>{bodyBlocks ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml :summary?null: description}</ReactMarkdown>}</Body></Row>
+            {summary && !bodyHtml && !bodyBlocks ? <div><Summary><Row><br /><SummaryTitle>Summary by ai.Q: <Subtext>[ChatGPT]</Subtext></SummaryTitle></Row><Row key="r14"><Body><Markdown>{entityToHtml(summary)}</Markdown></Body></Row></Summary><hr /></div> : null}
+            <Row key="r4"><Body>{bodyBlocks ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml : summary ? null : description}</ReactMarkdown>}</Body></Row>
             {AckBlock}
             <Share>{session.userslug ? null : <CallToShare>
                 <CallImage><img width="48" src={channelDetails.logo} /></CallImage>
@@ -373,8 +375,8 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
             >
                     <Button> Share! </Button>
                 </RWebShare>
-               <Chatbot> Note: You can use @chatbot mention tag to interact with ChatGPT language model in comments. Neither your comment, nor the generated responses will appear in "Comments" or "News & Views" streams.</Chatbot>
-            
+                <Chatbot> Note: You can use @chatbot mention tag to interact with ChatGPT language model in comments. Neither your comment, nor the generated responses will appear in "Comments" or "News & Views" streams.</Chatbot>
+
             </Share>
 
         </VerticalWrap>

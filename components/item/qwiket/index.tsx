@@ -300,6 +300,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
     let summary = descrParts.length > 1 ? descrParts[1] : '';
     if (summary.trim() == '[object Object]')
         summary = null;
+    description=summary.substring(0, 160)+'...';    
     const homeLink = `/${qparams.forum}/home/${qparams.tag}`;
     const itemUrl = item.url ? item.url : '';
 
@@ -373,7 +374,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
             >
                     <Button> Share! </Button>
                 </RWebShare>
-               <Chatbot> Note: You can use @chatbot mention tag to interact with ChatGPT language model in comments. Neither your comment, not the generated responses will appear in "Comments" or "News & Views" streams.</Chatbot>
+               <Chatbot> Note: You can use @chatbot mention tag to interact with ChatGPT language model in comments. Neither your comment, nor the generated responses will appear in "Comments" or "News & Views" streams.</Chatbot>
             
             </Share>
 

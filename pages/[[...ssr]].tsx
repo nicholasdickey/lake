@@ -298,7 +298,7 @@ export const getServerSideProps = withSessionSsr(
 
                     meta.description = summary ? summary : description;
                     meta.site_name = item.site_name;
-                    meta.title = `${item.catName}: ${item.title}`;
+                    meta.title = item.title.indexOf('Digest')<0?`${item.catName}: ${item.title}`:item.title;
                     meta.image = item.image;
                     meta.publishedTime = item.shared_time;
                     meta.url = item.shared_time;

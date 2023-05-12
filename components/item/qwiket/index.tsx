@@ -311,6 +311,9 @@ max-width:196px;
 padding:8px;
 @media(max-width:900px){
     padding:2px;
+    min-width:100%;
+    margin-top:20px;
+    margin-bottom:20px;
 }
 
 `

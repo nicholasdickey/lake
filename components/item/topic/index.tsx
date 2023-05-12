@@ -11,7 +11,7 @@ const Topic = ({ singlePanel, fullPage }: { singlePanel?: boolean, fullPage?: bo
   const [ackOverride, setAckOverride] = useState('');
   const key: FetchTopicKey = { threadid: qparams.threadid, withBody: 1, userslug: session.userslug, sessionid: session.sessionid, tag: qparams.tag, ackOverride: qparams.isbot || qparams.isfb || ackOverride == qparams.threadid };
   const { data, error, mutate } = useSWR(key, fetchTopic);
-  
+
   if (!data) {
     const item = {
       image: 'https://media.istockphoto.com/id/1280015859/photo/blue-lake-with-treeline-in-autumn-color-on-a-sunny-afternoon-in-northern-minnesota.jpg?s=612x612&w=0&k=20&c=smtj8bw1BW3gUI9rrxRnAzQKGWmTyMQYcODgbuWNMbc=',
@@ -22,6 +22,7 @@ const Topic = ({ singlePanel, fullPage }: { singlePanel?: boolean, fullPage?: bo
     }
     return <Qwiket extraWide={false} item={item} isTopic={true} singlePanel={singlePanel} isRight={true}></Qwiket>
   }
+  
   const { title, slug } = data.item;
   return <><Qwiket extraWide={false} item={data?.item} isTopic={true} singlePanel={singlePanel} mutate={mutate} setAckOverride={setAckOverride} isRight={true} fullPage={fullPage} channelName={channelDetails.displayName}></Qwiket>
     <Disqus forum={qparams.forum} title={title} cc={qparams.cc} slug={slug} fullPage={fullPage} /></>

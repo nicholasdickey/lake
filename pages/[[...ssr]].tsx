@@ -276,7 +276,7 @@ export const getServerSideProps = withSessionSsr(
                     context.res.statusCode = 404;
                     return { props: { error: 404 } }
                 }
-                const key: FetchTopicKey = { threadid: qparams.threadid ? qparams.threadid : '', withBody: 1, userslug: options.userslug, sessionid: options.sessionid, tag: qparams.tag, ackOverride: qparams.isbot || qparams.isfb };
+                const key: FetchTopicKey = { threadid: qparams.threadid ? qparams.threadid : '', withBody: 1, userslug: options.userslug, sessionid: options.sessionid, tag: qparams.tag, ackOverride: (qparams.isbot || qparams.isfb)?true:false };
                 try {
                     const topic = await fetchTopic(key);
                     //handle invalid slugs with 404:
@@ -284,6 +284,7 @@ export const getServerSideProps = withSessionSsr(
                         context.res.statusCode = 404;
                         return { props: { error: 404 } }
                     }
+                   // console.log("topic keyin ssr:",key)
                     fallback[unstable_serialize(key)] = topic;
                     const { item } = topic;
                     let description = item.description;
@@ -314,9 +315,10 @@ export const getServerSideProps = withSessionSsr(
                 meta.site_name = channelConfig.channelDetails.displayName;
                 meta.title = channelConfig.channelDetails.displayName
                 meta.image == channelConfig.channelDetails.logo;
-                meta.publishedTime = Date.now() / 1000 | 0,
-                    meta.canonic = `https://${process.env.CANONIC_DOMAIN}`
+                meta.publishedTime = Date.now() / 1000 | 0;
+                meta.canonic = `https://${process.env.CANONIC_DOMAIN}`
             }
+          //  console.log("fallback in ssr:",fallback)
             const propsWrap = {
                 props: {
                     session: options,

@@ -106,7 +106,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
             const rssItems = items.map((p: any, itemCount: number) => {
                 try {
                     //  console.log("rss item:", JSON.stringify(p))
-                    const title = `${p.site_name ? p.site_name + ': ' : ''}${p.title}` || ``;
+                    const title = p.title.indexOf('Digest')<0?`${p.site_name ? p.site_name + ': ' : ''}${p.title}`:p.title || ``;
                     const date = p.shared_time;
                     if (!date || date == "null") return;
                     // console.log("RSS date ",date);

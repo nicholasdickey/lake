@@ -374,43 +374,36 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
         }
         const { diff, timeString } = TimeDifference(published_time, qparams.timestamp)
         let bodyHtml: string = '';
-       // console.log("Qwiket body", body, item)
-        let isDigest=false;
+        // console.log("Qwiket body", body, item)
+        let isDigest = false;
         const renderDigest = (json: any) => {
-            console.log("renderDigest##################################",JSON.stringify(json))
-            isDigest=true;
+            isDigest = true;
             const summary = json.summary;
             let out = [];
             for (let key in json) {
                 if (key == 'summary')
                     continue;
                 const value = json[key];
-                console.log("key,value",key, value);
                 const hash = `#${key}`;
                 const items = value.items.map((item: any) => {
                     const { title, url, text, publication, image, slug } = item;
-                    console.log("image:",image)
-                    return <DigestItem key={`wefdoih-${slug}`}><Link href={url}><DigestTitle>{publication}: {title}</DigestTitle><DigestBody><DigestImage><img style={{width:"100%"}} alt={title} src={image.trim()}/></DigestImage><DigestText>{text}</DigestText></DigestBody></Link></DigestItem>
+                    return <DigestItem key={`wefdoih-${slug}`}><Link href={url}><DigestTitle>{publication}: {title}</DigestTitle><DigestBody><DigestImage><img style={{ width: "100%" }} alt={title} src={image.trim()} /></DigestImage><DigestText>{text}</DigestText></DigestBody></Link></DigestItem>
                 })
-                console.log("adding to out")
                 out.push(<DigestCategory><DigestHash>{hash}</DigestHash>{items}</DigestCategory>);
             }
-           // console.log("qwiket out",JSON.stringify(out))
-            return <Digest><DigestSummary><b>Hot Take:&nbsp;</b>{summary}</DigestSummary>{out}</Digest>
+            return <Digest><DigestSummary><b>Hot Take:&nbsp;</b><ReactMarkdown rehypePlugins={[rehypeRaw]} >{summary}</ReactMarkdown></DigestSummary>{out}</Digest>
         }
         interface BodyBlock {
             type: string;
             content: string;
             id?: string;
-            json?:any;
+            json?: any;
         }
         let bodyBlocks: Array<ReactNode> | null = null;
         let AckBlock: ReactNode = null;
         if (body) {
-            console.log("bodY:" + JSON.stringify(body))
             bodyBlocks = body.map((b: BodyBlock, i: number) => {
-                console.log("b.type",b.type)
-                return (b.type == "twitter" && b.id) ? <TweetEmbedContainer key={`twt-${i}`}><TweetEmbed><TwitterTweetEmbed tweetId={b.id} placeholder="Loading a Tweet..." /*options={{theme:session.dark?'dark':'light'}}*/ /></TweetEmbed></TweetEmbedContainer> : (b.type == 'html'|| b.type == 'text'||b.type=='image')? <ReactMarkdown rehypePlugins={[rehypeRaw]} >{b.content}</ReactMarkdown> : <div>{renderDigest(b.json)}</div>
+                return (b.type == "twitter" && b.id) ? <TweetEmbedContainer key={`twt-${i}`}><TweetEmbed><TwitterTweetEmbed tweetId={b.id} placeholder="Loading a Tweet..." /*options={{theme:session.dark?'dark':'light'}}*/ /></TweetEmbed></TweetEmbedContainer> : (b.type == 'html' || b.type == 'text' || b.type == 'image') ? <ReactMarkdown rehypePlugins={[rehypeRaw]} >{b.content}</ReactMarkdown> : <div>{renderDigest(b.json)}</div>
             })
         }
         if (!body && hasBody) {
@@ -422,18 +415,18 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
             <TopRow><Row key="r1"><Link href={homeLink} legacyBehavior><a rel="nofollow"><PubImageBox><PubImage loud={session.loud} isTopic={isTopic} placeholder={"blur"} sizes="(max-width: 768px) 100vw,
            (max-width: 2200px) 50vw, 33vw"      src={catIcon} alt={catName} /></PubImageBox></a></Link>
                 <Right length={0}><Link href={homeLink} legacyBehavior><a rel="nofollow"><SiteName isTopic={isTopic}>{site_name}</SiteName></a></Link><TimeSince isTopic={isTopic}>{timeString}</TimeSince></Right></Row></TopRow>
-            {author&&!isDigest ? <Row>{author}</Row> : null}
+            {author && !isDigest ? <Row>{author}</Row> : null}
             <Row key="r2"><Link href={itemUrl} legacyBehavior><a rel="nofollow"><Title isTopic={isTopic}>{title}</Title></a></Link></Row>
             <hr />
-            {isDigest?null:<Row key="3.1"><Link href={itemUrl} legacyBehavior><a rel="nofollow">{item.url}</a></Link></Row>}
-            {isDigest?null:<hr />}
+            {isDigest ? null : <Row key="3.1"><Link href={itemUrl} legacyBehavior><a rel="nofollow">{item.url}</a></Link></Row>}
+            {isDigest ? null : <hr />}
 
-            {(isDigest|| headless == 1 && (bodyHtml || bodyBlocks)) ? null : <Row key="r3"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}>
+            {(isDigest || headless == 1 && (bodyHtml || bodyBlocks)) ? null : <Row key="r3"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}>
                 <NextImage sizes="(max-width: 768px) 100vw,
            (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={blur} style={{ objectFit: "cover" }} data-id={"NextImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>}
 
 
-            {summary && !isDigest&&!bodyHtml && !bodyBlocks ? <div><Summary><Row><br /><SummaryTitle>Summary by ai.Q: <Subtext>[ChatGPT]</Subtext></SummaryTitle></Row><Row key="r14"><Body><Markdown>{entityToHtml(summary)}</Markdown></Body></Row></Summary><hr /></div> : null}
+            {summary && !isDigest && !bodyHtml && !bodyBlocks ? <div><Summary><Row><br /><SummaryTitle>Summary by ai.Q: <Subtext>[ChatGPT]</Subtext></SummaryTitle></Row><Row key="r14"><Body><Markdown>{entityToHtml(summary)}</Markdown></Body></Row></Summary><hr /></div> : null}
             <Row key="r4"><Body>{bodyBlocks ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml : summary ? null : description}</ReactMarkdown>}</Body></Row>
             {AckBlock}
             <Share>{true ? null : <CallToShare>

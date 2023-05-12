@@ -288,11 +288,20 @@ const DigestItem = styled.div`
 margin:20px;
 background: var(--highBackground);
 padding:20px;
+@media(max-width:900px){
+    padding:2px;
+    margin:2px;
+    margin-top:40px;
+}
 `
+
 const DigestBody = styled.div`
 display:flex;
 align-items:flex-start;
 margin-top:10px;
+@media(max-width:900px){
+    display:block;
+}
 
 `
 const DigestImage = styled.div`
@@ -300,6 +309,10 @@ min-width:196px;
 max-width:196px;
 //height:76px !important;
 padding:8px;
+@media(max-width:900px){
+    padding:2px;
+}
+
 `
 const DigestTitle = styled.div`
 font-weight:500;
@@ -310,6 +323,12 @@ background: var(--highBackground);
 padding:20px;
 margin-left:20px;
 margin-right:20px;
+@media(max-width:900px){
+    margin-left:2px;
+    margin-right:2px;
+    padding:2px;
+}
+
 
 `
 const DigestLink = styled.div`
@@ -318,12 +337,19 @@ const DigestText = styled.div`
 padding-left:20px;
 padding-top:4px;
 maring-top:-20px;
+@media(max-width:900px){
+    padding-left:2px;
+}
 `
 const DigestHash = styled.div`
     font-style:bold;
     font-size:20px;
     margin-top:24px;
     margin-left:20px;
+    @media(max-width:900px){
+        margin-left:2px;
+    }
+    
 `
 const DigestCategory = styled.div`
 `

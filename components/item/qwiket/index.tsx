@@ -530,6 +530,10 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
             site_name = site_name.split('|')[0];
             site_name = site_name.split(' - ')[0];
         }
+       // let isDigest=false;
+        if(author=='ai.Q'){
+            author='';
+        }
         const { diff, timeString } = TimeDifference(published_time, qparams.timestamp);
         if (slug == 'loading') {
             return <Link href={`/${qparams.forum}/topic/${tag}/${slug}${qparams.layoutNumber != 'l1' ? '/' + qparams.layoutNumber : ''}`} legacyBehavior><a rel="nofollow"><VerticalWrap isTopic={isTopic}>

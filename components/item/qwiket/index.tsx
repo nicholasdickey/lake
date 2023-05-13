@@ -206,6 +206,10 @@ const Comment = styled.div`
     margin:1px 16px 1px 3px;
    
 `
+const Shares= styled.div`
+display:flex;
+align-items: center;
+`
 
 const TweetEmbedContainer = styled.div`
     width:100%;
@@ -461,7 +465,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
             <Share>{true ? null : <CallToShare>
                 <CallImage><img width="48" src={channelDetails.logo} /></CallImage>
                 Please help us grow by sharing the links to this thread via email, social networks and forums. {channelName == 'America First News' ? `Facebook and Google are both shadow-banning America First News, we can't survive without your help!` : `Your help is greatly appreciated!`}
-            </CallToShare>}<RWebShare
+            </CallToShare>}<Shares><RWebShare
                 data={{
                     text: description,
                     url: `/${qparams.forum}/topic/${tag}/${slug}`,
@@ -470,7 +474,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                 onClick={() => console.log("shared successfully!")}
             >
                     <Button> Share! </Button>
-                </RWebShare>
+                </RWebShare></Shares>
                 <Chatbot> Note: You can use @chatbot mention tag to interact with ChatGPT language model in comments. Neither your comment, nor the generated responses will appear in "Comments" or "News & Views" streams.</Chatbot>
 
             </Share>
@@ -535,6 +539,9 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                 <Row key="r4" ><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage placeholder={"blur"} blurDataURL={blur} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
             </VerticalWrap></a></Link>
         }
+        if(!image) image = catIcon;
+        image=image.replace('hhttps','https');
+        console.log("IMAGE:",image)
         return <Link href={`/${qparams.forum}/topic/${tag}/${slug}${qparams.layoutNumber != 'l1' ? '/' + qparams.layoutNumber : ''}`} legacyBehavior><a rel="nofollow">
             <VerticalWrap isTopic={isTopic} isTag={isTag} diff={diff} isRight={isRight}>
                 <TopRow><Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} style={{ height: '38', width: 'auto' }} sizes="(max-width: 768px) 100vw,
@@ -547,4 +554,6 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
             </VerticalWrap></a></Link>
     }
 }
+//  <Row key="r4"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage placeholder={"blur"} blurDataURL={blur} style={{ maxWidth: "100%", height: "100%", objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
+            
 export default Qwiket;

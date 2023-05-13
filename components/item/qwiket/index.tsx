@@ -209,6 +209,9 @@ const Comment = styled.div`
 const Shares= styled.div`
 display:flex;
 align-items: center;
+justify-content: space-between;
+padding-right:20px;
+padding-left:20px;
 `
 
 const TweetEmbedContainer = styled.div`
@@ -235,6 +238,20 @@ const Button = styled.button`
     background:green;
     color:white;
     cursor:pointer;
+
+    background-color: #04AA6D;
+  border: none;
+  color: white;
+  padding: 3px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: 3px 2px;
+  border-radius: 8px;
+  &:hover{
+    background-color: #009060;
+  }
 `
 
 const PleaseRead = styled.p`
@@ -354,7 +371,7 @@ cursor:initial;
 const DigestHash = styled.div`
     font-style:bold;
     font-size:20px;
-    margin-top:24px;
+    margin-top:44px;
     margin-left:20px;
     @media(max-width:900px){
         margin-left:2px;
@@ -476,8 +493,9 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                 }}
                 onClick={() => console.log("shared successfully!")}
             >
-                    <Button> Share! </Button>
-                </RWebShare></Shares>
+                    <Button> Share </Button>
+                </RWebShare> {isDigest?<><a href="https://twitter.com/am1digest?ref_src=twsrc%5Etfw" className="twitter-follow-button" data-show-count="false">Follow @am1digest</a><script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script></>:<><a href="https://twitter.com/am1_news?ref_src=twsrc%5Etfw" className="twitter-follow-button" data-show-count="false">Follow @am1_news</a><script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script></>}</Shares>
+           
                 <Chatbot> Note: You can use @chatbot mention tag to interact with ChatGPT language model in comments. Neither your comment, nor the generated responses will appear in "Comments" or "News & Views" streams.</Chatbot>
 
             </Share>

@@ -317,9 +317,10 @@ padding:20px;
 `
 
 const DigestBody = styled.div`
-display:flex;
+//display:flex;
 align-items:flex-start;
 margin-top:10px;
+margin-bottom:10px;
 @media(max-width:900px){
     display:block;
 }
@@ -330,19 +331,30 @@ user-select: text;
 const DigestImage = styled.div`
 min-width:196px;
 max-width:196px;
+margin-top:6px;
 //height:76px !important;
-padding:8px;
-@media(max-width:900px){
+//padding:8px;
+//margin-left:20px;
+
+//margin-top:20px;
+@media(max-width:899px){
     padding:2px;
     min-width:100%;
     margin-top:20px;
     margin-bottom:20px;
 }
+@media(min-width:900px){
+    float:left;
+    margin-right:18px;
+    //margin-left:10px;
+}
 
 `
 const DigestTitle = styled.div`
+float:left;
 font-weight:500;
 font-size:20px;
+margin-bottom:10px;
 `
 const DigestSummary = styled.div`
 background: var(--highBackground);
@@ -360,18 +372,20 @@ margin-right:20px;
 const DigestLink = styled.div`
 `
 const DigestText = styled.div`
-padding-left:20px;
+//padding-left:20px;
 padding-top:4px;
-maring-top:-20px;
+marging-top:20px;
 @media(max-width:900px){
     padding-left:2px;
 }
 cursor:initial;
 `
 const DigestHash = styled.div`
+    float:left;
+    width:100%;
     font-style:bold;
     font-size:20px;
-    margin-top:44px;
+   // margin-top:24px;
     margin-left:20px;
     @media(max-width:900px){
         margin-left:2px;
@@ -439,10 +453,17 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                 const value = json[key];
                 const hash = `#${key}`;
                 const items = value.items.map((item: any) => {
-                    const { title, url, text, publication, image, slug } = item;
-                    return <DigestItem key={`wefdoih-${slug}`}><Link href={url}><DigestTitle>{publication}: {title}</DigestTitle></Link><DigestBody><DigestImage><Link href={url}><img style={{ width: "100%" }} alt={title} src={image.trim()} /></Link></DigestImage><DigestText>{text}</DigestText></DigestBody></DigestItem>
+                    let { title, url, text, publication, image, slug } = item;
+                    let blocks=[];
+                    const blocksRaw=text.split('</p><p>');
+                    blocks=blocksRaw.map((block:string,i:number)=>{
+                        block=block.replaceAll('<p>' ,'').replaceAll('</p>','').replaceAll('<br>','\n');
+                        return <><span key={i}>{block}</span><br/></>;
+                    })
+                    text=text.replaceAll('</p><p>','\n')
+                    return <DigestItem key={`wefdoih-${slug}`}><Link href={url}><DigestTitle>{publication}: {title}</DigestTitle></Link><DigestBody><DigestImage><Link href={url}><img style={{ width: "100%" }} alt={title} src={image.trim()} /></Link></DigestImage><DigestText> {blocks}</DigestText></DigestBody><hr/></DigestItem>
                 })
-                out.push(<DigestCategory><DigestHash>{hash}</DigestHash>{items}</DigestCategory>);
+                out.push(<DigestCategory><div><DigestHash><p>{hash}</p></DigestHash></div>{items}</DigestCategory>);
             }
             return <Digest><DigestSummary><b>Hot Take:&nbsp;</b><ReactMarkdown rehypePlugins={[rehypeRaw]} >{summary}</ReactMarkdown></DigestSummary>{out}</Digest>
         }

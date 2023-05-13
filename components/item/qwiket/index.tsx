@@ -354,7 +354,8 @@ const DigestTitle = styled.div`
 float:left;
 font-weight:500;
 font-size:20px;
-margin-bottom:10px;
+margin-bottom:14px;
+width:100%;
 `
 const DigestSummary = styled.div`
 background: var(--highBackground);

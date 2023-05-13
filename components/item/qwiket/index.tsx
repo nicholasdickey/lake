@@ -412,7 +412,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
             { catIcon: string, catName: string, tag: string, image: string, site_name: string, published_time: number, author: string, slug: string, body: any, hasBody?: boolean, ack?: boolean, headless?: number } =
             item ? item : { catIcon: '', catName: '', tag: '', image: '', site_name: '', published_time: '', author: '', body: '' };
         if (!image)
-            image = blur;
+            image = catIcon;
         if (!catIcon)
             catIcon = blur;
         if (catName?.indexOf('Liberty Daily') >= 0) {
@@ -566,7 +566,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
         }
         if(!image) image = catIcon;
         image=image.replace('hhttps','https');
-        console.log("IMAGE:",image)
+  
         return <Link href={`/${qparams.forum}/topic/${tag}/${slug}${qparams.layoutNumber != 'l1' ? '/' + qparams.layoutNumber : ''}`} legacyBehavior><a rel="nofollow">
             <VerticalWrap isTopic={isTopic} isTag={isTag} diff={diff} isRight={isRight}>
                 <TopRow><Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} style={{ height: '38', width: 'auto' }} sizes="(max-width: 768px) 100vw,

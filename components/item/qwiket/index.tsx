@@ -35,7 +35,7 @@ const VerticalWrap = styled.div<IsTopic>`
     border-color:${({ isTag, diff }) => (isTag && diff && (diff < 3600)) ? 'var(--qwiket-border-new) var(--qwiket-border-stale) var(--qwiket-border-new) var(--qwiket-border-new)' : isTag && diff && diff < 4 * 3600 ? 'var(--qwiket-border-recent) var(--qwiket-border-stale) var(--qwiket-border-recent) var(--qwiket-border-recent)' : 'var(--qwiket-border-stale)'};
     border-style: solid ${({ isTopic, singlePanel }) => isTopic ? singlePanel ? 'solid' : 'none' : 'solid'}  ${({ isTopic }) => isTopic ? 'none' : 'solid'}   ${({ isTopic }) => isTopic ? 'none' : 'solid'}  ;
     border-width:${({ isTopic }) => isTopic ? 1 : 1}px;
-    cursor:pointer;
+   // cursor:pointer;
     padding-left:${({ isTopic }) => isTopic ? 8 : 8}px;
     padding-right:${({ isTopic }) => isTopic ? 8 : 6}px;
     padding-top:${({ fullPage }) => fullPage ? 16 : 6}px;
@@ -306,6 +306,8 @@ margin-top:10px;
 @media(max-width:900px){
     display:block;
 }
+cursor:auto;
+user-select: text; 
 
 `
 const DigestImage = styled.div`
@@ -347,6 +349,7 @@ maring-top:-20px;
 @media(max-width:900px){
     padding-left:2px;
 }
+cursor:initial;
 `
 const DigestHash = styled.div`
     font-style:bold;
@@ -420,7 +423,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                 const hash = `#${key}`;
                 const items = value.items.map((item: any) => {
                     const { title, url, text, publication, image, slug } = item;
-                    return <DigestItem key={`wefdoih-${slug}`}><Link href={url}><DigestTitle>{publication}: {title}</DigestTitle><DigestBody><DigestImage><img style={{ width: "100%" }} alt={title} src={image.trim()} /></DigestImage><DigestText>{text}</DigestText></DigestBody></Link></DigestItem>
+                    return <DigestItem key={`wefdoih-${slug}`}><Link href={url}><DigestTitle>{publication}: {title}</DigestTitle></Link><DigestBody><DigestImage><Link href={url}><img style={{ width: "100%" }} alt={title} src={image.trim()} /></Link></DigestImage><DigestText>{text}</DigestText></DigestBody></DigestItem>
                 })
                 out.push(<DigestCategory><DigestHash>{hash}</DigestHash>{items}</DigestCategory>);
             }

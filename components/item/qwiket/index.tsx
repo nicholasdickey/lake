@@ -375,6 +375,7 @@ const DigestText = styled.div`
 //padding-left:20px;
 padding-top:4px;
 marging-top:20px;
+
 @media(max-width:900px){
     padding-left:2px;
 }
@@ -395,6 +396,9 @@ const DigestHash = styled.div`
 const DigestCategory = styled.div`
 `
 const Digest = styled.div`
+&.digest-paragraph{
+    margin-top:10px;
+}
 
 `
 
@@ -458,7 +462,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                     const blocksRaw=text.split('</p><p>');
                     blocks=blocksRaw.map((block:string,i:number)=>{
                         block=block.replaceAll('<p>' ,'').replaceAll('</p>','').replaceAll('<br>','\n');
-                        return <><span key={i}>{block}</span><br/></>;
+                        return <><span key={i} className="digest-paragraph">{block}</span><br/><br/></>;
                     })
                     text=text.replaceAll('</p><p>','\n')
                     return <DigestItem key={`wefdoih-${slug}`}><Link href={url}><DigestTitle>{publication}: {title}</DigestTitle></Link><DigestBody><DigestImage><Link href={url}><img style={{ width: "100%" }} alt={title} src={image.trim()} /></Link></DigestImage><DigestText> {blocks}</DigestText></DigestBody><hr/></DigestItem>

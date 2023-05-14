@@ -467,7 +467,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                     })
                     text = text.replaceAll('</p><p>', '\n')
                     if (text.trim().indexOf(':') == 0)
-                        text = text.substring(1);
+                        text = text.trim().substring(1);
                     return <DigestItem key={`wefdoih-${slug}`}><Link href={url}><DigestTitle>{publication}: {title}</DigestTitle></Link><DigestBody>{image ? <DigestImage><Link href={url}><img style={{ width: "100%" }} alt={title} src={image.trim()} /></Link></DigestImage> : null}<DigestText> {blocks}</DigestText></DigestBody><hr /></DigestItem>
                 })
                 out.push(<DigestCategory><div><DigestHash><p>{hash}</p></DigestHash></div>{items}</DigestCategory>);

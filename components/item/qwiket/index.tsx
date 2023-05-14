@@ -406,28 +406,30 @@ const Digest = styled.div`
 //--------------------
 
 const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPage, mutate, setAckOverride, channelName }: { extraWide: boolean, isRight: boolean, item: any, isTopic: boolean, qType?: string, singlePanel?: boolean, fullPage?: boolean, mutate?: any, setAckOverride?: any, channelName?: string }) => {
-
+    const isBrowser = () => typeof window !== `undefined`
     const [openDialog, setOpenDialog] = useState(false);
-
+    const [openBody, setOpenBody] = useState(true);
     const isTag = qType == 'tag';
-
+     
     const { session, qparams, newsline, channelDetails } = useAppContext();
     const isReact = item && typeof item.qpostid !== 'undefined' && item.qpostid;
-    let { description, title } = item ? item : { description: '', title: '' };
+    let { description, title,ack } = item ? item : { description: '', title: '', ack: false };
     const descrParts = description.split("{ai:summary}");
     description = descrParts[0].split("{ai")[0].trim();
-
+    useEffect(() => {
+        setOpenBody(ack)
+    },[ack])
     let summary = descrParts.length > 1 ? descrParts[1] : '';
     if (summary.trim() == '[object Object]')
         summary = null;
-    const homeLink = `/${qparams.forum}/home/${qparams.tag}`;
+    const homeLink= `/${qparams.forum}/home/${qparams.tag}`;
     const itemUrl = item.url ? item.url : '';
     description = description.substring(0, 280);
     if (description.length == 280)
         description += '...';
     const blur = 'https://ucarecdn.com/d26e44d9-5ca8-4823-9450-47a60e3287c6/al90.png';
     if (isTopic) {
-        let { catIcon, catName, tag, image, site_name, published_time, author, body, hasBody, slug, headless }:
+        let { catIcon, catName, tag, image, site_name, published_time, author, body, hasBody, slug, headless}:
             { catIcon: string, catName: string, tag: string, image: string, site_name: string, published_time: number, author: string, slug: string, body: any, hasBody?: boolean, ack?: boolean, headless?: number } =
             item ? item : { catIcon: '', catName: '', tag: '', image: '', site_name: '', published_time: '', author: '', body: '' };
         if (!image)
@@ -444,6 +446,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
             site_name = site_name.split('|')[0];
             site_name = site_name.split(' - ')[0];
         }
+        //const ob=isBrowser()?ack?true:false:true;
         const { diff, timeString } = TimeDifference(published_time, qparams.timestamp)
         let bodyHtml: string = '';
         // console.log("Qwiket body", body, item)
@@ -487,7 +490,9 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                 return (b.type == "twitter" && b.id) ? <TweetEmbedContainer key={`twt-${i}`}><TweetEmbed><TwitterTweetEmbed tweetId={b.id} placeholder="Loading a Tweet..." /*options={{theme:session.dark?'dark':'light'}}*/ /></TweetEmbed></TweetEmbedContainer> : (b.type == 'html' || b.type == 'text' || b.type == 'image') ? <ReactMarkdown rehypePlugins={[rehypeRaw]} >{b.content}</ReactMarkdown> : <div>{renderDigest(b.json)}</div>
             })
         }
-        if (!body && hasBody) {
+        console.log("Qwiket body=",{body,bodyHtml,hasBody,ack})
+       
+        if ( hasBody&&!openBody) {
             AckBlock = <>{openDialog ? <BodySnatcher mutate={mutate} setAckOverride={setAckOverride} setOpenDialog={setOpenDialog} tag={tag} slug={slug} /> : <SeeMore><a onClick={() => setOpenDialog(true)}>See more....</a></SeeMore>}</>
         }
         // <PleaseRead>Please click below to read the article on the original site before commenting:</PleaseRead>
@@ -507,8 +512,8 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
            (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={blur} style={{ objectFit: "cover" }} data-id={"NextImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>}
 
 
-            {summary && !isDigest && !bodyHtml && !bodyBlocks ? <div><Summary><Row><br /><SummaryTitle>Summary by ai.Q: <Subtext>[ChatGPT]</Subtext></SummaryTitle></Row><Row key="r14"><Body><Markdown>{entityToHtml(summary)}</Markdown></Body></Row></Summary><hr /></div> : null}
-            <Row key="r4"><Body>{bodyBlocks ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml ? bodyHtml : summary ? null : description}</ReactMarkdown>}</Body></Row>
+            {summary && !isDigest && !openBody ? <div><Summary><Row key="r14"><Body><div  dangerouslySetInnerHTML={{__html: summary}}/></Body></Row></Summary><hr /></div> : null}
+            <Row key="r4"><Body>{bodyBlocks&&openBody ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml&&openBody ? bodyHtml : summary ? null : description}</ReactMarkdown>}</Body></Row>
             {AckBlock}
             <Share>{true ? null : <CallToShare>
                 <CallImage><img width="48" src={channelDetails.logo} /></CallImage>

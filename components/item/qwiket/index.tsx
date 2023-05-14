@@ -466,7 +466,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                         return <><span key={i} className="digest-paragraph">{block}</span><br/><br/></>;
                     })
                     text=text.replaceAll('</p><p>','\n')
-                    return <DigestItem key={`wefdoih-${slug}`}><Link href={url}><DigestTitle>{publication}: {title}</DigestTitle></Link><DigestBody><DigestImage><Link href={url}><img style={{ width: "100%" }} alt={title} src={image.trim()} /></Link></DigestImage><DigestText> {blocks}</DigestText></DigestBody><hr/></DigestItem>
+                    return <DigestItem key={`wefdoih-${slug}`}><Link href={url}><DigestTitle>{publication}: {title}</DigestTitle></Link><DigestBody>{image?<DigestImage><Link href={url}><img style={{ width: "100%" }} alt={title} src={image.trim()} /></Link></DigestImage>:null}<DigestText> {blocks}</DigestText></DigestBody><hr/></DigestItem>
                 })
                 out.push(<DigestCategory><div><DigestHash><p>{hash}</p></DigestHash></div>{items}</DigestCategory>);
             }

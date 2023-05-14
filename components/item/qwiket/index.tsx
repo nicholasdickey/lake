@@ -206,7 +206,7 @@ const Comment = styled.div`
     margin:1px 16px 1px 3px;
    
 `
-const Shares= styled.div`
+const Shares = styled.div`
 display:flex;
 align-items: center;
 justify-content: space-between;
@@ -459,14 +459,16 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                 const hash = `#${key}`;
                 const items = value.items.map((item: any) => {
                     let { title, url, text, publication, image, slug } = item;
-                    let blocks=[];
-                    const blocksRaw=text.split('</p><p>');
-                    blocks=blocksRaw.map((block:string,i:number)=>{
-                        block=block.replaceAll('<p>' ,'').replaceAll('</p>','').replaceAll('<br>','\n');
-                        return <><span key={i} className="digest-paragraph">{block}</span><br/><br/></>;
+                    let blocks = [];
+                    const blocksRaw = text.split('</p><p>');
+                    blocks = blocksRaw.map((block: string, i: number) => {
+                        block = block.replaceAll('<p>', '').replaceAll('</p>', '').replaceAll('<br>', '\n');
+                        return <><span key={i} className="digest-paragraph">{block}</span><br /><br /></>;
                     })
-                    text=text.replaceAll('</p><p>','\n')
-                    return <DigestItem key={`wefdoih-${slug}`}><Link href={url}><DigestTitle>{publication}: {title}</DigestTitle></Link><DigestBody>{image?<DigestImage><Link href={url}><img style={{ width: "100%" }} alt={title} src={image.trim()} /></Link></DigestImage>:null}<DigestText> {blocks}</DigestText></DigestBody><hr/></DigestItem>
+                    text = text.replaceAll('</p><p>', '\n')
+                    if (text.trim().indexOf(':') == 0)
+                        text = text.substring(1);
+                    return <DigestItem key={`wefdoih-${slug}`}><Link href={url}><DigestTitle>{publication}: {title}</DigestTitle></Link><DigestBody>{image ? <DigestImage><Link href={url}><img style={{ width: "100%" }} alt={title} src={image.trim()} /></Link></DigestImage> : null}<DigestText> {blocks}</DigestText></DigestBody><hr /></DigestItem>
                 })
                 out.push(<DigestCategory><div><DigestHash><p>{hash}</p></DigestHash></div>{items}</DigestCategory>);
             }
@@ -519,9 +521,9 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                 }}
                 onClick={() => console.log("shared successfully!")}
             >
-                    <Button> Share </Button>
-                </RWebShare> {isDigest?<><a href="https://twitter.com/am1digest?ref_src=twsrc%5Etfw" className="twitter-follow-button" data-show-count="false">Follow @am1digest</a><script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script></>:<><a href="https://twitter.com/am1_news?ref_src=twsrc%5Etfw" className="twitter-follow-button" data-show-count="false">Follow @am1_news</a><script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script></>}</Shares>
-           
+                <Button> Share </Button>
+            </RWebShare> {isDigest ? <><a href="https://twitter.com/am1digest?ref_src=twsrc%5Etfw" className="twitter-follow-button" data-show-count="false">Follow @am1digest</a><script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script></> : <><a href="https://twitter.com/am1_news?ref_src=twsrc%5Etfw" className="twitter-follow-button" data-show-count="false">Follow @am1_news</a><script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script></>}</Shares>
+
                 <Chatbot> Note: You can use @chatbot mention tag to interact with ChatGPT language model in comments. Neither your comment, nor the generated responses will appear in "Comments" or "News & Views" streams.</Chatbot>
 
             </Share>
@@ -574,9 +576,9 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
             site_name = site_name.split('|')[0];
             site_name = site_name.split(' - ')[0];
         }
-       // let isDigest=false;
-        if(author=='ai.Q'){
-            author='';
+        // let isDigest=false;
+        if (author == 'ai.Q') {
+            author = '';
         }
         const { diff, timeString } = TimeDifference(published_time, qparams.timestamp);
         if (slug == 'loading') {
@@ -590,9 +592,9 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                 <Row key="r4" ><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage placeholder={"blur"} blurDataURL={blur} style={{ objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
             </VerticalWrap></a></Link>
         }
-        if(!image) image = catIcon;
-        image=image.replace('hhttps','https');
-  
+        if (!image) image = catIcon;
+        image = image.replace('hhttps', 'https');
+
         return <Link href={`/${qparams.forum}/topic/${tag}/${slug}${qparams.layoutNumber != 'l1' ? '/' + qparams.layoutNumber : ''}`} legacyBehavior><a rel="nofollow">
             <VerticalWrap isTopic={isTopic} isTag={isTag} diff={diff} isRight={isRight}>
                 <TopRow><Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} style={{ height: '38', width: 'auto' }} sizes="(max-width: 768px) 100vw,
@@ -606,5 +608,5 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
     }
 }
 //  <Row key="r4"><ImageBox isTopic={isTopic} loud={session.loud} extraWide={extraWide}><NextImage placeholder={"blur"} blurDataURL={blur} style={{ maxWidth: "100%", height: "100%", objectFit: "cover" }} data-id={"NexuImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>
-            
+
 export default Qwiket;

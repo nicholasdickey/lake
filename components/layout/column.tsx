@@ -294,7 +294,7 @@ export const Column = ({ pageType, visible, card, spaces, column, qparams, sessi
     }
     //console.log("d1b: COLUMN RENDER",{guid,visible,card, selector,type,pageType})
 
-    const feedName = (qparams.tag == 'ld' ? 'basement' : qparams.tag == 'fq' ? 'americafirstnews' : qparams.tag) + ' feed';
+    const feedName = (qparams.tag == 'ld' ? 'basement' : qparams.tag == 'fq' ? 'am1.news' : qparams.tag) + ' feed';
     const name = selector == 'mix' ? 'news&views' : selector == 'tag' ? feedName : selector == 'topics' ? 'active topics' : selector == 'reacts' ? 'comments' : qparams.type == 'solo' ? `solo ${qparams.tag == 'ld' ? 'basement' : qparams.tag}` : selector;
 
     if (qparams.type == 'newsline' || qparams.type == 'solo') {

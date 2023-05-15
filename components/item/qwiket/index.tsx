@@ -466,7 +466,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                     const blocksRaw = text.split('</p><p>');
                     blocks = blocksRaw.map((block: string, i: number) => {
                         block = block.replaceAll('<p>', '').replaceAll('</p>', '').replaceAll('<br>', '\n').replaceAll('()','');
-                        return <><span key={i} className="digest-paragraph">{block}</span><br /><br /></>;
+                        return <div key={`blockspan${i}`}><span key={i} className="digest-paragraph">{block}</span><br /><br /></div>;
                     })
                     text = text.replaceAll('</p><p>', '\n')
                     text=text.replaceAll('()','');
@@ -476,7 +476,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                 })
                 out.push(<DigestCategory><div><DigestHash><p>{hash}</p></DigestHash></div>{items}</DigestCategory>);
             }
-            return <Digest><DigestSummary><b>Hot Take:&nbsp;</b><ReactMarkdown rehypePlugins={[rehypeRaw]} >{summary}</ReactMarkdown></DigestSummary>{out}</Digest>
+            return <Digest><DigestSummary><b>The Gist:&nbsp;</b><ReactMarkdown rehypePlugins={[rehypeRaw]} >{summary}</ReactMarkdown></DigestSummary>{out}</Digest>
         }
         interface BodyBlock {
             type: string;

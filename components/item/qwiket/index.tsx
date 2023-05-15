@@ -465,10 +465,11 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                     let blocks = [];
                     const blocksRaw = text.split('</p><p>');
                     blocks = blocksRaw.map((block: string, i: number) => {
-                        block = block.replaceAll('<p>', '').replaceAll('</p>', '').replaceAll('<br>', '\n');
+                        block = block.replaceAll('<p>', '').replaceAll('</p>', '').replaceAll('<br>', '\n').replaceAll('()','');
                         return <><span key={i} className="digest-paragraph">{block}</span><br /><br /></>;
                     })
                     text = text.replaceAll('</p><p>', '\n')
+                    text=text.replaceAll('()','');
                     if (text.trim().indexOf(':') == 0)
                         text = text.trim().substring(1);
                     return <DigestItem key={`wefdoih-${slug}`}><Link href={url}><DigestTitle>{publication}: {title}</DigestTitle></Link><DigestBody>{image ? <DigestImage><Link href={url}><img style={{ width: "100%" }} alt={title} src={image.trim()} /></Link></DigestImage> : null}<DigestText> {blocks}</DigestText></DigestBody><hr /></DigestItem>
@@ -512,8 +513,8 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
            (max-width: 2200px) 50vw, 33vw"  placeholder={"blur"} blurDataURL={blur} style={{ objectFit: "cover" }} data-id={"NextImg"} src={image} alt={"NextImg:" + title} fill={true} /></ImageBox></Row>}
 
 
-            {summary && !isDigest && !openBody ? <div><Summary><Row key="r14"><Body><div  dangerouslySetInnerHTML={{__html: summary}}/></Body></Row></Summary><hr /></div> : null}
-            <Row key="r4"><Body>{bodyBlocks&&openBody ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml&&openBody ? bodyHtml : summary ? null : description}</ReactMarkdown>}</Body></Row>
+            {summary && !isDigest && !openBody &&!isDigest ? <div><Summary><Row key="r14"><Body><div  dangerouslySetInnerHTML={{__html: summary}}/></Body></Row></Summary><hr /></div> : null}
+            <Row key="r4"><Body>{bodyBlocks&&(openBody||isDigest) ? bodyBlocks : <ReactMarkdown rehypePlugins={[rehypeRaw]} >{bodyHtml&&openBody ? bodyHtml : summary ? null : description}</ReactMarkdown>}</Body></Row>
             {AckBlock}
             <Share>{true ? null : <CallToShare>
                 <CallImage><img width="48" src={channelDetails.logo} /></CallImage>

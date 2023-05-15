@@ -476,7 +476,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                 })
                 out.push(<DigestCategory><div><DigestHash><p>{hash}</p></DigestHash></div>{items}</DigestCategory>);
             }
-            return <Digest><DigestSummary><b>The Gist:&nbsp;</b><ReactMarkdown rehypePlugins={[rehypeRaw]} >{summary}</ReactMarkdown></DigestSummary>{out}</Digest>
+            return <Digest><DigestSummary><b>Core Dump:&nbsp;</b><ReactMarkdown rehypePlugins={[rehypeRaw]} >{summary}</ReactMarkdown></DigestSummary>{out}</Digest>
         }
         interface BodyBlock {
             type: string;

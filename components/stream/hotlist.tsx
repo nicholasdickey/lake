@@ -96,7 +96,7 @@ const HotlistItem = ({ session, qparams, item, spaces }: { session: Options, qpa
     if (!image) image = item.catIcon;
     return <ImageBox spaces={spaces} loud={session.loud} >
         <OpacityBox loud={session.loud}>
-            <NextImage style={{ objectFit: 'cover' }} placeholder={"blur"} blurDataURL={'https://ucarecdn.com/d26e44d9-5ca8-4823-9450-47a60e3287c6/al90.png'} src={image} alt={item.title} fill={true} /></OpacityBox>
+            <NextImage style={{ objectFit: 'cover' }} placeholder={"blur"} blurDataURL={'https://ucarecdn.com/d26e44d9-5ca8-4823-9450-47a60e3287c6/al90.png'} src={image} alt={item.title} fill={true} quality={40}  sizes="(max-width: 600px) 12vw, (max-width: 1200px) 16vw, 20vw" /></OpacityBox>
         <Link href={`/${qparams.forum}/topic/${item.tag}/${item.slug}${qparams.layoutNumber != 'l1' ? '/' + qparams.layoutNumber : ''}`} legacyBehavior><a rel="nofollow"><OverlayBox loud={session.loud}>
             <TitleBox>{item.title.slice(0, 64)}</TitleBox>
             <Hr />

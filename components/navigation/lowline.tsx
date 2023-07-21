@@ -90,7 +90,8 @@ const Stars = styled.div`
 const Star = styled(UilStar)`
     font-size: 10px;
     margin-left: 10px;
-    width:1-p;overflow-x;
+    width:1-p;
+    overflow-x:clip;
     height:10px;
     `
 
@@ -101,13 +102,22 @@ const Lowline = ({ session, lowline }:{session:Options,lowline:any}) => {
             <Star />
             <Star />
         </Stars>:null}
-        {session.loud?<div><Phone>{lowline.phone}</Phone>
-        <HorizontalPhone>{lowline.horizontalPhone}</HorizontalPhone>
+        {false&&session.loud?<div>
+        <Phone>{lowline.phone}</Phone>
+       <HorizontalPhone>{lowline.horizontalPhone}</HorizontalPhone>
         <VerticalTablet>{lowline.verticalTablet}</VerticalTablet>
         <HorizontalTablet>{lowline.horizontalTablet}</HorizontalTablet>
         <SmallDesktop>{lowline.smallDesktop}</SmallDesktop>
         <LargeDesktop>{lowline.largeDestop}</LargeDesktop>
-        </div>:null}
+        </div>:
+        <div>
+        <Phone><a href="https://wish-text.com/landing?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;</Phone>
+       <HorizontalPhone>Sponsor:&nbsp; <a href="https://wish-text.com/landing?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;</HorizontalPhone>
+        <VerticalTablet>Sponsor:&nbsp; <a href="https://wish-text.com/landing?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;</VerticalTablet>
+        <HorizontalTablet>Sponsor:&nbsp; <a href="https://wish-text.com/landing?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;</HorizontalTablet>
+        <SmallDesktop>Sponsor:&nbsp; <a href="https://wish-text.com/landing?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;Craft Personalized Messages With Ease! Wish It? Text It!</SmallDesktop>
+        <LargeDesktop>Sponsor:&nbsp; <a href="https://wish-text.com/landing?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;Craft Personalized Messages With Ease! Wish It? Text It!</LargeDesktop>
+        </div>}
         {session.loud?<Stars>
             <Star />
             <Star />

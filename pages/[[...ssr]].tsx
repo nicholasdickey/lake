@@ -177,8 +177,8 @@ export const getServerSideProps = withSessionSsr(
                 layoutNumber,
                 cc,
                 timestamp: Date.now() / 1000 | 0,
-                isbot: botInfo.bot,
-                isfb: botInfo.fb || utm_medium ? 1 : 0
+                isbot: false,//botInfo.bot,
+                isfb: botInfo.fb || utm_medium ? 0 : 0
             }
 
             // useful for debugging:

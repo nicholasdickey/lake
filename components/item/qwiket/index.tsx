@@ -494,7 +494,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
         }
         console.log("Qwiket body=",{body,bodyHtml,hasBody,ack})
        
-        if ( false&&hasBody&&!openBody) {
+        if ( hasBody&&!openBody) {
             AckBlock = <>{openDialog ? <BodySnatcher mutate={mutate} setAckOverride={setAckOverride} setOpenDialog={setOpenDialog} tag={tag} slug={slug} /> : <SeeMore><a onClick={() => setOpenDialog(true)}>See more....</a></SeeMore>}</>
         }
         // <PleaseRead>Please click below to read the article on the original site before commenting:</PleaseRead>

@@ -278,7 +278,7 @@ export const getServerSideProps = withSessionSsr(
                 }
                 const key: FetchTopicKey = { threadid: qparams.threadid ? qparams.threadid : '', withBody: 1, userslug: options.userslug, sessionid: options.sessionid, tag: qparams.tag, ackOverride: (qparams.isbot || qparams.isfb)?true:false };
                 try {
-                    const topic = await fetchTopic(key);
+                    const topic:any = await fetchTopic(key);
                     //handle invalid slugs with 404:
                     if (!topic.success) {
                         context.res.statusCode = 404;

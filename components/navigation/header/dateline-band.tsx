@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { useAppContext } from "../../../lib/context";
 import { getOnlineCount, unpublish } from '../../../lib/lake-api';
 import { UilGlassMartiniAlt, UilUsersAlt,UilSpoonAlt } from '@iconscout/react-unicons';
-import { Playfair_Display } from '@next/font/google';
+import { Playfair_Display } from 'next/font/google';
 import Image from 'next/image';
 import { Star } from "../../widgets/star"
 import { UilNewspaper } from '@iconscout/react-unicons'

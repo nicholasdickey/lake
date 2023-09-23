@@ -299,7 +299,7 @@ export const getServerSideProps = withSessionSsr(
                     meta.description = summary ? summary : description;
                     meta.site_name = item.site_name;
                     meta.title = item.title.indexOf('Digest')<0?`${item.catName}: ${item.title}`:item.title;
-                    meta.image = item.image;
+                    meta.image = `https://${process.env.CANONIC_DOMAIN}/api/og.png?threadid=${qparams.threadid ? qparams.threadid : ''}&tag=${qparams.tag}`//item.image;
                     meta.publishedTime = item.shared_time;
                     meta.url = item.shared_time;
                     meta.canonic = `https://${process.env.CANONIC_DOMAIN}/${forum}/topic/${tag}/${threadid}`

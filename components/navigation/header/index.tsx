@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import useSWR from 'swr';
 import { fetchUser,getOnlineCount,unpublish } from '../../../lib/lake-api';
 import Lowline from '../lowline';
-import { Playfair_Display } from '@next/font/google';
+import { Playfair_Display } from 'next/font/google';
 import { useAppContext } from "../../../lib/context";
 
 import TitleBand from './title-band';

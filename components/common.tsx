@@ -232,7 +232,8 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
 
   if (isFallback)
     return <Loading className={roboto.className}>Fallback Loading...</Loading>
-
+  const title=meta?.title||"";
+  const site_name=meta?.site_name||"";
   //all the Head setup happens at this level
   return (
     <>
@@ -265,7 +266,7 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
         <meta name="theme-color" content="#317EFB" /></>:null}
         <meta name="theme-color" content={theme=='dark'?palette.dark.colors.background:palette.light.colors.background} />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-        <meta name="twitter:card" content="summary_large_image"/>
+        {title.indexOf("The Digest")<0&&site_name.indexOf("Fox News")<0&&<meta name="twitter:card" content="summary_large_image"/>}
         <link
           rel="shortcut icon"
           type="image/png"

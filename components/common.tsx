@@ -266,7 +266,9 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
         <meta name="theme-color" content="#317EFB" /></>:null}
         <meta name="theme-color" content={theme=='dark'?palette.dark.colors.background:palette.light.colors.background} />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-        {title.indexOf("The Digest")<0&&site_name.indexOf("Fox News")<0&&<meta name="twitter:card" content="summary_large_image"/>}
+        {process.env.NODE_ENV=='development'&&title.indexOf("The Digest")<0&&site_name.indexOf("Fox News")<0&&<meta name="twitter:card" content="summary_large_image"/>}
+      
+        {process.env.NODE_ENV!='development'&&<meta name="twitter:card" content="summary_large_image"/>}
         <link
           rel="shortcut icon"
           type="image/png"

@@ -232,7 +232,8 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
 
   if (isFallback)
     return <Loading className={roboto.className}>Fallback Loading...</Loading>
-
+  const title=meta?.title||"";
+  const site_name=meta?.site_name||"";
   //all the Head setup happens at this level
   return (
     <>
@@ -252,7 +253,7 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
         <meta property="og:site_name" content={meta?.site_name} />
         {meta?.url ? <meta property="og:url" content={meta?.url} /> : null}
         <meta property="og:image" content={meta?.image} />
-      
+        <meta property="qwiket:verify"  content="qwiket" />
         <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
         <meta name='viewport' content='width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no' />
   
@@ -265,7 +266,9 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
         <meta name="theme-color" content="#317EFB" /></>:null}
         <meta name="theme-color" content={theme=='dark'?palette.dark.colors.background:palette.light.colors.background} />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-
+        {process.env.NODE_ENV=='development'&&title.indexOf("The Digest")<0&&site_name.indexOf("Fox News")<0&&<meta name="twitter:card" content="summary_large_image"/>}
+      
+        {process.env.NODE_ENV!='development'&&<meta name="twitter:card" content="summary_large_image"/>}
         <link
           rel="shortcut icon"
           type="image/png"

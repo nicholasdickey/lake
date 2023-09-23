@@ -13,7 +13,7 @@ export default function Home({ items, channelDetails, host, forum }: { channelDe
     const header = `<?xml version="1.0" encoding="UTF-8" ?>  
     <rss version="2.0"> 
       <channel> 
-        <title>${channelDetails.title}</title> 
+        <title>NEWS DIGEST: ${channelDetails.title}</title> 
         <link>https://${host}</link> 
         <description>${channelDetails.description}</description>
       `;
@@ -98,7 +98,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
             const header = `<?xml version="1.0" encoding="UTF-8" ?>  
     <rss version="2.0"> 
       <channel> 
-        <title>${channelDetails.title}</title> 
+        <title>${channelDetails.title} Digest</title> 
         <link>https://${host}</link> 
         <description>${channelDetails.description}</description>
       `;
@@ -107,9 +107,12 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                 try {
                     //  console.log("rss item:", JSON.stringify(p))
                     const isDigest=p.title.indexOf('Digest')>=0;
-                    const title = !isDigest?`${p.site_name ? p.site_name + ': ' : ''}${p.title}`:p.title || ``;
+                    const title = !isDigest?`${p.site_name ? p.site_name + ' Digest: ' : ''}${p.title}`:p.title || ``;
                     const date = p.shared_time;
+                    const image=p.image;
                     const url=p.url;
+                    const threadid=p.slug;
+                    const tag=p.tag;
                     if (!date || date == "null") return;
                     // console.log("RSS date ",date);
 
@@ -125,6 +128,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                         date * 1000
                     ).toISOString();
                     const flink = isDigest?`https://${host}/${forum}/topic/${p.tag}/${p.slug}`:`${url}`;
+                    const oglink=`https://${host}/api/og.png?threadid=${p.slug}&tag=${p.tag}`
                     let description = p.description;
 
                     const descrParts = description.split("{ai:summary}");
@@ -134,22 +138,28 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     //description=description.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
                     //summary=summary.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
                     summary = encodeEntities(summary);
-                    summary = `${summary}- Digest © am1.news -<p>Read the full digest feed on our website: www.am1.news</p><p> Please "like" and share to help us grow. Leave a comment! Let us know if the format works for you.</p>`;
+                    summary = `${summary}- Digest © am1.news -<p>Read the full digest feed on our website: www.am1.news</p><p> Please "like" and retweet to help us grow. And leave comments!</p>`;
                     description = encodeEntities(description);
-                    description = `${description}- Digest © am1.news -<p>Read the full digest feed on our website: www.am1.news</p><p> Please "like" and share to help us grow. Leave a comment! Let us know if the format works for you.</p>`;
-                    
                     console.log("description:", description)
                     console.log("summary:", summary);
                     if (summary.trim() == '[object Object]')
                         summary = null;
                     description = !isDigest&&summary ? summary : description;
                     console.log('rss description', description)
+                    console.log('image', image );
+                    console.log('url:', url,threadid,tag );
+                    description+=`
+                        <a href="${url}">${title}</a>
+                    `    
+
+                    
                     return `
         <item>
             <link>${flink}</link>
             <title>${title}</title>
             <pubDate>${isoDate}</pubDate>  
             <description>${description}</description>
+           
         </item>
         `
                 }

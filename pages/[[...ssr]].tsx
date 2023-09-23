@@ -300,6 +300,10 @@ export const getServerSideProps = withSessionSsr(
                     meta.site_name = item.site_name;
                     meta.title = item.title.indexOf('Digest')<0?`${item.catName}: ${item.title}`:item.title;
                     meta.image = `https://${process.env.CANONIC_DOMAIN}/api/og.png?threadid=${qparams.threadid ? qparams.threadid : ''}&tag=${qparams.tag}`//item.image;
+                    if(item.site_name.indexOf("Fox News")>=0||item.title.indexOf("Digest")>=0)
+                        meta.image=item.image;
+                    if(process.env.NODE_ENV!='development')
+                        meta.image=item.image;
                     meta.publishedTime = item.shared_time;
                     meta.url = item.shared_time;
                     meta.canonic = `https://${process.env.CANONIC_DOMAIN}/${forum}/topic/${tag}/${threadid}`

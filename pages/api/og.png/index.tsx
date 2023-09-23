@@ -2,18 +2,14 @@ import React from 'react';
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { ImageResponse } from 'next/server';
 
-
-
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
-import {
-    fetchChannelConfig, fetchChannelLayout, fetchUser, fetchSitemap,
-    fetchAllSitemaps, fetchChannelLayoutKey, fetchTopic, FetchTopicKey, processLoginCode, initLoginSession, getUserSession
-} from '../../../lib/lake-api';
-import { ReadStream } from 'fs';
+export const size = { width: 1200, height: 600 };
+export const alt = 'OpenGraph Image';
+export const contentType = 'image/png';
+export const runtime = 'edge';
 
 export const config = {
     runtime: "edge",
+    size : { width: 1200, height: 600 }
 }
 /**
  * Note: the incoming session object could be only partial, will be merged over existing session
@@ -52,11 +48,11 @@ async function handler(
 
     //console.log("image:", rsp, { image, catIcon, catName });
     const response = new ImageResponse(
-    <div style={{background:"#000",position:"relative",display:"flex",flexDirection:"column",alignItems:"center"}}>
+   ( <div style={{width:1200,height:1600,background:"#000",position:"relative",display:"flex",flexDirection:"column",alignItems:"center"}}>
         
-        <div style={{opacity:"0.4",display:"flex",width:"100%",height:"100%"} }><img src={image}/></div>
+        <div style={{opacity:"0.4",display:"flex",width:"100%",height:"100%"} }><img width={1200} src={image}/></div>
         
-        <div style={{ overflow: "hidden",textOverflow:"ellipses", padding:20,color:'#fff',position:"absolute",width:"100%",height:"100%",display:"flex",flexDirection:"column",alignItems:"center",fontSize:"28px"}}>
+        <div style={{width:1200,height:1600, overflow: "hidden",textOverflow:"ellipses", padding:20,color:'#fff',position:"absolute",display:"flex",flexDirection:"column",alignItems:"center",fontSize:"28px"}}>
         
             <div style={{display:'flex',justifyContent:'space-between'}}>
                 <img  width={80} height={80} style={{marginTop:10,marginLeft:0,borderRadius:0}} src={catIcon}/>
@@ -70,6 +66,11 @@ async function handler(
 
         
     </div >    
+    ),
+    {
+      width: 1200,
+      height: 600,
+    }
     )
     ;
     return response;

@@ -2,7 +2,7 @@
 import React from 'react'
 import Link from 'next/link'
 import styled from 'styled-components';
-import { Playfair_Display } from '@next/font/google';
+import { Playfair_Display } from 'next/font/google';
 
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400',], style: ['normal'] })
 

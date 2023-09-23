@@ -7,7 +7,7 @@ import { Options } from '../../lib/with-session';
 import { fetchQueue } from '../../lib/lake-api';
 import NextImage from 'next/image';
 import Link from 'next/link';
-import { Lexend_Tera } from "@next/font/google";
+import { Lexend_Tera } from "next/font/google";
 
 
 const HotlistBox = styled.div<Loud>`

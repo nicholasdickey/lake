@@ -8,7 +8,7 @@ const withPWA = require('next-pwa')({
   skipWaiting: true,
 }
 )
-const nextConfig =withBundleAnalyzer(withPWA({
+const nextConfig =withBundleAnalyzer({
   crossOrigin: 'anonymous', 
   reactStrictMode: true,
    typescript: {
@@ -36,6 +36,6 @@ const nextConfig =withBundleAnalyzer(withPWA({
       },
     ],
   },
-}))
+})
 
 module.exports = nextConfig;

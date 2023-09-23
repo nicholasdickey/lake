@@ -15,7 +15,7 @@ import { Header } from './navigation/header';
 import GlobalStyle from '../components/globalstyles'
 import { palette } from '../lib/palette';
 import { LayoutView } from './layout/layout-view';
-import { Roboto } from '@next/font/google';
+import { Roboto } from 'next/font/google';
 import { AppWrapper } from '../lib/context';
 import ScrollToTopButton from './widgets/scroll-to-top-button';
 import Script from 'next/script'

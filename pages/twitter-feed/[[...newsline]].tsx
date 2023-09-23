@@ -127,7 +127,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     const isoDate = new Date(
                         date * 1000
                     ).toISOString();
-                    const flink = isDigest?`https://${host}/${forum}/topic/${p.tag}/${p.slug}`:`${url}`;
+                    const flink = `https://${host}/${forum}/topic/${p.tag}/${p.slug}`;
                     const oglink=`https://${host}/api/og.png?threadid=${p.slug}&tag=${p.tag}`
                     let description = p.description;
 
@@ -138,7 +138,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     //description=description.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
                     //summary=summary.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
                     summary = encodeEntities(summary);
-                    summary = `${summary}- Digest © am1.news -<p>Read the full digest feed on our website: www.am1.news</p><p> Please "like" and retweet to help us grow. And leave comments!</p>`;
+                    summary = `${summary}- summary © am1.news -<p>Read the original story and more like it on our website. We can only share about 20% of our full news feed on Facebook</p><p>www.am1.news</p>`;
                     description = encodeEntities(description);
                     console.log("description:", description)
                     console.log("summary:", summary);
@@ -155,11 +155,17 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     
                     return `
         <item>
-            <link>${flink}</link>
+           
             <title>${title}</title>
             <pubDate>${isoDate}</pubDate>  
             <description>${description}</description>
-           
+            <media:content 
+                    xmlns:media="http://search.yahoo.com/mrss/" 
+                    url="${oglink}" 
+                    medium="image" 
+                    type="image/jpeg" 
+                    width="150" 
+                    height="150" />
         </item>
         `
                 }

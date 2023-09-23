@@ -265,7 +265,7 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
         <meta name="theme-color" content="#317EFB" /></>:null}
         <meta name="theme-color" content={theme=='dark'?palette.dark.colors.background:palette.light.colors.background} />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-
+        <meta name="twitter:card" content="summary_large_image"/>
         <link
           rel="shortcut icon"
           type="image/png"

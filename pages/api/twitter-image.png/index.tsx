@@ -11,6 +11,16 @@ export const config = {
     runtime: "edge",
     size : { width: 1200, height: 1600 }
 }
+function removeHashtags(inputString: string): string {
+    // Use a regular expression to match hashtags
+    const regex = /#\w+/g;
+    
+    // Replace all matched hashtags with an empty string
+    const resultString = inputString.replace(regex, '');
+  
+    return resultString;
+  }
+  
 /**
  * Note: the incoming session object could be only partial, will be merged over existing session
  * 
@@ -43,7 +53,7 @@ async function handler(
     } = rsp.item;
     const descriptionSplit = description.split("{ai:summary}");
     if (descriptionSplit.length > 1) {
-        description = descriptionSplit[1].replaceAll('<p>', '').replaceAll('</p>', '');
+        description = removeHashtags(descriptionSplit[1].replaceAll('<p>', '').replaceAll('</p>', ''));
     }
 
     //console.log("image:", rsp, { image, catIcon, catName });

@@ -48,7 +48,7 @@ async function handler(
     //console.log("image:", rsp, { image, catIcon, catName });
     const descriptionLength=description.length;
     console.log("descrtiption length:",description.length  );
-    const fontSize=descriptionLength>600?'40px':descriptionLength>500?'44px':descriptionLength>400?'48px':descriptionLength>300?'56px':'64px';
+    const fontSize=descriptionLength>600?'42px':descriptionLength>500?'44px':descriptionLength>400?'48px':descriptionLength>300?'56px':'64px';
    
     const titleLength=title.length;
     console.log("title length:",title.length  );
@@ -56,17 +56,17 @@ async function handler(
     const response = new ImageResponse(
    ( <div style={{width:1200,height:1600,background:"#222",position:"relative",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"space-between"}}>
         
-        <div style={{opacity:"0.5",display:"flex",background:"#222",width:"100%",height:"100%"} }><img width={1200} src={image}/></div>
-        <div style={{paddingTop:40,zIndex:"100",color:"fff",position:'absolute',display:'flex',justifyContent:'space-between',alignItems:"flex-start"}}>
+        <div style={{opacity:"0.4",display:"flex",background:"#222",width:"100%",height:"100%"} }><img width={1200} src={image}/></div>
+        <div style={{paddingTop:40,zIndex:"100",color:"fff",position:'absolute',display:'flex',justifyContent:'space-between',alignItems:"flex-start",flexWrap:"wrap"}}>
                 <img height={120} style={{marginTop:15,marginLeft:40,borderRadius:0}} src={catIcon}/>
-                <div style={{marginLeft:30,color:"#fff",width:'80%',fontSize:'58px',fontWeight:700}}>{title}</div> 
+                <div style={{marginLeft:54,color:"#fff",width:'78%',fontSize:'58px',fontWeight:700}}>{title}</div> 
             </div>
-        <div style={{borderRadius:30,width:1200, marginTop:680,background:"#222",overflow: "hidden",textOverflow:"ellipses", padding:20,color:'#fff',position:"absolute",display:"flex",flexDirection:"column",alignItems:"center",fontSize:fontSize,justifyContent:"flex-end"}}>
+        <div style={{width:1200, marginTop:680,background:"#222",overflow: "hidden",textOverflow:"ellipses", padding:20,color:'#fff',position:"absolute",display:"flex",flexDirection:"column",alignItems:"center",fontSize:fontSize,justifyContent:"flex-end"}}>
         
            
             <div style={{display:'flex',padding:20, background:"#222"}}>{description}</div>
             <div style={{ display:'flex',fontSize:'28px',fontStyle:'italic',color:'#aaa', background:"#222" ,overflow: "hidden",textOverflow:"ellipses", padding:0,marginTop:20}}>
-               Digest Copyright &copy; 2023,&nbsp;&nbsp;&nbsp; <i>{`${(process.env.NEXT_PUBLIC_LAKEAPI||"").indexOf("american")>=0?'American Outdoorsman: www.american-outdoorsman.news':'America First News: www.am1.news'}`}</i>
+               Digest Copyright &copy; 2023,  {"--"} <i>{`${(process.env.NEXT_PUBLIC_LAKEAPI||"").indexOf("american")>=0?'American Outdoorsman: www.american-outdoorsman.news':'America First News: www.am1.news'}`}</i>{"--"}
             </div>
         </div >
 

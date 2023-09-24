@@ -83,13 +83,12 @@ const diverseDarkerBackgroundColors: string[] = [
     console.log("title length:",title.length  );
     const titleFontSize=titleLength>50?'62px':titleLength>40?'70px':titleLength>30?'82px':'84px';
     const response = new ImageResponse(
-   ( <div style={{width:1200,height:1600,background:randomColor,position:"relative",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"space-between"}}>
-        <div style={{display:"flex",background:"#000"}}>
-        <div style={{opacity:"0.4",display:"flex",background:"#000",width:"100%",height:"100%"} }><img width={1200} src={image}/></div>
-        </div>
-        <div style={{paddingTop:40,zIndex:"100",color:"fff",position:'absolute',display:'flex',justifyContent:'space-between',alignItems:"flex-start",flexWrap:"wrap"}}>
+   ( <div style={{width:1200,height:1600,background:"#222",position:"relative",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"space-between"}}>
+        
+        <div style={{opacity:"0.5",display:"flex",background:"#222",width:"100%",height:"100%"} }><img width={1200} src={image}/></div>
+        <div style={{paddingTop:40,zIndex:"100",color:"fff",position:'absolute',display:'flex',justifyContent:'space-between',alignItems:"flex-start"}}>
                 <img height={120} style={{marginTop:15,marginLeft:40,borderRadius:0}} src={catIcon}/>
-                <div style={{marginLeft:54,color:"#fff",width:'78%',fontSize:'58px',fontWeight:700}}>{title}</div> 
+                <div style={{marginLeft:30,color:"#fff",width:'80%',fontSize:'58px',fontWeight:700}}>{title}</div> 
             </div>
         <div style={{width:1200, marginTop:680,background:randomColor,overflow: "hidden",textOverflow:"ellipses", padding:20,color:'#fff',position:"absolute",display:"flex",flexDirection:"column",alignItems:"center",fontSize:fontSize,justifyContent:"flex-end"}}>
         

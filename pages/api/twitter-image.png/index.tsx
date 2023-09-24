@@ -31,7 +31,6 @@ async function handler(
     const params = parts[1].split('&');
     const threadid = params[0].split('=')[1];
     const tag = params[1]?.split('=')[1]||"";
-    //console.log("threadid:",threadid);
     //console.log("tag:",tag);
     //let { threadid = '',tag=''} = req.query;
     //const key: FetchTopicKey = { threadid:threadid as string, withBody: 1, userslug: "og", sessionid: "", tag: tag as string, ackOverride: false};

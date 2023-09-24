@@ -59,8 +59,8 @@ async function handler(
         
         <div style={{opacity:"0.5",display:"flex",background:"#222",width:"100%",height:"100%"} }><img width={1200} src={image}/></div>
         <div style={{paddingTop:40,zIndex:"100",color:"fff",position:'absolute',display:'flex',justifyContent:'space-between',alignItems:"flex-start"}}>
-                <img  width={120} height={120} style={{marginTop:15,marginLeft:40,borderRadius:0}} src={catIcon}/>
-                <div style={{marginLeft:30,color:"#fff",width:'84%',fontSize:'58px',fontWeight:700}}>{title}</div> 
+                <img height={120} style={{marginTop:15,marginLeft:40,borderRadius:0}} src={catIcon}/>
+                <div style={{marginLeft:30,color:"#fff",width:'80%',fontSize:'58px',fontWeight:700}}>{title}</div> 
             </div>
         <div style={{borderRadius:30,width:1200, marginTop:680,background:"#222",overflow: "hidden",textOverflow:"ellipses", padding:20,color:'#fff',position:"absolute",display:"flex",flexDirection:"column",alignItems:"center",fontSize:fontSize,justifyContent:"flex-end"}}>
         

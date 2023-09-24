@@ -541,7 +541,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
      <Share>{session.userslug ? null : <CallToShare>
                 <CallImage><img width="48" src={channelDetails.logo} /></CallImage>
                 Please help us grow by sharing the links to this thread via email, social networks and forums. {channelName == 'America First News' ? `Facebook and Google are both shadow-banning America First News, we can't survive without your help!` : `Your help is greatly appreciated!`}
-            </CallToShare>}<Shares><RWebShare
+            </CallToShare>}<RWebShare
                 data={{
                     text: description,
                     url: `/${qparams.forum}/topic/${tag}/${slug}`,

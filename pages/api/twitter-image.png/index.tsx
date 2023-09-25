@@ -55,7 +55,7 @@ async function handler(
         description = removeHashtags(descriptionSplit[1].replaceAll('<p>', '').replaceAll('</p>', ''));
     }
 
-    //console.log("image:", rsp, { image, catIcon, catName });
+    ///console.log("image:", rsp, { image, catIcon, catName });
     const descriptionLength=description.length;
     console.log("descrtiption length:",description.length  );
     const fontSize=descriptionLength>600?'42px':descriptionLength>500?'44px':descriptionLength>400?'48px':descriptionLength>300?'56px':'64px';

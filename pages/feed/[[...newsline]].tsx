@@ -109,6 +109,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     const isDigest=p.title.indexOf('Digest')>=0;
                     const title = !isDigest?`${p.site_name ? p.site_name + ': ' : ''}${p.title}`:p.title || ``;
                     const date = p.shared_time;
+                    const url=p.url;
                     if (!date || date == "null") return;
                     // console.log("RSS date ",date);
 
@@ -123,7 +124,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     const isoDate = new Date(
                         date * 1000
                     ).toISOString();
-                    const flink = `https://${host}/${forum}/topic/${p.tag}/${p.slug}`;
+                    const flink = isDigest?`https://${host}/${forum}/topic/${p.tag}/${p.slug}`:`${url}`;
                     let description = p.description;
 
                     const descrParts = description.split("{ai:summary}");
@@ -133,8 +134,10 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     //description=description.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
                     //summary=summary.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
                     summary = encodeEntities(summary);
-                    summary = `${summary}- summary © am1.news -<p>Read the original story and more like it on our website. We can only share about 20% of our full news feed on Facebook</p><p>www.am1.news</p>`;
+                    summary = `${summary}- Digest © am1.news -<p>Read the full digest feed on our website: www.am1.news</p><p> Please "like" and share to help us grow. Leave a comment! Let us know if the format works for you.</p>`;
                     description = encodeEntities(description);
+                    description = `${description}- Digest © am1.news -<p>Read the full digest feed on our website: www.am1.news</p><p> Please "like" and share to help us grow. Leave a comment! Let us know if the format works for you.</p>`;
+                    
                     console.log("description:", description)
                     console.log("summary:", summary);
                     if (summary.trim() == '[object Object]')

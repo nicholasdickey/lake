@@ -41,6 +41,25 @@ async function handler(
     const params = parts[1].split('&');
     const threadid = params[0].split('=')[1];
     const tag = params[1]?.split('=')[1]||"";
+
+// Define an array of diverse darker background colors
+const diverseDarkerBackgroundColors: string[] = [
+    "#1B1464", // Dark Blue
+    "#4C1130", // Dark Wine
+    "#0F4D92", // Dark Cyan
+    "#2C3E50", // Midnight Blue
+    "#541E24", // Dark Red
+    "#222", // Dark Grey
+  ];
+  
+  // Function to pick a random diverse darker background color
+  function getRandomDiverseDarkerBackgroundColor(): string {
+    const randomIndex = Math.floor(Math.random() * diverseDarkerBackgroundColors.length);
+    return diverseDarkerBackgroundColors[randomIndex];
+  }
+  
+  // Example usage
+  const randomColor = getRandomDiverseDarkerBackgroundColor();
     //console.log("tag:",tag);
     //let { threadid = '',tag=''} = req.query;
     //const key: FetchTopicKey = { threadid:threadid as string, withBody: 1, userslug: "og", sessionid: "", tag: tag as string, ackOverride: false};
@@ -64,18 +83,19 @@ async function handler(
     console.log("title length:",title.length  );
     const titleFontSize=titleLength>50?'62px':titleLength>40?'70px':titleLength>30?'82px':'84px';
     const response = new ImageResponse(
-   ( <div style={{width:1200,height:1600,background:"#222",position:"relative",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"space-between"}}>
-        
-        <div style={{opacity:"0.4",display:"flex",background:"#222",width:"100%",height:"100%"} }><img width={1200} src={image}/></div>
+   ( <div style={{width:1200,height:1600,background:randomColor,position:"relative",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"space-between"}}>
+        <div style={{display:"flex",background:"#000"}}>
+        <div style={{opacity:"0.4",display:"flex",background:"#000",width:"100%",height:"100%"} }><img width={1200} src={image}/></div>
+        </div>
         <div style={{paddingTop:40,zIndex:"100",color:"fff",position:'absolute',display:'flex',justifyContent:'space-between',alignItems:"flex-start",flexWrap:"wrap"}}>
                 <img height={120} style={{marginTop:15,marginLeft:40,borderRadius:0}} src={catIcon}/>
                 <div style={{marginLeft:54,color:"#fff",width:'78%',fontSize:'58px',fontWeight:700}}>{title}</div> 
             </div>
-        <div style={{width:1200, marginTop:680,background:"#222",overflow: "hidden",textOverflow:"ellipses", padding:20,color:'#fff',position:"absolute",display:"flex",flexDirection:"column",alignItems:"center",fontSize:fontSize,justifyContent:"flex-end"}}>
+        <div style={{width:1200, marginTop:680,background:randomColor,overflow: "hidden",textOverflow:"ellipses", padding:20,color:'#fff',position:"absolute",display:"flex",flexDirection:"column",alignItems:"center",fontSize:fontSize,justifyContent:"flex-end"}}>
         
            
-            <div style={{display:'flex',padding:20, background:"#222"}}>{description}</div>
-            <div style={{ display:'flex',fontSize:'28px',fontStyle:'italic',color:'#aaa', background:"#222" ,overflow: "hidden",textOverflow:"ellipses", padding:0,marginTop:20}}>
+            <div style={{display:'flex',padding:20, background:randomColor}}>{description}</div>
+            <div style={{ display:'flex',fontSize:'28px',fontStyle:'italic',color:'#aaa', background:randomColor ,overflow: "hidden",textOverflow:"ellipses", padding:0,marginTop:20}}>
                Digest Copyright &copy; 2023,  {"--"} <i>{`${(process.env.NEXT_PUBLIC_LAKEAPI||"").indexOf("american")>=0?'American Outdoorsman: www.american-outdoorsman.news':'America First News: www.am1.news'}`}</i>{"--"}
             </div>
         </div >

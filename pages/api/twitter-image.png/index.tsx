@@ -96,7 +96,7 @@ const diverseDarkerBackgroundColors: string[] = [
            
             <div style={{display:'flex',padding:20, background:randomColor}}>{description}</div>
             <div style={{ display:'flex',fontSize:'28px',fontStyle:'italic',color:'#aaa', background:randomColor ,overflow: "hidden",textOverflow:"ellipses", padding:0,marginTop:20}}>
-               Digest Copyright &copy; 2023,  {"--"} <i>{`${(process.env.NEXT_PUBLIC_LAKEAPI||"").indexOf("american")>=0?'American Outdoorsman: www.american-outdoorsman.news':'America First News: www.am1.news'}`}</i>{"--"}
+               Digest Copyright &copy; 2023,  {"--"} <i>{`${(process.env.NEXT_PUBLIC_LAKEAPI||"").indexOf("american")>=0?'American Outdoorsman: www.american-outdoorsman.news':'America One News: www.am1.news'}`}</i>{"--"}
             </div>
         </div >
 

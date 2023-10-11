@@ -16,7 +16,7 @@ const Topic = ({ singlePanel, fullPage }: { singlePanel?: boolean, fullPage?: bo
     const item = {
       image: 'https://media.istockphoto.com/id/1280015859/photo/blue-lake-with-treeline-in-autumn-color-on-a-sunny-afternoon-in-northern-minnesota.jpg?s=612x612&w=0&k=20&c=smtj8bw1BW3gUI9rrxRnAzQKGWmTyMQYcODgbuWNMbc=',
       title: 'Loading...',
-      site_name: 'America First News',
+      site_name: 'America One News',
       description: "Loading...",
       slug: 'loading'
     }

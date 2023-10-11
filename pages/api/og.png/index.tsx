@@ -60,7 +60,7 @@ async function handler(
             </div>
             <div style={{display:'flex',margin:20}}>{description}</div>
             <div style={{ width:'100%',textAlign:"right", marginTop:20, marginLeft:40,fontSize:18,color:'#f44', overflow: "hidden",textOverflow:"ellipses", padding:0,display:"flex"}}>
-                <b><em>Summary Copyright &copy; {`${(process.env.NEXT_PUBLIC_LAKEAPI||"").indexOf("american")>=0?'American Outdoorsman':'America First News'}`}</em></b>
+                <b><em>Summary Copyright &copy; {`${(process.env.NEXT_PUBLIC_LAKEAPI||"").indexOf("american")>=0?'American Outdoorsman':'America One News'}`}</em></b>
             </div>
         </div >
 

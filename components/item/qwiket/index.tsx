@@ -519,7 +519,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
             {AckBlock}
             <Share>{true ? null : <CallToShare>
                 <CallImage><img width="48" src={channelDetails.logo} /></CallImage>
-                Please help us grow by sharing the links to this thread via email, social networks and forums. {channelName == 'America First News' ? `Facebook and Google are both shadow-banning America First News, we can't survive without your help!` : `Your help is greatly appreciated!`}
+                Please help us grow by sharing the links to this thread via email, social networks and forums. {channelName == 'America One News' ? `Facebook and Google are both shadow-banning America One News, we can't survive without your help!` : `Your help is greatly appreciated!`}
             </CallToShare>}<Shares><RWebShare
                 data={{
                     text: description,
@@ -591,7 +591,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
         if (slug == 'loading') {
             return <Link href={`/${qparams.forum}/topic/${tag}/${slug}${qparams.layoutNumber != 'l1' ? '/' + qparams.layoutNumber : ''}`} legacyBehavior><a rel="nofollow"><VerticalWrap isTopic={isTopic}>
                 <Row key="r1"><PubImageBox><PubImage isTopic={isTopic} loud={session.loud} sizes="(max-width: 768px) 100vw,
-              (max-width: 2200px) 50vw, 33vw"     placeholder={"blur"} src={blur} alt={'America First News'} /></PubImageBox>
+              (max-width: 2200px) 50vw, 33vw"     placeholder={"blur"} src={blur} alt={'America One News'} /></PubImageBox>
                     <Right length={'am1.news'.length}><SiteName isTopic={isTopic}>{'am1.news'}</SiteName><TimeSince isTopic={isTopic}>{0}</TimeSince></Right></Row>
                 {author ? <Row>{author}</Row> : null}
                 <Row key="r2"><Title isTopic={isTopic}>{title}</Title></Row>

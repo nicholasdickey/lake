@@ -115,8 +115,8 @@ const Lowline = ({ session, lowline }:{session:Options,lowline:any}) => {
        <HorizontalPhone>Sponsor:&nbsp; <a href="https://wish-text.com/?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;</HorizontalPhone>
         <VerticalTablet>Sponsor:&nbsp; <a href="https://wish-text.com/?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;</VerticalTablet>
         <HorizontalTablet>Sponsor:&nbsp; <a href="https://wish-text.com/?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;</HorizontalTablet>
-        <SmallDesktop>Sponsor:&nbsp; <a href="https://wish-text.com/?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;Craft Personalized Messages With Ease! Wish It? Text It!</SmallDesktop>
-        <LargeDesktop>Sponsor:&nbsp; <a href="https://wish-text.com/?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;Craft Personalized Messages With Ease! Wish It? Text It!</LargeDesktop>
+        <SmallDesktop>Sponsor:&nbsp; <a href="https://wish-text.com/?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;Craft Personalized Greeting and Sympathy Cards With Ease!</SmallDesktop>
+        <LargeDesktop>Sponsor:&nbsp; <a href="https://wish-text.com/?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;Craft Personalized Greeting and Sympathy Cards for social media With Ease!</LargeDesktop>
         </div>}
         {session.loud?<Stars>
             <Star />

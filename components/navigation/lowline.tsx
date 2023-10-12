@@ -111,12 +111,12 @@ const Lowline = ({ session, lowline }:{session:Options,lowline:any}) => {
         <LargeDesktop>{lowline.largeDestop}</LargeDesktop>
         </div>:
         <div>
-        <Phone><a href="https://wish-text.com/landing?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;</Phone>
-       <HorizontalPhone>Sponsor:&nbsp; <a href="https://wish-text.com/landing?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;</HorizontalPhone>
-        <VerticalTablet>Sponsor:&nbsp; <a href="https://wish-text.com/landing?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;</VerticalTablet>
-        <HorizontalTablet>Sponsor:&nbsp; <a href="https://wish-text.com/landing?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;</HorizontalTablet>
-        <SmallDesktop>Sponsor:&nbsp; <a href="https://wish-text.com/landing?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;Craft Personalized Messages With Ease! Wish It? Text It!</SmallDesktop>
-        <LargeDesktop>Sponsor:&nbsp; <a href="https://wish-text.com/landing?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;Craft Personalized Messages With Ease! Wish It? Text It!</LargeDesktop>
+        <Phone><a href="https://wish-text.com/?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;</Phone>
+       <HorizontalPhone>Sponsor:&nbsp; <a href="https://wish-text.com/?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;</HorizontalPhone>
+        <VerticalTablet>Sponsor:&nbsp; <a href="https://wish-text.com/?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;</VerticalTablet>
+        <HorizontalTablet>Sponsor:&nbsp; <a href="https://wish-text.com/?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;</HorizontalTablet>
+        <SmallDesktop>Sponsor:&nbsp; <a href="https://wish-text.com/?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;Craft Personalized Messages With Ease! Wish It? Text It!</SmallDesktop>
+        <LargeDesktop>Sponsor:&nbsp; <a href="https://wish-text.com/?utm_content=am1-header">WISH-TEXT.COM</a>&nbsp;Craft Personalized Messages With Ease! Wish It? Text It!</LargeDesktop>
         </div>}
         {session.loud?<Stars>
             <Star />

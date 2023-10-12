@@ -537,23 +537,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
 
         </VerticalWrap>
     }
-    /*
-     <Share>{session.userslug ? null : <CallToShare>
-                <CallImage><img width="48" src={channelDetails.logo} /></CallImage>
-                Please help us grow by sharing the links to this thread via email, social networks and forums. {channelName == 'America First News' ? `Facebook and Google are both shadow-banning America First News, we can't survive without your help!` : `Your help is greatly appreciated!`}
-            </CallToShare>}<RWebShare
-                data={{
-                    text: description,
-                    url: `/${qparams.forum}/topic/${tag}/${slug}`,
-                    title,
-                }}
-                onClick={() => console.log("shared successfully!")}
-            >
-                    <Button> Share! </Button>
-                </RWebShare>
-                <Chatbot> Note: You can use @chatbot mention tag to interact with ChatGPT language model in comments. Neither your comment, nor the generated responses will appear in "Comments" or "News & Views" streams.</Chatbot>
-
-            </Share>*/
+   
     else if (isReact) {
         let { id, author_avatar, tag, catName, catIcon, author_name, postBody, subscr_status, createdat, thread_author, thread_title, thread_description, thread_url, slug, moderate_flag } = item;
         const { diff, timeString } = TimeDifference(createdat, qparams.timestamp)

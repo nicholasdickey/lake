@@ -531,7 +531,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                 <Button> Share </Button>
             </RWebShare> {isDigest ? <><a href="https://twitter.com/am1digest?ref_src=twsrc%5Etfw" className="twitter-follow-button" data-show-count="false">Follow @am1digest</a><script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script></> : <><a href="https://twitter.com/am1_news?ref_src=twsrc%5Etfw" className="twitter-follow-button" data-show-count="false">Follow @am1_news</a><script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script></>}</Shares>
 
-                <Chatbot> Note: You can use @chatbot mention tag to interact with ChatGPT language model in comments. Neither your comment, nor the generated responses will appear in "Comments" or "News & Views" streams.</Chatbot>
+                {false&&<Chatbot> Note: You can use @chatbot mention tag to interact with ChatGPT language model in comments. Neither your comment, nor the generated responses will appear in "Comments" or "News & Views" streams.</Chatbot>}
 
             </Share>
 

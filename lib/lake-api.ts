@@ -18,6 +18,20 @@ export const unpublish = async (slug: string, tag: string) => {
    const res = await axios.get(url);
    return res.data;
 }
+/**
+ * Client-side only function
+ * 
+ * @param slug 
+ * @param tag 
+ * @returns 
+ */
+export const digestInclude = async (slug: string, tag: string) => {
+   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/newsline/insert-digest-include?slug=${slug}&tag=${tag}`;
+   console.log("digestInclude",url);
+   const res = await axios.get(url);
+   return res.data;
+}
+
 //--------------------------------------------------
 
 
@@ -441,4 +455,28 @@ export const updatePublications = async ({ newsline, tag, switch: switchParam, f
       console.log("ERROR in getchMyNewsline:", data.msg)
    }
 }
+export const getDigestInclude = async () => {
+   const url = `${process.env.NEXT_PUBLIC_LAKEAPI}/api/v1/newsline/get-digest-include`
+
+   let res;
+   try {
+      res = await axios.get(url)
+   }
+   catch (x) {
+      console.log("getDigestInclude HANDLED EXCEPTION:", x)
+      res = await axios.get(url)
+      console.log("retried successfully")
+   }
+   const data = res ? res.data : null;
+
+   if (data?.success) {
+      return data.items;
+   }
+   else {
+      console.log("ERROR in getDigestInclude:", data.msg)
+
+   }
+}
+
+
 //--------------------------------------------------

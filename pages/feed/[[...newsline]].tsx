@@ -119,7 +119,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                 try {
                     //  console.log("rss item:", JSON.stringify(p))
                     const isDigest = p.title.indexOf('Digest') >= 0;
-                    const title = !isDigest ? `${p.site_name ? p.site_name + ': ' : ''}${p.title}` : p.title || ``;
+                    const title = '';
                     const date = p.shared_time;
                     const url = p.url;
                     if (!date || date == "null") return;

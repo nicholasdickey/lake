@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router'
 import styled from 'styled-components';
 import { useAppContext } from "../../../lib/context";
-import { getOnlineCount, unpublish } from '../../../lib/lake-api';
+import { getOnlineCount, unpublish,digestInclude } from '../../../lib/lake-api';
 import { UilGlassMartiniAlt, UilUsersAlt,UilSpoonAlt } from '@iconscout/react-unicons';
 import { Playfair_Display } from 'next/font/google';
 import Image from 'next/image';
@@ -206,7 +206,7 @@ const DatelineBand = ({ channelDetails, user, updateSession }: DatelineBandParam
                             {channelDetails.slug=='qwiket'?
                             <Link href="/usconservative/topic/fq/6-slug-la-cocina-am1news"> <Martini><div style={{width:16,height:16}}><svg stroke="#888" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="spoon"><path d="M15.53,14.13a1,1,0,0,0-1.42,0,1,1,0,0,0,0,1.41l6.18,6.18a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.41Zm1.23-2.49a3,3,0,0,0,2.12-.88l2.83-2.83a1,1,0,0,0,0-1.41,1,1,0,0,0-1.42,0L17.46,9.35a1,1,0,0,1-1.41,0l3.54-3.54a1,1,0,0,0,0-1.41,1,1,0,0,0-1.42,0L14.64,7.93h0a1,1,0,0,1,0-1.41l2.82-2.83a1,1,0,1,0-1.41-1.41L13.22,5.11a3,3,0,0,0,0,4.24h0L12,10.59,10.44,9.05a4.16,4.16,0,0,0-.74-5C8.26,2.61,4.53,1,2.77,2.79S2.6,8.27,4,9.72A4.36,4.36,0,0,0,6.94,11h.14A3.88,3.88,0,0,0,9,10.46L10.57,12,2.29,20.28a1,1,0,1,0,1.42,1.41l9-9,0,0,0,0,1.92-1.92A3,3,0,0,0,16.76,11.64ZM8.43,8.44A1.93,1.93,0,0,1,7,9,2.26,2.26,0,0,1,5.46,8.3C4.38,7.22,3.62,4.77,4.19,4.2A1,1,0,0,1,4.85,4,5.87,5.87,0,0,1,8.29,5.47,2.12,2.12,0,0,1,8.43,8.44Z"></path></svg></div>  </Martini></Link>:null}
                
-                            {hasUnpublish ? <Unpublish><Link onClick={async () => { await unpublish(qparams.threadid, qparams.tag); console.log("unpublish"); }} href={'#'}><UilNewspaper size="16" color="red" /></Link></Unpublish> : null}
+                            {hasUnpublish ? <Unpublish><Link onClick={async () => { await unpublish(qparams.threadid, qparams.tag); console.log("unpublish"); }} href={'#'}><UilNewspaper size="16" color="red" /></Link><Link onClick={async () => { await digestInclude(qparams.threadid, qparams.tag); console.log("digestInclude"); }} href={'#'}><UilNewspaper size="16" color="green" style={{marginLeft:10}} /></Link></Unpublish> : null}
                             </Icons>
                                 
                            

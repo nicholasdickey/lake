@@ -6,7 +6,7 @@ import {
 
 } from "next";
 import {
-    fetchQueue, fetchChannelConfig, FetchQueueKey,
+    fetchQueue, fetchChannelConfig, FetchQueueKey, getDigestInclude,
 } from '../../lib/lake-api';
 import encodeEntities from '../../lib/encode-entities';
 export default function Home({ items, channelDetails, host, forum }: { channelDetails: any, items: any[], host: string, forum: string }) {
@@ -102,7 +102,10 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         <link>https://${host}</link> 
         <description>${channelDetails.description}</description>
       `;
-
+            const includeItems= await getDigestInclude();
+            if(includeItems&&includeItems.length>0)
+                items.push(...includeItems);
+        
             const rssItems = items.map((p: any, itemCount: number) => {
                 try {
                     //  console.log("rss item:", JSON.stringify(p))

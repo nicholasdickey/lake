@@ -6,10 +6,10 @@ import {
 
 } from "next";
 import {
-    fetchQueue, fetchChannelConfig, FetchQueueKey,
+    fetchQueue, fetchChannelConfig, FetchQueueKey, getDigestInclude
 } from '../../lib/lake-api';
 import encodeEntities from '../../lib/encode-entities';
-export default function Home({ items, channelDetails, host, forum }: { channelDetails: any, items: any[], host: string, forum: string }) {
+export default async function Home({ items, channelDetails, host, forum }: { channelDetails: any, items: any[], host: string, forum: string }) {
     const header = `<?xml version="1.0" encoding="UTF-8" ?>  
     <rss version="2.0"> 
       <channel> 
@@ -17,6 +17,11 @@ export default function Home({ items, channelDetails, host, forum }: { channelDe
         <link>https://${host}</link> 
         <description>${channelDetails.description}</description>
       `;
+    const includeItems = await getDigestInclude();
+    if (includeItems && includeItems.length > 0)
+        items.push(...includeItems);
+
+
     const rssItems = items.map((p, itemCount) => {
         try {
             //  console.log("rss item:", JSON.stringify(p))
@@ -102,14 +107,21 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         <link>https://${host}</link> 
         <description>${channelDetails.description}</description>
       `;
+            console.log("NEW PART",newsline)
+            if (newsline.indexOf('digest') >= 0) {
+                const includeItems = await getDigestInclude();
+                console.log("includeItems", includeItems)
+                if (includeItems && includeItems.length > 0)
+                    items.push(...includeItems);
+            }
 
             const rssItems = items.map((p: any, itemCount: number) => {
                 try {
                     //  console.log("rss item:", JSON.stringify(p))
-                    const isDigest=p.title.indexOf('Digest')>=0;
-                    const title = !isDigest?`${p.site_name ? p.site_name + ': ' : ''}${p.title}`:p.title || ``;
+                    const isDigest = p.title.indexOf('Digest') >= 0;
+                    const title = !isDigest ? `${p.site_name ? p.site_name + ': ' : ''}${p.title}` : p.title || ``;
                     const date = p.shared_time;
-                    const url=p.url;
+                    const url = p.url;
                     if (!date || date == "null") return;
                     // console.log("RSS date ",date);
 
@@ -124,7 +136,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     const isoDate = new Date(
                         date * 1000
                     ).toISOString();
-                    const flink = isDigest?`https://${host}/${forum}/topic/${p.tag}/${p.slug}`:`${url}`;
+                    const flink = isDigest ? `https://${host}/${forum}/topic/${p.tag}/${p.slug}` : `${url}`;
                     let description = p.description;
 
                     const descrParts = description.split("{ai:summary}");
@@ -137,12 +149,12 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     summary = `${summary}- Digest © am1.news -<p>Read the full digest feed on our website: www.am1.news</p><p> Please "like" and share to help us grow. Leave a comment! Let us know if the format works for you.</p>`;
                     description = encodeEntities(description);
                     description = `${description}- Digest © am1.news -<p>Read the full digest feed on our website: www.am1.news</p><p> Please "like" and share to help us grow. Leave a comment! Let us know if the format works for you.</p>`;
-                    
+
                     console.log("description:", description)
                     console.log("summary:", summary);
                     if (summary.trim() == '[object Object]')
                         summary = null;
-                    description = !isDigest&&summary ? summary : description;
+                    description = !isDigest && summary ? summary : description;
                     console.log('rss description', description)
                     return `
         <item>

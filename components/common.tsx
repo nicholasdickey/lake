@@ -234,6 +234,7 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
     return <Loading className={roboto.className}>Fallback Loading...</Loading>
   const title=meta?.title||"";
   const site_name=meta?.site_name||"";
+ // console.log({layoutType,newslineLayout,contextLayout})
   //all the Head setup happens at this level
   return (
     <>

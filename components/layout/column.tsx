@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 
 import styled from 'styled-components';
 import Swipe from "react-easy-swipe";
@@ -264,13 +264,18 @@ export const Column = ({ pageType, visible, card, spaces, column, qparams, sessi
     let selector = column.selector;
     let msc = column.msc;
     const [topicOverride, setTopicOverride] = useState({ leftColumnOverride: 'topic' });
+   
     // const [inited,setInited]=
     const fullPage = spaces < 3;
+    useEffect(() => {
+        if(fullPage)
+        setTopicOverride({ leftColumnOverride: 'topic' });
+    },[qparams.threadid])
     var randomstring = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     const [guid, setGuid] = useState(randomstring())
-    // console.log("d1b: COLUMN RENDER",guid,visible,card, selector,type)
-    //  console.log("**** FirstColumn:", JSON.stringify({qparamsType:qparams.type,isLeft,spaces, selector, type, msc, session}))
-    // console.log("Column:",{override:session.leftColumnOverride,qParamsType:qparams.type,type,selector,fullPage,pageType,qparams})
+    //console.log("d1b: COLUMN RENDER",guid,visible,card, selector,type)
+    //console.log("**** FirstColumn:", JSON.stringify({qparamsType:qparams.type,isLeft,spaces, selector, type, msc, session}))
+    //console.log("Column:",{override:session.leftColumnOverride,qParamsType:qparams.type,type,selector,fullPage,pageType,qparams})
     if (session.leftColumnOverride == 'navigator' && qparams.type == 'solo' && fullPage) {
         session.leftColumnOverride = 'newsline';
     }
@@ -292,7 +297,7 @@ export const Column = ({ pageType, visible, card, spaces, column, qparams, sessi
     else if (isLeft) {
         selector = session.leftColumnOverride || selector;
     }
-    //console.log("d1b: COLUMN RENDER",{guid,visible,card, selector,type,pageType})
+    console.log("==>d1b: COLUMN RENDER",{guid,visible,card, selector,type,pageType})
 
     const feedName = (qparams.tag == 'ld' ? 'basement' : qparams.tag == 'fq' ? 'am1.news' : qparams.tag) + ' feed';
     const name = selector == 'mix' ? 'news&views' : selector == 'tag' ? feedName : selector == 'topics' ? 'active topics' : selector == 'reacts' ? 'comments' : qparams.type == 'solo' ? `solo ${qparams.tag == 'ld' ? 'basement' : qparams.tag}` : selector;

@@ -159,6 +159,8 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     //description=description.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
                     //summary=summary.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
                     summary=removeHashtags(summary);
+                    if(summary.length<10)
+                        return;
                     summary = encodeEntities(summary);
                     summary = `${summary}- summary © am1.news -`;
                     

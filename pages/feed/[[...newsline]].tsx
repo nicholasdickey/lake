@@ -9,6 +9,8 @@ import {
     fetchQueue, fetchChannelConfig, FetchQueueKey, getDigestInclude
 } from '../../lib/lake-api';
 import encodeEntities from '../../lib/encode-entities';
+import removeHashtags from '../../lib/remove-hashtags';
+
 export default async function Home({ items, channelDetails, host, forum }: { channelDetails: any, items: any[], host: string, forum: string }) {
     const header = `<?xml version="1.0" encoding="UTF-8" ?>  
     <rss version="2.0"> 
@@ -20,8 +22,7 @@ export default async function Home({ items, channelDetails, host, forum }: { cha
     const includeItems = await getDigestInclude();
     if (includeItems && includeItems.length > 0)
         items.push(...includeItems);
-
-
+   
     const rssItems = items.map((p, itemCount) => {
         try {
             //  console.log("rss item:", JSON.stringify(p))
@@ -107,7 +108,8 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         <link>https://${host}</link> 
         <description>${channelDetails.description}</description>
       `;
-            console.log("NEW PART",newsline)
+            let isDigestFeed = newsline.indexOf('digest') >= 0;
+            console.log("NEW PART", newsline)
             if (newsline.indexOf('digest') >= 0) {
                 const includeItems = await getDigestInclude();
                 console.log("includeItems", includeItems)
@@ -119,6 +121,8 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                 try {
                     //  console.log("rss item:", JSON.stringify(p))
                     const isDigest = p.title.indexOf('Digest') >= 0;
+                    if (isDigestFeed && !isDigest)
+                        return;
                     const title = '';
                     const date = p.shared_time;
                     const url = p.url;
@@ -146,7 +150,8 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     //description=description.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
                     //summary=summary.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
                     summary = encodeEntities(summary);
-                    summary = `${summary}- Digest © am1.news -`;
+                    summary = `${summary}- summary © am1.news -`;
+                    summary=removeHashtags(summary);
                     description = encodeEntities(description);
                     description = `${description}- Digest © am1.news -<p>Read the full digest feed on our website: www.am1.news</p><p> Please "like" and share to help us grow. Leave a comment! Let us know if the format works for you.</p>`;
 

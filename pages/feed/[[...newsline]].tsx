@@ -159,13 +159,14 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     //description=description.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
                     //summary=summary.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
                     summary=removeHashtags(summary);
-                    if(summary.length<10)
+                    console.log("################# DIGEST summary",summary)
+                    if(!isDigest&&summary.length<10)
                         return;
                     summary = encodeEntities(summary);
                     summary = `${summary}- summary © am1.news -`;
-                    
+                    description=removeHashtags(description);   
                     description = encodeEntities(description);
-                    description = `${description}- Digest © am1.news -<p>Read the full digest feed on our website: www.am1.news</p><p> Please "like" and share to help us grow. Leave a comment! Let us know if the format works for you.</p>`;
+                    description = `${description}- summary © am1.news -`;
 
                     console.log("description:", description)
                     console.log("summary:", summary);

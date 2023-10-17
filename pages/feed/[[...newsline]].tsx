@@ -99,7 +99,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
         const key: FetchQueueKey["key"] = ['queue', type, newsline, 0, forum, '', 0, '0', '', '', 0, '', '', 12];
         console.log("rss key==", key)
-        const { items } = await fetchQueue(key);
+        let { items } = await fetchQueue(key);
         if (context.res) {
             const header = `<?xml version="1.0" encoding="UTF-8" ?>  
     <rss version="2.0"> 
@@ -110,19 +110,26 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
       `;
             let isDigestFeed = newsline.indexOf('digest') >= 0;
             console.log("NEW PART", newsline)
+            items=items.filter((p: any, itemCount: number) => {
+                const isDigest = p.title.indexOf('Digest') >= 0;
+                if (isDigestFeed && !isDigest)
+                    return false;
+                return true;
+              
+            }
             if (newsline.indexOf('digest') >= 0) {
                 const includeItems = await getDigestInclude();
                 console.log("includeItems", includeItems)
                 if (includeItems && includeItems.length > 0)
                     items.push(...includeItems);
             }
-
+           
             const rssItems = items.map((p: any, itemCount: number) => {
                 try {
                     //  console.log("rss item:", JSON.stringify(p))
                     const isDigest = p.title.indexOf('Digest') >= 0;
-                    if (isDigestFeed && !isDigest)
-                        return;
+                 //   if (isDigestFeed && !isDigest)
+                 //       return;
                     const title = '';
                     const date = p.shared_time;
                     const url = p.url;

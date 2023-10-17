@@ -116,7 +116,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     return false;
                 return true;
               
-            }
+            })
             if (newsline.indexOf('digest') >= 0) {
                 const includeItems = await getDigestInclude();
                 console.log("includeItems", includeItems)

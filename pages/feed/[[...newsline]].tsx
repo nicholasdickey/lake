@@ -114,6 +114,8 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                 const isDigest = p.title.indexOf('Digest') >= 0;
                 if (isDigestFeed && !isDigest)
                     return false;
+                if(isDigestFeed&&p.title.indexOf('The Corner:')>=0)
+                    return false;
                 return true;
               
             })

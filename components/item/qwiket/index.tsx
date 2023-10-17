@@ -14,6 +14,7 @@ import { BodySnatcher } from './body-snatcher';
 import { Star } from '../../widgets/star'
 import { RWebShare } from "react-web-share";
 import { entityToHtml } from '../../../lib/entity-to-html';
+import removeHashtags from "../../../lib/remove-hashtags";
 /**
  * CSS
  */
@@ -453,7 +454,8 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
         let isDigest = false;
         const renderDigest = (json: any) => {
             isDigest = true;
-            const summary = json.summary;
+            const summary = removeHashtags(json.summary);
+
             let out = [];
          
             for (let key in json) {
@@ -463,6 +465,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                 const hash = `#${key}`;
                 const items = value.items.map((item: any) => {
                     let { title, url, text, publication, image, slug } = item;
+                    text=removeHashtags(text);
                     let blocks = [];
                     const blocksRaw = text.split('</p><p>');
                     blocks = blocksRaw.map((block: string, i: number) => {
@@ -477,7 +480,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                 })
                 out.push(<DigestCategory><div><DigestHash><p>{hash}</p></DigestHash></div>{items}</DigestCategory>);
             }
-            return <Digest><DigestSummary><b>Core Dump:&nbsp;</b><ReactMarkdown rehypePlugins={[rehypeRaw]} >{summary}</ReactMarkdown></DigestSummary>{out}</Digest>
+            return <Digest>{out}</Digest>
         }
         interface BodyBlock {
             type: string;

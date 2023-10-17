@@ -149,9 +149,10 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     summary = summary.replaceAll('<p>', '<p>').replaceAll('</p>', '</p>\n\n');
                     //description=description.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
                     //summary=summary.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
+                    summary=removeHashtags(summary);
                     summary = encodeEntities(summary);
                     summary = `${summary}- summary © am1.news -`;
-                    summary=removeHashtags(summary);
+                    
                     description = encodeEntities(description);
                     description = `${description}- Digest © am1.news -<p>Read the full digest feed on our website: www.am1.news</p><p> Please "like" and share to help us grow. Leave a comment! Let us know if the format works for you.</p>`;
 

@@ -3,7 +3,8 @@ export default  function removeHashtags(input: string): string {
     //const hashtagRegex = /#\w+/g;
     const hashtagRegex = /#(\w+)\b/g;
 
-    const ret=input.replace(hashtagRegex, '');
+    let ret=input.replace(hashtagRegex, '');
+    ret=input.replace(/\(\)/g, '');
     console.log("removeHashtags:",input,ret);
     return input.replace(hashtagRegex, '');
 }

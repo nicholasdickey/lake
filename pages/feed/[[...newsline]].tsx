@@ -135,6 +135,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     const title = '';
                     const date = p.shared_time;
                     const url = p.url;
+                    const image=p.image;
                     if (!date || date == "null") return;
                     // console.log("RSS date ",date);
 
@@ -180,6 +181,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
             <title>${title}</title>
             <pubDate>${isoDate}</pubDate>  
             <description>${description}</description>
+            <enclosure url="${image}" type="image/${image.indexOf('png')>=0?"png":"jpg"}" ></enclosure>
         </item>
         `
                 }

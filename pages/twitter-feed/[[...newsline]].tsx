@@ -162,6 +162,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
             <title>${title}</title>
             <pubDate>${isoDate}</pubDate>  
             <description>${description}</description>
+            <enclosure url="${image}" type="image/png" />
            
         </item>
         `

@@ -182,7 +182,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
             <title>${title}</title>
             <pubDate>${isoDate}</pubDate>  
             <description>${description}</description>
-            <enclosure url="${twitterUrl}" type="image/${image.indexOf('png')>=0?"png":"jpg"}" ></enclosure>
+            <enclosure url="${twitterUrl}" type="image/png" ></enclosure>
         </item>
         `
                 }

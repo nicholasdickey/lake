@@ -174,14 +174,15 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     if (summary.trim() == '[object Object]')
                         summary = null;
                     description = !isDigest && summary ? summary : description;
-                    console.log('rss description', description)
+                    console.log('rss description', description);
+                    const twitterUrl=`https://${host}/api/og.png?threadid=${p.slug}&tag=${p.tag}`
                     return `
         <item>
             <link>${flink}</link>
             <title>${title}</title>
             <pubDate>${isoDate}</pubDate>  
             <description>${description}</description>
-            <enclosure url="${image}" type="image/${image.indexOf('png')>=0?"png":"jpg"}" ></enclosure>
+            <enclosure url="${twitterUrl}" type="image/${image.indexOf('png')>=0?"png":"jpg"}" ></enclosure>
         </item>
         `
                 }

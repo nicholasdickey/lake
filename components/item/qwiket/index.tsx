@@ -32,6 +32,7 @@ interface IsTopic {
 }
 
 const VerticalWrap = styled.div<IsTopic>`
+
     background:var(--background);
     border-color:${({ isTag, diff }) => (isTag && diff && (diff < 3600)) ? 'var(--qwiket-border-new) var(--qwiket-border-stale) var(--qwiket-border-new) var(--qwiket-border-new)' : isTag && diff && diff < 4 * 3600 ? 'var(--qwiket-border-recent) var(--qwiket-border-stale) var(--qwiket-border-recent) var(--qwiket-border-recent)' : 'var(--qwiket-border-stale)'};
     border-style: solid ${({ isTopic, singlePanel }) => isTopic ? singlePanel ? 'solid' : 'none' : 'solid'}  ${({ isTopic }) => isTopic ? 'none' : 'solid'}   ${({ isTopic }) => isTopic ? 'none' : 'solid'}  ;
@@ -56,6 +57,7 @@ const VerticalWrap = styled.div<IsTopic>`
 `
 
 const Row = styled.div`
+
     display:flex;
     align-items: center;
     justify-content: space-between;
@@ -72,7 +74,27 @@ const Row = styled.div`
     a{
         text-overflow:ellipsis;
         overflow:hidden;
-     }    
+     }   
+     ol{
+        margin-right:20px;
+        text-justify: inter-word;
+        text-align: justify;
+        margin-top:10px;
+        li{
+            margin-top:20px;
+        }
+
+     } 
+     ul{
+        margin-right:20px;
+        text-justify: inter-word;
+        text-align: justify;
+        margin-top:10px;
+        li{
+            margin-top:20px;
+        }
+        }
+    
 `
 
 const TopRow = styled.div`
@@ -492,7 +514,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
         let AckBlock: ReactNode = null;
         if (body) {
             bodyBlocks = body.map((b: BodyBlock, i: number) => {
-                return (b.type == "twitter" && b.id) ? <TweetEmbedContainer key={`twt-${i}`}><TweetEmbed><TwitterTweetEmbed tweetId={b.id} placeholder="Loading a Tweet..." /*options={{theme:session.dark?'dark':'light'}}*/ /></TweetEmbed></TweetEmbedContainer> : (b.type == 'html' || b.type == 'text' || b.type == 'image') ? <ReactMarkdown rehypePlugins={[rehypeRaw]} >{b.content}</ReactMarkdown> : <div>{renderDigest(b.json)}</div>
+                return (b.type == "twitter" && b.id) ? <TweetEmbedContainer key={`twt-${i}`}><TweetEmbed><TwitterTweetEmbed tweetId={b.id} placeholder="Loading a Tweet..." /*options={{theme:session.dark?'dark':'light'}}*/ /></TweetEmbed></TweetEmbedContainer> : (b.type == 'html' || b.type == 'text' || b.type == 'image') ? <ReactMarkdown rehypePlugins={[rehypeRaw]} >{b.content}</ReactMarkdown> :b.type=='ol'?<ReactMarkdown rehypePlugins={[rehypeRaw]} >{"<ol>"+b.content+"</ol>"}</ReactMarkdown>: <div>{renderDigest(b.json)}</div>
             })
         }
         console.log("Qwiket body=",{body,bodyHtml,hasBody,ack})

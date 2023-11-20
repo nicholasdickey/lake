@@ -220,7 +220,7 @@ export const fetchTopic = async ({ threadid, withBody, userslug, sessionid, tag,
       res = await axios.get(url)
       console.log("retried successfully")
    }
-
+   console.log("FETCH TOPIC: ",JSON.stringify(res.data))
    return res ? res.data : null;
 }
 //--------------------------------------------------

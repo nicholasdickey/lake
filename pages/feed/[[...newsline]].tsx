@@ -164,7 +164,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     if(!isDigest&&summary.length<10)
                         return;
                     summary = encodeEntities(summary);
-                    summary = `${summary}- summary © am1.news -`;
+                    summary = `${summary}`;
                     description=removeHashtags(description);   
                     description = encodeEntities(description);
                     description = `${description}- summary © am1.news -`;

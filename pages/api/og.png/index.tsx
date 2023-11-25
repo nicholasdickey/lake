@@ -48,19 +48,19 @@ async function handler(
 
     //console.log("image:", rsp, { image, catIcon, catName });
     const response = new ImageResponse(
-   ( <div style={{width:1200,height:1600,background:"#000",position:"relative",display:"flex",flexDirection:"column",alignItems:"center"}}>
+   ( <div style={{width:1600,height:1200,background:"#FFF",position:"relative",display:"flex",flexDirection:"column",alignItems:"flex-end"}}>
         
-        <div style={{opacity:"0.4",display:"flex",width:"100%",height:"100%"} }><img width={1200} src={image}/></div>
+       <div style={{opacity:"0.5",display:"flex",justifyContent:"flex-end",alignItems:"baseline",width:120,height:120} }><img width={12} src={image}/></div>
         
-        <div style={{width:1200,height:1600, overflow: "hidden",textOverflow:"ellipses", padding:20,color:'#fff',position:"absolute",display:"flex",flexDirection:"column",alignItems:"center",fontSize:"28px"}}>
+        <div style={{width:1600,height:1200, overflow: "hidden",textOverflow:"ellipses", padding:20,color:'#fff',position:"absolute",display:"flex",flexDirection:"column",alignItems:"center",fontSize:"28px"}}>
         
-            <div style={{display:'flex',justifyContent:'space-between'}}>
+            {false&&<div style={{display:'flex',justifyContent:'space-between'}}>
                 <img  width={80} height={80} style={{marginTop:10,marginLeft:0,borderRadius:0}} src={catIcon}/>
                 <div style={{width:'90%',fontSize:'44px',padding:40}}>{title}</div> 
-            </div>
-            <div style={{display:'flex',margin:20}}>{description}</div>
-            <div style={{ width:'100%',textAlign:"right", marginTop:20, marginLeft:40,fontSize:18,color:'#f44', overflow: "hidden",textOverflow:"ellipses", padding:0,display:"flex"}}>
-                <b><em>Summary Copyright &copy; {`${(process.env.NEXT_PUBLIC_LAKEAPI||"").indexOf("american")>=0?'American Outdoorsman':'America One News'}`}</em></b>
+            </div>}
+            <div style={{display:'flex',marginRight:15,fontSize:20,lineHeight:1.5,color:"#444"}}>{description}</div>
+            <div style={{ width:'100%',textAlign:"right", marginTop:20, marginLeft:40,fontSize:12,color:'#f44', overflow: "hidden",textOverflow:"ellipses", padding:0,display:"flex"}}>
+               {false&&<b><em>Summary Copyright &copy; {`${(process.env.NEXT_PUBLIC_LAKEAPI||"").indexOf("american")>=0?'American Outdoorsman':'America One News'}`}</em></b>}
             </div>
         </div >
 

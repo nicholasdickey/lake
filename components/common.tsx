@@ -246,8 +246,11 @@ export default function Home({ session: startSession, qparams, meta }: CommonPro
         <meta name="slogan" content="Internet's Front Page" />
         
         <meta property="og:description" content={meta?.description} />
+        <meta property="twitter:description" content={meta?.description} />
+        
         <meta name="title" content={meta?.title} />
         <meta property="og:title" content={meta?.title} />
+        <meta property="twitter:title" content={meta?.title} />
         <meta name="description" content={meta?.description} />
         <meta property="og:type" content="website" />
         <meta property="fb:appid" content="358234474670240" />

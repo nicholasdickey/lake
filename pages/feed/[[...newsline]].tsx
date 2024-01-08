@@ -156,7 +156,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     const descrParts = description.split("{ai:summary}");
                     description - descrParts[0];
                     let summary = descrParts.length > 1 ? descrParts[1] : '';
-                    summary = summary.replaceAll('<p>', '<p>').replaceAll('</p>', '</p>\n\n');
+                    summary = summary.replaceAll('<p>', '<p>').replaceAll('</p>', '</p>\n\n').replaceAll('()','');
                     //description=description.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
                     //summary=summary.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
                     summary=removeHashtags(summary);

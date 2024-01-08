@@ -302,11 +302,11 @@ export const getServerSideProps = withSessionSsr(
                     meta.image = `https://${process.env.CANONIC_DOMAIN}/api/og.png?threadid=${qparams.threadid ? qparams.threadid : ''}&tag=${qparams.tag}`//item.image;
                     //if(item.site_name.indexOf("Fox News")>=0||item.title.indexOf("Digest")>=0)
                     //    meta.image=item.image;
-                    if(process.env.NODE_ENV!='development'/*&&item.title.indexOf("Digest")<0*/)
+                   // if(process.env.NODE_ENV!='development'/*&&item.title.indexOf("Digest")<0*/)
                         meta.image=item.image;
                     meta.publishedTime = item.shared_time;
-                    meta.url = item.shared_time;
-                    meta.canonic = `https://${process.env.CANONIC_DOMAIN}/${forum}/topic/${tag}/${threadid}`
+                    meta.url = item.url;
+                    meta.canonic = item.url;//`https://${process.env.CANONIC_DOMAIN}/${forum}/topic/${tag}/${threadid}`
                 }
                 catch (x) {
                     console.log("FETCH TOPIC ERROR", x);

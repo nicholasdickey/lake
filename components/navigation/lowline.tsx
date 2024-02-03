@@ -111,12 +111,12 @@ const Lowline = ({ session, lowline }:{session:Options,lowline:any}) => {
         <LargeDesktop>{lowline.largeDestop}</LargeDesktop>
         </div>:
         <div>
-        <Phone><a href="https://findexar.com/?utm_content=am1-header">FINDEXAR.COM</a>&nbsp;</Phone>
-       <HorizontalPhone>Sponsor:&nbsp; <a href="https://findexar.com/?utm_content=am1-header">FINDEXAR.COM</a>&nbsp;</HorizontalPhone>
-        <VerticalTablet>Sponsor:&nbsp; <a href="https://findexar.com/?utm_content=am1-header">FINDEXAR.COM</a>&nbsp;</VerticalTablet>
-        <HorizontalTablet>Sponsor:&nbsp; <a href="https://findexar.com/?utm_content=am1-header">FINDEXAR.COM</a>&nbsp;</HorizontalTablet>
-        <SmallDesktop>Sponsor:&nbsp; <a href="https://findexar.com/?utm_content=am1-header">FINDEXAR.COM</a>&nbsp;Track Major League Athletes&apos; Media Mentions – Perfect for Fantasy Sports Fans.</SmallDesktop>
-        <LargeDesktop>Sponsor:&nbsp; <a href="https://findexar.com/?utm_content=am1-header">FINDEXAR.COM</a>&nbsp;Track Major League Athletes&apos; Media Mentions – Perfect for Fantasy Sports Fans.</LargeDesktop>
+        <Phone><a href="https://findexar.com/?utm_content=am1-header">QWIKET.COM</a>&nbsp;</Phone>
+       <HorizontalPhone>Sponsor:&nbsp; <a href="https://findexar.com/?utm_content=am1-header">QWIKET.COM</a>&nbsp;</HorizontalPhone>
+        <VerticalTablet>Sponsor:&nbsp; <a href="https://findexar.com/?utm_content=am1-header">QWIKET.COM</a>&nbsp;</VerticalTablet>
+        <HorizontalTablet>Sponsor:&nbsp; <a href="https://findexar.com/?utm_content=am1-header">QWIKET.COM</a>&nbsp;</HorizontalTablet>
+        <SmallDesktop>Sponsor:&nbsp; <a href="https://findexar.com/?utm_content=am1-header">QWIKET.COM</a>&nbsp;Sports Media Index – Perfect for Fantasy Sports Fans.</SmallDesktop>
+        <LargeDesktop>Sponsor:&nbsp; <a href="https://findexar.com/?utm_content=am1-header">QWIKET.COM</a>&nbsp;Sports Media Index – Perfect for Fantasy Sports Fans. Track media mentions of your fantasy team.</LargeDesktop>
         </div>}
         {session.loud?<Stars>
             <Star />

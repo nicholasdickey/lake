@@ -19,6 +19,7 @@ export default async function Home({ items, channelDetails, host, forum }: { cha
         <link>https://${host}</link> 
         <description>${channelDetails.description}</description>
       `;
+    console.log("FEED==>");  
     const includeItems = await getDigestInclude();
     if (includeItems && includeItems.length > 0)
         items.push(...includeItems);
@@ -112,6 +113,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
             console.log("NEW PART", newsline)
             items=items.filter((p: any, itemCount: number) => {
                 const isDigest = p.title.indexOf('Digest') >= 0;
+                console.log("isDigest",isDigest)
                 if (isDigestFeed && !isDigest)
                     return false;
                 if(p.title.indexOf('The Corner:')>=0)
@@ -128,7 +130,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
            
             const rssItems = items.map((p: any, itemCount: number) => {
                 try {
-                    //  console.log("rss item:", JSON.stringify(p))
+                    console.log("rss item:", JSON.stringify(p))
                     const isDigest = p.title.indexOf('Digest') >= 0;
                  //   if (isDigestFeed && !isDigest)
                  //       return;
@@ -137,7 +139,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     const url = p.url;
                     const image=p.image;
                     if (!date || date == "null") return;
-                    // console.log("RSS date ",date);
+                    console.log("RSS date ",date);
 
                     const cdate = Math.round(
                         new Date().getTime() / 1000

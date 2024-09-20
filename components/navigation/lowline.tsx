@@ -2,21 +2,21 @@
 import React from 'react'
 import styled from 'styled-components';
 import { UilStar } from '@iconscout/react-unicons'
-import {Options} from '../../lib/with-session';
+import { Options } from '../../lib/with-session';
 
 interface LowlineWrapperParams {
     loud: number,
     band: number,
 }
 const LowlineWrapper = styled.div<LowlineWrapperParams>`
-    display:  ${({loud})=>loud?'flex':'hidden'};
+    display:  ${({ loud }) => loud ? 'flex' : 'hidden'};
     margin-top: 10px;
     margin-bottom:16px;
-    ${({loud})=>loud?'border-top: thin solid var(--text);':
-     '@media (min-width:600px) {opacity:0.5; border-top: thin solid var(--text);}'}
+    ${({ loud }) => loud ? 'border-top: thin solid var(--text);' :
+        '@media (min-width:600px) {opacity:0.5; border-top: thin solid var(--text);}'}
     
-    height:  ${({loud})=>loud?'30':'0'}px;
-    border-bottom: ${({loud,band}) => !loud && band==1 ? null : 'thin solid var(--text)'};
+    height:  ${({ loud }) => loud ? '30' : '0'}px;
+    border-bottom: ${({ loud, band }) => !loud && band == 1 ? null : 'thin solid var(--text)'};
     width: 100%;
     align-items: center;
     font-family: Roboto;
@@ -95,34 +95,34 @@ const Star = styled(UilStar)`
     height:10px;
     `
 
-const Lowline = ({ session, lowline }:{session:Options,lowline:any}) => {
+const Lowline = ({ session, lowline }: { session: Options, lowline: any }) => {
     return <LowlineWrapper loud={session.loud} band={session.band}>
-        {session.loud?<Stars>
+        {session.loud ? <Stars>
             <Star />
             <Star />
             <Star />
-        </Stars>:null}
-        {false&&session.loud?<div>
-        <Phone>{lowline.phone}</Phone>
-       <HorizontalPhone>{lowline.horizontalPhone}</HorizontalPhone>
-        <VerticalTablet>{lowline.verticalTablet}</VerticalTablet>
-        <HorizontalTablet>{lowline.horizontalTablet}</HorizontalTablet>
-        <SmallDesktop>{lowline.smallDesktop}</SmallDesktop>
-        <LargeDesktop>{lowline.largeDestop}</LargeDesktop>
-        </div>:
-        <div>
-        <Phone><a href="https://qwiket.com/?utm_content=am1_header">QWIKET.COM</a>&nbsp;</Phone>
-       <HorizontalPhone>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET.COM</a>&nbsp;</HorizontalPhone>
-        <VerticalTablet>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET.COM</a>&nbsp;</VerticalTablet>
-        <HorizontalTablet>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET.COM</a>&nbsp;</HorizontalTablet>
-        <SmallDesktop>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET.COM</a>&nbsp;Sports Media Index – Perfect for Fantasy Sports Fans.</SmallDesktop>
-        <LargeDesktop>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET.COM</a>&nbsp;Sports Media Index – Perfect for Fantasy Sports Fans. Track media mentions of your fantasy team.</LargeDesktop>
-        </div>}
-        {session.loud?<Stars>
+        </Stars> : null}
+        {false && session.loud ? <div>
+            <Phone>{lowline.phone}</Phone>
+            <HorizontalPhone>{lowline.horizontalPhone}</HorizontalPhone>
+            <VerticalTablet>{lowline.verticalTablet}</VerticalTablet>
+            <HorizontalTablet>{lowline.horizontalTablet}</HorizontalTablet>
+            <SmallDesktop>{lowline.smallDesktop}</SmallDesktop>
+            <LargeDesktop>{lowline.largeDestop}</LargeDesktop>
+        </div> :
+            <div>
+                <Phone><a href="https://qwiket.com/?utm_content=am1_header">QWIKET.COM</a>&nbsp;</Phone>
+                <HorizontalPhone>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET.COM</a>&nbsp;</HorizontalPhone>
+                <VerticalTablet>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET.COM</a>&nbsp;</VerticalTablet>
+                <HorizontalTablet>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET.COM Sports AI</a>&nbsp;</HorizontalTablet>
+                <SmallDesktop>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET.COM</a>&nbsp;Sports News Monitor and AI Chat.</SmallDesktop>
+                <LargeDesktop>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET.COM</a>&nbsp;Sports News Monitor and AI Chat.</LargeDesktop>
+            </div>}
+        {session.loud ? <Stars>
             <Star />
             <Star />
             <Star />
-        </Stars>:null}
+        </Stars> : null}
     </LowlineWrapper>
 }
 export default Lowline;

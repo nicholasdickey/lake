@@ -309,7 +309,7 @@ export const getServerSideProps = withSessionSsr(
                     meta.canonic = item.url;//`https://${process.env.CANONIC_DOMAIN}/${forum}/topic/${tag}/${threadid}`
                 }
                 catch (x) {
-                    console.log("FETCH TOPIC ERROR", x);
+                    //console.log("FETCH TOPIC ERROR", x);
                     context.res.statusCode = 503;
                     return { props: { error: 503 } }
                 }

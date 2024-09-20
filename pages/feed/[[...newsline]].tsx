@@ -19,18 +19,18 @@ export default async function Home({ items, channelDetails, host, forum }: { cha
         <link>https://${host}</link> 
         <description>${channelDetails.description}</description>
       `;
-    console.log("FEED==>");  
+    console.log("FEED==>");
     const includeItems = await getDigestInclude();
     if (includeItems && includeItems.length > 0)
         items.push(...includeItems);
-   
+
     const rssItems = items.map((p, itemCount) => {
         try {
-            //  console.log("rss item:", JSON.stringify(p))
+            console.log("=================>rss item:", JSON.stringify(p))
             const title = `${p.site_name ? p.site_name + ': ' : ''}${p.title}` || ``;
             const date = p.shared_time;
             if (!date || date == "null") return;
-            // console.log("RSS date ",date);
+            console.log("RSS date ", new Date(date * 1000).toISOString());
 
             const cdate = Math.round(
                 new Date().getTime() / 1000
@@ -70,7 +70,7 @@ export default async function Home({ items, channelDetails, host, forum }: { cha
     })
     const all = `${header}${rssItems.join('\n')} </channel>
     </rss>`
-    // console.log("RSS",all)
+    console.log("*** RSS", all)
     return <div><div>{all}</div></div>;
 }
 
@@ -101,6 +101,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         const key: FetchQueueKey["key"] = ['queue', type, newsline, 0, forum, '', 0, '0', '', '', 0, '', '', 12];
         console.log("rss key==", key)
         let { items } = await fetchQueue(key);
+        console.log("items", items)
         if (context.res) {
             const header = `<?xml version="1.0" encoding="UTF-8" ?>  
     <rss version="2.0"> 
@@ -111,15 +112,15 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
       `;
             let isDigestFeed = newsline.indexOf('digest') >= 0;
             console.log("NEW PART", newsline)
-            items=items.filter((p: any, itemCount: number) => {
+            items = items.filter((p: any, itemCount: number) => {
                 const isDigest = p.title.indexOf('Digest') >= 0;
-                console.log("isDigest",isDigest)
+                console.log("isDigest", isDigest)
                 if (isDigestFeed && !isDigest)
                     return false;
-                if(p.title.indexOf('The Corner:')>=0)
+                if (p.title.indexOf('The Corner:') >= 0)
                     return false;
                 return true;
-              
+
             })
             if (newsline.indexOf('digest') >= 0) {
                 const includeItems = await getDigestInclude();
@@ -127,19 +128,20 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                 if (includeItems && includeItems.length > 0)
                     items.push(...includeItems);
             }
-           
+
             const rssItems = items.map((p: any, itemCount: number) => {
                 try {
                     console.log("rss item:", JSON.stringify(p))
                     const isDigest = p.title.indexOf('Digest') >= 0;
-                 //   if (isDigestFeed && !isDigest)
-                 //       return;
+                    //   if (isDigestFeed && !isDigest)
+                    //       return;
                     const title = '';
                     const date = p.shared_time;
                     const url = p.url;
-                    const image=p.image;
+                    const image = p.image;
                     if (!date || date == "null") return;
-                    console.log("RSS date ",date);
+
+                    console.log("RSS date ", new Date(date * 1000).toISOString());
 
                     const cdate = Math.round(
                         new Date().getTime() / 1000
@@ -154,20 +156,22 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     ).toISOString();
                     const flink = isDigest ? `https://${host}/${forum}/topic/${p.tag}/${p.slug}` : `${url}`;
                     let description = p.description;
-
+                    console.log("description", description)
                     const descrParts = description.split("{ai:summary}");
                     description - descrParts[0];
+                    console.log("description2", description)
                     let summary = descrParts.length > 1 ? descrParts[1] : '';
-                    summary = summary.replaceAll('<p>', '<p>').replaceAll('</p>', '</p>\n\n').replaceAll('()','');
+
+                    summary = summary.replaceAll('<p>', '<p>').replaceAll('</p>', '</p>\n\n').replaceAll('()', '');
                     //description=description.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
                     //summary=summary.replaceAll('"', '&#34;').replaceAll("'", '&#39;').replaceAll("&", '&#38;');
-                    summary=removeHashtags(summary);
-                    console.log("################# DIGEST summary",summary)
-                    if(!isDigest&&summary.length<10)
+                    summary = removeHashtags(summary);
+                    console.log("################# DIGEST summary", summary)
+                    if (!isDigest && summary.length < 10)
                         return;
                     summary = encodeEntities(summary);
                     summary = `${summary}`;
-                    description=removeHashtags(description);   
+                    description = removeHashtags(description);
                     description = encodeEntities(description);
                     description = `${description}- summary © am1.news -`;
 
@@ -177,7 +181,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                         summary = null;
                     description = !isDigest && summary ? summary : description;
                     console.log('rss description', description);
-                    const twitterUrl=`https://${host}/api/og.png?threadid=${p.slug}&tag=${p.tag}`
+                    const twitterUrl = `https://${host}/api/og.png?threadid=${p.slug}&tag=${p.tag}`
                     return `
         <item>
             <link>${flink}</link>
@@ -197,9 +201,11 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
                 }
             })
+            console.log("rssItems", rssItems)
             const rss = rssItems.filter((p: any) => p ? true : false)
             const all = `${header}${rss.join('\n')} </channel>
     </rss>`
+            console.log("*** RSS", all)
             context.res.setHeader('Content-Type', 'text/xml');
             context.res.write(all);
             context.res.end();

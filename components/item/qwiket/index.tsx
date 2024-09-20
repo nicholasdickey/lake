@@ -517,7 +517,7 @@ const Qwiket = ({ extraWide, isRight, item, isTopic, qType, singlePanel, fullPag
                 return (b.type == "twitter" && b.id) ? <TweetEmbedContainer key={`twt-${i}`}><TweetEmbed><TwitterTweetEmbed tweetId={b.id} placeholder="Loading a Tweet..." /*options={{theme:session.dark?'dark':'light'}}*/ /></TweetEmbed></TweetEmbedContainer> : (b.type == 'html' || b.type == 'text' || b.type == 'image') ? <ReactMarkdown rehypePlugins={[rehypeRaw]} >{b.content}</ReactMarkdown> :b.type=='ol'?<ReactMarkdown rehypePlugins={[rehypeRaw]} >{"<ol>"+b.content+"</ol>"}</ReactMarkdown>: <div>{renderDigest(b.json)}</div>
             })
         }
-        console.log("Qwiket body=",{body,bodyHtml,hasBody,ack})
+       // console.log("Qwiket body=",{body,bodyHtml,hasBody,ack})
        
         if ( hasBody&&!openBody) {
             AckBlock = <>{openDialog ? <BodySnatcher mutate={mutate} setAckOverride={setAckOverride} setOpenDialog={setOpenDialog} tag={tag} slug={slug} /> : <SeeMore><a onClick={() => setOpenDialog(true)}>See more....</a></SeeMore>}</>

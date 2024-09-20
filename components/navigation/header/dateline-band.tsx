@@ -122,7 +122,7 @@ const DatelineBand = ({ channelDetails, user, updateSession }: DatelineBandParam
             setHasUnpublish(true);
         }
     }, [subscr_status]);
-    console.log('channelDetails', channelDetails)
+    //console.log('channelDetails', channelDetails)
     const { session, qparams } = useAppContext();
     const countKey = { sessionid: session.sessionid, userslug: session.userslug };
     const { data: count, error: countError } = useSWR(qparams.isbot ? null : countKey, getOnlineCount, { refreshInterval: 10000 })

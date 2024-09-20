@@ -144,7 +144,7 @@ const Queue = ({ qType, isLeft, card,visible,isRight,extraWide }: { visible: boo
         const { scrollY } = window;
         if (scrollY == 0) {
             if(qType=='newsline') 
-            console.log("d1b: calling mutate")
+            //console.log("d1b: calling mutate")
             mutate();
         }
     }, [visible])

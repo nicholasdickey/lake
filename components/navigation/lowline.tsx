@@ -115,8 +115,8 @@ const Lowline = ({ session, lowline }: { session: Options, lowline: any }) => {
                 <HorizontalPhone>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET AI</a>&nbsp;</HorizontalPhone>
                 <VerticalTablet>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET AI</a>&nbsp;</VerticalTablet>
                 <HorizontalTablet>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET AI: Sports Knowledge</a>&nbsp;</HorizontalTablet>
-                <SmallDesktop>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET AI</a>&nbsp;Interactive Sports Knowledge.</SmallDesktop>
-                <LargeDesktop>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET AI</a>&nbsp;Interactive Sports Knowledge and Reasoning Support.</LargeDesktop>
+                <SmallDesktop>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET AI:</a>&nbsp;Interactive Sports Knowledge.</SmallDesktop>
+                <LargeDesktop>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET AI:</a>&nbsp;Interactive Sports Knowledge and Reasoning Support.</LargeDesktop>
             </div>}
         {session.loud ? <Stars>
             <Star />

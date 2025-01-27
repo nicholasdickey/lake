@@ -74,7 +74,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         let newsline = context.params?.newsline || process.env.DEFAULT_NEWSLINE;
         if (!newsline)
             process.env.DEFAULT_NEWSLINE
-        console.log("FEED:", { newsline, context: context.params })
+        // console.log("FEED:", { newsline, context: context.params })
         newsline = `rss-${newsline || process.env.DEFAULT_NEWSLINE}`;
 
         const forum = process.env.DEFAULT_FORUM || '';
@@ -102,20 +102,20 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         <link>https://${host}</link> 
         <description>${channelDetails.description}</description>
       `;
-            const includeItems= await getDigestInclude();
-            if(includeItems&&includeItems.length>0)
+            const includeItems = await getDigestInclude();
+            if (includeItems && includeItems.length > 0)
                 items.push(...includeItems);
-        
+
             const rssItems = items.map((p: any, itemCount: number) => {
                 try {
                     //  console.log("rss item:", JSON.stringify(p))
-                    const isDigest=p.title.indexOf('Digest')>=0;
-                    const title = !isDigest?`${p.site_name ? p.site_name + ' Digest: ' : ''}${p.title}`:p.title || ``;
+                    const isDigest = p.title.indexOf('Digest') >= 0;
+                    const title = !isDigest ? `${p.site_name ? p.site_name + ' Digest: ' : ''}${p.title}` : p.title || ``;
                     const date = p.shared_time;
-                    const image=p.image;
-                    const url=p.url;
-                    const threadid=p.slug;
-                    const tag=p.tag;
+                    const image = p.image;
+                    const url = p.url;
+                    const threadid = p.slug;
+                    const tag = p.tag;
                     if (!date || date == "null") return;
                     // console.log("RSS date ",date);
 
@@ -130,8 +130,8 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     const isoDate = new Date(
                         date * 1000
                     ).toISOString();
-                    const flink = isDigest?`https://${host}/${forum}/topic/${p.tag}/${p.slug}`:`${url}`;
-                    const oglink=`https://${host}/api/og.png?threadid=${p.slug}&tag=${p.tag}`
+                    const flink = isDigest ? `https://${host}/${forum}/topic/${p.tag}/${p.slug}` : `${url}`;
+                    const oglink = `https://${host}/api/og.png?threadid=${p.slug}&tag=${p.tag}`
                     let description = p.description;
 
                     const descrParts = description.split("{ai:summary}");
@@ -147,15 +147,15 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                     console.log("summary:", summary);
                     if (summary.trim() == '[object Object]')
                         summary = null;
-                    description = !isDigest&&summary ? summary : description;
+                    description = !isDigest && summary ? summary : description;
                     console.log('rss description', description)
-                    console.log('image', image );
-                    console.log('url:', url,threadid,tag );
-                    description+=`
+                    console.log('image', image);
+                    console.log('url:', url, threadid, tag);
+                    description += `
                         <a href="${url}">${title}</a>
-                    `    
+                    `
 
-                    
+
                     return `
         <item>
             <link>${flink}</link>

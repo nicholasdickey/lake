@@ -19,7 +19,7 @@ export default async function Home({ items, channelDetails, host, forum }: { cha
         <link>https://${host}</link> 
         <description>${channelDetails.description}</description>
       `;
-    console.log("FEED==>");
+    // console.log("FEED==>");
     const includeItems = await getDigestInclude();
     if (includeItems && includeItems.length > 0)
         items.push(...includeItems);

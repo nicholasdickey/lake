@@ -112,11 +112,11 @@ const Lowline = ({ session, lowline }: { session: Options, lowline: any }) => {
         </div> :
             <div>
                 <Phone><a href="https://qwiket.com/?utm_content=am1_header">QWIKET.COM</a>&nbsp;</Phone>
-                <HorizontalPhone>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET AI</a>&nbsp;</HorizontalPhone>
-                <VerticalTablet>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET AI</a>&nbsp;</VerticalTablet>
-                <HorizontalTablet>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET AI: Sports Knowledge</a>&nbsp;</HorizontalTablet>
-                <SmallDesktop>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET AI:</a>&nbsp;Interactive Sports Knowledge.</SmallDesktop>
-                <LargeDesktop>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET AI:</a>&nbsp;Interactive Sports Knowledge and Reasoning Support.</LargeDesktop>
+                <HorizontalPhone>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET</a>&nbsp;</HorizontalPhone>
+                <VerticalTablet>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET</a>&nbsp;</VerticalTablet>
+                <HorizontalTablet>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET: Sports Knowledge</a>&nbsp;</HorizontalTablet>
+                <SmallDesktop>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET:</a>&nbsp;Elevate your fantasy game! Interactive Sports Knowledge.</SmallDesktop>
+                <LargeDesktop>Sponsor:&nbsp; <a href="https://qwiket.com/?utm_content=am1_header">QWIKET:</a>&nbsp;Elevate your fantasy game! Interactive Sports Knowledge and Reasoning Support for Fantasy Sports and Betting Enthusiasts.</LargeDesktop>
             </div>}
         {session.loud ? <Stars>
             <Star />

@@ -50,19 +50,28 @@ export const getServerSideProps = withSessionSsr(
     async function getServerSideProps(context: GetServerSidePropsContext): Promise<any> {
         try {
             let host = context.req.headers.host || "";
-            
+            // Get the caller's IP address
+            let ip: string | string[] | undefined;
+            try {
+                ip = context.req.headers['x-forwarded-for'] || context.req.connection.remoteAddress;
+                console.log("IP:", ip)
+            }
+            catch (x) {
+                console.log("IP ERROR:", x)
+            }
+
             //Disqus OAuth callback params:
             const { code, state, utm_medium, appid }: { code: string, state: string, utm_medium: string, appid: string } = context.query as any;
 
             let ssr = context.params?.ssr as string[];
-            
+
             if (!ssr)
                 ssr = [`${process.env.DEFAULT_FORUM}`];
             let [forum] = ssr;
-            if(forum=='index'){
+            if (forum == 'index') {
                 ssr = [`${process.env.DEFAULT_FORUM}`];
-                forum=process.env.DEFAULT_FORUM||'';
-            }        
+                forum = process.env.DEFAULT_FORUM || '';
+            }
             // Sitemap handling:
             const format = 'xml';
             if (forum.indexOf("sitemap") == 0 && (forum.indexOf(".xml") >= 0 || forum.indexOf(".txt") >= 0)) {
@@ -97,7 +106,7 @@ export const getServerSideProps = withSessionSsr(
 
             const tag = (type == 'topic' || type == 'home' || type == 'solo') ? ssr[2] || "" : "";
 
-            const threadid = (type == 'topic' || type == 'home') ? ssr[3] || "" : "" || "";
+            const threadid = (type == 'topic' || type == 'home') ? ssr[3] || "" : "";
 
             const layoutNumber = ((type == 'topic' || type == 'home') ? ssr[4] : type == 'solo' ? ssr[3] || "l1" : ssr[2]) || "l1";
 
@@ -114,6 +123,7 @@ export const getServerSideProps = withSessionSsr(
             const defaultWidth = platformType == 'tablet' ? 900 : platformType == 'desktop' ? 1200 : 600;
 
             const botInfo = isbot({ ua });
+            console.log("SSR:", JSON.stringify({ ip, ua, platformType, botInfo }))
 
             //redirect from legacy domains:
             /*if (host != process.env.CANONIC_DOMAIN&& host.indexOf('vercel.app')<0) {
@@ -276,7 +286,7 @@ export const getServerSideProps = withSessionSsr(
                     context.res.statusCode = 404;
                     return { props: { error: 404 } }
                 }
-                const key: FetchTopicKey = { threadid: qparams.threadid ? qparams.threadid : '', withBody: 1, userslug: options.userslug, sessionid: options.sessionid, tag: qparams.tag, ackOverride: (qparams.isbot || qparams.isfb)?true:false };
+                const key: FetchTopicKey = { threadid: qparams.threadid ? qparams.threadid : '', withBody: 1, userslug: options.userslug, sessionid: options.sessionid, tag: qparams.tag, ackOverride: (qparams.isbot || qparams.isfb) ? true : false };
                 try {
                     const topic = await fetchTopic(key);
                     //handle invalid slugs with 404:
@@ -284,7 +294,7 @@ export const getServerSideProps = withSessionSsr(
                         context.res.statusCode = 404;
                         return { props: { error: 404 } }
                     }
-                   // console.log("topic keyin ssr:",key)
+                    // console.log("topic keyin ssr:",key)
                     fallback[unstable_serialize(key)] = topic;
                     const { item } = topic;
                     let description = item.description;
@@ -298,12 +308,12 @@ export const getServerSideProps = withSessionSsr(
 
                     meta.description = summary ? summary : description;
                     meta.site_name = item.site_name;
-                    meta.title = item.title.indexOf('Digest')<0?`${item.catName}: ${item.title}`:item.title;
+                    meta.title = item.title.indexOf('Digest') < 0 ? `${item.catName}: ${item.title}` : item.title;
                     meta.image = `https://${process.env.CANONIC_DOMAIN}/api/og.png?threadid=${qparams.threadid ? qparams.threadid : ''}&tag=${qparams.tag}`//item.image;
                     //if(item.site_name.indexOf("Fox News")>=0||item.title.indexOf("Digest")>=0)
                     //    meta.image=item.image;
-                   // if(process.env.NODE_ENV!='development'/*&&item.title.indexOf("Digest")<0*/)
-                        meta.image=item.image;
+                    // if(process.env.NODE_ENV!='development'/*&&item.title.indexOf("Digest")<0*/)
+                    meta.image = item.image;
                     meta.publishedTime = item.shared_time;
                     meta.url = item.url;
                     meta.canonic = item.url;//`https://${process.env.CANONIC_DOMAIN}/${forum}/topic/${tag}/${threadid}`
@@ -322,7 +332,7 @@ export const getServerSideProps = withSessionSsr(
                 meta.publishedTime = Date.now() / 1000 | 0;
                 meta.canonic = `https://${process.env.CANONIC_DOMAIN}`
             }
-          //  console.log("fallback in ssr:",fallback)
+            //  console.log("fallback in ssr:",fallback)
             const propsWrap = {
                 props: {
                     session: options,
